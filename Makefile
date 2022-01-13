@@ -21,4 +21,4 @@ site:
 	git pull origin main
 	git add .
 	git commit -m "Update site ${msg}"
-	git push -u origin main
+	git push origin main
