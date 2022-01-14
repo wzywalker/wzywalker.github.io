@@ -36,7 +36,8 @@ jobs:
 
     - name: Build site
       run: |
-        python ./Maverick/mvrk.py --config ./config.py
+        cd ./Maverick
+        python ./mvrk.py --config ../config.py
 
     - name: Deploy to GitHub Pages
       uses: docker://peaceiris/gh-pages:v2
