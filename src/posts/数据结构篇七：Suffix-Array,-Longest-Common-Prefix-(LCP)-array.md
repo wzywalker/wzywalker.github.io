@@ -2,11 +2,15 @@
 layout: post
 title: 数据结构篇七：Suffix-Array,-Longest-Common-Prefix-(LCP)-array
 slug: 数据结构篇七：Suffix-Array,-Longest-Common-Prefix-(LCP)-array
-date: 2022-01-14 00:00
+date: 2021-11-12 06:00
 status: publish
 author: walker
 categories: 
   - CS
+tags:
+  - data struct
+  - suffix array
+  - lcp
 ---
 
 这是一位 google 工程师分享的8小时的[数据结构](https://www.youtube.com/watch?v=RBSGKlAvoiM)的视频,我的笔记

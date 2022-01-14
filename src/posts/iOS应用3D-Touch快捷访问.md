@@ -2,11 +2,13 @@
 layout: post
 title: iOS应用3D-Touch快捷访问
 slug: iOS应用3D-Touch快捷访问
-date: 2022-01-14 00:00
+date: 2018-09-14 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - 3d-touch
 ---
 
 #用法

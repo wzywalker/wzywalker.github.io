@@ -2,11 +2,14 @@
 layout: post
 title: ES6中generator传参与返回值
 slug: ES6中generator传参与返回值
-date: 2022-01-14 00:00
+date: 2020-11-13 00:00
 status: publish
 author: walker
 categories: 
   - Front
+tags:
+  - es6
+  - generator
 ---
 
 先看两个例子, 

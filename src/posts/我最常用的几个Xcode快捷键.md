@@ -2,11 +2,13 @@
 layout: post
 title: 我最常用的几个Xcode快捷键
 slug: 我最常用的几个Xcode快捷键
-date: 2022-01-14 00:00
+date: 2017-03-16 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - xcode
 ---
 
 >⌘(command) ⏎(return) ⌥(option/alt) ⇧(shift) ⌃(control/ctrl)

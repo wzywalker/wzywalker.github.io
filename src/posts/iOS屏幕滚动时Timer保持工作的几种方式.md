@@ -2,11 +2,15 @@
 layout: post
 title: iOS屏幕滚动时Timer保持工作的几种方式
 slug: iOS屏幕滚动时Timer保持工作的几种方式
-date: 2022-01-14 00:00
+date: 2020-03-22 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - timer
+  - runloop
+  - cadisplaylink
 ---
 
 iOS当前线程的RunLoop在TableView等scrollView滑动时将DefaultMode切换到了`TrackingRunLoopMode`。因为Timer默认是添加在RunLoop上的`DefaultMode`上的，当Mode切换后Timer就停止了运行。

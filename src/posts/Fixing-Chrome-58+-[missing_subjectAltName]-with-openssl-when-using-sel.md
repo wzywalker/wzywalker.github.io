@@ -2,11 +2,13 @@
 layout: post
 title: Fixing-Chrome-58+-[missing_subjectAltName]-with-openssl-when-using-sel
 slug: Fixing-Chrome-58+-[missing_subjectAltName]-with-openssl-when-using-sel
-date: 2022-01-14 00:00
+date: 2020-01-01 00:00
 status: publish
 author: walker
 categories: 
-  - iOS
+  - Skill
+tags:
+  - chrome
 ---
 
 [原文链接](https://alexanderzeitler.com/articles/Fixing-Chrome-missing_subjectAltName-selfsigned-cert-openssl/)

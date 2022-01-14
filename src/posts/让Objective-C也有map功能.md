@@ -2,11 +2,15 @@
 layout: post
 title: 让Objective-C也有map功能
 slug: 让Objective-C也有map功能
-date: 2022-01-14 00:00
+date: 2019-07-30 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - map
+  - keypath
+  - kvc
 ---
 
 map一个数组是大部分高级语言都有的, OC 没有, 有几个方案让它实现, 我优选出三个: 

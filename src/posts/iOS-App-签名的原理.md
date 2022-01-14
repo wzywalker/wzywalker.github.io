@@ -2,11 +2,13 @@
 layout: post
 title: iOS-App-签名的原理
 slug: iOS-App-签名的原理
-date: 2022-01-14 00:00
+date: 2020-11-23 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - 
 ---
 
 原文转载: [https://wereadteam.github.io/2017/03/13/Signature/](https://wereadteam.github.io/2017/03/13/Signature/)
@@ -17,33 +19,33 @@ iOS 签名机制挺复杂，各种证书，Provisioning Profile，entitlements�
 [](https://wereadteam.github.io/2017/03/13/Signature/#%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86)非对称加密
 通常我们说的签名就是数字签名，它是基于非对称加密算法实现的。对称加密是通过同一份密钥加密和解密数据，而非对称加密则有两份密钥，分别是公钥和私钥，用公钥加密的数据，要用私钥才能解密，用私钥加密的数据，要用公钥才能解密。
 简单说一下常用的非对称加密算法 RSA 的数学原理，理解简单的数学原理，就可以理解非对称加密是怎么做到的，为什么会是安全的：
-选两个质数 p
- 和 q
+选两个质数 p
+ 和 q
 ，相乘得出一个大整数n
 ，例如 p=61，q=53，n=pq=3233
-选 1-n 间的随便一个质数 e
+选 1-n 间的随便一个质数 e
 ，例如 e = 17
-经过一系列数学公式，算出一个数字 d
-，满足：a. 通过 n
- 和 e
- 这两个数据一组数据进行数学运算后，可以通过 n 和 d 去反解运算，反过来也可以。b. 如果只知道 n
- 和 e
-，要推导出 d
-，需要知道 p
- 和 q
+经过一系列数学公式，算出一个数字 d
+，满足：a. 通过 n
+ 和 e
+ 这两个数据一组数据进行数学运算后，可以通过 n 和 d 去反解运算，反过来也可以。b. 如果只知道 n
+ 和 e
+，要推导出 d
+，需要知道 p
+ 和 q
 ，也就是要需要把 n 因数分解。
 
-上述的 (n,e)
- 这两个数据在一起就是公钥，(n,d)
- 这两个数据就是私钥，满足用公钥加密，私钥解密，或反过来公钥加密，私钥解密，也满足在只暴露公钥（只知道 n
- 和 e）的情况下，要推导出私钥 (n,d)
-，需要把大整数 n
- 因数分解。目前因数分解只能靠暴力穷举，而n数字越大，越难以用穷举计算出因数 p
- 和 q
-，也就越安全，当 n
- 大到二进制 1024 位或 2048 位时，以目前技术要破解几乎不可能，所以非常安全。
-若对数字 d
- 是怎样计算出来的感兴趣，可以详读这两篇文章：RSA 算法原理[（一）](http://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html)[（二）](http://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html)
+上述的 (n,e)
+ 这两个数据在一起就是公钥，(n,d)
+ 这两个数据就是私钥，满足用公钥加密，私钥解密，或反过来公钥加密，私钥解密，也满足在只暴露公钥（只知道 n
+ 和 e）的情况下，要推导出私钥 (n,d)
+，需要把大整数 n
+ 因数分解。目前因数分解只能靠暴力穷举，而n数字越大，越难以用穷举计算出因数 p
+ 和 q
+，也就越安全，当 n
+ 大到二进制 1024 位或 2048 位时，以目前技术要破解几乎不可能，所以非常安全。
+若对数字 d
+ 是怎样计算出来的感兴趣，可以详读这两篇文章：RSA 算法原理[（一）](http://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html)[（二）](http://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html)
 [](https://wereadteam.github.io/2017/03/13/Signature/#%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D)数字签名
 现在知道了有非对称加密这东西，那数字签名是怎么回事呢？
 数字签名的作用是我对某一份数据打个标记，表示我认可了这份数据（签了个名），然后我发送给其他人，其他人可以知道这份数据是经过我认证的，数据没有被篡改过。
@@ -96,26 +98,26 @@ AD-Hoc 相当于企业分发的限制版，限制安装设备数量，较少用�
 苹果自己有固定的一对公私钥，跟上面 AppStore 例子一样，私钥在苹果后台，公钥在每个 iOS 设备上。这里称为公钥A，私钥A。A:Apple
 把公钥 L 传到苹果后台，用苹果后台里的私钥 A 去签名公钥 L。得到一份数据包含了公钥 L 以及其签名，把这份数据称为证书。
 在苹果后台申请 AppID，配置好设备 ID 列表和 APP 可使用的权限，再加上第③步的证书，组成的数据用私钥 A 签名，把数据和签名一起组成一个 Provisioning Profile 文件，下载到本地 Mac 开发机。
-在开发时，编译完一个 APP 后，用本地的私钥 L 对这个 APP 进行签名，同时把第④步得到的 Provisioning Profile 文件打包进 APP 里，文件名为 embedded.mobileprovision
+在开发时，编译完一个 APP 后，用本地的私钥 L 对这个 APP 进行签名，同时把第④步得到的 Provisioning Profile 文件打包进 APP 里，文件名为 embedded.mobileprovision
 ，把 APP 安装到手机上。
-在安装时，iOS 系统取得证书，通过系统内置的公钥 A，去验证 embedded.mobileprovision
- 的数字签名是否正确，里面的证书签名也会再验一遍。
-确保了 embedded.mobileprovision
- 里的数据都是苹果授权以后，就可以取出里面的数据，做各种验证，包括用公钥 L 验证APP签名，验证设备 ID 是否在 ID 列表上，AppID 是否对应得上，权限开关是否跟 APP 里的 Entitlements 对应等。
+在安装时，iOS 系统取得证书，通过系统内置的公钥 A，去验证 embedded.mobileprovision
+ 的数字签名是否正确，里面的证书签名也会再验一遍。
+确保了 embedded.mobileprovision
+ 里的数据都是苹果授权以后，就可以取出里面的数据，做各种验证，包括用公钥 L 验证APP签名，验证设备 ID 是否在 ID 列表上，AppID 是否对应得上，权限开关是否跟 APP 里的 Entitlements 对应等。
 
 开发者证书从签名到认证最终苹果采用的流程大致是这样，还有一些细节像证书有效期/证书类型等就不细说了。
 [](https://wereadteam.github.io/2017/03/13/Signature/#%E6%A6%82%E5%BF%B5%E5%92%8C%E6%93%8D%E4%BD%9C)概念和操作
 上面的步骤对应到我们平常具体的操作和概念是这样的：
-第 1 步对应的是 keychain 里的 “从证书颁发机构请求证书”，这里就本地生成了一堆公私钥，保存的 CertificateSigningRequest
- 就是公钥，私钥保存在本地电脑里。
+第 1 步对应的是 keychain 里的 “从证书颁发机构请求证书”，这里就本地生成了一堆公私钥，保存的 CertificateSigningRequest
+ 就是公钥，私钥保存在本地电脑里。
 第 2 步苹果处理，不用管。
-第 3 步对应把 CertificateSigningRequest
- 传到苹果后台生成证书，并下载到本地。这时本地有两个证书，一个是第 1 步生成的，一个是这里下载回来的，keychain 会把这两个证书关联起来，因为他们公私钥是对应的，在XCode选择下载回来的证书时，实际上会找到 keychain 里对应的私钥去签名。这里私钥只有生成它的这台 Mac 有，如果别的 Mac 也要编译签名这个 App 怎么办？答案是把私钥导出给其他 Mac 用，在 keychain 里导出私钥，就会存成 .p12
- 文件，其他 Mac 打开后就导入了这个私钥。
+第 3 步对应把 CertificateSigningRequest
+ 传到苹果后台生成证书，并下载到本地。这时本地有两个证书，一个是第 1 步生成的，一个是这里下载回来的，keychain 会把这两个证书关联起来，因为他们公私钥是对应的，在XCode选择下载回来的证书时，实际上会找到 keychain 里对应的私钥去签名。这里私钥只有生成它的这台 Mac 有，如果别的 Mac 也要编译签名这个 App 怎么办？答案是把私钥导出给其他 Mac 用，在 keychain 里导出私钥，就会存成 .p12
+ 文件，其他 Mac 打开后就导入了这个私钥。
 第 4 步都是在苹果网站上操作，配置 AppID / 权限 / 设备等，最后下载 Provisioning Profile 文件。
-第 5 步 XCode 会通过第 3 步下载回来的证书（存着公钥），在本地找到对应的私钥（第一步生成的），用本地私钥去签名 App，并把 Provisioning Profile 文件命名为 embedded.mobileprovision
- 一起打包进去。这里对 App 的签名数据保存分两部分，Mach-O 可执行文件会把签名直接写入这个文件里，其他资源文件则会保存在 _CodeSignature
- 目录下。
+第 5 步 XCode 会通过第 3 步下载回来的证书（存着公钥），在本地找到对应的私钥（第一步生成的），用本地私钥去签名 App，并把 Provisioning Profile 文件命名为 embedded.mobileprovision
+ 一起打包进去。这里对 App 的签名数据保存分两部分，Mach-O 可执行文件会把签名直接写入这个文件里，其他资源文件则会保存在 _CodeSignature
+ 目录下。
 
 第 6 - 7 步的打包和验证都是 Xcode 和 iOS 系统自动做的事。
 这里再总结一下这些概念：
@@ -127,10 +129,10 @@ AD-Hoc 相当于企业分发的限制版，限制安装设备数量，较少用�
 
 [](https://wereadteam.github.io/2017/03/13/Signature/#%E5%85%B6%E4%BB%96%E5%8F%91%E5%B8%83%E6%96%B9%E5%BC%8F)其他发布方式
 前面以开发包为例子说了签名和验证的流程，另外两种方式 In-House 企业签名和 AD-Hoc 流程也是差不多的，只是企业签名不限制安装的设备数，另外需要用户在 iOS 系统设置上手动点击信任这个企业才能通过验证。
-而 AppStore 的签名验证方式有些不一样，前面我们说到最简单的签名方式，苹果在后台直接用私钥签名 App 就可以了，实际上苹果确实是这样做的，如果去下载一个 AppStore 的安装包，会发现它里面是没有 embedded.mobileprovision
- 文件的，也就是它安装和启动的流程是不依赖这个文件，验证流程也就跟上述几种类型不一样了。
-据猜测，因为上传到 AppStore 的包苹果会重新对内容加密，原来的本地私钥签名就没有用了，需要重新签名，从 AppStore 下载的包苹果也并不打算控制它的有效期，不需要内置一个 embedded.mobileprovision
- 去做校验，直接在苹果用后台的私钥重新签名，iOS 安装时用本地公钥验证 App 签名就可以了。
+而 AppStore 的签名验证方式有些不一样，前面我们说到最简单的签名方式，苹果在后台直接用私钥签名 App 就可以了，实际上苹果确实是这样做的，如果去下载一个 AppStore 的安装包，会发现它里面是没有 embedded.mobileprovision
+ 文件的，也就是它安装和启动的流程是不依赖这个文件，验证流程也就跟上述几种类型不一样了。
+据猜测，因为上传到 AppStore 的包苹果会重新对内容加密，原来的本地私钥签名就没有用了，需要重新签名，从 AppStore 下载的包苹果也并不打算控制它的有效期，不需要内置一个 embedded.mobileprovision
+ 去做校验，直接在苹果用后台的私钥重新签名，iOS 安装时用本地公钥验证 App 签名就可以了。
 那为什么发布 AppStore 的包还是要跟开发版一样搞各种证书和 Provisioning Profile？猜测因为苹果想做统一管理，Provisioning Profile 里包含一些权限控制，AppID 的检验等，苹果不想在上传 AppStore 包时重新用另一种协议做一遍这些验证，就不如统一把这部分放在 Provisioning Profile 里，上传 AppStore 时只要用同样的流程验证这个 Provisioning Profile 是否合法就可以了。
 所以 App 上传到 AppStore 后，就跟你的 证书 / Provisioning Profile 都没有关系了，无论他们是否过期或被废除，都不会影响 AppStore 上的安装包。
 到这里 iOS 签名机制的原理和主流程大致说完了，希望能对理解苹果签名和排查日常签名问题有所帮助。
@@ -142,7 +144,7 @@ AD-Hoc 相当于企业分发的限制版，限制安装设备数量，较少用�
 [](https://wereadteam.github.io/2017/03/13/Signature/#AppStore-%E5%8A%A0%E5%AF%86)AppStore 加密
 另一个问题是我们把 App 传上 AppStore 后，苹果会对 App 进行加密，导致 App 体积增大不少，这个加密实际上是没卵用的，只是让破解的人要多做一个步骤，运行 App 去内存 dump 出可执行文件而已，无论怎样加密，都可以用这种方式拿出加密前的可执行文件。所以为什么要做这样的加密呢？想不到有什么好处。
 [](https://wereadteam.github.io/2017/03/13/Signature/#%E6%9C%AC%E5%9C%B0%E7%A7%81%E9%92%A5)本地私钥
-我们看到前面说的签名流程很绕很复杂，经常出现各种问题，像有 Provisioning Profile 文件但证书又不对，本地有公钥证书没对应私钥等情况，不理解原理的情况下会被绕晕，我的疑问是，这里为什么不能简化呢？还是以开发证书为例，为什么一定要用本地 Mac 生成的私钥去签名？苹果要的只是本地签名，私钥不一定是要本地生成的，苹果也可以自己生成一对公私钥给我们，放在 Provisioning Profile 里，我们用里面的私钥去加密就行了，这样就不会有 CertificateSigningRequest
- 和 p12
- 的概念，跟本地 keychain 没有关系，不需要关心证书，只要有 Provisioning Profile 就能签名，流程会减少，易用性会提高很多，同时苹果想要的控制一点都不会少，也没有什么安全问题，为什么不这样设计呢？
+我们看到前面说的签名流程很绕很复杂，经常出现各种问题，像有 Provisioning Profile 文件但证书又不对，本地有公钥证书没对应私钥等情况，不理解原理的情况下会被绕晕，我的疑问是，这里为什么不能简化呢？还是以开发证书为例，为什么一定要用本地 Mac 生成的私钥去签名？苹果要的只是本地签名，私钥不一定是要本地生成的，苹果也可以自己生成一对公私钥给我们，放在 Provisioning Profile 里，我们用里面的私钥去加密就行了，这样就不会有 CertificateSigningRequest
+ 和 p12
+ 的概念，跟本地 keychain 没有关系，不需要关心证书，只要有 Provisioning Profile 就能签名，流程会减少，易用性会提高很多，同时苹果想要的控制一点都不会少，也没有什么安全问题，为什么不这样设计呢？
 能想到的一个原因是 Provisioning Profile 在非 AppStore 安装时会打包进安装包，第三方拿到这个 Provisioning Profile 文件就能直接用起来给他自己的 App 签名了。但这种问题也挺好解决，只需要打包时去掉文件里的私钥就行了，所以仍不明白为什么这样设计。

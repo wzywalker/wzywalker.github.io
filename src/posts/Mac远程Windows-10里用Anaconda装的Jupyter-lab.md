@@ -2,14 +2,17 @@
 layout: post
 title: Mac远程Windows-10里用Anaconda装的Jupyter-lab
 slug: Mac远程Windows-10里用Anaconda装的Jupyter-lab
-date: 2022-01-14 00:00
+date: 2021-06-13 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - jupyter
+  - windows
 ---
 
-家里台式机配置比笔记本好多了，但又习惯了苹果本，怎么在小本本上直接跑windows上的jutyper呢？
+家里台式机配置比笔记本好多了，但又习惯了苹果本，怎么在小本本上直接跑windows上的jupyter呢？
 
 首先，给Windows 10 装上[OpenSSH](https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse)
 

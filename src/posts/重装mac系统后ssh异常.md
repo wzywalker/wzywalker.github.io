@@ -2,11 +2,14 @@
 layout: post
 title: 重装mac系统后ssh异常
 slug: 重装mac系统后ssh异常
-date: 2022-01-14 00:00
+date: 2019-08-03 00:00
 status: publish
 author: walker
 categories: 
   - Skill
+tags:
+  - macos
+  - ssh
 ---
 
 表现在两个方面: `ssh 登录服务器`, 和`通过ssh 使用 git`, 报的错都是`Permissino denied (publickey)`
@@ -18,8 +21,8 @@ categories:
 使用git出现问题, 并不局限于 github, 我连 gitlab 也是一样. 其实根据文档一项项检测,我在`ssh-add -l`这一句发现了问题, 虽然我生成了密钥, 但是它的输出显示我没有私钥, 照如下解决即可:
 
 >**Tip**: On most systems the default private keys (~/.ssh/id_rsa
-, ~/.ssh/id_dsa and ~/.ssh/identity) are **automatically** added to the SSH authentication agent. You shouldn't need to run `ssh-add path/to/key`
- unless you override the file name when you generate a key.
+, ~/.ssh/id_dsa and ~/.ssh/identity) are **automatically** added to the SSH authentication agent. You shouldn't need to run `ssh-add path/to/key`
+ unless you override the file name when you generate a key.
 
 也就是说, 把你的id_rsa文件手动指定一下`ssh_add 文件路径`(不知道为什么会出这种鬼问题)
 

@@ -2,11 +2,15 @@
 layout: post
 title: 关于@synthesize
 slug: 关于@synthesize
-date: 2022-01-14 00:00
+date: 2019-08-16 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+	- synthesize
+	- dynamic
+	- property
 ---
 
 首先, `@synthesize myLocalVar = _myLocalVar;` 这句话是显式帮你省掉了一个 `getter` 方法和一个 `setter` 方法. 两个方法长什么样不赘述.

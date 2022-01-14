@@ -2,11 +2,17 @@
 layout: post
 title: 数据结构篇一：Array,-Linked-List,-Stack,-Queues
 slug: 数据结构篇一：Array,-Linked-List,-Stack,-Queues
-date: 2022-01-14 00:00
+date: 2021-11-12 00:00
 status: publish
 author: walker
 categories: 
   - CS
+tags:
+  - data struct
+  - array
+  - linked list
+  - stack
+  - queues
 ---
 
 这是一位 google 工程师分享的8小时的[数据结构](https://www.youtube.com/watch?v=RBSGKlAvoiM)的视频,我的笔记

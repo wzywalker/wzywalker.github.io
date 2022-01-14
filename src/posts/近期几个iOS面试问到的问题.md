@@ -1,12 +1,14 @@
 ---
-layout: post
+layout: draft
 title: 近期几个iOS面试问到的问题
 slug: 近期几个iOS面试问到的问题
-date: 2022-01-14 00:00
+date: 2021-11-05 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - interview
 ---
 
 ```swift

@@ -2,11 +2,15 @@
 layout: post
 title: SwiftUI的ViewModifier和Animation学习笔记
 slug: SwiftUI的ViewModifier和Animation学习笔记
-date: 2022-01-14 00:00
+date: 2020-10-17 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - swiftui
+  - viewmodifier
+  - animation
 ---
 
 我们通过这篇文章练习如下几个知识点，借用的是斯坦福CS193p的课程里的demo，但是代码是我写的，也就是对着最终的效果写出我的实现的意思

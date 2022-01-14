@@ -2,11 +2,13 @@
 layout: post
 title: Xcode自增build号
 slug: Xcode自增build号
-date: 2022-01-14 00:00
+date: 2018-03-22 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - xcode
 ---
 
 脚本:

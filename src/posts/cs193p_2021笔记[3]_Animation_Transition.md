@@ -2,11 +2,15 @@
 layout: post
 title: cs193p_2021笔记[3]_Animation_Transition
 slug: cs193p_2021笔记[3]_Animation_Transition
-date: 2022-01-14 00:00
+date: 2022-10-24 02:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - cs193p
+  - animation
+  - transition
 ---
 
 [cs193p_2021_笔记_1](https://www.jianshu.com/p/998b0ef4a2cd)

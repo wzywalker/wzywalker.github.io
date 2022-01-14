@@ -2,11 +2,14 @@
 layout: post
 title: 把GAE程序通过SSH部署到VPS
 slug: 把GAE程序通过SSH部署到VPS
-date: 2022-01-14 00:00
+date: 2017-01-14 00:00
 status: publish
 author: walker
 categories: 
   - Skill
+tags:
+  - gae
+  - vps
 ---
 
 大部分在[文档](https://cloud.google.com/appengine/downloads)上都写了, 写这篇文章的目的是发现现在`appcfg.py update xxxx`的时候会打开浏览器访问google请求授权(后台内建了一个本地server, 端口是`8090`, 授权成功后会带授权码请求本地的8090端口, 所以我们在 ssh 环境中是没有浏览器的, 该怎么解决呢?

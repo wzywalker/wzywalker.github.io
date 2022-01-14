@@ -2,11 +2,14 @@
 layout: post
 title: 从查找文件并移动的shell命令说开去
 slug: 从查找文件并移动的shell命令说开去
-date: 2022-01-14 00:00
+date: 2020-10-13 00:00
 status: publish
 author: walker
 categories: 
   - Skill
+tags:
+	- shell
+	- xargs
 ---
 
 一个不能更常见的需求: 从一大堆下载目录(或别的目录)里, 查找指定的文件, 并移动/复制到指定的文件夹, 如果用鼠标点开一个个的文件夹, 还有文件夹里的文件夹, 估计要累死, 当然, 即使自己不会, 也很容易查到两个shell命令:

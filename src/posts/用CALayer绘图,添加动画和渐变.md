@@ -2,11 +2,16 @@
 layout: post
 title: 用CALayer绘图,添加动画和渐变
 slug: 用CALayer绘图,添加动画和渐变
-date: 2022-01-14 00:00
+date: 2019-10-17 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - calayer
+  - path
+  - animation
+  - gradient
 ---
 
 如果CALayer只有一个简单的 path, 那么直接给 path 赋值是最简单的:

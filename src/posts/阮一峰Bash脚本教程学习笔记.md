@@ -2,7 +2,7 @@
 layout: post
 title: -bin-bash和-bin-sh的区别
 slug: -bin-bash和-bin-sh的区别
-date: 2022-01-14 00:00
+date: 2020-07-02 00:00
 status: publish
 author: walker
 categories: 

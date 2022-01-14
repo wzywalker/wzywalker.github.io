@@ -2,11 +2,14 @@
 layout: post
 title: UIImage转NSData有时为nil
 slug: UIImage转NSData有时为nil
-date: 2022-01-14 00:00
+date: 2018-07-14 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - debug
+  - uiimage
 ---
 
 一般, 我们会用`UIImagePNGRepresentation`, `UIImagePNGRepresentation`来达到目的, 但有时候, 发现它的返回值为`nil`...

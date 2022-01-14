@@ -2,11 +2,13 @@
 layout: post
 title: 理解Core-Graphics的Clipping和填充模式
 slug: 理解Core-Graphics的Clipping和填充模式
-date: 2022-01-14 00:00
+date: 2021-11-28 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - core graphics
 ---
 
 先来看一个例子

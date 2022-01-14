@@ -2,11 +2,15 @@
 layout: post
 title: 树莓派利用Privoxy,Shadowsocks,Kcptun做http代理排坑记录
 slug: 树莓派利用Privoxy,Shadowsocks,Kcptun做http代理排坑记录
-date: 2022-01-14 00:00
+date: 2018-11-12 00:00
 status: publish
 author: walker
 categories: 
   - Skill
+tags:
+  - raspberry pi
+  - shadowsocks
+  - kcptun
 ---
 
 我用树莓派做`翻墙网关`, `透明网关`, 通通绕到坑里出不来了, 方案很多, 思路是树莓派翻, 智能dns, 智能国内外分流, 外加让树莓派成为局域网的`网关`以便让局域网用户`无感翻墙`.  
@@ -101,3 +105,7 @@ feedproxy.google.com
 我没去研究什么是`Supervised`了, 而且也希望代理好切换, 于是选择了第二种方案, 即换了wifi后就没代理了(跟在`iPhone`上设置一样)
 
 ![](../assets/1859625-f092d16231112699.jpg)
+
+# TODO:
+
+udp2raw, and udp2raw on mac

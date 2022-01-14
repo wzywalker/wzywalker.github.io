@@ -2,11 +2,17 @@
 layout: post
 title: View
 slug: View
-date: 2022-01-14 00:00
+date: 2021-12-22 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - uiview
+  - frame
+  - bounds
+  - layout
+  - autolayout
 ---
 
 《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第1章

@@ -2,11 +2,24 @@
 layout: post
 title: 《Deep-Learning-with-Python》笔记
 slug: 《Deep-Learning-with-Python》笔记
-date: 2022-01-14 00:00
+date: 2021-09-12 00:00
 status: publish
 author: walker
 categories: 
   - AI
+tags:
+  - deep learning
+  - 深度学习
+  - keras
+  - cv
+  - nlp
+  - tensorflow
+  - gan
+  - lstm
+  - language mode
+  - rnn
+  - heatmap
+  - dropout
 ---
 
 本来是打算趁这个时间好好看看花书的，前几章看下来确实觉得获益匪浅，但看下去就发现跟不上了，特别是抱着急功近利的心态的话，目前也沉不下去真的一节节吃透地往下看。这类书终归不是入门教材，是需要你有过一定的积累后再回过头来看的。

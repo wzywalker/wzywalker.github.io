@@ -2,11 +2,13 @@
 layout: post
 title: error--IB-Designables--Failed-to-update-auto-layout-status
 slug: error--IB-Designables--Failed-to-update-auto-layout-status
-date: 2022-01-14 00:00
+date: 2020-08-21 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - xcode
 ---
 
 首先, 了解一下 [IBInspectable / IBDesignable](http://nshipster.com/ibinspectable-ibdesignable/)

@@ -2,11 +2,18 @@
 layout: post
 title: Drawing
 slug: Drawing
-date: 2022-01-14 00:00
+date: 2021-11-03 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - drawing
+  - imageview
+  - core image
+  - path
+  - shape
+  - graphics
 ---
 
 《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第2章

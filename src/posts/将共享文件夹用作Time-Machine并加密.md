@@ -2,11 +2,14 @@
 layout: post
 title: 将共享文件夹用作Time-Machine并加密
 slug: 将共享文件夹用作Time-Machine并加密
-date: 2022-01-14 00:00
+date: 2019-11-21 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+	- time machine
+	- nas
 ---
 
 怎么在局域网创建一个共享文件夹不在此文讨论范围内, 比如windows文件夹简单右键共享一下, 就能走完本教程. 以下是在macOS上设置Time Machine的操作.

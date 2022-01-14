@@ -2,11 +2,16 @@
 layout: post
 title: cs193p_2021笔记[4]_Color_Image_Gesture
 slug: cs193p_2021笔记[4]_Color_Image_Gesture
-date: 2022-01-14 00:00
+date: 2022-10-24 03:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - uicolor
+  - uiimage
+  - gesture
+  - item provider
 ---
 
 [cs193p_2021_笔记_1](https://www.jianshu.com/p/998b0ef4a2cd)
@@ -56,7 +61,7 @@ UIImage
 * Multiple file formats, transformation primitives, animated images, etc. 
 * Once you have the UIImage you want, use Image(uiImage:) to display it.
 
-#  Multithreading
+# Multithreading
 
 * 多线程其实并不是同时运行，而是前后台非常快速地切换
 * `Queue`只是有顺序执行的代码，封装了`threading`的应用

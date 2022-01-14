@@ -2,11 +2,13 @@
 layout: post
 title: OC静态库里NSClassFromString得到nil的解决
 slug: OC静态库里NSClassFromString得到nil的解决
-date: 2022-01-14 00:00
+date: 2018-03-15 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  debug
 ---
 
 如果你在静态库中有从类名反射回类的代码, 如下:

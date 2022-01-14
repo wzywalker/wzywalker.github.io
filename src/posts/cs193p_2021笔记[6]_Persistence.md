@@ -2,11 +2,17 @@
 layout: post
 title: cs193p_2021笔记[6]_Persistence
 slug: cs193p_2021笔记[6]_Persistence
-date: 2022-01-14 00:00
+date: 2022-10-24 05:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - cs193p
+  - userdefaults 
+  - core data
+  - codable
+  - cloudkit
 ---
 
 [cs193p_2021_笔记_1](https://www.jianshu.com/p/998b0ef4a2cd)
@@ -139,7 +145,7 @@ db.perform(query) { (records: [CKRecord]?, error: NSError?) in
 
 One of the coolest features of Cloud Kit is its ability to `send push notifications` on changes. All you do is register an `NSPredicate` and whenever the database changes to match it,
 
-##  File System
+## File System
 
 Sandbox包含：
 * Application directory — Your executable, .jpgs, etc.; not writeable.

@@ -7,6 +7,11 @@ status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - objective c
+  - runtime
+  - message forward
+  - property
 ---
 
 ![](../assets/1859625-d4af961b2a73f75a.png)

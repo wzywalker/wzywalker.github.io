@@ -2,11 +2,13 @@
 layout: post
 title: MacOS添加自启动脚本
 slug: MacOS添加自启动脚本
-date: 2022-01-14 00:00
+date: 2020-03-21 00:00
 status: publish
 author: walker
 categories: 
   - Skill
+tags:
+	- macos
 ---
 
 MacOS下添加自启动脚本有很多方法, 在一篇[知乎文章](https://www.zhihu.com/question/22794908/answer/89421030)中了解到Launchd替代了过去的init, rc, init.d, rc.d, SystemStarter, inted/xinetd, watchdogd等, 建议用Launchd.

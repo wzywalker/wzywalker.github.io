@@ -2,11 +2,16 @@
 layout: post
 title: cs193p_2021笔记[5]_Property-Wrapper
 slug: cs193p_2021笔记[5]_Property-Wrapper
-date: 2022-01-14 00:00
+date: 2022-10-24 04:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - cs193p
+  - property wrapper
+  - binding
+  - publisher
 ---
 
 [cs193p_2021_笔记_1](https://www.jianshu.com/p/998b0ef4a2cd)
@@ -20,7 +25,7 @@ cs193p_2021_笔记_5_Property Wrapper
 
 ---
 
-#  Property Wrappers
+# Property Wrappers
 
 C#中的`Attributes`，python中的`Decorators`, Java的`Annonations`，类似的设计模式。
 

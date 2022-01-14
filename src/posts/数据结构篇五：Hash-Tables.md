@@ -2,11 +2,14 @@
 layout: post
 title: 数据结构篇五：Hash-Tables
 slug: 数据结构篇五：Hash-Tables
-date: 2022-01-14 00:00
+date: 2021-11-12 04:00
 status: publish
 author: walker
 categories: 
   - CS
+tags:
+  - data struct
+  - hash table
 ---
 
 这是一位 google 工程师分享的8小时的[数据结构](https://www.youtube.com/watch?v=RBSGKlAvoiM)的视频,我的笔记

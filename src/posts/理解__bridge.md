@@ -7,6 +7,9 @@ status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - bridge
+  - c++
 ---
 
 比较受用, 全文转载, [原文点此](https://abson.github.io/2016/08/19/Object-C-理解桥接/)

@@ -2,11 +2,14 @@
 layout: post
 title: shell命令用正则批量重命名文件
 slug: shell命令用正则批量重命名文件
-date: 2022-01-14 00:00
+date: 2020-11-14 00:00
 status: publish
 author: walker
 categories: 
   - Skill
+tags:
+  - shell
+  - rename
 ---
 
 又是用shell来操作文件的问题.

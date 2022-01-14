@@ -2,11 +2,13 @@
 layout: post
 title: iOS签名相关命令
 slug: iOS签名相关命令
-date: 2022-01-14 00:00
+date: 2019-10-09 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - sign
 ---
 
 用openssl查看CSR文件内容

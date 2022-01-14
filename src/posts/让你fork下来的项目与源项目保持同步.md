@@ -2,11 +2,16 @@
 layout: post
 title: 让你fork下来的项目与源项目保持同步
 slug: 让你fork下来的项目与源项目保持同步
-date: 2022-01-14 00:00
+date: 2019-03-23 00:00
 status: publish
 author: walker
 categories: 
   - Skill
+tags:
+  - git
+  - github
+  - fork
+  - upstream
 ---
 
 原文[在此](https://2buntu.com/articles/1459/keeping-your-forked-repo-synced-with-the-upstream-source/), 建议阅读, 我把关键步骤抽出来了, 方便概览

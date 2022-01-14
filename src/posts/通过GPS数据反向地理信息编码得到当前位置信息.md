@@ -7,6 +7,9 @@ status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - gps
+  - geo
 ---
 
 # 检查可用性

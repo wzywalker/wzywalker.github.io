@@ -2,11 +2,15 @@
 layout: post
 title: Thread-in-iOS
 slug: Thread-in-iOS
-date: 2022-01-14 00:00
+date: 2021-11-26 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - thread
+  - gcd
+  - operation
 ---
 
 《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第25章

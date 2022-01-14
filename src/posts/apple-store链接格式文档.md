@@ -2,11 +2,13 @@
 layout: post
 title: apple-store链接格式文档
 slug: apple-store链接格式文档
-date: 2022-01-14 00:00
+date: 2020-03-12 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - app store
 ---
 
 The app on Appstore has specific URL format `http://itunes.apple.com/[country-code]/app/[app-name]/id+[id_value]?mt=[1...12]`

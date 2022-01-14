@@ -2,11 +2,15 @@
 layout: post
 title: Windows下用AHK来映射Mac常用快捷键
 slug: Windows下用AHK来映射Mac常用快捷键
-date: 2022-01-14 00:00
+date: 2019-03-17 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - macos
+  - windows
+  - ahk
 ---
 
 最近用Windows做了一段主力机, 别的问题倒没啥, Windows下有啥干不了的呢, 哪怕鼠标滚轮方向相反, 大量快捷键不同等问题都能在非常短的适应后就不会对自己造成什么困找, 问题是我还得在Windows和Mac环境切来切去, 这样频繁地按错快捷键再纠正也挺烦人的, 决定一劳永逸地解决这个问题, 经过反复搜索和比较, 还是一个以前用Windows的时候就一直敬而远之的软件成了我的首选:AutoHotKey(AHK).

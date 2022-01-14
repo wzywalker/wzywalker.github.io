@@ -2,11 +2,14 @@
 layout: post
 title: 开发apple-pay碰到的问题总结
 slug: 开发apple-pay碰到的问题总结
-date: 2022-01-14 00:00
+date: 2019-03-04 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - apple pay
+  - debug
 ---
 
 本来想简单总结一下Apple Pay 开发过程中的几个问题, 结果被[这篇文章](http://www.lilongcnc.cc/2016/02/28/9-applepay支付界面调用和获取payment参数银联扣款流程/)全碰上了, 干脆全文转载, 作者对相关资源整理得比较详细, 比较有参考价值, 建议阅读, 我做个概述.

@@ -2,11 +2,13 @@
 layout: post
 title: El-Captain设置环境变量
 slug: El-Captain设置环境变量
-date: 2022-01-14 00:00
+date: 2020-08-19 00:00
 status: publish
 author: walker
 categories: 
   - Skill
+tags:
+  - macos
 ---
 
 这里说的不是设置变量给bash/shell来用, 而是给程序使用, 比如, chromium自36版以后, 就不再内置google api keys, [官方文档](http://www.chromium.org/developers/how-tos/api-keys)说明你打包的时候没有添加key的话, 可以在runtime添加, 比如在系统的环境变量里添加进去.

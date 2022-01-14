@@ -2,11 +2,13 @@
 layout: post
 title: libxml-tree-h-file-not-found
 slug: libxml-tree-h-file-not-found
-date: 2022-01-14 00:00
+date: 2018-09-22 00:00
 status: publish
 author: walker
 categories: 
   - iOS
+tags:
+  - libxml2
 ---
 
 stackoverflow用户对添加libxml2库表现出了极大的抱怨，原因在要把它好好地添加进去实在是太复杂了。
