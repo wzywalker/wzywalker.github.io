@@ -5,55 +5,6 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitem
 xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-    <loc>/archives/cs193p_2021_%E7%AC%94%E8%AE%B0_%5B%E5%AE%8C%E7%BB%93%5D_pdf%E4%B8%8B%E8%BD%BD/</loc>
-    <lastmod>2022-10-24</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-</url>
-
-<url>
-    <loc>/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B7%5D_Document-Architecture/</loc>
-    <lastmod>2022-10-24</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-</url>
-
-<url>
-    <loc>/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B6%5D_Persistence/</loc>
-    <lastmod>2022-10-24</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-</url>
-
-<url>
-    <loc>/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B5%5D_Property-Wrapper/</loc>
-    <lastmod>2022-10-24</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-</url>
-
-<url>
-    <loc>/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B4%5D_Color_Image_Gesture/</loc>
-    <lastmod>2022-10-24</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-</url>
-
-<url>
-    <loc>/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B3%5D_Animation_Transition/</loc>
-    <lastmod>2022-10-24</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-</url>
-
-<url>
-    <loc>/archives/cs193p_2021_%E7%AC%94%E8%AE%B0%5B2%5D/</loc>
-    <lastmod>2022-10-24</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-</url>
-
-<url>
     <loc>/archives/HMM%E3%80%81NER%E3%80%81PoS%E3%80%81Viterbi%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2022-06-14</lastmod>
     <changefreq>always</changefreq>
@@ -62,20 +13,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
     <loc>/archives/%E3%80%8AEffective-Objective-C-2-0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/</loc>
-    <lastmod>2022-01-14</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-</url>
-
-<url>
-    <loc>/archives/%E9%80%9A%E8%BF%87GPS%E6%95%B0%E6%8D%AE%E5%8F%8D%E5%90%91%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E7%BC%96%E7%A0%81%E5%BE%97%E5%88%B0%E5%BD%93%E5%89%8D%E4%BD%8D%E7%BD%AE%E4%BF%A1%E6%81%AF/</loc>
-    <lastmod>2022-01-14</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-</url>
-
-<url>
-    <loc>/archives/%E7%90%86%E8%A7%A3__bridge/</loc>
     <lastmod>2022-01-14</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
@@ -182,6 +119,55 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
     <loc>/archives/Drawing/</loc>
     <lastmod>2021-11-03</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
+    <loc>/archives/cs193p_2021_%E7%AC%94%E8%AE%B0_%5B%E5%AE%8C%E7%BB%93%5D_pdf%E4%B8%8B%E8%BD%BD/</loc>
+    <lastmod>2021-10-24</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
+    <loc>/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B7%5D_Document-Architecture/</loc>
+    <lastmod>2021-10-24</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
+    <loc>/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B6%5D_Persistence/</loc>
+    <lastmod>2021-10-24</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
+    <loc>/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B5%5D_Property-Wrapper/</loc>
+    <lastmod>2021-10-24</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
+    <loc>/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B4%5D_Color_Image_Gesture/</loc>
+    <lastmod>2021-10-24</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
+    <loc>/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B3%5D_Animation_Transition/</loc>
+    <lastmod>2021-10-24</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
+    <loc>/archives/cs193p_2021_%E7%AC%94%E8%AE%B0%5B2%5D/</loc>
+    <lastmod>2021-10-24</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
 </url>
@@ -502,6 +488,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+    <loc>/archives/%E7%90%86%E8%A7%A3__bridge/</loc>
+    <lastmod>2018-06-14</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
     <loc>/archives/Xcode%E8%87%AA%E5%A2%9Ebuild%E5%8F%B7/</loc>
     <lastmod>2018-03-22</lastmod>
     <changefreq>always</changefreq>
@@ -518,6 +511,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
     <loc>/archives/OC%E9%9D%99%E6%80%81%E5%BA%93%E9%87%8CNSClassFromString%E5%BE%97%E5%88%B0nil%E7%9A%84%E8%A7%A3%E5%86%B3/</loc>
     <lastmod>2018-03-15</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
+    <loc>/archives/%E9%80%9A%E8%BF%87GPS%E6%95%B0%E6%8D%AE%E5%8F%8D%E5%90%91%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E7%BC%96%E7%A0%81%E5%BE%97%E5%88%B0%E5%BD%93%E5%89%8D%E4%BD%8D%E7%BD%AE%E4%BF%A1%E6%81%AF/</loc>
+    <lastmod>2018-01-14</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
 </url>
