@@ -66,17 +66,17 @@ nav = [
 social_links = [
     {
         "name": "Twitter",
-        "url": "https://twitter.com/AlanDecode",
+        "url": "https://twitter.com/walkerwzy",
         "icon": "gi gi-twitter"
     },
     {
         "name": "GitHub",
-        "url": "https://github.com/AlanDecode",
+        "url": "https://github.com/walkerwzy",
         "icon": "gi gi-github"
     },
     {
         "name": "Weibo",
-        "url": "https://weibo.com/5245109677/",
+        "url": "https://weibo.com/1071696872",
         "icon": "gi gi-weibo"
     }
 ]
@@ -84,8 +84,8 @@ social_links = [
 valine = {
     "enable": True,
     "el": '#vcomments',
-    "appId": "IKRAfuPq0zrz6Wfje8ahHAIP-gzGzoHsz",
-    "appKey": "lFaCWkd4xCs0Ng5UWs1eHNwU",
+    "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz",
+    "appKey": "iQCtrtlr8eKrQllM03GMESMJ",
     "visitor": True,
     "recordIP": True
 }
