@@ -2,12 +2,12 @@
 """Sample Configuration
 """
 
-source_dir = "./src/"
-build_dir = "./dist/"
+source_dir = "../src/"
+build_dir = "../dist/"
 template = {
     "name": "Galileo",
     "type": "local",
-    "path": "./Galileo"
+    "path": "../Galileo"
 }
 
 # For Maverick
