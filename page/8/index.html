@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/ca56c0d5a4cdab049d48400eb35fcc82.json"
         }
     </script>
     
@@ -67,14 +67,74 @@
         
         <li>
             <article class="yue">
-                <h1>RNN梯度消失与梯度爆炸推导</h1>
+                <h1>UIImage转NSData有时为nil</h1>
+                
+                    <blockquote>一般, 我们会用UIImagePNGRepresentation, UIImagePNGRepresentation来达到目的, 但有时候, 发现它的返回值为nil...不需要怀疑这么简单处理有什么问题, 文档 就是如此:</blockquote>
+                
+                <footer>
+                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/UIImage%E8%BD%ACNSData%E6%9C%89%E6%97%B6%E4%B8%BAnil/">Read More</a></span>
+                    <time class="ga-mono">
+                        2018-07-14
+                    </time>
+                </footer>
+            </article>
+        </li>
+        
+        <li>
+            <article class="yue">
+                <h1>Xcode自增build号</h1>
+                
+                    <blockquote>脚本:buildNumber=$(/usr/libexec/PlistBuddy -c &quot;Print CFBundleVersion&quot; &quot;${PROJECT_DIR}/${INFOPLIST_FILE}&quot;)  </blockquote>
+                
+                <footer>
+                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/Xcode%E8%87%AA%E5%A2%9Ebuild%E5%8F%B7/">Read More</a></span>
+                    <time class="ga-mono">
+                        2018-03-22
+                    </time>
+                </footer>
+            </article>
+        </li>
+        
+        <li>
+            <article class="yue">
+                <h1>UIMenuController的使用</h1>
+                
+                    <blockquote>#1, 基本使用</blockquote>
+                
+                <footer>
+                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/UIMenuController%E7%9A%84%E4%BD%BF%E7%94%A8/">Read More</a></span>
+                    <time class="ga-mono">
+                        2018-03-21
+                    </time>
+                </footer>
+            </article>
+        </li>
+        
+        <li>
+            <article class="yue">
+                <h1>OC静态库里NSClassFromString得到nil的解决</h1>
+                
+                    <blockquote>如果你在静态库中有从类名反射回类的代码, 如下:</blockquote>
+                
+                <footer>
+                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/OC%E9%9D%99%E6%80%81%E5%BA%93%E9%87%8CNSClassFromString%E5%BE%97%E5%88%B0nil%E7%9A%84%E8%A7%A3%E5%86%B3/">Read More</a></span>
+                    <time class="ga-mono">
+                        2018-03-15
+                    </time>
+                </footer>
+            </article>
+        </li>
+        
+        <li>
+            <article class="yue">
+                <h1>我最常用的几个Xcode快捷键</h1>
                 
                     <blockquote></blockquote>
                 
                 <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/RNN%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1%E4%B8%8E%E6%A2%AF%E5%BA%A6%E7%88%86%E7%82%B8%E6%8E%A8%E5%AF%BC/">Read More</a></span>
+                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E6%88%91%E6%9C%80%E5%B8%B8%E7%94%A8%E7%9A%84%E5%87%A0%E4%B8%AAXcode%E5%BF%AB%E6%8D%B7%E9%94%AE/">Read More</a></span>
                     <time class="ga-mono">
-                        2021-05-09
+                        2017-03-16
                     </time>
                 </footer>
             </article>
@@ -82,14 +142,14 @@
         
         <li>
             <article class="yue">
-                <h1>RNN中bidirectional和num_layer对output和hidden形状的影响</h1>
+                <h1>把GAE程序通过SSH部署到VPS</h1>
                 
-                    <blockquote>Batch first</blockquote>
+                    <blockquote>大部分在文档上都写了, 写这篇文章的目的是发现现在appcfg.py update xxxx的时候会打开浏览器访问google请求授权(后台内建了一个本地server, 端口是8090, 授权成功后会带授权码请求本地的8090端口, 所以我们在 ssh 环境中是没有浏览器的, 该怎么解决呢?我玩 linux 不多, 就以我的知识量这么解决:</blockquote>
                 
                 <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/RNN%E4%B8%ADbidirectional%E5%92%8Cnum_layer%E5%AF%B9output%E5%92%8Chidden%E5%BD%A2%E7%8A%B6%E7%9A%84%E5%BD%B1%E5%93%8D/">Read More</a></span>
+                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E6%8A%8AGAE%E7%A8%8B%E5%BA%8F%E9%80%9A%E8%BF%87SSH%E9%83%A8%E7%BD%B2%E5%88%B0VPS/">Read More</a></span>
                     <time class="ga-mono">
-                        2021-04-13
+                        2017-01-14
                     </time>
                 </footer>
             </article>
@@ -97,89 +157,14 @@
         
         <li>
             <article class="yue">
-                <h1>几种教材里求解Ax=0笔记</h1>
+                <h1>-bin-bash和-bin-sh的区别</h1>
                 
-                    <blockquote>如果一个矩阵化简为</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E5%87%A0%E7%A7%8D%E6%95%99%E6%9D%90%E9%87%8C%E6%B1%82%E8%A7%A3Ax%3D0%E7%AC%94%E8%AE%B0/">Read More</a></span>
-                    <time class="ga-mono">
-                        2021-03-05
-                    </time>
-                </footer>
-            </article>
-        </li>
-        
-        <li>
-            <article class="yue">
-                <h1>scikit-learn官网教程笔记(一)</h1>
-                
-                    <blockquote>当初翻scikit learn文档的时候，越翻越多，干脆把它的教程拿出来看了看，只有前面的部分，主要想看看scikit learn角度整理的知识体系，果然，一开始就是从监督和非监督讲起：Machine learning</blockquote>
+                    <blockquote>[该文不严谨, 文末有补充]脚本test.sh内容：</blockquote>
                 
                 <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/scikit-learn%E5%AE%98%E7%BD%91%E6%95%99%E7%A8%8B%E7%AC%94%E8%AE%B0%28%E4%B8%80%29/">Read More</a></span>
+                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/-bin-bash%E5%92%8C-bin-sh%E7%9A%84%E5%8C%BA%E5%88%AB/">Read More</a></span>
                     <time class="ga-mono">
-                        2021-03-02
-                    </time>
-                </footer>
-            </article>
-        </li>
-        
-        <li>
-            <article class="yue">
-                <h1>从投影、正交补角度证明（推导）最小二乘法公式</h1>
-                
-                    <blockquote>学习线性回归的时候，会教我们$X\theta=y$可以直接用最小二乘法直接把$\theta$求出来：$\theta=(X^TX)^{-1}X^Ty$并且还在我之前的博文里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。首先，在吴恩达的教材里，这个并不叫最小二乘(least suqare），而是叫Normal Equation method，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(Projection)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：首先，预备知识子空间</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E4%BB%8E%E6%8A%95%E5%BD%B1%E3%80%81%E6%AD%A3%E4%BA%A4%E8%A1%A5%E8%A7%92%E5%BA%A6%E8%AF%81%E6%98%8E%EF%BC%88%E6%8E%A8%E5%AF%BC%EF%BC%89%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E5%85%AC%E5%BC%8F/">Read More</a></span>
-                    <time class="ga-mono">
-                        2021-01-25
-                    </time>
-                </footer>
-            </article>
-        </li>
-        
-        <li>
-            <article class="yue">
-                <h1>矩阵最小二乘法求解仿射变换矩阵</h1>
-                
-                    <blockquote>一个矩形三个顶点(0,0), (50, 0), (50, 50), 变换后为(30, 30), (30, 130), (130, 130), 求其仿射矩阵。我们分别设起始和结束矩阵的坐标为：$(a_x, a_y), (b_x, b_y), (c_x, c_y)$， 变换后的加一个prime（$ ^\prime$)符号，以此类推。</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E7%9F%A9%E9%98%B5%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E6%B1%82%E8%A7%A3%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5/">Read More</a></span>
-                    <time class="ga-mono">
-                        2021-01-17
-                    </time>
-                </footer>
-            </article>
-        </li>
-        
-        <li>
-            <article class="yue">
-                <h1>add_subplots方法传递额外参数</h1>
-                
-                    <blockquote>用matplotlib绘制3D图，最快的用法ax = plt.axes(projection=&#39;3d&#39;)</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/">Read More</a></span>
-                    <time class="ga-mono">
-                        2021-01-14
-                    </time>
-                </footer>
-            </article>
-        </li>
-        
-        <li>
-            <article class="yue">
-                <h1>二分法、牛顿法和梯度下降法开根号和解方程</h1>
-                
-                    <blockquote>二分法</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E4%BA%8C%E5%88%86%E6%B3%95%E3%80%81%E7%89%9B%E9%A1%BF%E6%B3%95%E5%92%8C%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E5%BC%80%E6%A0%B9%E5%8F%B7%E5%92%8C%E8%A7%A3%E6%96%B9%E7%A8%8B/">Read More</a></span>
-                    <time class="ga-mono">
-                        2021-01-14
+                        2010-03-26
                     </time>
                 </footer>
             </article>
