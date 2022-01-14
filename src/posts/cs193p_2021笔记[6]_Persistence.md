@@ -2,7 +2,7 @@
 layout: post
 title: cs193p_2021笔记[6]_Persistence
 slug: cs193p_2021笔记[6]_Persistence
-date: 2022-10-24 05:00
+date: 2021-10-24 05:00
 status: publish
 author: walker
 categories: 

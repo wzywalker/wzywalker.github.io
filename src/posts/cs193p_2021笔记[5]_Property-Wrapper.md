@@ -2,7 +2,7 @@
 layout: post
 title: cs193p_2021笔记[5]_Property-Wrapper
 slug: cs193p_2021笔记[5]_Property-Wrapper
-date: 2022-10-24 04:00
+date: 2021-10-24 04:00
 status: publish
 author: walker
 categories: 

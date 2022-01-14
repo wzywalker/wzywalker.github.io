@@ -2,7 +2,7 @@
 layout: post
 title: cs193p_2021笔记[4]_Color_Image_Gesture
 slug: cs193p_2021笔记[4]_Color_Image_Gesture
-date: 2022-10-24 03:00
+date: 2021-10-24 03:00
 status: publish
 author: walker
 categories: 
