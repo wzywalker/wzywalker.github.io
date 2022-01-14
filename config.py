@@ -4,15 +4,15 @@
 
 source_dir = "../src/"
 build_dir = "../dist/"
-template = {
-    "name": "Galileo",
-    "type": "local",
-    "path": "../Galileo"
-}
+# template = {
+#     "name": "Galileo",
+#     "type": "local",
+#     "path": "../Galileo"
+# }
 
 # For Maverick
 site_prefix = "/"
-# template = "Galileo"
+template = "Galileo"
 index_page_size = 10
 archives_page_size = 30
 fetch_remote_imgs = False
