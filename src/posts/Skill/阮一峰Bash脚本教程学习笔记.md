@@ -1,3 +1,18 @@
+---
+layout: post
+title: -bin-bash和-bin-sh的区别
+slug: -bin-bash和-bin-sh的区别
+date: 2022-01-14 00:00
+status: publish
+author: walker
+categories: 
+  - Skill
+tags:
+  - bash
+  - sh
+  - shell
+---
+
 [教程地址](https://wangdoc.com/bash/intro.html)
 
 ## 快捷键:
