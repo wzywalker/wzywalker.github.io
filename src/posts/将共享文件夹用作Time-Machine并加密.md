@@ -8,8 +8,8 @@ author: walker
 categories: 
   - iOS
 tags:
-	- time machine
-	- nas
+  - time machine
+  - nas
 ---
 
 怎么在局域网创建一个共享文件夹不在此文讨论范围内, 比如windows文件夹简单右键共享一下, 就能走完本教程. 以下是在macOS上设置Time Machine的操作.

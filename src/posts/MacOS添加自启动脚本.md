@@ -8,7 +8,7 @@ author: walker
 categories: 
   - Skill
 tags:
-	- macos
+  - macos
 ---
 
 MacOS下添加自启动脚本有很多方法, 在一篇[知乎文章](https://www.zhihu.com/question/22794908/answer/89421030)中了解到Launchd替代了过去的init, rc, init.d, rc.d, SystemStarter, inted/xinetd, watchdogd等, 建议用Launchd.

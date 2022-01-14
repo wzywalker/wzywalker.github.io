@@ -8,9 +8,9 @@ author: walker
 categories: 
   - iOS
 tags:
-	- synthesize
-	- dynamic
-	- property
+  - synthesize
+  - dynamic
+  - property
 ---
 
 首先, `@synthesize myLocalVar = _myLocalVar;` 这句话是显式帮你省掉了一个 `getter` 方法和一个 `setter` 方法. 两个方法长什么样不赘述.
