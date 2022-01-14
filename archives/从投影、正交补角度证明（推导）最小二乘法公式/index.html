@@ -1,0 +1,228 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>从投影、正交补角度证明（推导）最小二乘法公式 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="学习线性回归的时候，会教我们$X\theta=y$可以直接用最小二乘法直接把$\theta$求出来：$\theta=(X^TX)^{-1}X^Ty$并且还在我之前的博文里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。首先，在吴恩达的教材里，这个并不叫最小二乘(least suqare），而是叫Normal Equation method，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(Projection)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：首先，预备知识子空间" />
+<meta property="og:title" content="从投影、正交补角度证明（推导）最小二乘法公式 - Maverick" />
+<meta property="og:description" content="学习线性回归的时候，会教我们$X\theta=y$可以直接用最小二乘法直接把$\theta$求出来：$\theta=(X^TX)^{-1}X^Ty$并且还在我之前的博文里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。首先，在吴恩达的教材里，这个并不叫最小二乘(least suqare），而是叫Normal Equation method，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(Projection)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：首先，预备知识子空间" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/%E4%BB%8E%E6%8A%95%E5%BD%B1%E3%80%81%E6%AD%A3%E4%BA%A4%E8%A1%A5%E8%A7%92%E5%BA%A6%E8%AF%81%E6%98%8E%EF%BC%88%E6%8E%A8%E5%AF%BC%EF%BC%89%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E5%85%AC%E5%BC%8F/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2021-01-25T00:00:00-00.00" />
+<meta name="twitter:title" content="从投影、正交补角度证明（推导）最小二乘法公式 - Maverick" />
+<meta name="twitter:description" content="学习线性回归的时候，会教我们$X\theta=y$可以直接用最小二乘法直接把$\theta$求出来：$\theta=(X^TX)^{-1}X^Ty$并且还在我之前的博文里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。首先，在吴恩达的教材里，这个并不叫最小二乘(least suqare），而是叫Normal Equation method，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(Projection)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：首先，预备知识子空间" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">从投影、正交补角度证明（推导）最小二乘法公式</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2021-01-25
+                </time>
+                
+                in <a no-style class="category" href="/category/AI/">
+                    AI
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/%E4%BB%8E%E6%8A%95%E5%BD%B1%E3%80%81%E6%AD%A3%E4%BA%A4%E8%A1%A5%E8%A7%92%E5%BA%A6%E8%AF%81%E6%98%8E%EF%BC%88%E6%8E%A8%E5%AF%BC%EF%BC%89%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E5%85%AC%E5%BC%8F/" 
+                    data-flag-title="从投影、正交补角度证明（推导）最小二乘法公式"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>学习线性回归的时候，会教我们$X\theta=y$可以直接用<strong>最小二乘法</strong>直接把$\theta$求出来：</p><p>$\theta=(X^TX)^{-1}X^Ty$</p><p>并且还在我<a href="https://www.jianshu.com/p/c2d0c743dc5d">之前的博文</a>里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。</p><p>首先，在吴恩达的教材里，这个并不叫最小二乘(<code>least suqare</code>），而是叫<code>Normal Equation method</code>，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(<code>Projection</code>)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：</p><p>首先，预备知识</p><h2>子空间</h2>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-72641d1c767c5d48.png" /></figure><p>笔记很清楚了，对于一个矩阵
+$A= \begin{bmatrix}
+   -2 &amp; -1 &amp; -3 \
+   4 &amp; 2 &amp; 6 \
+\end{bmatrix}$ 它的列空间是自然是C(A)，行空间自然是A的转置的后的<code>列空间</code>，然后各自拥有一个对应的零空间（即求解$Ax=0, A^Tx=0）$</p><p>上图用红框框出来的部分即是具体这个矩阵$A$的四个子空间。同时，拥有如下性质：</p><ol>
+<li>$C(A)$与$N(A^T)$正交(<code>orthogonal</code>)，即列空间与左零空间正交</li>
+<li>$C(A^T)$与$N(A)$正交，即行空间与零空间正交</li>
+</ol>
+<h2>正交补</h2>
+<p>$V^\bot = {\vec x \in \R^n | \vec x \cdot \vec{v} = 0; for; every\ \vec{v} \in V \text{}}$ 即V的正交补为垂直于V内任意一个向量的所有向量。</p><p>那么:</p><ul>
+<li>$C(A) = (N(A^T))^\bot$</li>
+<li>$C(A^T) = (N(A))^\bot$</li>
+</ul>
+<h2>投影是一个线性变换</h2>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-d8ac940868255950.png" /></figure>
+这里已经看到我们熟悉的$(A^TA)^{-1}A^Tx$了，我们来看一下推导过程：<ol>
+<li>$\vec x$在$V \in \R^n$上的投影$Proj_V^{\vec x} = \vec v$必然能表示成该空间的<code>basis</code>{$\vec b_1, \vec b_2, \vec b_3, \dots$}的线性变换：$\vec v \in V = y_1\vec b_1 + y_2\vec b_2 + \cdots + y_k \vec b_k =  A\vec y$</li>
+<li>求出$\vec y$则求出了这个投影在哪里</li>
+<li>$\vec x$能向$V$投影，自然也能向$V^\bot$投影($\vec w$)</li>
+</ol>
+<ul>
+<li>这里是故意这么说的，强调都是投影，其实在向$V$投影时，在$V^\bot$的投影（$\vec w$）就是那条<strong>垂线</strong></li>
+</ul>
+<ol start="4">
+<li>$V \Rightarrow C(A),; V^\bot \Rightarrow N(A^T), \vec v \in V, \vec w \in V^\bot$</li>
+<li>左零空间只不过是转置的零空间，那么零空间的特性是什么呢？即$A\vec x = 0$的空间，那么$\vec w$在左零空间里，意味着: $A^T\vec w = 0$</li>
+<li>$\vec w = \vec x - \vec v = \vec x - A\vec y \Rightarrow A^T(\vec x - A\vec y) = 0 \Rightarrow A^T \vec x = A^TA\vec y$</li>
+<li>只要$A^TA$可逆的话: $\Rightarrow \vec  y= (A^TA)^{-1}A^T\vec x$</li>
+<li>$\therefore Proj_V^{\vec x} = A\vec y = A(A^TA)^{-1}A^T\vec x$</li>
+<li>得证$\vec x$在$V$上的投影就是一个线性变换</li>
+<li>$\vec y$即是机器学习中我们需要学习到的<strong>系数</strong> = $(A^TA)^{-1}A^T$</li>
+</ol>
+<h2>最小二乘逼近</h2>
+<p>由此到了下一课，<code>the lease squares approximation</code>，讲的就是$A\vec x = \vec b$无解时，意思就是在$\vec b$不存在A的张成子空间中，所以无论进行怎样的<strong>线性变换</strong>，都是不可能得到$\vec b$的，则取$\vec x$在$C(A)$中的投影作为近似的解（证明就不再展开了）
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-d1b8b7885a37111f.png" /></figure>
+仍然用的是同一个思路，即&quot;垂线在左零空间中&quot;，来构造$A^T\cdot \vec w = \vec 0$</p><h2>应用最小二乘拟合一条回归线</h2>
+<p>这里终于讲到了与机器学习最接近的内容：<code>regression</code>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-47522e6f6b83c068.png" /></figure>
+可以看到，毫无业务思维的花花肠子，很多机器学习课程里会花大量工夫从感性到理性上给你讲这些内容，因为它的期望从0跟你讲清楚，而在循序渐进的数学理论体系里，这些根本就不需要关联感性认识的，什么每年的房价啊，数学关注的只是建模。</p><p>这个回归实例里，因为需要拟合的是一条直线：$y = b + ax$，那么既有的数据就成了机器学习里的“样本”，但我们这里不需要这么理解，而是直接理解为矩阵，得到
+方程组：
+$\begin{cases}
+b + a = 1 \
+b + 2a = 2 \
+b + 3a = 2
+\end{cases}$
+提取矩阵：
+$A = \begin{bmatrix}1&amp;1\1&amp; 2\ 1&amp; 3\end{bmatrix}, \vec b = \begin{bmatrix}1\2\ 2\end{bmatrix}$ $\Rightarrow A\vec x = \vec b$</p><p>好了，在上面提到的<a href="https://www.jianshu.com/p/c2d0c743dc5d">这篇博文</a>里，我们不明就里地直接用了公式，已知A和b求变换矩阵M(即这里的$\vec x$)，还当成是机器学习的内容，而现在我们已经知道自己是在做什么，就是找b在$A$的张成子空间里的投影，就能得到最近似的解</p><p>$$\vec x \approx (A^TA)^{-1}A^T\vec b$$</p>
+
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+    <span class="ga-tag">
+        <a class="ga-highlight" href="/tag/%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95/">#最小二乘法</a>
+    </span>
+    
+    <span class="ga-tag">
+        <a class="ga-highlight" href="/tag/math/">#math</a>
+    </span>
+    
+    <span class="ga-tag">
+        <a class="ga-highlight" href="/tag/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/">#线性代数</a>
+    </span>
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/scikit-learn%E5%AE%98%E7%BD%91%E6%95%99%E7%A8%8B%E7%AC%94%E8%AE%B0%28%E4%B8%80%29/">scikit-learn官网教程笔记(一)</a>
+        <p class="yue">当初翻scikit learn文档的时候，越翻越多，干脆把它的教程拿出来看了看，只有前面的部分，主要想看看scikit learn角度整理的知识体系，果然，一开始就是从监督和非监督讲起：Machine learning</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/%E7%9F%A9%E9%98%B5%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E6%B1%82%E8%A7%A3%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5/">矩阵最小二乘法求解仿射变换矩阵</a>
+        <p class="yue">一个矩形三个顶点(0,0), (50, 0), (50, 50), 变换后为(30, 30), (30, 130), (130, 130), 求其仿射矩阵。我们分别设起始和结束矩阵的坐标为：$(a_x, a_y), (b_x, b_y), (c_x, c_y)$， 变换后的加一个prime（$ ^\prime$)符号，以此类推。</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

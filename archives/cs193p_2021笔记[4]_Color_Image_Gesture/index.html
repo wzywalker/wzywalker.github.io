@@ -1,0 +1,347 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>cs193p_2021笔记[4]_Color_Image_Gesture - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="cs193p_2021_笔记_1" />
+<meta property="og:title" content="cs193p_2021笔记[4]_Color_Image_Gesture - Maverick" />
+<meta property="og:description" content="cs193p_2021_笔记_1" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B4%5D_Color_Image_Gesture/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="cs193p_2021笔记[4]_Color_Image_Gesture - Maverick" />
+<meta name="twitter:description" content="cs193p_2021_笔记_1" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">cs193p_2021笔记[4]_Color_Image_Gesture</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/iOS/">
+                    iOS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B4%5D_Color_Image_Gesture/" 
+                    data-flag-title="cs193p_2021笔记[4]_Color_Image_Gesture"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p><a href="https://www.jianshu.com/p/998b0ef4a2cd">cs193p_2021_笔记_1</a>
+<a href="https://www.jianshu.com/p/af0ad1bead34">cs193p_2021_笔记_2</a>
+<a href="https://www.jianshu.com/p/d103f8d12052">cs193p_2021_笔记_3_Animation_Transition</a>
+cs193p_2021_笔记_4_Color_Image_Gesture
+<a href="https://www.jianshu.com/p/e3c2ee1628c6">cs193p_2021_笔记_5_Property Wrapper</a>
+<a href="https://www.jianshu.com/p/a315274a4fd2">cs193p_2021_笔记_6_Persistence</a>
+<a href="https://www.jianshu.com/p/f4ae879eef9c">cs193p_2021_笔记_7_Document Architecture</a>
+<a href="https://www.jianshu.com/p/2136bdc2c6f6">cs193p_2021_笔记_8</a></p><p>--</p><h1>Color, UIColor &amp; CGColor</h1>
+<p>Color:</p><ul>
+<li>Is a color-specifier, e.g., <code>.foregroundColor(Color.green)</code>.</li>
+<li>Can also act like a <code>ShapeStyle</code>, e.g., <code>.fill(Color.blue)</code>.</li>
+<li>Can also act like a <code>View</code>, e.g., Color.white can appear <code>wherever</code> a View can appear.（可以当作view）</li>
+</ul>
+<p>UIColor:</p><ul>
+<li>Is used to <code>manipulate</code> colors.（主打操控）</li>
+<li>Also has many <code>more</code> built-in <code>colors</code> than <code>Color</code>, including “system-related” colors.(颜色更多)</li>
+<li>Can be interrogated and can convert between color spaces.</li>
+</ul>
+<p>For example, you can get the RGBA values from a UIColor.
+Once you have desired UIColor, employ <code>Color(uiColor:)</code> to use it in one of the roles above.</p><p>CGColor:</p><ul>
+<li>The fundamental color representation in the Core Graphics drawing system</li>
+<li><code>color.cgColor</code></li>
+</ul>
+<h1>Image V.S. UIImage</h1>
+<p>Image:</p><ul>
+<li>Primarily serves as a View.(主要功能是View)</li>
+<li>Is <code>not</code> a type for vars that <code>hold an image</code> (i.e. a jpeg or gif or some such). That’s UIImage.</li>
+<li>Access images in your Assets.xcassets (in Xcode) by name using <code>Image(_ name: String)</code>.</li>
+<li>Also, many, many system images available via <code>Image(systemName:)</code>.</li>
+<li>You can control the size of system images with <code>.imageScale()</code> View modifier.</li>
+<li>System images also are affected by the .font modifier.</li>
+<li>System images are also very useful <code>as masks</code> (for gradients, for example).</li>
+</ul>
+<p>UIImage</p><ul>
+<li>Is the type for actually <code>creating/manipulating</code> images and <code>storing</code> in vars.</li>
+<li>Very powerful representation of an image.</li>
+<li>Multiple file formats, transformation primitives, animated images, etc.</li>
+<li>Once you have the UIImage you want, use Image(uiImage:) to display it.</li>
+</ul>
+<h1>Multithreading</h1>
+<ul>
+<li>多线程其实并不是同时运行，而是前后台非常快速地切换</li>
+<li><code>Queue</code>只是有顺序执行的代码，封装了<code>threading</code>的应用</li>
+<li>这些“代码”用<code>closure</code>来传递</li>
+<li><strong>main queue</strong>唯一能操作UI的线程<ul>
+<li>主线程是单线程，所以不能执行异步代码</li>
+</ul>
+</li>
+<li><strong>background queues</strong>执行任意：<em>long-lived, non-UI</em> tasks<ul>
+<li>可以并行运行(running in parallel) -&gt; even with main UI queue</li>
+<li>可以手动设置优先级，服务质量(<code>QoS</code>)等</li>
+<li>优先级永远不可能超过main queue</li>
+</ul>
+</li>
+<li>base API: GCD (<code>Grand Central Dispatch</code>)<ol>
+<li>getting access to a queue</li>
+<li>plopping a block of code on a queue</li>
+</ol>
+</li>
+</ul>
+<p>A: Creating a Queue</p><p>There are numerous ways to create a queue, but we’re only going to look at two ...</p><div class="highlight"><pre><span></span><span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span> <span class="c1">// the queue where all UI code must be posted</span>
+<span class="n">DispatchQueue</span><span class="p">.</span><span class="n">global</span><span class="p">(</span><span class="n">qos</span><span class="p">:</span> <span class="n">QoS</span><span class="p">)</span> <span class="c1">// a non-UI queue with a certain quality of service qos (quality of service) is one of the following ...</span>
+    <span class="p">.</span><span class="n">userInteractive</span>    <span class="c1">// do this fast, the UI depends on it!</span>
+    <span class="p">.</span><span class="n">userInitiated</span>  <span class="c1">// the user just asked to do this, so do it now</span>
+    <span class="p">.</span><span class="n">utility</span>    <span class="c1">// this needs to happen, but the user didn’t just ask for it</span>
+    <span class="p">.</span><span class="n">background</span> <span class="c1">// maintenance tasks (cleanups, etc.)</span>
+</pre></div>
+<p>B: Plopping a Closure onto a Queue</p><p>There are two basic ways to add a closure to a queue ...</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">queue</span> <span class="p">=</span> <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span> <span class="c1">//or</span>
+<span class="kd">let</span> <span class="nv">queue</span> <span class="p">=</span> <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">global</span><span class="p">(</span><span class="n">qos</span><span class="p">:)</span> 
+<span class="n">queue</span><span class="p">.</span><span class="k">async</span> <span class="p">{</span> <span class="cm">/* code to execute on queue */</span> <span class="p">}</span>
+<span class="n">queue</span><span class="p">.</span><span class="n">sync</span> <span class="p">{</span> <span class="cm">/* code to execute on queue */</span> <span class="p">}</span>
+</pre></div>
+<p>主线程里永远不要<code>.sync</code>, 那样会阻塞UI</p><div class="highlight"><pre><span></span><span class="n">DispatchQueue</span><span class="p">(</span><span class="n">global</span><span class="p">:</span> <span class="p">.</span><span class="n">userInitiated</span><span class="p">).</span><span class="k">async</span> <span class="p">{</span>
+    <span class="c1">// 耗时代码</span>
+    <span class="c1">// 不阻塞UI，也不能更新UI</span>
+    <span class="c1">// 到主线程去更新UI</span>
+    <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="k">async</span> <span class="p">{</span>
+        <span class="c1">// UI code can go here! we’re on the main queue! </span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<h1>Gestures</h1>
+<p>手势是iOS里的一等公民</p><div class="highlight"><pre><span></span><span class="c1">// recognize</span>
+<span class="n">myView</span><span class="p">.</span><span class="n">gesture</span><span class="p">(</span><span class="n">theGesture</span><span class="p">)</span> <span class="c1">// theGesture must implement the Gesture protocol</span>
+
+<span class="c1">// create</span>
+<span class="kd">var</span> <span class="nv">theGesture</span><span class="p">:</span> <span class="n">some</span> <span class="n">Gesture</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">TapGesture</span><span class="p">(</span><span class="bp">count</span><span class="p">:</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1">// double tap</span>
+<span class="p">}</span>
+
+<span class="c1">// discrete gestures</span>
+<span class="kd">var</span> <span class="nv">theGesture</span><span class="p">:</span> <span class="n">some</span> <span class="n">Gesture</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">TapGesture</span><span class="p">(</span><span class="bp">count</span><span class="p">:</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">onEnded</span> <span class="p">{</span> <span class="cm">/* do something */</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 其实就是：</span>
+<span class="kd">func</span> <span class="nf">theGesture</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="n">some</span> <span class="n">Gesture</span> <span class="p">{</span>
+    <span class="n">tapGesture</span><span class="p">(</span><span class="bp">count</span><span class="p">:</span> <span class="mi">2</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// “convenience versions”</span>
+<span class="n">myView</span><span class="p">.</span><span class="n">onTapGesture</span><span class="p">(</span><span class="bp">count</span><span class="p">:</span> <span class="nb">Int</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* do something */</span> <span class="p">}</span> 
+<span class="n">myView</span><span class="p">.</span><span class="n">onLongPressGesture</span><span class="p">(...)</span> <span class="p">{</span> <span class="cm">/* do something */</span> <span class="p">}</span>
+
+<span class="c1">// non-discrete gestures</span>
+
+<span class="kd">var</span> <span class="nv">theGesture</span><span class="p">:</span> <span class="n">some</span> <span class="n">Gesture</span> <span class="p">{</span>
+      <span class="n">DragGesture</span><span class="p">(...)</span>
+<span class="p">.</span><span class="n">onEnded</span> <span class="p">{</span> <span class="n">value</span> <span class="k">in</span> <span class="cm">/* do something */</span> <span class="p">}</span>
+</pre></div>
+<p>non-discrete手势里传递的<code>value</code>是一个state:</p><ul>
+<li>For a <code>DragGesture</code>, it’s a struct with things like the <code>start and end location</code> of the fingers.</li>
+<li>For a <code>MagnificationGesture</code> it’s the <code>scale</code> of the magnification (how far the fingers spread out).</li>
+<li>For a <code>RotationGesture</code> it’s the <code>Angle</code> of the rotation (like the fingers were turning a dial).</li>
+<li>还可以跟踪一个state: <code>@GestureState var myGestureState: MyGestureStateType = &lt;starting value&gt;</code></li>
+</ul>
+<p>唯一可以更新这个<code>myGestureState</code>的机会：</p><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nv">theGesture</span><span class="p">:</span> <span class="n">some</span> <span class="n">Gesture</span> <span class="p">{</span>
+     <span class="n">DragGesture</span><span class="p">(...)</span>
+        <span class="p">.</span><span class="n">updating</span><span class="p">(</span><span class="err">$</span><span class="n">myGestureState</span><span class="p">)</span> <span class="p">{</span> <span class="n">value</span><span class="p">,</span> <span class="n">myGestureState</span><span class="p">,</span> <span class="n">transaction</span> <span class="k">in</span> 
+            <span class="n">myGestureState</span> <span class="p">=</span> <span class="cm">/* usually something related to value */</span>
+        <span class="p">}</span>
+        <span class="p">.</span><span class="n">onEnded</span> <span class="p">{</span> <span class="n">value</span> <span class="k">in</span> <span class="cm">/* do something */</span> <span class="p">}</span>
+ <span class="p">}</span>
+</pre></div>
+<p>注意<code>$</code>的用法</p><p>如果不需要去计算一个<code>gestureState</code>传出去的话，有个<code>updating</code>用简版：</p><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">onChanged</span> <span class="p">{</span> <span class="n">value</span> <span class="k">in</span>
+<span class="cm">/* do something with value (which is the state of the fingers) */</span>
+<span class="p">}</span>
+</pre></div>
+<p>事实上，目前来看<code>gestureState</code>只做了两件事：</p><ol>
+<li>把实时手势对应的值保存起来</li>
+<li>在手势结束时复原（对于缩放，变为1，对于移动，变为0）</li>
+<li>同时，它是只读的，只在<code>.updating</code>方法里有更新的机会</li>
+</ol>
+<p>所以，如果你的UI和动画逻辑，用到了手势结束时的值（即需要它复原），那么你也可以直接在<code>.onEnded</code>方法里手动把它设回去，等同于你也实现了你的<code>gestureState</code>，并且没有它那些限制。</p><h2>Drag and Drop</h2>
+<h3>Item Provider</h3>
+<ul>
+<li>The heart of drag nad drop is the <code>NSItemProvider</code> class.</li>
+<li>It facilitates the transfer of data between processes (via drag and drop, for example)</li>
+<li>It facilitates the transfer of a number of data types in iOS, for example:<ul>
+<li>NSAttributedString and NSString</li>
+<li>NSURL</li>
+<li>UIImage and UIColor</li>
+</ul>
+</li>
+<li>pre-Swift，所以需要bridging，比如：<code>String as NSString</code></li>
+</ul>
+<p>结合几个要点，一句话就能让你的元素能被拖动(drag)：</p><div class="highlight"><pre><span></span><span class="n">Text</span><span class="p">(</span><span class="n">emoji</span><span class="p">).</span><span class="n">onDrag</span><span class="p">{</span> <span class="bp">NSItemProvider</span><span class="p">(</span><span class="n">object</span><span class="p">:</span> <span class="n">emoji</span> <span class="k">as</span> <span class="bp">NSString</span><span class="p">)}</span>
+</pre></div>
+<p>而接收(drop)则要复杂很多：</p><div class="highlight"><pre><span></span><span class="n">otherView</span><span class="p">.</span><span class="n">onDrop</span><span class="p">(</span><span class="n">of</span><span class="p">:</span> <span class="p">[.</span><span class="n">plainText</span><span class="p">],</span> <span class="n">isTarget</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span> <span class="p">{</span><span class="n">providers</span><span class="p">,</span> <span class="n">location</span> <span class="k">in</span> <span class="k">return</span> <span class="kc">false</span> <span class="p">}</span>
+</pre></div>
+<ul>
+<li>参接收的类型由<code>of</code>参数指定，这里假定是文本</li>
+<li>方法里最终要返回一个bool值，表示成功接收与否，我返了个false，意思是你能让物体拖动，但是一松开手指就复原了</li>
+</ul>
+<p>从<code>itemprovider</code>里加载对象有模板代码：</p><div class="highlight"><pre><span></span><span class="kd">extension</span> <span class="nc">Array</span> <span class="k">where</span> <span class="n">Element</span> <span class="p">==</span> <span class="bp">NSItemProvider</span> <span class="p">{</span>
+  <span class="kd">func</span> <span class="nf">loadObjects</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">ofType</span> <span class="n">theType</span><span class="p">:</span> <span class="n">T</span><span class="p">.</span><span class="kr">Type</span><span class="p">,</span> <span class="n">firstOnly</span><span class="p">:</span> <span class="nb">Bool</span> <span class="p">=</span> <span class="kc">false</span><span class="p">,</span> <span class="n">using</span> <span class="n">load</span><span class="p">:</span> <span class="p">@</span><span class="n">escaping</span> <span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="nb">Void</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="nb">Bool</span> <span class="k">where</span> <span class="n">T</span><span class="p">:</span> <span class="bp">NSItemProviderReading</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="kd">let</span> <span class="nv">provider</span> <span class="p">=</span> <span class="bp">first</span><span class="p">(</span><span class="k">where</span><span class="p">:</span> <span class="p">{</span> <span class="nv">$0</span><span class="p">.</span><span class="n">canLoadObject</span><span class="p">(</span><span class="n">ofClass</span><span class="p">:</span> <span class="n">theType</span><span class="p">)})</span> <span class="p">{</span>
+      <span class="n">provider</span><span class="p">.</span><span class="n">loadObject</span><span class="p">(</span><span class="n">ofClass</span><span class="p">:</span> <span class="n">theType</span><span class="p">)</span> <span class="p">{</span> <span class="n">object</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
+        <span class="k">if</span> <span class="kd">let</span> <span class="nv">value</span> <span class="p">=</span> <span class="n">object</span> <span class="k">as</span><span class="p">?</span> <span class="n">T</span> <span class="p">{</span>
+          <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="k">async</span> <span class="p">{</span>
+              <span class="n">load</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="kc">true</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">false</span>
+  <span class="p">}</span>
+
+<span class="c1">// and</span>
+<span class="c1">// where T: _ObjectiveCBridgeable, T._ObjectiveCType: NSItemProviderReading</span>
+</pre></div>
+<ol>
+<li>提供了两段代码，可以看到其实就是对要加载的对象的约束不同，提供了对OC的兼容</li>
+<li>模板代码演示了</li>
+</ol>
+<p>稳健地从拖拽对象加载内容（canload -&gt; load)
+3. 真正的业务逻辑其实就是为拖进来的这个view选择一个位置存放（或读取它携带的数据）
+4. <code>T.Type</code>传的是类别的<code>.self</code>，比如<code>String.self</code></p>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/Thread-in-iOS/">Thread-in-iOS</a>
+        <p class="yue">《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第25章</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B5%5D_Property-Wrapper/">cs193p_2021笔记[5]_Property-Wrapper</a>
+        <p class="yue">cs193p_2021_笔记_1</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

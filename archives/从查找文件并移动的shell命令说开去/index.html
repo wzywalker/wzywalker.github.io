@@ -1,0 +1,286 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>从查找文件并移动的shell命令说开去 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="一个不能更常见的需求: 从一大堆下载目录(或别的目录)里, 查找指定的文件, 并移动/复制到指定的文件夹, 如果用鼠标点开一个个的文件夹, 还有文件夹里的文件夹, 估计要累死, 当然, 即使自己不会, 也很容易查到两个shell命令:" />
+<meta property="og:title" content="从查找文件并移动的shell命令说开去 - Maverick" />
+<meta property="og:description" content="一个不能更常见的需求: 从一大堆下载目录(或别的目录)里, 查找指定的文件, 并移动/复制到指定的文件夹, 如果用鼠标点开一个个的文件夹, 还有文件夹里的文件夹, 估计要累死, 当然, 即使自己不会, 也很容易查到两个shell命令:" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/%E4%BB%8E%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6%E5%B9%B6%E7%A7%BB%E5%8A%A8%E7%9A%84shell%E5%91%BD%E4%BB%A4%E8%AF%B4%E5%BC%80%E5%8E%BB/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="从查找文件并移动的shell命令说开去 - Maverick" />
+<meta name="twitter:description" content="一个不能更常见的需求: 从一大堆下载目录(或别的目录)里, 查找指定的文件, 并移动/复制到指定的文件夹, 如果用鼠标点开一个个的文件夹, 还有文件夹里的文件夹, 估计要累死, 当然, 即使自己不会, 也很容易查到两个shell命令:" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">从查找文件并移动的shell命令说开去</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/Skill/">
+                    Skill
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/%E4%BB%8E%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6%E5%B9%B6%E7%A7%BB%E5%8A%A8%E7%9A%84shell%E5%91%BD%E4%BB%A4%E8%AF%B4%E5%BC%80%E5%8E%BB/" 
+                    data-flag-title="从查找文件并移动的shell命令说开去"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>一个不能更常见的需求: 从一大堆下载目录(或别的目录)里, 查找指定的文件, 并移动/复制到指定的文件夹, 如果用鼠标点开一个个的文件夹, 还有文件夹里的文件夹, 估计要累死, 当然, 即使自己不会, 也很容易查到两个shell命令:</p>
+<pre><code>find path_A -name &quot;*AAA*&quot; -print0 | xargs -0 -I {} mv {} path_B
+find path_A -maxdepth 1 -name &quot;*AAA*&quot; -exec mv {} path_B \; 
+</code></pre>
+<p>都能达到目的, 第二条命令容易懂很多(<code>-maxdepth</code>去掉就是recrusive search), 去<code>exec</code>一个<code>mv</code>命令, 记得加上表示语句结束的分号就好了, 我的关注点在第一条, 趁机学学<code>xargs</code>吧.</p><p>查到<a href="https://www.cnblogs.com/wangqiguo/p/6464234.html">这篇文章</a>说的不错, 先摘几个要点:</p>
+<pre><code>echo 'main' | cat test.cpp
+</code></pre>
+<p>这条命令并不会把<code>main</code>输出, 因为管道确实将其作为标准输入给了<code>cat</code>命令作为标准输入, 但因为有了<code>test.cpp</code>这个命令行参数, <code>cat</code>命令就没有去读标准输入的参数了.<br />
+其实基本上linux的命令中很多的命令的设计是先从命令行参数中获取参数，然后从标准输入中读取，反映在程序上，命令行参数是通过main函数<code>int main(int argc,char*argv[])</code>的函数参数获得的，而标准输入则是通过标准输入函数例如C语言中的scanf读取到的。他们获取的地方是不一样的。例如：</p>
+<pre><code>echo 'main' | cat
+</code></pre>
+<p>这条命令中cat会从其标准输入中读取内容并处理，也就是会输出 'main' 字符串。echo命令将其标准输出的内容 'main' 通过管道定向到 cat 的标准输入中。</p>
+<pre><code>cat
+</code></pre>
+<p>如果仅仅输入cat并回车，则该程序会等待输入，我们需要从键盘输入要处理的内容给cat，此时cat也是从标准输入中得到要处理的内容的，因为我们的cat命令行中也没有指定要处理的文件名。大多数命令有一个参数<code>-</code>如果直接在命令的最后指定 <code>-</code>则表示从标准输入中读取，例如：</p>
+<pre><code>echo 'main' | cat -
+</code></pre>
+<p>这样也是可行的，会显示 'main' 字符串，同样输入	<code>cat -</code>直接回车与输入 <code>cat</code>直接回车的效果也一样，但是如果这样呢：</p>
+<pre><code>echo 'main' | cat test.cpp -
+</code></pre>
+<p>同时指定test.cpp 和 - 参数，此时cat程序会先输出test.cpp的内容，然后输出标准输入'main'字符串，如果换一下顺序变成这样：</p>
+<pre><code>echo 'main' | cat - test.cpp
+</code></pre>
+<p>则会先输出标准输入'main'字符串，然后输出test.cpp文件的内容。如果去掉这里的<code>-</code>参数，则cat只会输出test.cpp文件的内容。另外如果同时传递标准输入和文件名，grep也会同时处理这两个输入，例如：</p>
+<pre><code>echo 'main' | grep 'main' test.cpp -
+</code></pre>
+<p>此处同上, 如果不加<code>-</code>, 则只会在test.cpp中搜索&quot;main&quot;, 加了<code>-</code>, 则会在文件和标准输出中都检查关键字.</p><p>另外很多程序是不处理标准输入的，例如<code>kill</code>,<code>rm</code>这些程序如果命令行参数中没有指定要处理的内容则不会默认从标准输入中读取。所以：</p>
+<pre><code>echo '516' | kill
+</code></pre>
+<p>这种命里是不能执行的。</p>
+<pre><code>echo 'test' | rm -f
+</code></pre>
+<p>这种也是没有效果的。</p><p>有时候我们的脚本却需要<code>echo '516' | kill</code>这样的效果，例如<code>ps -ef | grep 'ddd' | kill</code>这样的效果，筛选出符合某条件的进程pid然后结束。这种需求对于我们来说是理所当然而且是很常见的，那么应该怎样达到这样的效果呢。有几个解决办法：</p>
+<pre><code>kill `ps -ef | grep 'ddd'`    
+</code></pre>
+<p>这个时候实际上等同于拼接字符串得到的命令，其效果类似于<code>kill $pid</code></p>
+<pre><code>for procid in $(ps -aux | grep &quot;some search&quot; | awk '{print $2}'); do kill -9 $procid; done   
+</code></pre>
+<p>其实与第一种原理一样，只不过需要多次kill的时候是循环处理的，每次处理一个</p>
+<pre><code>ps -ef | grep 'ddd' | xargs kill  
+</code></pre>
+<p>OK，使用了<code>xargs</code>命令，铺垫了这么久终于铺到了主题上。<code>xargs</code>命令可以通过管道接受字符串，并将接收到的字符串<strong>通过空格分割成许多参数</strong>(默认情况下是通过空格分割) 然后将参数传递给其后面的命令，作为后面命令的命令行参数</p><p>###xargs与管道的区别</p>
+<pre><code>echo '--help' | cat
+echo '--help' | xargs cat
+```	
+第一句输出`--help`, 第二句相当于执行了`cat --help`, 所以管道是把前面的输出当成后面的输入, 而`xargs`则是把前面的输出当成了后面的命令行参数.
+
+`xargs`的命令参数可以查我给的引用原文, 说得详细且有实例, 或者看下面的简单介绍:
+
+</code></pre>
+<p>-0，--null：以\0作为分隔符，接受到的特殊字符将当作文本符号处理；<br />
+-d：指定分段的分隔符，默认分隔字符为空白字符；
+-a，--arg-file=file：指定命令标准输入的来源文件；
+-e'FLAG' 或者-E 'FLAG'：指定一个终止符号，当xargs命令匹配到第一个FLAG后，停止传递，并退出命令；
+-p：每当xargs执行一个分段时，询问一次用户是否执行；
+-t：表示先打印执行的命令再输出；
+-n NUM：表示一个分段包含的参数个数，参数之间以分隔符隔开，默认是将所有的参数当作一个分段输出；
+-i：用于将分段分批传递给其后的{}进行输出，分段会替换{}所在的位置进行输出；
+-I &quot;FLAG&quot;：可指定分段的替换符号，分段会分批替换到符号所在的位置进行输出执行；
+-L：指定每次执行的最大的非空行的行数；</p>
+<pre><code>我们来说回&quot;查找并移动&quot;这个原始需求.
+
+首先, 前面铺垫的那么多`-`与标准输入的内容其实与`find`命令并无多大关系. 我们看这里面用到的三个参数
+
+### -print0
+用过`find`都知道它的结果是以换行符分隔的, 而加上`-print0`选项则可以把它换成`\0`(其实就是`NUL`)来分隔. 嗯, 不是空格, 但是至少变成了一行, 有点命令行参数的意思了吧?
+
+### -0
+就是`--null`, 以`null`为分隔符, 因为我们在前面设置`find`的输出为`null`, 这里当然要设置相应的分隔符. 如果仔细读了前面的参数表, 会发现其实它就是`-d '\0'`的简化版.
+
+### -I
+这个命令的英文说明看得我云里雾里, 一贯的不说人话风格, 我还是用一个实例来说明它的用法吧
+
+我在一个目录里建了几个文件, 用`find`把它找出来并用`xargs`把它`echo`出来:
+
+</code></pre>
+<p>$find . -name &quot;*.txt&quot; -print0 | xargs -p -0 echo
+echo ./c.txt ./b.txt ./a.txt?...y
+./c.txt ./b.txt ./a.txt</p>
+<pre><code>    
+注意, 我加了一个`-p`参数, 这是为了在执行命令前先把命令打印出来, 这样一来你有机会检查生成的命令最终是不是你想要的, 另一方面也能检查你的命令是否执行了多次.
+
+根据上面的演示, 我们发现一个问题, 就是如果是执行`mv file path/`这样的命令, 也就是说我们需要在命令**中间**插入管道过来的参数, 是不行的, 似乎应该用占位符.
+
+反向学习, 我们既然已经知道了`-I replstr`是正确答案, 那就尝试一下吧:
+
+</code></pre>
+<p>$find . -name &quot;*.txt&quot; -print0 | xargs -p -0 -I {} echo {} &quot;HELLO&quot;
+echo ./c.txt HELLO?...y
+./c.txt HELLO
+echo ./b.txt HELLO?...y
+./b.txt HELLO
+echo ./a.txt HELLO?...y
+./a.txt HELLO</p>
+<pre><code>
+首先, 我们发现, 我们成功地在`echo`和`HELLO`间插入了管道过来的参数, 其次, 它还把参数用分隔符自行拆开了一次执行一个(又有点类似于添加了`-n 1`的选项的意思).
+
+现在我们明白了, 网上查到的那条命令最终就是执行了N次`mv FILE /path`, 这就是`-I {}`.
+
+Furthermore, 我们把标准答案里那高大上的`{}`换一下如何?
+
+</code></pre>
+<p>$ find . -name &quot;*.txt&quot; -print0 | xargs -p -0 -I 'M' echo 'M' &quot;HELLO&quot;
+echo ./c.txt HELLO?...y
+./c.txt HELLO
+echo ./b.txt HELLO?...y
+./b.txt HELLO
+echo ./a.txt HELLO?...y
+./a.txt HELLO</p><p>$ find . -name &quot;*.txt&quot; -print0 | xargs -p -0 -I M echo M &quot;HELLO&quot;
+echo ./c.txt HELLO?...y
+./c.txt HELLO
+echo ./b.txt HELLO?...y
+./b.txt HELLO
+echo ./a.txt HELLO?...y
+./a.txt HELLO</p>
+<pre><code>
+这里我分别用了`'M'`和`M`, 都不影响其作为占位符的作用, 不要被那故弄玄虚的`{}`给迷惑了. 之所以用`{}`应该还是它更好被辨识和表义, 并不是大括号本身是什么语法.
+</code></pre>
+
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/%E8%AE%A9Objective-C%E4%B9%9F%E6%9C%89map%E5%8A%9F%E8%83%BD/">让Objective-C也有map功能</a>
+        <p class="yue">map一个数组是大部分高级语言都有的, OC 没有, 有几个方案让它实现, 我优选出三个:原生实现</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/shell%E5%91%BD%E4%BB%A4%E7%94%A8%E6%AD%A3%E5%88%99%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/">shell命令用正则批量重命名文件</a>
+        <p class="yue">又是用shell来操作文件的问题.我下了老友记的全集, 结果在NAS里死活匹配不出3季以后的剧集信息, 因为打包来源相同, 一直没深究, 只当是刮削工具做得不好, 今天才发现从第4季开始, 所有的文件名格式都错了, 如:Friends.s10.06.2003.BDRip.1080p.Ukr.Eng.AC3.Hurtom.TNU.Tenax555.mkv</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

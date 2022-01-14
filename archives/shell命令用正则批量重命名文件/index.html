@@ -1,0 +1,231 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>shell命令用正则批量重命名文件 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="又是用shell来操作文件的问题.我下了老友记的全集, 结果在NAS里死活匹配不出3季以后的剧集信息, 因为打包来源相同, 一直没深究, 只当是刮削工具做得不好, 今天才发现从第4季开始, 所有的文件名格式都错了, 如:Friends.s10.06.2003.BDRip.1080p.Ukr.Eng.AC3.Hurtom.TNU.Tenax555.mkv" />
+<meta property="og:title" content="shell命令用正则批量重命名文件 - Maverick" />
+<meta property="og:description" content="又是用shell来操作文件的问题.我下了老友记的全集, 结果在NAS里死活匹配不出3季以后的剧集信息, 因为打包来源相同, 一直没深究, 只当是刮削工具做得不好, 今天才发现从第4季开始, 所有的文件名格式都错了, 如:Friends.s10.06.2003.BDRip.1080p.Ukr.Eng.AC3.Hurtom.TNU.Tenax555.mkv" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/shell%E5%91%BD%E4%BB%A4%E7%94%A8%E6%AD%A3%E5%88%99%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="shell命令用正则批量重命名文件 - Maverick" />
+<meta name="twitter:description" content="又是用shell来操作文件的问题.我下了老友记的全集, 结果在NAS里死活匹配不出3季以后的剧集信息, 因为打包来源相同, 一直没深究, 只当是刮削工具做得不好, 今天才发现从第4季开始, 所有的文件名格式都错了, 如:Friends.s10.06.2003.BDRip.1080p.Ukr.Eng.AC3.Hurtom.TNU.Tenax555.mkv" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">shell命令用正则批量重命名文件</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/Skill/">
+                    Skill
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/shell%E5%91%BD%E4%BB%A4%E7%94%A8%E6%AD%A3%E5%88%99%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/" 
+                    data-flag-title="shell命令用正则批量重命名文件"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>又是用shell来操作文件的问题.</p><p>我下了老友记的全集, 结果在NAS里死活匹配不出3季以后的剧集信息, 因为打包来源相同, 一直没深究, 只当是刮削工具做得不好, 今天才发现从第4季开始, 所有的文件名格式都错了, 如:</p><div class="highlight"><pre><span></span><span class="n">Friends</span><span class="p">.</span><span class="n">s10</span><span class="p">.</span><span class="mf">06.2003</span><span class="p">.</span><span class="n">BDRip</span><span class="p">.</span><span class="mi">1080</span><span class="n">p</span><span class="p">.</span><span class="n">Ukr</span><span class="p">.</span><span class="n">Eng</span><span class="p">.</span><span class="n">AC3</span><span class="p">.</span><span class="n">Hurtom</span><span class="p">.</span><span class="n">TNU</span><span class="p">.</span><span class="n">Tenax555</span><span class="p">.</span><span class="n">mkv</span>
+</pre></div>
+<p>中的<code>s10.06</code>应为<code>s10.e06</code>, 那么改对不就是了么. 又是批量任务啊, 这次的需求从上次的批量移动文件变成了批量修改文件名.</p><p>事实上<code>mv</code>其实也是重命名工具, 奈何这次的规则稍微复杂, 我还是想要用正则来匹配, 一番搜索, 找到了<code>rename</code>这个工具. 网上的相关文章似乎有点旧, 跟今天我Homebrew下来的的文档有出入, 因此也就没看网上的文档了, 建议自己看一下官方文档, 还自带了<code>tutorial</code>和<code>cookbook</code>, 很良心啊, 看完基本自己就会了.</p><p>新版的<code>rename</code>工具把选项分为了<code>switch</code>和<code>transforms</code>, 自然文档也就成了:</p>
+<pre><code>rename [switches|transforms] [files]
+</code></pre>
+<p>既然都推荐你们看文档了, 我了不一一介绍了, 挑几个需要注意的讲, 最后再揭晓我是如何完成这次批量重命名的.</p><p>##debug
+<code>-n</code>这个<code>switch</code>可以显示本次命令将被如何执行, 而不真正执行, 这非常像上一篇文章里介绍<code>xargs</code>时的<code>-p</code>, 在<code>rename</code>的语境里, 它叫<code>dry-run</code>. 总之我就是通过这个学习的, 非常有用.</p><p>##替换
+新版<code>rename</code>加了很多像去头啊, 去尾啊, 加前缀啊, 加尾缀啊, 去空白啊, 变大小写啊等等的选项, 这个去读文档, 执行一些简单且明确的任务用这些<code>switch</code>和<code>transforms</code>比自己去构建正则要来的简单, 这也是作者把这些小功能全提取出来的目的吧. 由于我的目标是正则, 着重关注<code>-s</code>这个<code>transform</code>.</p><p>假设有文件<code>abc123.mp3</code>和<code>abc456.mp3</code>, 以下命令均加了<code>-n</code>, 以便直接看输出</p><div class="highlight"><pre><span></span><span class="c1">#替换</span>
+<span class="err">$</span><span class="n">rename</span> <span class="o">-</span><span class="n">n</span> <span class="o">-</span><span class="n">s</span> <span class="n">abc</span> <span class="n">mmm</span> <span class="o">*</span>
+<span class="err">$</span><span class="n">rename</span> <span class="o">-</span><span class="n">n</span> <span class="s1">&#39;s/abc/mmm/&#39;</span> <span class="o">*</span>
+<span class="c1">#以上两句只是展示两种写法/格式</span>
+<span class="c1">#输出:</span>
+<span class="s1">&#39;abc123.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;mmm123.mp3&#39;</span>
+<span class="s1">&#39;abc456.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;mmm456.mp3&#39;</span>
+
+<span class="c1">#加前缀</span>
+<span class="err">$</span><span class="n">rename</span> <span class="o">-</span><span class="n">n</span> <span class="s1">&#39;s/^/album_/&#39;</span> <span class="o">*.</span><span class="n">mp3</span>
+<span class="c1">#输出:</span>
+<span class="s1">&#39;abc123.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;album_abc123.mp3&#39;</span>
+<span class="s1">&#39;abc456.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;album_abc456.mp3&#39;</span>
+
+<span class="c1">#演示一次错误的加前缀方式</span>
+<span class="err">$</span><span class="n">rename</span> <span class="o">-</span><span class="n">n</span> <span class="s1">&#39;s/^/album_^/&#39;</span> <span class="o">*.</span><span class="n">mp3</span>
+<span class="c1">#输出:</span>
+<span class="s1">&#39;abc123.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;album_^abc123.mp3&#39;</span>
+<span class="s1">&#39;abc456.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;album_^abc456.mp3&#39;</span>
+<span class="c1">#看到了吧? 直接把^给替换了, 而不是插入</span>
+
+<span class="c1">#去后缀</span>
+<span class="err">$</span><span class="n">rename</span> <span class="o">-</span><span class="n">n</span> <span class="s1">&#39;s/\.mp3//&#39;</span> <span class="o">*.</span><span class="n">mp3</span>
+<span class="c1">#输出:</span>
+<span class="s1">&#39;abc123.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;abc123&#39;</span>
+<span class="s1">&#39;abc456.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;abc456&#39;</span>
+
+<span class="c1">#分组</span>
+<span class="err">$</span><span class="n">touch</span> <span class="n">AA</span><span class="o">.</span><span class="n">S01</span><span class="mf">.12</span><span class="o">.</span><span class="n">mkv</span> <span class="n">AA</span><span class="o">.</span><span class="n">S01</span><span class="mf">.13</span><span class="o">.</span><span class="n">mkv</span> <span class="n">AA</span><span class="o">.</span><span class="n">S01</span><span class="mf">.14</span><span class="o">.</span><span class="n">mkv</span>
+<span class="c1">#这次把文件搞复杂点, 假定有如上三个文件, 我们要把12改为E12, 以此类推</span>
+<span class="err">$</span><span class="n">rename</span> <span class="o">-</span><span class="n">n</span> <span class="s1">&#39;s/\.(\d</span><span class="si">{2}</span><span class="s1">)\./\.E$1\./&#39;</span> <span class="o">*.</span><span class="n">mkv</span>
+<span class="c1">#输出:</span>
+<span class="s1">&#39;AA.S01.12.mkv&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;AA.S01.E12.mkv&#39;</span>
+<span class="s1">&#39;AA.S01.13.mkv&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;AA.S01.E13.mkv&#39;</span>
+<span class="s1">&#39;AA.S01.14.mkv&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;AA.S01.E14.mkv&#39;</span>
+</pre></div>
+<p>看到最后一个例子是不是发现我的目标已经达到了? 我没有深入研究, 只是简单的根据实际情况把前后带点符号, 中间夹了两位数字的提取了出来, 加了字母<code>E</code>, 可能还有更简便的办法, 但我看到输出, 就急急测试去了, 果然等待数秒后, 文件全部重命名成功.</p><p>##递归
+当然没那么简单, 因为4-10季的内容在各自的文件夹里, 如何递归呢? 看过我<a href="https://www.jianshu.com/p/6fab4aedc07e">上一篇文章</a>的人可能会想到我又去借管道和<code>xargs</code>了吧? 这次得益于我提前读了文档, 里面也有介绍, 它还能直接应用<code>find</code>过来的结果, 还不需要像<code>xargs</code>一样给个占位, 应该是作者直接做的支持, 所以我的最终命令是这样的:</p><div class="highlight"><pre><span></span><span class="err">$</span><span class="bp">find</span> <span class="p">.</span> <span class="o">-</span><span class="n">name</span> <span class="s">&quot;*.mkv&quot;</span> <span class="o">-</span><span class="n">print0</span> <span class="o">|</span> <span class="n">rename</span> <span class="o">-</span><span class="n">n</span> <span class="err">&#39;</span><span class="n">s</span><span class="o">/</span><span class="err">\</span><span class="p">.(</span><span class="err">\</span><span class="n">d</span><span class="p">{</span><span class="mi">2</span><span class="p">})</span><span class="err">\</span><span class="p">.</span><span class="o">/</span><span class="err">\</span><span class="p">.</span><span class="n">e</span><span class="nv">$1</span><span class="err">\</span><span class="p">.</span><span class="o">/</span><span class="err">&#39;</span>
+</pre></div>
+<blockquote>
+<p>是的, 肯定要先<code>-n</code>看看有没有操作失误, 文件出问题就麻烦了(建议先复制一份).</p></blockquote>
+<p>此外, 因为用的是管道, 所以最后的<code>[files]</code>参数就不需要了, 我之前就是疏忽了, 复制过来时留着前面做测试的<code>*.mkv</code>尾巴, 看到出错提示才意识到.</p><blockquote>
+<p>2021/4/22
+我又来批量重命名的时候，发现<code>-print0</code>加上反而不行了，也就是说把带了换行符的<code>find</code>输出直接送到<code>rename</code> 里面，反而能成功，拼成一行送进去的不行，不知道上次是怎么成功的。</p></blockquote>
+<p>so far so good.</p><p>##吐槽
+简书的代码块, 预览里很好看, 发布出去千奇百怪, 是什么鬼, 为了给代码着色, 我不得不在代码语言标识上乱写一通(反正写bash是不着色的)</p><hr />
+<h2>Bonus</h2>
+<p>不小心看到关于<code>mv</code>的<a href="%5Bhttps://news.ycombinator.com/item?id=22860140">这个技巧</a>, 如果改动的只是文件名的一小部分, 比如在<code>10</code>前面加个<code>e</code>变成<code>e10</code>, 这么做就可以了</p><div class="highlight"><pre><span></span><span class="n">mv</span> <span class="n">Friends</span><span class="p">.</span><span class="n">s06</span><span class="p">.{,</span><span class="n">e</span><span class="p">}</span><span class="mf">10.1080</span><span class="n">p</span><span class="p">.</span><span class="n">x265</span><span class="p">.</span><span class="n">mkv</span>
+</pre></div>
+<p>而不需要</p><div class="highlight"><pre><span></span><span class="n">mv</span> <span class="n">Friends</span><span class="p">.</span><span class="n">s06</span><span class="p">.</span><span class="mf">10.1080</span><span class="n">p</span><span class="p">.</span><span class="n">x265</span><span class="p">.</span><span class="n">mkv</span> <span class="n">Friends</span><span class="p">.</span><span class="n">s06</span><span class="p">.</span><span class="n">e10</span><span class="p">.</span><span class="mi">1080</span><span class="n">p</span><span class="p">.</span><span class="n">x265</span><span class="p">.</span><span class="n">mkv</span>
+</pre></div>
+<p>原文里面有两个例子, 一目了然</p><div class="highlight"><pre><span></span><span class="nt">mv</span><span class="w"> </span><span class="nt">foo-bar-</span><span class="p">{</span><span class="err">baz,quux</span><span class="p">}.</span><span class="nc">txt</span><span class="w"></span>
+<span class="nt">mv</span><span class="w"> </span><span class="nt">foo-bar</span><span class="p">{</span><span class="err">,-baz</span><span class="p">}.</span><span class="nc">txt</span><span class="w"></span>
+</pre></div>
+<p>以上显示的是更改和添加, 显然,你也可以猜到删除的用法, 看起来跟rename用法类似</p><div class="highlight"><pre><span></span><span class="nt">mv</span><span class="w"> </span><span class="nt">foo-bar</span><span class="p">{</span><span class="err">-baz,</span><span class="p">}.</span><span class="nc">txt</span><span class="w"></span>
+</pre></div>
+<p>当然这个贴子有很大的争论, 感兴趣可以看看.</p>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/%E4%BB%8E%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6%E5%B9%B6%E7%A7%BB%E5%8A%A8%E7%9A%84shell%E5%91%BD%E4%BB%A4%E8%AF%B4%E5%BC%80%E5%8E%BB/">从查找文件并移动的shell命令说开去</a>
+        <p class="yue">一个不能更常见的需求: 从一大堆下载目录(或别的目录)里, 查找指定的文件, 并移动/复制到指定的文件夹, 如果用鼠标点开一个个的文件夹, 还有文件夹里的文件夹, 估计要累死, 当然, 即使自己不会, 也很容易查到两个shell命令:</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/-bin-bash%E5%92%8C-bin-sh%E7%9A%84%E5%8C%BA%E5%88%AB/">-bin-bash和-bin-sh的区别</a>
+        <p class="yue">教程地址快捷键:</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

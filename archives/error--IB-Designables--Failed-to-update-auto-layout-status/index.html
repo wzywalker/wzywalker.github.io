@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>error--IB-Designables--Failed-to-update-auto-layout-status - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="首先, 了解一下 IBInspectable / IBDesignable" />
+<meta property="og:title" content="error--IB-Designables--Failed-to-update-auto-layout-status - Maverick" />
+<meta property="og:description" content="首先, 了解一下 IBInspectable / IBDesignable" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/error--IB-Designables--Failed-to-update-auto-layout-status/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="error--IB-Designables--Failed-to-update-auto-layout-status - Maverick" />
+<meta name="twitter:description" content="首先, 了解一下 IBInspectable / IBDesignable" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">error--IB-Designables--Failed-to-update-auto-layout-status</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/iOS/">
+                    iOS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/error--IB-Designables--Failed-to-update-auto-layout-status/" 
+                    data-flag-title="error--IB-Designables--Failed-to-update-auto-layout-status"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>首先, 了解一下 <a href="http://nshipster.com/ibinspectable-ibdesignable/">IBInspectable / IBDesignable</a>
+这是让 Xcode能在设计时就体现你代码对 UI 进行的修改, 以及在设计器里能动态增加你对视图添加的属性的控件的特性(是的, 只是 xcode 的特性, 并不是语言特征)</p><p>然后, 用这个的人多半碰到了这类问题:
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-7f2bcd64bfbc2079.png" /></figure></p><blockquote>
+<p>error: IB Designables: Failed to update auto layout status: Interface Builder Cocoa Touch Tool raised a &quot;NSInternalInconsistencyException&quot; exception: Could not load NIB in bundle: 'NSBundle</p></blockquote>
+<p>网上可能有一大堆讨论相关问题的贴子, 解决方法不尽其数, 可能都不适用你, 所以我的这篇也可能不适用你, 最好还是善用搜索, 我谨提供一种思路.</p><p>网上有让你修改工程配置的, 寻找崩溃日志的, 解决我这个问题的, 是在Storyboard 界面里选中出问题的 View(你一定要至少知道是给哪个 view 添加上 <code>IB_DESIGNABLE</code>才导致的问题, 可以通过逐个移除这个声明以测试), 再在菜单里选择: <code>Editor - Debug Selected Views</code>
+这个时候就会模拟<code>IB_DESIGNABLE</code>进行 debug, 再加上全局异常断点, 代码就会在崩溃处命中了.</p><p>我的问题是我用了两个属性, 然后在 view 的 <code>drawWithRect:</code>方法中, 这两个属性都为空, 而我的属性是在<code>initWithCoder:</code>中初始化的. 所以我再添加<code>initWithFrame:</code>, 在其中解决, 顺利解决.</p><p>这说明三个问题:</p><ol>
+<li><code>IB_DESIGNABLE</code>目前的实现还有 bug, 真实启动是跑<code>initWithCoder:</code>的, 它在设计器里绘图的时候却走了<code>initWithFrame:</code>, 你可能不得不为了对付这个 bug 而添加一次同样的代码</li>
+<li><code>initWithFrame:</code>的时候 frame 是{0, 0, 0, 0}可别忘了, 有时候这个也是崩溃原因</li>
+<li>如果我把<code>drawWithRect:</code>中要用到的属性提前初始化一样可以避免这样的问题, 怎样做? 配合<code>IBInspectable</code>, 然后在设计器中给属性设初始值</li>
+</ol>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-71d8f6cada235f4b.png" /></figure>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/%E4%BD%BF%E7%94%A8openssl%E5%88%9B%E5%BB%BA%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%8F%8A%E9%83%A8%E7%BD%B2%E5%88%B0IIS%E6%95%99%E7%A8%8B/">使用openssl创建自签名证书及部署到IIS教程</a>
+        <p class="yue">#创建自签名证书</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/libxml-tree-h-file-not-found/">libxml-tree-h-file-not-found</a>
+        <p class="yue">stackoverflow用户对添加libxml2库表现出了极大的抱怨，原因在要把它好好地添加进去实在是太复杂了。我就是因为出现了'libxml/tree.h file not found’错误，才发现的这篇贴子，照着做，错误就消除了，备注如下：原始地址：http://stackoverflow.com/questions/1428847/libxml-tree-h-no-such-file-or-directory见e.w. parris的答案Adding libxml2 is a big, fat, finicky pain in the ass. If you're going to do it, do it before you get too far in building your project.You need to add it in two ways:1. Target settings</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

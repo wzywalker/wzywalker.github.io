@@ -1,0 +1,592 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>View - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第1章" />
+<meta property="og:title" content="View - Maverick" />
+<meta property="og:description" content="《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第1章" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/View/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="View - Maverick" />
+<meta name="twitter:description" content="《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第1章" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">View</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/iOS/">
+                    iOS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/View/" 
+                    data-flag-title="View"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第1章</p><hr />
+<h1>View</h1>
+<ul>
+<li>A view knows how to draw itself into a rectangular area of the interface.</li>
+<li>A view is also a responder</li>
+<li>init:<ul>
+<li><code>init(frame:)</code>: init from code</li>
+<li><code>init(coder:)</code>: init from nib</li>
+</ul>
+</li>
+</ul>
+<h2>Window and Root View</h2>
+<ul>
+<li>Window = top view, ultimate superview<ul>
+<li>iPad with iOS 13+ can have multiple window</li>
+</ul>
+</li>
+<li>only one subview: rootViewController's <code>main view</code> -&gt; occupy the entirety of the window</li>
+</ul>
+<h2>How an App Launches</h2>
+<ul>
+<li>Swift项目自动调用了<code>UIApplicationMain</code>方法，唯一方法，初始化了必要资源</li>
+<li>初始化<code>UIApplicationMain</code>（你<code>UIApplication.shared</code>的来源），及其degate class(<code>@UIApplicationMain</code>)，并持有，贯穿app整个生命周期</li>
+<li>UIApplicationMain calls the app delegate’s <code>application(_:didFinish- LaunchingWithOptions:)</code>, giving your code an opportunity run.</li>
+<li>UIApplicationMain creates a <code>UISceneSession</code>, a <code>UIWindowScene</code>, and an instance that will serve as the window scene’s <code>delegate</code>.<ul>
+<li>delegate由<em>plist.info / Application Scene Manifest / Delegate Class Name</em> 决定 (<code>$(PRODUCT_MODULE_NAME).SceneDelegate</code>)</li>
+</ul>
+</li>
+<li>初始化root view<ul>
+<li>UIApplicationMain根据plist判断是否使用了storyboard<ul>
+<li>初始化UIWindow，并赋给scene delegate's <code>window</code> property</li>
+<li>初始化initial view controller 并赋给window的<code>rootViewController</code>属性</li>
+<li>UIAplicationMain call window's <code>makeKeyAndVisible</code>呈现Interface</li>
+</ul>
+</li>
+<li>call scene delegate's <code>scene(_:willConnectTo:options:)</code><ul>
+<li>这里也是没用storyboard的话，手动去实现上面几步的地方</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Referring to the Windows</strong></p><ul>
+<li><code>view.window</code>, if it's nil means it can't be visible to the user</li>
+<li>scene delegate's <code>window</code> property</li>
+<li><code>UIApplication.shared.windows.first!</code></li>
+</ul>
+<blockquote>
+<p>Do not expect that the window you know about is the app’s only window. The runtime can create <code>additional mysterious windows</code>, such as the <code>UITextEffectsWindow</code> and the <code>UIRemoteKeyboardWindow</code>.</p></blockquote>
+<h2>Subview and Superview</h2>
+<p><strong>曾经</strong>，一个view拥有它对应的一个矩形区域，不属于它的subview的其它view在这个矩形内是看不见的，因为重绘矩形的时候是不会考虑到其它view的。同样，也不能draw到矩形区域外去。</p><p>OS X10.5起，苹果更新了关于View的架构，iOS也跟着改变了，subview能出现在superview之外（所以反而需要<code>clipping</code>了），一个view也能overlap到另一个view上而无需成为其subview（后来居上）。</p><p>结果就是，你现在看到几个互相重叠的我色块，你再也分辨不出view之间的层次关系了。（<code>isDescendant(of:)</code>可以检查层次关系）</p><p>没有清空subview的方法，所以：<code>myView.subviews.forEach {$0.removeFromSuperview()}</code></p><h2>Color</h2>
+<ul>
+<li>background color不设置表示这个view是透明的</li>
+<li>如果再没有进行任何子view的绘制，那么这个view就看不见了</li>
+<li>这种view可以作为容器来使用</li>
+</ul>
+<p>iOS 13起，引入黑暗模式后，硬编码的颜色就迎来了很大的问题。</p><ul>
+<li>纠结的解决方法：</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">v</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="p">=</span> <span class="bp">UIColor</span> <span class="p">{</span> <span class="n">tc</span> <span class="k">in</span>
+        <span class="k">switch</span> <span class="n">tc</span><span class="p">.</span><span class="n">userInterfaceStyle</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="p">.</span><span class="n">dark</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">UIColor</span><span class="p">(</span><span class="n">red</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">green</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span> <span class="n">blue</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">default</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">UIColor</span><span class="p">(</span><span class="n">red</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">green</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">blue</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>其中, tc是<code>trait collection</code>，一系列特征的集合。</p><ul>
+<li>而iOS 13起多了很多<code>.system</code>开头的color，可以自适应</li>
+<li><em>asset catalog</em>中可以自定义颜色，并设置不同模式下的颜色</li>
+</ul>
+<h2>Visibility and Opacity</h2>
+<p>隐藏一个view:</p><ul>
+<li><code>isHidden</code>: view还在，但不会接受触摸事件<ul>
+<li><code>alpha = 0</code>也会使得<code>isHidden == true</code></li>
+</ul>
+</li>
+<li><code>isOpaque</code>: 它不影响可见性，但影响<strong>drawing system</strong><ul>
+<li><code>opaque == true</code>的view不具有透明度，将拥有最高的渲染效率</li>
+</ul>
+</li>
+<li><code>frame = CGRect.zero</code>的view也是不可见的</li>
+</ul>
+<h2>Frame, Bounds and Center</h2>
+<ul>
+<li>就是视图在父视图（坐标系）中的位置和大小。</li>
+<li><code>sizeTofit</code>方法来适应内容的大小。</li>
+<li><code>bound</code>原点设为(10, 10)意思是坐标系往左上角移了(10,10)的像素，即原来的(10,10)现在到了原点。<ul>
+<li><code>bounds.insetBy(dx:dy)</code>是保持中心不变（即同时改变了原点和宽高）</li>
+</ul>
+</li>
+<li><code>center</code>表示的是视图在父级中的位置，所以改变自己的bounds并不改变它的center<ul>
+<li>本质上<code>frame</code>是center+宽度的便捷方法</li>
+<li>如果v2是v1的子视图，<code>v2.center = v1.center</code> 通常不能生效，因为它们的坐标系不同（各自的父级）</li>
+</ul>
+</li>
+</ul>
+<h2>Transform and Transform3D</h2>
+<ul>
+<li>Transform改变View的绘制，但不改变它的bounds和center.</li>
+<li>value is a <code>CGAffineTransform</code>，其实就是一个变换矩阵</li>
+<li>CGPoint, CGSize, and CGRect all have an <code>applying(_:)</code> method 用来计算应用Transform后的坐标</li>
+<li>3D版的就是多了一个垂直于屏幕的Z轴</li>
+</ul>
+<h2>Window Coordinates and Screen Coordinates</h2>
+<ul>
+<li>The device screen has <code>no frame</code>, but it has bounds.</li>
+<li>The window has <code>no superview</code>, but its frame is set automatically to match the screen’s bounds.<ul>
+<li>continues to fill the screen</li>
+</ul>
+</li>
+</ul>
+<p>iOS 7及之前，屏幕的坐标系是不变的，如果有旋转，则是对root view进行了一次rotation的transfrom。
+但在iOS 8不再用transform而是制定了两套坐标系，通过<code>UICoordinateSpace</code>协议表示
+    * UIScreen's <code>coordinateSpace</code>: 会旋转的bounds
+    * UIScreen's <code>fixedCoordinateSpace</code>: 不变</p><p>读取视图v在设备的固定坐标系下的位置：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">screen</span> <span class="p">=</span> <span class="bp">UIScreen</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">fixedCoordinateSpace</span>
+<span class="kd">let</span> <span class="nv">r</span> <span class="p">=</span> <span class="n">v</span><span class="p">.</span><span class="n">superview</span><span class="p">!.</span><span class="n">convert</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">frame</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="n">screen</span><span class="p">)</span>
+</pre></div>
+<h2>Trait Collections</h2>
+<p>将view的一系列环境特征通过view hierarchy层级下传，通过服从<code>UITraitEnvironment</code>协议（提供<code>traitCollection</code>属性和<code>traitCollectionDidChange</code>方法）</p><p><strong>traitCollection</strong></p><ul>
+<li><em>displayScale</em>: screen's resolution</li>
+<li><em>userInterfaceIdiom</em>: general device type, iPhone, or ipad</li>
+<li><em>interfaceStyle</em>: is in light/dark mode</li>
+<li><em>userInterfaceLevel</em>: .base / .elevated -&gt; affects dynamic background colors</li>
+</ul>
+<blockquote>
+<p>If you implement traitCollectionDidChange(_: ), <code>always call super in the first line</code>. Forgetting to do this is a common beginner mistake.</p></blockquote>
+<p>自定义trait collection只能用下面这种“组合”的方式</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">tcdisp</span> <span class="p">=</span> <span class="bp">UITraitCollection</span><span class="p">(</span><span class="n">displayScale</span><span class="p">:</span> <span class="bp">UIScreen</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">scale</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">tcphone</span> <span class="p">=</span> <span class="bp">UITraitCollection</span><span class="p">(</span><span class="n">userInterfaceIdiom</span><span class="p">:</span> <span class="p">.</span><span class="n">phone</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">tc1</span> <span class="p">=</span> <span class="bp">UITraitCollection</span><span class="p">(</span><span class="n">traitsFrom</span><span class="p">:</span> <span class="p">[</span><span class="n">tcdisp</span><span class="p">,</span> <span class="n">tcphone</span><span class="p">])</span>  <span class="c1">// 取交集</span>
+</pre></div>
+<p>自动颜色的底层逻辑：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">yellow</span> <span class="p">=</span> <span class="bp">UIColor</span><span class="p">.</span><span class="n">systemYellow</span>
+<span class="kd">let</span> <span class="nv">light</span> <span class="p">=</span> <span class="bp">UITraitCollection</span><span class="p">(</span><span class="n">userInterfaceStyle</span><span class="p">:</span> <span class="p">.</span><span class="n">light</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">dark</span> <span class="p">=</span> <span class="bp">UITraitCollection</span><span class="p">(</span><span class="n">userInterfaceStyle</span><span class="p">:</span> <span class="p">.</span><span class="n">dark</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">yellowLight</span> <span class="p">=</span> <span class="n">yellow</span><span class="p">.</span><span class="n">resolvedColor</span><span class="p">(</span><span class="n">with</span><span class="p">:</span> <span class="n">light</span><span class="p">)</span>
+<span class="c1">// 1 0.8 0 1</span>
+<span class="kd">let</span> <span class="nv">yellowDark</span> <span class="p">=</span> <span class="n">yellow</span><span class="p">.</span><span class="n">resolvedColor</span><span class="p">(</span><span class="n">with</span><span class="p">:</span> <span class="n">dark</span><span class="p">)</span>
+<span class="c1">// 1 0.839216 0.0392157 1</span>
+</pre></div>
+<h3>Size Classes</h3>
+<p>把屏幕针对宽高和比例做几个分类：</p><ul>
+<li>.regular(h, v) -&gt; iPad</li>
+<li>.compact(h) + .regular(v) -&gt; 竖屏iPhone</li>
+<li>.regular(h) + .compact(v) -&gt; 横屏大iPhone</li>
+<li>.compact(h, v) -&gt; 横屏小iPhone（5S以前的）</li>
+</ul>
+<p>所以, size class:</p><ul>
+<li>并不能从<code>traitCollectionDidChange</code>获得，因为iPad永远是<code>.regular</code></li>
+<li>只关心横竖向突然间.regular和.compact的切换</li>
+</ul>
+<p><strong>Overriding Trait Collections</strong></p><p>You cannot <code>insert</code> a trait collection directly into the inheritance hierarchy simply by setting a view’s trait collection;</p><p>For the user interface style, there is a simpler facility available both for a UIViewController and for a UIView: the <code>overrideUserInterfaceStyle</code> property. 
+    * default <code>.unspecified</code>，意味着interface style会往下传
+    * 一旦设为.dark或.light, 就拦截了<code>userInterfaceStyle</code>的继承</p><h2>Layout</h2>
+<ul>
+<li>Manual layout: <code>layoutSubviews</code>里手动摆放每个视图，可定制最强</li>
+<li>Autoresizing: 子视图根据<code>autoresizingMask</code>来调整</li>
+<li>Autolayout: 依赖对“约束”的描述来布局，背后仍然是<code>layoutSubviews</code><ul>
+<li>需要禁止autoresizing</li>
+</ul>
+</li>
+</ul>
+<h3>Autoresizing</h3>
+<p>Autoresizing is a matter of conceptually assigning a subview “<strong>springs and struts</strong>.” A spring can expand and contract; a strut can’t. Springs and struts can be assigned internally or externally, horizontally or vertically.</p><p>可变的就叫Spring(有弹性)，不变的就叫Strut（不知道怎么翻译）。</p><ul>
+<li>一个居中的子视图，本身也会随着父视图而改变大小:<ul>
+<li>意味着它与父视图的四个边距是不变的 -&gt; 4个外部决定的struts</li>
+<li>宽高则是可变的 -&gt; 2个内部决定的spring</li>
+</ul>
+</li>
+<li>而如果子视图不随环境改变大小：<ul>
+<li>意思着宽高是固定的 -&gt; 2个内部决定的struts</li>
+<li>而四个边距通通可变 -&gt; 4个外部决定的spring</li>
+</ul>
+</li>
+<li>一个右下角摆放的OK button<ul>
+<li>显然，按钮大小不改变 -&gt; 2个内部struts</li>
+<li>与右边和底部距离不变 -&gt; 2个外部struts</li>
+<li>与顶部和左边距离可变 -&gt; 2个外部spring</li>
+</ul>
+</li>
+<li>一个顶部占满的text field<ul>
+<li>高度不变 -&gt; 1个vertical struts（内部）</li>
+<li>宽度可变 -&gt; 1个horizontal spring(内部)</li>
+<li>顶，左，右三边距离不变 -&gt; 3个外部struts</li>
+<li>底部距离可变 -&gt; 1个外部spring</li>
+</ul>
+</li>
+</ul>
+<p>所谓的“内部”，是因为教材里用的是internally，就例子来看，其实就是说衡量的对象只是自己，而“距离”明显需要有一个参照物，那就叫externally了。</p><p>通过<code>autoresizingMask</code>来描述上述例子中的规则，通过bitmask来进行组合，默认为全空（但是等同于<code>flexibleRightMargin</code>)，即普通的流式布局，靠左上对齐，右边距和底边距是动态的。</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">v1</span> <span class="p">=</span> <span class="bp">UIView</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">132</span><span class="p">,</span> <span class="mi">194</span><span class="p">))</span>
+<span class="n">v1</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="p">=</span> <span class="bp">UIColor</span><span class="p">(</span><span class="n">red</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">green</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span> <span class="n">blue</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">v2</span> <span class="p">=</span> <span class="bp">UIView</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">132</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">v2</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="p">=</span> <span class="bp">UIColor</span><span class="p">(</span><span class="n">red</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">green</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">blue</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">v1b</span> <span class="p">=</span> <span class="n">v1</span><span class="p">.</span><span class="n">bounds</span>
+<span class="kd">let</span> <span class="nv">v3</span> <span class="p">=</span> <span class="bp">UIView</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span><span class="n">CGRect</span><span class="p">(</span><span class="n">v1b</span><span class="p">.</span><span class="n">width</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="n">v1b</span><span class="p">.</span><span class="n">height</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<span class="n">v3</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="p">=</span> <span class="bp">UIColor</span><span class="p">(</span><span class="n">red</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">green</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+<span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
+<span class="n">v1</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
+<span class="n">v1</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">v3</span><span class="p">)</span>
+</pre></div>
+<p>演示了上例中的&quot;text fiels&quot;和“ok button&quot;，一个置顶，一个靠中下。并且都设置了绝对大小的宽高，那么当你改变v1的frame的时候，比如变宽变高，v2,v3会发生什么呢？</p><p>因为你没有设置autoresizingMask，那么就会默认保持左上的边距，这样v2不再铺满顶部，v3也不再紧贴右下角，想要它们跟着v1变化：</p><div class="highlight"><pre><span></span><span class="n">v2</span><span class="p">.</span><span class="n">autoresizingMask</span> <span class="p">=</span> <span class="p">.</span><span class="n">flexibleWidth</span>  <span class="c1">// 宽度可变</span>
+<span class="n">v3</span><span class="p">.</span><span class="n">autoresizingMask</span> <span class="p">=</span> <span class="p">[.</span><span class="n">flexibleTopMargin</span><span class="p">,</span> <span class="p">.</span><span class="n">flexibleLeftMargin</span><span class="p">]</span> <span class="c1">// 左，顶可变（这样就能尽情往右下贴了）</span>
+</pre></div>
+<blockquote>
+<p>AutoResizing在<code>layoutSubviews</code>被调用之前发生。</p></blockquote>
+<h3>Autolayout and Constraints</h3>
+<p>autolayout的子view可以不用autolayout，但是父view必须是autolayout，层层向上到<code>main view</code> of it's view controller, which <em>receives autolayout-related events</em></p><p>autolayout描述不同view的属性之间的位置关系，这些view不必是兄弟，也不非得是父子，只需要保证拥有一个共同的祖先。</p><p>谁持有这些约束？</p><ul>
+<li>如果是约束自身的宽度（绝对值） -&gt; 属于自身</li>
+<li>如果是约束了它对superview的顶部的距离 -&gt; 属于superview</li>
+<li>如果约束了几个sibling view的顶部对齐 -&gt; 属于这些view的superview</li>
+</ul>
+<p>事实上，iOS不需要你关心这个，<code>.activate</code>让你只管描述约束和关系，然后把它加到正确的view上。</p><p>约束基本上是可读的，除了<code>priority</code>, <code>constant</code>, 和 <code>isActive</code>，其它情况你只能移除并重建了。（还有一个跟约束无关的<code>identifier</code>， debug有用）</p><blockquote>
+<p>autolayout发生在<code>layoutSubviews</code>，所以如果你提前设置了frame，图像将会发生跳动。如果你是在layoutSubviews里面设置的就不会。当然你最好线用约束。</p></blockquote>
+<p>如果你的约束涉及到了别的之前并没用使用autolayout的view， The autolayout engine takes care of this for you:</p><ul>
+<li>it <code>reads</code> the view’s <em>frame</em></li>
+<li>and <em>autoresizingMask</em> settings and <code>translates</code> them into implicit constraints</li>
+</ul>
+<p>比如：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">lab1</span> <span class="p">=</span> <span class="bp">UILabel</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">270</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">42</span><span class="p">,</span><span class="mi">22</span><span class="p">))</span>
+<span class="n">lab1</span><span class="p">.</span><span class="n">autoresizingMask</span> <span class="p">=</span> <span class="p">[.</span><span class="n">flexibleLeftMargin</span><span class="p">,</span> <span class="p">.</span><span class="n">flexibleBottomMargin</span><span class="p">]</span>
+<span class="n">lab1</span><span class="p">.</span><span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Hello&quot;</span>
+<span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">lab1</span><span class="p">)</span>
+</pre></div>
+<p>一个右上的label，如果你的另一个view相对<em>lab1</em>来设置autolayout的约束，那么lab1将会自动产生如下四个约束：</p>
+<pre><code>1. &lt;NSAutoresizingMaskLayoutConstraint H:[UILabel:'Hello']-(63)-|&gt;
+2. &lt;NSAutoresizingMaskLayoutConstraint UILabel:'Hello'.minY == 20&gt;
+3. &lt;NSAutoresizingMaskLayoutConstraint UILabel:'Hello'.width == 42&gt;
+4. &lt;NSAutoresizingMaskLayoutConstraint UILabel:'Hello'.height == 22&gt;
+</code></pre>
+<p>而且约束的具体数值以当前运行设备来定的，比如上例是iPhone8，屏幕宽度是375，那么：</p><ul>
+<li>origin(270, 28) 能得到minY = 20 -&gt; 约束2</li>
+<li>size(42, 22)能得到height = 22, width = 42 -&gt; 约束3，4</li>
+<li>结合屏幕宽度，origin, size， 得到右边距离：(375 - 270 - 42 = 63) -&gt; 约束1</li>
+</ul>
+<p>但是如果后面还有别的约束的话，很容易千万冲突，毕竟都自动生成的，用户写代码的时候并不会在意当时自动生成的约束在其它场景是否也会有别的约束自动生成</p><p><code>translatesAutoresizingMaskIntoConstraints</code>干的就是这个，所以一般情况下是把它关掉的。</p><p>语法：</p><div class="highlight"><pre><span></span><span class="n">v1</span><span class="p">.</span><span class="n">addConstraint</span><span class="p">(</span>
+    <span class="bp">NSLayoutConstraint</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="n">v2</span><span class="p">,</span>
+        <span class="n">attribute</span><span class="p">:</span> <span class="p">.</span><span class="n">leading</span><span class="p">,</span>
+        <span class="n">relatedBy</span><span class="p">:</span> <span class="p">.</span><span class="bp">equal</span><span class="p">,</span>
+        <span class="n">toItem</span><span class="p">:</span> <span class="n">v1</span><span class="p">,</span>
+        <span class="n">attribute</span><span class="p">:</span> <span class="p">.</span><span class="n">leading</span><span class="p">,</span>
+        <span class="n">multiplier</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">constant</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">)</span>
+
+
+<span class="c1">// compact notation</span>
+<span class="bp">NSLayoutConstraint</span><span class="p">.</span><span class="n">activate</span><span class="p">([</span>
+        <span class="n">lab2</span><span class="p">.</span><span class="n">topAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span>
+            <span class="n">equalTo</span><span class="p">:</span> <span class="n">lab1</span><span class="p">.</span><span class="n">bottomAnchor</span><span class="p">,</span> <span class="n">constant</span><span class="p">:</span> <span class="mi">20</span><span class="p">),</span>
+        <span class="n">lab2</span><span class="p">.</span><span class="n">trailingAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span>
+            <span class="n">equalTo</span><span class="p">:</span> <span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">trailingAnchor</span><span class="p">,</span> <span class="n">constant</span><span class="p">:</span> <span class="o">-</span><span class="mi">20</span><span class="p">)</span>
+<span class="p">])</span>
+</pre></div>
+<h3>VFL (Visual format notation)</h3>
+<p><code>&quot;V:|-10-[v2(20)]&quot;</code>这代表v2的顶部距离superview 10个point,高度是20。如果描述的是水平方向的，则是<strong>H</strong>，但H是默认的，可以省略。同样，H对应的括号里的数值会被理解为width.</p><p>v2是view的名字，通常你需要准备一个字典，这样就可以在<code>VFL</code>中用简单的文字对应任何view了</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">d</span> <span class="p">=</span> <span class="p">[</span><span class="s">&quot;v2&quot;</span><span class="p">:</span><span class="n">v2</span><span class="p">,</span><span class="s">&quot;v3&quot;</span><span class="p">:</span><span class="n">v3</span><span class="p">]</span>
+<span class="bp">NSLayoutConstraint</span><span class="p">.</span><span class="n">activate</span><span class="p">([</span>
+    <span class="bp">NSLayoutConstraint</span><span class="p">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">withVisualFormat</span><span class="p">:</span>
+        <span class="s">&quot;H:|[v2]|&quot;</span><span class="p">,</span> <span class="n">metrics</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">views</span><span class="p">:</span> <span class="n">d</span><span class="p">),</span>
+    <span class="bp">NSLayoutConstraint</span><span class="p">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">withVisualFormat</span><span class="p">:</span>
+        <span class="s">&quot;V:|[v2(10)]&quot;</span><span class="p">,</span> <span class="n">metrics</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">views</span><span class="p">:</span> <span class="n">d</span><span class="p">),</span>
+    <span class="bp">NSLayoutConstraint</span><span class="p">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">withVisualFormat</span><span class="p">:</span>
+        <span class="s">&quot;H:[v3(20)]|&quot;</span><span class="p">,</span> <span class="n">metrics</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">views</span><span class="p">:</span> <span class="n">d</span><span class="p">),</span>
+    <span class="bp">NSLayoutConstraint</span><span class="p">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">withVisualFormat</span><span class="p">:</span>
+        <span class="s">&quot;V:[v3(20)]|&quot;</span><span class="p">,</span> <span class="n">metrics</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">views</span><span class="p">:</span> <span class="n">d</span><span class="p">)</span>
+<span class="p">].</span><span class="n">flatMap</span> <span class="p">{</span><span class="nv">$0</span><span class="p">})</span>
+</pre></div>
+<p>注意这里的flatMap，因为<code>constraints(withVisualFormat:)</code> 返的是一个数组，而期望是一个值，所以用map把$0取了出来。</p><p><code>&quot;[v1(&gt;=20@400,&lt;=30)]&quot;</code>，@后面接的是优先级</p><h3>new features</h3>
+<p>iOS 10引入的<code>anchorWithOffset(to:)</code>，是什么意思？</p><p>它也是创建的一个anchor，也就是说可以应用<code>constrain(equalto:)</code>之类的方法，而它本身是一个dimension，所以dimension当然是可以用来比较的。</p><p>比如，我有一个view(v1)，摆在屏幕上面某位置，现在要摆一个view(v2)，希望它出现在v1和屏幕底部（或v1的superview，设为v0）的中间（即垂直居中），显然，如果要用dimension描述出来的话，那就是：</p><ul>
+<li>v1底部到v2中间的距离</li>
+<li>等于</li>
+<li>v2中部到屏幕底部v0底部的距离</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="bp">NSLayoutConstraint</span><span class="p">.</span><span class="n">activate</span><span class="p">([</span>
+    <span class="n">v1</span><span class="p">.</span><span class="n">bottomAnchor</span><span class="p">.</span><span class="n">anchorWithOffset</span><span class="p">(</span><span class="n">to</span><span class="p">:</span> <span class="n">v2</span><span class="p">.</span><span class="n">centerYAnchor</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> 
+    <span class="n">v2</span><span class="p">.</span><span class="n">centerYAnchor</span><span class="p">.</span><span class="n">anchorWithOffset</span><span class="p">(</span><span class="n">to</span><span class="p">:</span> <span class="n">view</span><span class="p">.</span><span class="n">bottomAnchor</span><span class="p">))</span>
+<span class="p">])</span>
+</pre></div>
+<p>刻意写成了三行，与我上文的三段文字描述对应</p><p>iOS 11引入了运行时决定的spacing：</p>
+<pre><code>constraint(equalToSystemSpacingAfter:multiplier:)
+constraint(greaterThanOrEqualToSystemSpacingAfter:multiplier:)
+constraint(lessThanOrEqualToSystemSpacingAfter:multiplier:)
+constraint(equalToSystemSpacingBelow:multiplier:)
+constraint(greaterThanOrEqualToSystemSpacingBelow:multiplier:)
+constraint(lessThanOrEqualToSystemSpacingBelow:multiplier:)
+</code></pre>
+<h3>Margins and Guides</h3>
+<ul>
+<li>UIEdgeInsets是对布局的补充，增加“第二条边”</li>
+<li>Layout guides -&gt; 没看明白</li>
+<li>safe area可以表示为inset，也可以表示为guides<ul>
+<li><code>additionalSafeAreaInsets</code>还能增加safe area</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">c</span> <span class="p">=</span> <span class="n">v1</span><span class="p">.</span><span class="n">topAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> <span class="n">v</span><span class="p">.</span><span class="n">safeAreaLayoutGuide</span><span class="p">.</span><span class="n">topAnchor</span><span class="p">)</span>
+</pre></div>
+<p>subview might be positioned with respect to its superview’s <code>margins</code>, especially through an autolayout constraint. By <strong>default</strong>, a view has a margin of 8 on all four edges.
+这更像是superview的padding，而iOS并没有padding的概念（因为它并不是CSS的盒子模型）</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">c</span> <span class="p">=</span> <span class="n">v</span><span class="p">.</span><span class="n">leadingAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">layoutMarginsGuide</span><span class="p">.</span><span class="n">leadingAnchor</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">arr</span> <span class="p">=</span> <span class="bp">NSLayoutConstraint</span><span class="p">.</span><span class="n">constraints</span><span class="p">(</span><span class="n">withVisualFormat</span><span class="p">:</span>
+        <span class="s">&quot;H:|-[v]&quot;</span><span class="p">,</span> <span class="n">metrics</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">views</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;v&quot;</span><span class="p">:</span><span class="n">v</span><span class="p">])</span>
+</pre></div>
+<ul>
+<li><code>layoutMarginsGuide</code>是只读的，但UIView提供了<code>layoutMargins</code>属性（一个UIEdgeInsets）<ul>
+<li>from iOS11: <code>directionalLayoutMargins</code>(其实就是用了trail, leading等)</li>
+</ul>
+</li>
+<li>VFL中用短横线来代表对齐的是margin</li>
+<li>margin会往下传，用<code>preservesSuperviewLayoutMargins</code>控制</li>
+<li>margin与safearea不冲突，会自动相加，用<code>insetsLayoutMarginsFromSafeArea</code>关闭</li>
+<li>viewController有<code>systemMinimumLayoutMargins</code>可以增加main view的margin(减小的话会静默失败，即无效)<ul>
+<li>而<code>viewRespectsSystemMinimumLayoutMargins</code>设为false，就能突破这个限制：（上下为0，左右为16，大屏设备左右为20）</li>
+</ul>
+</li>
+</ul>
+<p><strong>Custom layout guides</strong></p><p>书中的例子是垂直平均分配几个view，然后发现是把layout guide当成一个view来做的</p><ul>
+<li>每个view（除去最后一个） add一个guide</li>
+<li>ABABABA排列，A是view,B是guide</li>
+<li>A的底部=B的顶部（除去最后一个A）</li>
+<li>A的顶部=B的底部（除去第一个A）</li>
+<li>令B的高度相等</li>
+</ul>
+<p>就把4个A给垂直平均分配了，理解的难点就是guide也当作一个view来用，而语法上又是加到view的属性里的。同时，只要设置guide的高度相等，就会自动占用4个View之外的所有空间平均分配。
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-bf291a7ac1244dfd.png" /></figure></p><p>这么做只是为了演示layout guide，但是虽然理解了，也不知道能用它来干嘛？当成一个隐形的view去做布局？</p><p><strong>Constraint alignment</strong></p><p>通过设置view的<code>alignmentRectInsets</code>，可以改变constrains计算的起点。对我来说，又是一种padding?</p><p>同样的还有自定义baseline的<code>forFirstBaselineLayout and forLastBaselineLayout.</code></p><h3>Intrinsic Content Size</h3>
+<p>button, label, image等会根据内容和预设有一个instrinsic content size，而且可以用来<strong>隐式地</strong>产生约束（<code>NSContentSizeLayoutConstraint</code>）</p><ul>
+<li><code>contentHuggingPriority(for:)</code> 某方向上阻止扩大到比intrinsic size更大的优先级，默认250</li>
+<li><code>contentCompressionResistancePriority(for:)</code>，阻止缩小的优先级，默认750</li>
+<li><code>invalidateIntrinsicContentSize</code>就像invalidate a view，会触发重新计算size</li>
+</ul>
+<p><code>&quot;H:[lab1(&gt;=100)]-(&gt;=20)-[lab2(&gt;=100)]&quot;</code> 这两个label，在屏幕变小时，谁最先缩到100？</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">p</span> <span class="p">=</span> <span class="n">lab2</span><span class="p">.</span><span class="n">contentCompressionResistancePriority</span><span class="p">(</span><span class="k">for</span><span class="p">:</span> <span class="p">.</span><span class="n">horizontal</span><span class="p">)</span>
+<span class="n">lab1</span><span class="p">.</span><span class="n">setContentCompressionResistancePriority</span><span class="p">(</span><span class="n">p</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="k">for</span><span class="p">:</span> <span class="p">.</span><span class="n">horizontal</span><span class="p">)</span>
+</pre></div>
+<p>这里把lab1阻止缩小的优先级调得更高，那么就是lab2会先缩小</p><h3>Self-Sizing Views</h3>
+<p>前面讲的都是superview对subview的影响，这一节反过来，subview的大小影响superview。</p><p>假定一个没有设置宽高的view，包含了一个button，我们知道button是有其intrinsic size的（固定的高，宽度由按钮文字决定），</p><ul>
+<li>所以这个view也就有了宽高。</li>
+<li>但这个宽高拥有低优先级，不会与显式设定的宽高相冲突。</li>
+<li>运行时调用<code>systemLayoutSizeFitting(_:)</code>可以让系统优优先级地去按这个size去layout。这个操作是昂贵和低效的。</li>
+</ul>
+<h3>Stack Views</h3>
+<p>UIStackView仍然是自动布局体系里的，它的作用是（为其<code>arrangedSubviews</code>）生成一系列约束，可以理解为语法糖。</p><ul>
+<li><code>arrangedSubviews</code>是<strong>subViews</strong>的一个子集</li>
+<li>stackView也可以添加额外的subView</li>
+<li><em>setCustomSpacing(_:after:)</em>设置额外的space</li>
+<li>不要再对arrangedSubviews手动添加约束，基本会与你看不见的计算出来的约束冲突<ul>
+<li>但stackview本身是可以用autolayout来布局的</li>
+</ul>
+</li>
+</ul>
+<p>此时再来看看前面的竖向排列元素，并且间隔相等的例子的写法：</p><div class="highlight"><pre><span></span><span class="c1">// give the stack view arranged subviews</span>
+<span class="kd">let</span> <span class="nv">sv</span> <span class="p">=</span> <span class="bp">UIStackView</span><span class="p">(</span><span class="n">arrangedSubviews</span><span class="p">:</span> <span class="n">views</span><span class="p">)</span>
+<span class="c1">// configure the stack view</span>
+<span class="n">sv</span><span class="p">.</span><span class="n">axis</span> <span class="p">=</span> <span class="p">.</span><span class="n">vertical</span>
+<span class="n">sv</span><span class="p">.</span><span class="n">alignment</span> <span class="p">=</span> <span class="p">.</span><span class="n">fill</span>
+<span class="n">sv</span><span class="p">.</span><span class="n">distribution</span> <span class="p">=</span> <span class="p">.</span><span class="n">equalSpacing</span>
+<span class="c1">// constrain the stack view</span>
+<span class="n">sv</span><span class="p">.</span><span class="n">translatesAutoresizingMaskIntoConstraints</span> <span class="p">=</span> <span class="kc">false</span>
+<span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">sv</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">marg</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">layoutMarginsGuide</span>
+<span class="kd">let</span> <span class="nv">safe</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">safeAreaLayoutGuide</span>
+<span class="bp">NSLayoutConstraint</span><span class="p">.</span><span class="n">activate</span><span class="p">([</span>
+    <span class="n">sv</span><span class="p">.</span><span class="n">topAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span><span class="n">safe</span><span class="p">.</span><span class="n">topAnchor</span><span class="p">),</span>
+    <span class="n">sv</span><span class="p">.</span><span class="n">leadingAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span><span class="n">marg</span><span class="p">.</span><span class="n">leadingAnchor</span><span class="p">),</span>
+    <span class="n">sv</span><span class="p">.</span><span class="n">trailingAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span><span class="n">marg</span><span class="p">.</span><span class="n">trailingAnchor</span><span class="p">),</span>
+    <span class="n">sv</span><span class="p">.</span><span class="n">bottomAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span><span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bottomAnchor</span><span class="p">),</span>
+<span class="p">])</span>
+</pre></div>
+<p>顺便注意以下里对layoutMargin和safearea的引用，都是通过layout guide的。</p><blockquote>
+<p>debug会发现stack view其实帮你做了你之前做的事：<code>generating UILayoutGuide objects and using them as spacers</code></p></blockquote>
+<p>stack view还有一个特性就是能自适应<code>arrangedSubviews</code>的变化。如果你把它理解为一个计算引擎，可能就好理解了。</p><h3>Internationalization</h3>
+<p>使用.leading, .trailing等是为了适应不同语言的左右顺序，引入到布局里却会出现问题，并不是从右到左的语言的横向布局就也要相应反转。UIView.semanticContentAttribute可以人为控制，</p><ul>
+<li>默认值是.unspecified，</li>
+<li>.playback or .spatial将会不应用翻转。</li>
+<li>.forceLeftToRight or .forceRightToLeft则是手动指定一个方向</li>
+</ul>
+<p>UIView<code>.effectiveUserInterfaceLayoutDirection</code>能report出这个trait</p><blockquote>
+<p>You can test your app’s right-to-left behavior easily by changing the scheme’s Run option Application Language to “Right to Left Pseudolanguage.”</p></blockquote>
+<h3>Debug autolayout</h3>
+
+<pre><code>(lldb) e -l objc -- [[UIApplication sharedApplication] windows][0]
+(UIWindow *) $1 = ...
+(lldb) e -l objc -O -- [$1 _autolayoutTrace]
+</code></pre>
+<p>To get a full list of the constraints responsible for positioning a particular view within its superview, log the results of calling the UIView instance method <code>constraintsAffectingLayout(for:)</code>.</p><h2>Configuring Layout in Nib</h2>
+<p>这一部分内容建议打开Xcode对着原文操作，多为界面操作</p><h3>Conditional Interface Design</h3>
+<p>wC, HR等用来表示宽高在正常和压缩空间里的不同组合。</p><p>思路：先架构通用的视图和约束，然后用两种方法之一来描述不同size class下的特殊布局：</p><ul>
+<li>in the Attributes or Size inspector</li>
+<li>design that difference in the canvas:</li>
+</ul>
+<h2>Xcode View Features</h2>
+<h3>Designable Views and Inspectable Properties</h3>
+<p>有关Xcode的预览这一节可以看看，以及<code>@IBDesignable</code>方法能在xib里面呈现（教程里是在<code>willMove(toSuperview)</code>方法里调用）</p><h2>Layout Events</h2>
+<p><strong>updateConstraints</strong></p><ul>
+<li>（向上冒泡）<code>propagated up</code> the hierarchy, starting at the deepest subview</li>
+<li>called at launch time，然后几乎不会调用，除非手动</li>
+<li>也从不直接调用，而是通过<ul>
+<li><code>updateConstraintsIfNeeded</code>方法</li>
+<li>或是<code>setNeedsUpdateConstraints</code></li>
+</ul>
+</li>
+</ul>
+<p><strong>traitCollectionDidChange(_:)</strong></p><ul>
+<li>(向下传播)<code>propagated down</code> the hierarchy of UITraitEnvironments.</li>
+</ul>
+<p><strong>layoutSubviews</strong></p><ul>
+<li>The layoutSubviews message is the moment when <code>layout actually takes place</code>.</li>
+<li>（向下传播） <code>propagated down</code> the hierarchy, starting at the top (typically the root view) and working down to the deepest subview.</li>
+<li>If you’re not using autolayout, layoutSubviews does <strong>nothing</strong> by default</li>
+<li>layoutSubviews is your opportunity to perform manual layout <strong>after</strong> autoresizing has taken place.</li>
+<li>If you are using autolayout, you <strong>must</strong> call super or the app will crash (with a helpful error message).</li>
+<li>从不直接调用：<ul>
+<li><code>layoutIfNeeded</code></li>
+<li><code>setNeedsLayout</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>When you’re using autolayout, <code>what happens in layoutSubviews</code>?</p><ol>
+<li>The runtime, having examined and resolved all the constraints affecting this view’s subviews,</li>
+<li>and having worked out values for their center and bounds,</li>
+<li>now simply assigns <code>center</code> and <code>bounds</code> values to them.</li>
+</ol>
+<p>In other words, layoutSubviews performs <strong>manual layout</strong>!</p></blockquote>
+<p>所以如果你需要在auto layout之后微调，<code>layoutSubviews</code>是法定的入口：</p><ol>
+<li>call <code>super</code>, causing all the subviews to adopt their new frames</li>
+<li>examine those frames, 如果不满意，则对<code>frame</code>进行微调（或者<code>bounds</code>和<code>center</code>）</li>
+</ol>
+<p>这也是autolayout engine自己的步骤，要注意的是你必须要和autolayout engine来协作，并且<strong>不要</strong>调用<code>setNeedsUpdateConstraints</code>(时机已过)</p>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0%5B2%5D/">cs193p_2021_笔记[2]</a>
+        <p class="yue">cs193p_2021_笔记_1</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/Drawing/">Drawing</a>
+        <p class="yue">《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第2章</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>数据结构篇八：Balanced-Binary-Search-Trees(BBST) - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记" />
+<meta property="og:title" content="数据结构篇八：Balanced-Binary-Search-Trees(BBST) - Maverick" />
+<meta property="og:description" content="这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AB%EF%BC%9ABalanced-Binary-Search-Trees%28BBST%29/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="数据结构篇八：Balanced-Binary-Search-Trees(BBST) - Maverick" />
+<meta name="twitter:description" content="这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">数据结构篇八：Balanced-Binary-Search-Trees(BBST)</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/CS/">
+                    CS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AB%EF%BC%9ABalanced-Binary-Search-Trees%28BBST%29/" 
+                    data-flag-title="数据结构篇八：Balanced-Binary-Search-Trees(BBST)"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><hr />
+<h1>Balanced Binary Search Trees (BBST)</h1>
+<ul>
+<li>满足low (logarithmic) height for fast insertions and deletions</li>
+<li>clever usage of a <code>tree invairant</code> and <code>tree rotation</code></li>
+</ul>
+<h2>AVL Tree</h2>
+<p>一种BBST，满足O(log n)的插入删除和查找复杂度，也是第一种BBST，后续出现的更多的：2-3 tree, AA tree, scapegoat tree, red-black tree(avl的最主要竞争对手)</p><p>能保持平衡的因子：Balance Factor (<code>BF</code>)</p><ul>
+<li>BF(node) = H(node.right) - H(node.left)</li>
+<li>H(x) = height of node = # of edges between (x, furthest leaf)</li>
+<li>平衡就是左右平均分配，所以要么均分，要么某一边多一个，BF其实就是(-1, 0, 1)里的一个了 &lt;- avl tree invariant</li>
+</ul>
+<p>一个node需要存：</p><ul>
+<li>本身的(comparable) value</li>
+<li>balance factor</li>
+<li>the <code>height</code> of this node</li>
+<li>left/right pointer</li>
+</ul>
+<p>使树保持左右平衡主要是靠rotation，极简情况下（三个node），我们有两种基本情况（left-left, right-right），有其它情况就旋转一次变成这两种情况之一：
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-80a75204b823272d.png" /></figure></p><h2>Insertion</h2>
+<p>一次插入需要考虑的是，插在哪边，以及插入后对bf, height和balance的破坏
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-fbcb86360e02615e.png" /></figure></p><p>其中修复平衡就是上图中几个基本结构的转换</p><h2>Removal</h2>
+<p>avl树就是一棵BST，删除节点分两步：</p><ol>
+<li>按照bst的方法查找节点，即小的在左边找，大的在右边找</li>
+<li>也按bst的原则删除元素，即找到元素后，把左边的最大值或右边的最小值拿过来补上删除的位置</li>
+<li>这一步是多出来的，显然是要更新一下节点的bf和height，及重新balance一次了。</li>
+</ol>
+<p>前两部分参考BST一章，流程伪代码：</p><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">remove</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span> <span class="o">...</span>
+    <span class="c1"># Code for BST item removal here</span>
+    <span class="o">...</span>
+    <span class="c1"># Update balance factor</span>
+    <span class="n">update</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="c1"># Rebalance tree</span>
+    <span class="k">return</span> <span class="n">balance</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+</pre></div>
+
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/">翻转二叉树</a>
+        <p class="yue">最近在找工作，所以这些算法梗又出现在了我的阅读视野里，比如经典的homebrew作者吐槽的翻转二叉树的问题。</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%94%EF%BC%9AHash-Tables/">数据结构篇五：Hash-Tables</a>
+        <p class="yue">这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

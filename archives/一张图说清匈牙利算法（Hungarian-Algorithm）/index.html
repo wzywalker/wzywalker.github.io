@@ -1,0 +1,263 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>一张图说清匈牙利算法（Hungarian-Algorithm） - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="做多目标跟踪的时候会碰到这个算法，每个人都有自己的说法讲清楚这个算法是干什么的？我的老师就跟我说过是什么给工人分配活干（即理解为指派问题），网上还看到有说红娘尽可能匹配多的情侣等，透过这些感性理解，基本上就能理解大概是最大匹配的问题了。然后加了限制：后来者优先。即后匹配的能抢掉前人已匹配的对象，这个是有数学依据还是只是一种实现思路我就没深究了。我的理解不会比别人更高级，之所以能用一张图说清楚，只不过是我作图的时候发现可以把过程画在一张图里，只需要把图示标清楚就好了，这样就不需要每一步画一张图了，一旦理解了，哪怕忘了，一瞅这张图也能立刻回忆起来。先上数据：import numpy as np" />
+<meta property="og:title" content="一张图说清匈牙利算法（Hungarian-Algorithm） - Maverick" />
+<meta property="og:description" content="做多目标跟踪的时候会碰到这个算法，每个人都有自己的说法讲清楚这个算法是干什么的？我的老师就跟我说过是什么给工人分配活干（即理解为指派问题），网上还看到有说红娘尽可能匹配多的情侣等，透过这些感性理解，基本上就能理解大概是最大匹配的问题了。然后加了限制：后来者优先。即后匹配的能抢掉前人已匹配的对象，这个是有数学依据还是只是一种实现思路我就没深究了。我的理解不会比别人更高级，之所以能用一张图说清楚，只不过是我作图的时候发现可以把过程画在一张图里，只需要把图示标清楚就好了，这样就不需要每一步画一张图了，一旦理解了，哪怕忘了，一瞅这张图也能立刻回忆起来。先上数据：import numpy as np" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/%E4%B8%80%E5%BC%A0%E5%9B%BE%E8%AF%B4%E6%B8%85%E5%8C%88%E7%89%99%E5%88%A9%E7%AE%97%E6%B3%95%EF%BC%88Hungarian-Algorithm%EF%BC%89/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2021-09-23T00:00:00-00.00" />
+<meta name="twitter:title" content="一张图说清匈牙利算法（Hungarian-Algorithm） - Maverick" />
+<meta name="twitter:description" content="做多目标跟踪的时候会碰到这个算法，每个人都有自己的说法讲清楚这个算法是干什么的？我的老师就跟我说过是什么给工人分配活干（即理解为指派问题），网上还看到有说红娘尽可能匹配多的情侣等，透过这些感性理解，基本上就能理解大概是最大匹配的问题了。然后加了限制：后来者优先。即后匹配的能抢掉前人已匹配的对象，这个是有数学依据还是只是一种实现思路我就没深究了。我的理解不会比别人更高级，之所以能用一张图说清楚，只不过是我作图的时候发现可以把过程画在一张图里，只需要把图示标清楚就好了，这样就不需要每一步画一张图了，一旦理解了，哪怕忘了，一瞅这张图也能立刻回忆起来。先上数据：import numpy as np" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">一张图说清匈牙利算法（Hungarian-Algorithm）</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2021-09-23
+                </time>
+                
+                in <a no-style class="category" href="/category/AI/">
+                    AI
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/%E4%B8%80%E5%BC%A0%E5%9B%BE%E8%AF%B4%E6%B8%85%E5%8C%88%E7%89%99%E5%88%A9%E7%AE%97%E6%B3%95%EF%BC%88Hungarian-Algorithm%EF%BC%89/" 
+                    data-flag-title="一张图说清匈牙利算法（Hungarian-Algorithm）"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>做多目标跟踪的时候会碰到这个算法，每个人都有自己的说法讲清楚这个算法是干什么的？我的老师就跟我说过是什么给工人分配活干（即理解为<code>指派问题</code>），网上还看到有说红娘尽可能匹配多的情侣等，透过这些感性理解，基本上就能理解大概是最大匹配的问题了。</p><p>然后加了限制：后来者优先。即后匹配的<strong>能</strong>抢掉前人已匹配的对象，这个是有数学依据还是只是一种实现思路我就没深究了。</p><p>我的理解不会比别人更高级，之所以能用一张图说清楚，只不过是我作图的时候发现可以把过程画在一张图里，只需要把图示标清楚就好了，这样就不需要每一步画一张图了，一旦理解了，哪怕忘了，一瞅这张图也能立刻回忆起来。</p><p>先上数据：</p><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">relationship_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+</pre></div>
+<p>你可以理解为6个工人，7个工作，6个男孩，7个女孩等，当然，6行7列，这么直观理解也是一点问题都没有的。</p><p>算法匹配过程如下：
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-288e5208f101f44f.png" /></figure></p><ul>
+<li>灰蓝线就是被抢掉的</li>
+<li>绿线就是抢夺失败的</li>
+<li><code>紫线</code>是被抢了后找候选成功的</li>
+<li><code>红线</code>是一次性成功的</li>
+</ul>
+<p>其中被抢的和抢夺失败的还加了删除线，这是为了强调。匹配成功的就是<code>红线</code>和<code>紫线</code>，也就是说，我们匹配出来的是：</p><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+<p>甚至可以这么表示这个过程：</p>
+<pre><code>x0,y0
+x1,y1
+x2,y0 -&gt; x0,y1 -&gt; x1-&gt;y4 (x2抢x0的,x0抢x1的)
+x3,y2
+x4,y3
+x5,y3 -&gt; x4匹配不到新的，抢夺失败，-&gt; x5,null
+</code></pre>
+<p>有没有说清楚？就两步：</p><ol>
+<li>根据关联表直接建立关系</li>
+<li>如果当前<code>C</code>匹配的对象已经被<code>B</code>匹配过了，那么尝试把它抢过来：</li>
+</ol>
+<ul>
+<li><code>B</code>去找别的匹配<ul>
+<li>找到了(<code>A</code>)就建立新的匹配<ul>
+<li>如果新的匹配(<code>A</code>)也已经被别人(<code>D</code>)匹配了，那么那个“别人(<code>D</code>)”也放弃当前匹配去找别的（<em>递归警告</em>）</li>
+</ul>
+</li>
+<li>如果找不到新的匹配，那么<code>C</code>抢夺失败，递归中的<code>D</code>也同理，失败向上冒泡</li>
+</ul>
+</li>
+</ul>
+<p>注意递归怎么写代码就能写出来了：</p><div class="highlight"><pre><span></span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">relationship_matrix</span><span class="o">.</span><span class="n">shape</span>    <span class="c1"># 6个x，7个y</span>
+
+<span class="c1"># 如果x0与y0关联，x3也与y0关联，那么x0去找新的匹配时，需要把y0过滤掉</span>
+<span class="c1"># 同理x0如果找到下一个y2，y2已被x2关联，那么x2找新的匹配时[y0, y2]都需要过滤掉</span>
+<span class="c1"># 我们把这个数组存为y_used</span>
+<span class="n">y_used</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ny</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>  <span class="c1"># 存y是否连接上</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">ny</span><span class="p">,),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># 存x连接的对象，没有为-1</span>
+
+<span class="k">def</span> <span class="nf">find_other_path_and_used</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ny</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">relationship_matrix</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">y_used</span><span class="p">[</span><span class="n">y</span><span class="p">]:</span>
+            <span class="n">y_used</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>        <span class="c1"># 处于争夺中的y，需要打标，在后续的递归时要过滤掉</span>
+            <span class="k">if</span> <span class="n">path</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">find_other_path_and_used</span><span class="p">(</span><span class="n">path</span><span class="p">[</span><span class="n">y</span><span class="p">]):</span>
+                <span class="n">path</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>         <span class="c1"># 直接连接 和 抢夺成功</span>
+                <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>                    <span class="c1"># 抢夺失败 和 默认失败</span>
+
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nx</span><span class="p">):</span>
+    <span class="n">y_used</span><span class="p">[:]</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># empty</span>
+    <span class="n">find_other_path_and_used</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+<p>真的写代码实现的时候，难点反而是<code>y_used</code>这个，第一遍代码没考虑这一点，导致递归的时候每次都从$y_0$开始而出现死循环，意识到后把处于争抢状态中的<code>y</code>打个标就好了。</p><p>scipy中有一个算法实现了Hungarian algorithm：</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">linear_sum_assignment</span>
+
+<span class="c1"># relationship_matrix是代价矩阵</span>
+<span class="c1"># 所以我们要代价越小越好，就用1来减</span>
+<span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">linear_sum_assignment</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">relationship_matrix</span><span class="p">)</span> 
+<span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">))</span>
+</pre></div>
+
+<pre><code>[(0, 0), (1, 1), (2, 6), (3, 2), (4, 3), (5, 4)]
+</code></pre>
+<p>为什么与上面不一样呢？</p><ol>
+<li>（0，0），（1，1）的匹配显然不是我们实现的后来者优先</li>
+<li>他把行看成是工人，列看成是任务，每个工人总要分配个任务，所以(5,4)这种代价矩阵里没有的关联它也做出来了，目的只是让“总代价”最小</li>
+</ol>
+
+<pre><code>(1-relationship_matrix)[rows, cols]  # 总代价为1
+</code></pre>
+
+<pre><code>array([0, 0, 0, 0, 0, 1])
+</code></pre>
+<p>从它的名字也能看出来，它是理解为<code>指派问题</code>的(<code>assignment</code>)</p>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+    <span class="ga-tag">
+        <a class="ga-highlight" href="/tag/%E5%8C%88%E7%89%99%E5%88%A9%E7%AE%97%E6%B3%95/">#匈牙利算法</a>
+    </span>
+    
+    <span class="ga-tag">
+        <a class="ga-highlight" href="/tag/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA/">#多目标跟踪</a>
+    </span>
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0/">李宏毅MACHINE-LEARNING-2021-SPRING笔记</a>
+        <p class="yue"></p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/%E5%87%A0%E5%A4%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95python%E5%AE%9E%E7%8E%B0/">几大排序算法python实现</a>
+        <p class="yue">冒泡排序</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

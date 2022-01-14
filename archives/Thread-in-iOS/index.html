@@ -1,0 +1,535 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>Thread-in-iOS - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第25章" />
+<meta property="og:title" content="Thread-in-iOS - Maverick" />
+<meta property="og:description" content="《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第25章" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/Thread-in-iOS/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="Thread-in-iOS - Maverick" />
+<meta name="twitter:description" content="《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第25章" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">Thread-in-iOS</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/iOS/">
+                    iOS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/Thread-in-iOS/" 
+                    data-flag-title="Thread-in-iOS"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第25章</p><hr />
+<h1>Thread</h1>
+<p>Thread在开发过程中基本上线程是隐形的，你感知不到，因为大多数情况下，程序只（需要）跑在主线程上，这是没有问题的：</p><ul>
+<li>你的代码事实上执行得非常快，你感知不到</li>
+<li>响应逻辑过程锁死UI，是安全的操作</li>
+</ul>
+<p>原生的后台线程：</p><ul>
+<li>动画：The Core Animation framework is running the animation and updating the presentation layer on a background thread.</li>
+<li>网络：A web view’s fetching and loading of its content is asynchronous</li>
+<li>影音：Sounds are played asynchronously. Loading, preparation, and playing of movies happens asynchronously.</li>
+<li>存盘：UIDocument saves and reads on a background thread.</li>
+</ul>
+<p>但所有的<code>complete functions / delegations / notification</code> 都是在主线程被调用的</p><p>多线程的问题</p><ul>
+<li>调用时机/顺序不可控，次数也不可控，随时可能被执行</li>
+<li>数据的线程安全，不得不借助“锁”的机制来保证（race condition）<ul>
+<li>a lock is an <code>invitation</code> to <em>forget</em> to use the lock, or to <em>forget</em> to remove the lock after you’ve set it.</li>
+</ul>
+</li>
+<li>The lifetime of a thread is independent of the lifetimes of other objects in your app.<ul>
+<li>一个对象的退出不能保证有后台线程将来会调用它 -&gt; 闪退或Zombie</li>
+</ul>
+</li>
+<li>Hard to debug.</li>
+</ul>
+<p>XCode对debug的支持：</p><ul>
+<li>Debug navigator</li>
+<li><code>NSLog / os_log / Logger</code> outputs</li>
+<li>Instruments &gt; Time Profiler</li>
+<li>Thread Sanitizer, Main Thread Checker (项目配置 &gt; Diagnostics)</li>
+</ul>
+<p>执行后台线程的方法：</p><h2>Manual Threading</h2>
+<p><code>performSelector(inBackground:with:)</code></p><ul>
+<li>只能传一个参数，多个参数要打包</li>
+<li>手动管理内存 -&gt; wrap every thing in an autorelease pool</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nf">drawThatPuppy</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">makeBitmapContext</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="kd">let</span> <span class="nv">center</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span>
+        <span class="c1">// 这里打包参数为一个字典</span>
+        <span class="kd">let</span> <span class="nv">d</span> <span class="p">:</span> <span class="p">[</span><span class="n">AnyHashable</span><span class="p">:</span><span class="nb">Any</span><span class="p">]</span> <span class="p">=</span>
+            <span class="p">[</span><span class="s">&quot;center&quot;</span><span class="p">:</span><span class="n">center</span><span class="p">,</span> <span class="s">&quot;bounds&quot;</span><span class="p">:</span><span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">,</span> <span class="s">&quot;zoom&quot;</span><span class="p">:</span><span class="n">CGFloat</span><span class="p">(</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">performSelector</span><span class="p">(</span><span class="n">inBackground</span><span class="p">:</span> <span class="k">#selector</span><span class="p">(</span><span class="n">reallyDraw</span><span class="p">),</span> <span class="n">with</span><span class="p">:</span> <span class="n">d</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="c1">// trampoline, background thread entry point</span>
+<span class="kr">@objc</span> <span class="kd">func</span> <span class="nf">reallyDraw</span><span class="p">(</span><span class="kc">_</span> <span class="n">d</span><span class="p">:</span> <span class="p">[</span><span class="n">AnyHashable</span><span class="p">:</span><span class="nb">Any</span><span class="p">])</span> <span class="p">{</span>
+    <span class="c1">// 手动控制内存</span>
+    <span class="n">autoreleasepool</span> <span class="p">{</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">center</span><span class="p">:</span> <span class="n">d</span><span class="p">[</span><span class="s">&quot;center&quot;</span><span class="p">]</span> <span class="k">as</span><span class="p">!</span> <span class="n">CGPoint</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="p">:</span> <span class="n">d</span><span class="p">[</span><span class="s">&quot;bounds&quot;</span><span class="p">]</span> <span class="k">as</span><span class="p">!</span> <span class="n">CGRect</span><span class="p">,</span>
+            <span class="n">zoom</span><span class="p">:</span> <span class="n">d</span><span class="p">[</span><span class="s">&quot;zoom&quot;</span><span class="p">]</span> <span class="k">as</span><span class="p">!</span> <span class="n">CGFloat</span><span class="p">)</span>
+        <span class="c1">// 手动回调主线程</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">performSelector</span><span class="p">(</span><span class="n">onMainThread</span><span class="p">:</span> <span class="k">#selector</span><span class="p">(</span><span class="n">allDone</span><span class="p">),</span> <span class="n">with</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span>
+            <span class="n">waitUntilDone</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
+
+<span class="p">}</span>
+<span class="c1">// called on main thread! background thread exit point</span>
+<span class="kr">@objc</span> <span class="kd">func</span> <span class="nf">allDone</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kc">self</span><span class="p">.</span><span class="n">setNeedsDisplay</span><span class="p">()</span>
+<span class="p">}</span>
+</pre></div>
+<p>即便如此，还是没有解决不同线程使用同一个实例变量（如<code>bitmapContext</code>）造成程序非常脆弱的问题，得进一步使用<code>lock</code>等机制。</p><h2>Operation</h2>
+<ul>
+<li>将<code>thread</code>封装成<code>task</code>，表示成<code>Operation</code> 通过 <code>OperationQueue</code>来操作。</li>
+<li>回调机制变成了通知机制（或<code>KVO</code>）</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">queue</span> <span class="p">:</span> <span class="n">OperationQueue</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nv">q</span> <span class="p">=</span> <span class="n">OperationQueue</span><span class="p">()</span>
+    <span class="c1">// ... further configurations can go here ...</span>
+    <span class="k">return</span> <span class="n">q</span>
+<span class="p">}()</span>
+
+<span class="kd">func</span> <span class="nf">drawThatPuppy</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nv">center</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span>
+    <span class="c1">// 也可以用 BlcokOperation</span>
+    <span class="c1">// 来执行你的耗时操作</span>
+    <span class="kd">let</span> <span class="nv">op</span> <span class="p">=</span> <span class="n">MyMandelbrotOperation</span><span class="p">(</span>
+        <span class="n">center</span><span class="p">:</span> <span class="n">center</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span> <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">zoom</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1">// 通知/回调</span>
+    <span class="n">NotificationCenter</span><span class="p">.</span><span class="k">default</span><span class="p">.</span><span class="n">addObserver</span><span class="p">(</span><span class="kc">self</span><span class="p">,</span>
+        <span class="n">selector</span><span class="p">:</span> <span class="k">#selector</span><span class="p">(</span><span class="n">operationFinished</span><span class="p">),</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">MyMandelbrotOperation</span><span class="p">.</span><span class="n">mandelOpFinished</span><span class="p">,</span> <span class="n">object</span><span class="p">:</span> <span class="n">op</span><span class="p">)</span>
+    <span class="c1">// 结合起来</span>
+    <span class="kc">self</span><span class="p">.</span><span class="n">queue</span><span class="p">.</span><span class="n">addOperation</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<p>而一个<code>Operation</code>子类包含两个部分：</p><ol>
+<li>A designated initializer<ul>
+<li>你可以把需要的参数设计成对应的属性，并初始化好它</li>
+</ul>
+</li>
+<li>A main method<ul>
+<li>耗程序真正执行的地方，OperationQueue执行到这个Operation的时候就会被自动执行</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">MyMandelbrotOperation</span><span class="p">:</span> <span class="n">Operation</span> <span class="p">{</span>
+    <span class="kd">static</span> <span class="kd">let</span> <span class="nv">mandelOpFinished</span> <span class="p">=</span> <span class="n">Notification</span><span class="p">.</span><span class="n">Name</span><span class="p">(</span><span class="s">&quot;mandelOpFinished&quot;</span><span class="p">)</span>
+
+    <span class="c1">// 1. params -&gt; arguments</span>
+    <span class="kd">private</span> <span class="kd">let</span> <span class="nv">center</span> <span class="p">:</span> <span class="n">CGPoint</span>
+    <span class="kd">private</span> <span class="kd">let</span> <span class="nv">bounds</span> <span class="p">:</span> <span class="n">CGRect</span>
+    <span class="kd">private</span> <span class="kd">let</span> <span class="nv">zoom</span> <span class="p">:</span> <span class="n">CGFloat</span>
+    <span class="kd">private</span><span class="p">(</span><span class="kr">set</span><span class="p">)</span> <span class="kd">var</span> <span class="nv">bitmapContext</span> <span class="p">:</span> <span class="n">CGContext</span><span class="p">!</span> <span class="p">=</span> <span class="kc">nil</span>  <span class="c1">// 封装成了类属性，不再线程共享</span>
+    <span class="kd">init</span><span class="p">(</span><span class="n">center</span> <span class="n">c</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">,</span> <span class="n">bounds</span> <span class="n">b</span><span class="p">:</span><span class="n">CGRect</span><span class="p">,</span> <span class="n">zoom</span> <span class="n">z</span><span class="p">:</span><span class="n">CGFloat</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">center</span> <span class="p">=</span> <span class="n">c</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span> <span class="p">=</span> <span class="n">b</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">zoom</span> <span class="p">=</span> <span class="n">z</span>
+        <span class="kc">super</span><span class="p">.</span><span class="kd">init</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 1.1 logic</span>
+    <span class="kd">let</span> <span class="nv">MANDELBROT_STEPS</span> <span class="p">=</span> <span class="mi">100</span>
+    <span class="kd">func</span> <span class="nf">makeBitmapContext</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="n">CGSize</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// ... same as before</span>
+    <span class="p">}</span>
+    <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="n">center</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span><span class="n">CGRect</span><span class="p">,</span> <span class="n">zoom</span><span class="p">:</span><span class="n">CGFloat</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// ... same as before</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 2. main</span>
+    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// 首先要检查isCancelled</span>
+        <span class="k">guard</span> <span class="o">!</span><span class="kc">self</span><span class="p">.</span><span class="n">isCancelled</span> <span class="k">else</span> <span class="p">{</span><span class="k">return</span><span class="p">}</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">makeBitmapContext</span><span class="p">(</span><span class="n">size</span><span class="p">:</span> <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">center</span><span class="p">:</span> <span class="kc">self</span><span class="p">.</span><span class="n">center</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span> <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">zoom</span><span class="p">:</span> <span class="kc">self</span><span class="p">.</span><span class="n">zoom</span><span class="p">)</span>
+        <span class="k">if</span> <span class="o">!</span><span class="kc">self</span><span class="p">.</span><span class="n">isCancelled</span> <span class="p">{</span>
+            <span class="c1">// 完成通知，也可以用KVO机制</span>
+            <span class="c1">// 主线程接收到后要立即处理，因为OpearationQueue将会立即释放这个Operation</span>
+            <span class="c1">// 此外，接收通知可能也不在主线程，-&gt; GCD</span>
+            <span class="n">NotificationCenter</span><span class="p">.</span><span class="k">default</span><span class="p">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">:</span> <span class="n">MyMandelbrotOperation</span><span class="p">.</span><span class="n">mandelOpFinished</span><span class="p">,</span> <span class="n">object</span><span class="p">:</span> <span class="kc">self</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 3. observer</span>
+<span class="c1">// 就是前面在主线程里注册监听消息的方法</span>
+<span class="c1">// warning! called on background thread</span>
+<span class="kr">@objc</span> <span class="kd">func</span> <span class="nf">operationFinished</span><span class="p">(</span><span class="kc">_</span> <span class="n">n</span><span class="p">:</span><span class="n">Notification</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="kd">let</span> <span class="nv">op</span> <span class="p">=</span> <span class="n">n</span><span class="p">.</span><span class="n">object</span> <span class="k">as</span><span class="p">?</span> <span class="n">MyMandelbrotOperation</span> <span class="p">{</span>
+        <span class="c1">// 1. 主线程（GCD）</span>
+        <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="k">async</span> <span class="p">{</span>
+            <span class="c1">// 2. 移除通知监听</span>
+            <span class="n">NotificationCenter</span><span class="p">.</span><span class="k">default</span><span class="p">.</span><span class="n">removeObserver</span><span class="p">(</span><span class="kc">self</span><span class="p">,</span>
+                <span class="n">name</span><span class="p">:</span> <span class="n">MyMandelbrotOperation</span><span class="p">.</span><span class="n">mandelOpFinished</span><span class="p">,</span> <span class="n">object</span><span class="p">:</span> <span class="n">op</span><span class="p">)</span>
+            <span class="kc">self</span><span class="p">.</span><span class="n">bitmapContext</span> <span class="p">=</span> <span class="n">op</span><span class="p">.</span><span class="n">bitmapContext</span>  <span class="c1">// 传回这个之前是线程共享的变量</span>
+            <span class="kc">self</span><span class="p">.</span><span class="n">setNeedsDisplay</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span> 
+<span class="p">}</span>
+</pre></div>
+<p>注意<code>bitmapContext</code>这个之前主线程设置，然后后台线程共享的变量，现在由Operation这个类自己持有，结束时才赋值回主线程。</p><p>此外，还能限制并发数量：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">q</span> <span class="p">=</span> <span class="n">OperationQueue</span><span class="p">()</span>
+<span class="n">q</span><span class="p">.</span><span class="n">maxConcurrentOperationCount</span> <span class="p">=</span> <span class="mi">1</span>
+</pre></div>
+<p>This turns the OperationQueue into a <code>serial queue</code>.</p><p>最后，解决最后一个问题，即你的调用者都没了，比如ViewController没了，调用者没了，后台任务也理应取消（下载、存盘类不需要UI交互的除外）</p><div class="highlight"><pre><span></span><span class="kd">deinit</span><span class="p">{</span>
+    <span class="kc">self</span><span class="p">.</span><span class="n">queue</span><span class="p">.</span><span class="n">cancelAllOperations</span><span class="p">()</span>
+<span class="p">}</span>
+</pre></div>
+<p>至此，前面提到的一些多线程会带来的问题如调用时机和数量不可控，跨线程数据安全，以及生命周期等问题，<code>Operation</code>都完美解决并封装了。</p><p>设置优先级，QoS, 依赖等一些进阶示例：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">backgroundOperation</span> <span class="p">=</span> <span class="bp">NSOperation</span><span class="p">()</span>
+<span class="n">backgroundOperation</span><span class="p">.</span><span class="n">queuePriority</span> <span class="p">=</span> <span class="p">.</span><span class="n">Low</span>
+<span class="n">backgroundOperation</span><span class="p">.</span><span class="n">qualityOfService</span> <span class="p">=</span> <span class="p">.</span><span class="n">Background</span>
+
+<span class="kd">let</span> <span class="nv">operationQueue</span> <span class="p">=</span> <span class="bp">NSOperationQueue</span><span class="p">.</span><span class="n">mainQueue</span><span class="p">()</span>
+<span class="n">operationQueue</span><span class="p">.</span><span class="n">addOperation</span><span class="p">(</span><span class="n">backgroundOperation</span><span class="p">)</span>
+
+<span class="c1">// dependence</span>
+<span class="kd">let</span> <span class="nv">networkingOperation</span><span class="p">:</span> <span class="bp">NSOperation</span> <span class="p">=</span> <span class="p">...</span>
+<span class="kd">let</span> <span class="nv">resizingOperation</span><span class="p">:</span> <span class="bp">NSOperation</span> <span class="p">=</span> <span class="p">...</span>
+<span class="n">resizingOperation</span><span class="p">.</span><span class="n">addDependency</span><span class="p">(</span><span class="n">networkingOperation</span><span class="p">)</span>
+
+<span class="kd">let</span> <span class="nv">operationQueue</span> <span class="p">=</span> <span class="bp">NSOperationQueue</span><span class="p">.</span><span class="n">mainQueue</span><span class="p">()</span>
+<span class="c1">// 虽然resizing添加了network为依赖，但是还是需要全部加到队列里</span>
+<span class="c1">// 不要以为加了尾部operation就能把依赖全加进去</span>
+<span class="n">operationQueue</span><span class="p">.</span><span class="n">addOperations</span><span class="p">([</span><span class="n">networkingOperation</span><span class="p">,</span> <span class="n">resizingOperation</span><span class="p">],</span> <span class="n">waitUntilFinished</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
+</pre></div>
+<h2>Grand Central Dispatch</h2>
+<p>可以认为GCD是更底层的Operation，它甚至直接嵌入了操作系统，能被任何代码执行而且非常高效。调用过程也与Operation差不多:</p><ul>
+<li>表示一个task</li>
+<li>加入一个queue<ul>
+<li>GCD Queue也被表示成了<em>dispatch queue</em></li>
+<li>a lightweight opaque pseudo-object consisting essentially of <code>a list of functions</code> to be executed.</li>
+<li>如果自定义这个queue，它默认状态下是<code>serial queue</code></li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">MANDELBROT_STEPS</span> <span class="p">=</span> <span class="mi">100</span>
+<span class="kd">var</span> <span class="nv">bitmapContext</span><span class="p">:</span> <span class="n">CGContext</span><span class="p">!</span>
+<span class="kd">let</span> <span class="nv">draw_queue</span> <span class="p">=</span> <span class="n">DispatchQueue</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="s">&quot;com.neuburg.mandeldraw&quot;</span><span class="p">)</span>
+
+<span class="c1">// 改造一个返回前述跨线程变量的方法</span>
+<span class="kd">func</span> <span class="nf">makeBitmapContext</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="n">CGSize</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">CGContext</span> <span class="p">{</span>
+    <span class="c1">// ... as before ...</span>
+    <span class="kd">let</span> <span class="nv">context</span> <span class="p">=</span> <span class="n">CGContext</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span>
+        <span class="n">width</span><span class="p">:</span> <span class="nb">Int</span><span class="p">(</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">),</span> <span class="n">height</span><span class="p">:</span> <span class="nb">Int</span><span class="p">(</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">),</span>
+        <span class="n">bitsPerComponent</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="n">bytesPerRow</span><span class="p">:</span> <span class="n">bitmapBytesPerRow</span><span class="p">,</span>
+        <span class="n">space</span><span class="p">:</span> <span class="n">colorSpace</span><span class="p">,</span> <span class="n">bitmapInfo</span><span class="p">:</span> <span class="n">prem</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">context</span><span class="p">!</span>
+<span class="p">}</span>
+<span class="c1">// 相应方法增加这个context参数，而不是从环境里取</span>
+<span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="n">center</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span><span class="n">CGRect</span><span class="p">,</span> <span class="n">zoom</span><span class="p">:</span><span class="n">CGFloat</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span><span class="n">CGContext</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// ... as before, but we refer to local context, not self.bitmapContext</span>
+<span class="p">}</span>
+
+<span class="c1">// 剩下的，一个block搞定：</span>
+<span class="c1">// UI触发的事件</span>
+<span class="kd">func</span> <span class="nf">drawThatPuppy</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nv">center</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span>
+    <span class="kd">let</span> <span class="nv">bounds</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span>
+    <span class="kc">self</span><span class="p">.</span><span class="n">draw_queue</span><span class="p">.</span><span class="k">async</span> <span class="p">{</span>
+        <span class="c1">// 下面两行代码虽然用到了self，但是它们没有改变任何属性，是线程安全的</span>
+        <span class="kd">let</span> <span class="nv">bitmap</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">makeBitmapContext</span><span class="p">(</span><span class="n">size</span><span class="p">:</span> <span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">center</span><span class="p">:</span> <span class="n">center</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">zoom</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">bitmap</span><span class="p">)</span>
+        <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="k">async</span> <span class="p">{</span>
+            <span class="kc">self</span><span class="p">.</span><span class="n">bitmapContext</span> <span class="p">=</span> <span class="n">bitmap</span>
+            <span class="kc">self</span><span class="p">.</span><span class="n">setNeedsDisplay</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span> 
+<span class="p">}</span>
+</pre></div>
+<p>可以看到，相比Operation把代码结构都改了，GCD几乎只是包了一层block，代码变动非常少。（唯一的发动就是把所有执行代码的变量都需要通过参数机制传进去）。</p><p>同时， <em>center, bounds</em>等参数，直接从环境里取，这是block机制带来的便利；同样的机制也被用在了线程共享的变量传回主线程时，因为对第二层block而言，第一层block就是它的<code>higher surrounding scope</code>，是能看到它的<em>bitmap</em>变量的。 -&gt; 我们并没有从头到尾retrive一个<code>self.bitmap</code>变量，也就不存在data sharing。</p><p>不像Operation把耗时操作写在别处，GCD的方式易读性更高。</p><p>除了有<code>.async(execute:)</code>，还有<code>asyncAfter(deadline:execute:)</code>和<code>sync(execute:)</code>，望文生义，就不多介绍了。</p><h3>Dispatch Groups</h3>
+<p>group提供了监听(wait)一组后台线程全部执行结束的功能：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">outerQueue</span> <span class="p">=</span> <span class="n">DispatchQueue</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="s">&quot;outer&quot;</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">innerQueue</span> <span class="p">=</span> <span class="n">DispatchQueue</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="s">&quot;inner&quot;</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">group</span> <span class="p">=</span> <span class="n">DispatchGroup</span><span class="p">()</span>
+<span class="n">outerQueue</span><span class="p">.</span><span class="k">async</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nv">series</span> <span class="p">=</span> <span class="s">&quot;123456789&quot;</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="k">in</span> <span class="n">series</span> <span class="p">{</span>
+        <span class="n">group</span><span class="p">.</span><span class="n">enter</span><span class="p">()</span>  <span class="c1">// flag 1</span>
+        <span class="n">innerQueue</span><span class="p">.</span><span class="n">asyncAfter</span><span class="p">(</span>
+            <span class="n">deadline</span><span class="p">:.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="p">.</span><span class="n">milliseconds</span><span class="p">(</span><span class="nb">Int</span><span class="p">.</span><span class="n">random</span><span class="p">(</span><span class="k">in</span><span class="p">:</span> <span class="mf">1.</span><span class="p">..</span><span class="mi">1000</span><span class="p">)))</span> <span class="p">{</span>
+                <span class="bp">print</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">terminator</span><span class="p">:</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">group</span><span class="p">.</span><span class="n">leave</span><span class="p">()</span> <span class="c1">// flag 2</span>
+        <span class="p">}</span> 
+        <span class="n">group</span><span class="p">.</span><span class="n">wait</span><span class="p">()</span>  <span class="c1">// 一旦加了这句话，这9个线程就变成线性的了，注释掉，就是9个线程随机先后执行</span>
+    <span class="p">}</span>
+    <span class="c1">// 可见这个notify等同于wait_all</span>
+    <span class="c1">// 当enter次数与leave次数一致时触发</span>
+    <span class="n">group</span><span class="p">.</span><span class="n">notify</span><span class="p">(</span><span class="n">queue</span><span class="p">:</span> <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span><span class="p">)</span> <span class="p">{</span>
+        <span class="bp">print</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">done&quot;</span><span class="p">)</span>
+    <span class="p">}</span> 
+<span class="p">}</span>
+</pre></div>
+<h3>One-Time Execution</h3>
+<p>Objective-C中实现单例的<code>dispatch_once</code>其实就是GCD的内容，而在Swift中这个方法就没有了，也没用GCD去实现了:</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">globalOnce</span> <span class="p">:</span> <span class="nb">Void</span> <span class="p">=</span> <span class="p">{</span>
+        <span class="bp">print</span><span class="p">(</span><span class="s">&quot;once in a lifetime&quot;</span><span class="p">)</span> <span class="c1">// once, at most</span>
+<span class="p">}()</span>
+</pre></div>
+<p>这个print只会打印一次。而如果是用在对象中，可以声明为<code>lazy</code>：</p><div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">ViewController</span><span class="p">:</span> <span class="bp">UIViewController</span> <span class="p">{</span>
+        <span class="kd">private</span> <span class="kr">lazy</span> <span class="kd">var</span> <span class="nv">instanceOnce</span> <span class="p">:</span> <span class="nb">Void</span> <span class="p">=</span> <span class="p">{</span>
+            <span class="bp">print</span><span class="p">(</span><span class="s">&quot;once in an instance&quot;</span><span class="p">)</span> <span class="c1">// once per instance, at most</span>
+        <span class="p">}()</span>
+<span class="c1">// ... }</span>
+</pre></div>
+<p><code>instanceOnce</code>这个变量也只会初始化一次。</p><p><strong>Bonus</strong></p><div class="highlight"><pre><span></span><span class="c1">// 并发</span>
+<span class="kd">let</span> <span class="nv">queue</span> <span class="p">=</span> <span class="n">DispatchQueue</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="s">&quot;queue&quot;</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="p">.</span><span class="n">concurrent</span><span class="p">)</span>
+<span class="c1">// 条件， check the queue</span>
+<span class="n">dispatchPrecondition</span><span class="p">(</span><span class="n">condition</span><span class="p">:</span> <span class="p">.</span><span class="n">onQueue</span><span class="p">(</span><span class="kc">self</span><span class="p">.</span><span class="n">draw_queue</span><span class="p">))</span>
+</pre></div>
+<h2>App Backgrounding</h2>
+<ul>
+<li>应用进入后台时，iOS系统会给应用<code>小于5秒</code>的时间来结束当前的任务</li>
+<li>可以用<code>UIApplication.shared.beginBackgroundTask(expirationHandler:)</code>来申请更长的时间（<code>不超过30秒</code>），返回一个identifier<ul>
+<li><code>expirationHandler</code>是一个超时还没处理完的话，系统会调的方法，</li>
+</ul>
+</li>
+<li>任务执行完后需要调用<code>UIApplication.shared.endBackgroundTask(_:)</code>方法来结束后台时间的申请<ul>
+<li><code>expirationHandler</code>里同样需要显式<code>endBackgroundTask</code></li>
+<li>所以正常方法体和超时方法体都会有endBackgroundTask的调用</li>
+</ul>
+</li>
+</ul>
+<p>把这个特性直接封装到一个operation里去：</p><div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">BackgroundTaskOperation</span><span class="p">:</span> <span class="n">Operation</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">whatToDo</span> <span class="p">:</span> <span class="p">(()</span> <span class="p">-&gt;</span> <span class="p">())?</span>
+    <span class="kd">var</span> <span class="nv">cleanup</span> <span class="p">:</span> <span class="p">(()</span> <span class="p">-&gt;</span> <span class="p">())?</span>
+    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">guard</span> <span class="o">!</span><span class="kc">self</span><span class="p">.</span><span class="n">isCancelled</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+        <span class="kd">var</span> <span class="nv">bti</span> <span class="p">:</span> <span class="n">UIBackgroundTaskIdentifier</span> <span class="p">=</span> <span class="p">.</span><span class="n">invalid</span>
+        <span class="n">bti</span> <span class="p">=</span> <span class="bp">UIApplication</span><span class="p">.</span><span class="n">shared</span><span class="p">.</span><span class="n">beginBackgroundTask</span> <span class="p">{</span>
+            <span class="kc">self</span><span class="p">.</span><span class="n">cleanup</span><span class="p">?()</span>
+            <span class="kc">self</span><span class="p">.</span><span class="n">cancel</span><span class="p">()</span>
+            <span class="bp">UIApplication</span><span class="p">.</span><span class="n">shared</span><span class="p">.</span><span class="n">endBackgroundTask</span><span class="p">(</span><span class="n">bti</span><span class="p">)</span> <span class="c1">// cancellation</span>
+        <span class="p">}</span>
+        <span class="k">guard</span> <span class="n">bti</span> <span class="o">!=</span> <span class="p">.</span><span class="n">invalid</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+        <span class="n">whatToDo</span><span class="p">?()</span>
+        <span class="k">guard</span> <span class="o">!</span><span class="kc">self</span><span class="p">.</span><span class="n">isCancelled</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+        <span class="bp">UIApplication</span><span class="p">.</span><span class="n">shared</span><span class="p">.</span><span class="n">endBackgroundTask</span><span class="p">(</span><span class="n">bti</span><span class="p">)</span> <span class="c1">// completion</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 调用</span>
+<span class="kd">let</span> <span class="nv">task</span> <span class="p">=</span> <span class="n">BackgroundTaskOperation</span><span class="p">()</span>
+<span class="n">task</span><span class="p">.</span><span class="n">whatToDo</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+<span class="n">myQueue</span><span class="p">.</span><span class="n">addOperation</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+</pre></div>
+<p>这样，</p><ul>
+<li>正常情况下会执行<code>whatToDo()</code></li>
+<li>如果应用被挂到后台，因为注册过后台任务，有小于30秒的时间跑完任务</li>
+<li>如果顺利跑完，你把应用切到前台，会发现UI已经更新了</li>
+<li>超时也没跑完，就会进入超时的block里去取消任务了，UI上也得不到结果</li>
+</ul>
+<blockquote>
+<p>最后，要知道所谓的申请时长，并不是在<em>didEnterBackground</em>之类的方法里去做的，而是做任务的时候就直接注册了，是不是很麻烦？</p></blockquote>
+<h2>Background Processing</h2>
+<p>相比向系统申请少得可怜的后台挂起时间，iOS 从13开始引入了后台任务机制，方便你执行一些用户不需要感知的任务，比如下载，或数据清理：</p><ul>
+<li>路径：target &gt; Signing &amp; Capabilities &gt; Background processing</li>
+<li>use <code>Background Task framework</code>, need to import <code>BackgroundTasks</code></li>
+<li><em>Info.plist</em> &gt; add &quot;Permitted background task schedule identifiers&quot; key (<code>BTTaskSchedulerPermittedIdentifiers</code>), 任意标识字符串，比如反域名</li>
+<li>在<code>appDelegate</code>里面去实现需要后台执行的方法</li>
+</ul>
+<p>涉及到两个类:</p><ul>
+<li><code>BGProcessingTaskRequest</code><ul>
+<li>在<code>didEnterBackground</code>方法里调用</li>
+<li>需要match <em>plist.info</em>里的id</li>
+<li>注册是否通电/有网/延迟执行（ExternalPower / Network / earliestBeginDate）</li>
+</ul>
+</li>
+<li><code>BGTaskScheduler</code><ul>
+<li><code>application(_:didFinishLaunchingWithOptions:)</code>里执行</li>
+<li><code>register(forTaskWithIdentifier:using:launchHandler:)</code>方法<ul>
+<li>id: matching plist.info</li>
+<li>using: dispatch queue</li>
+<li>handler: <code>BGTask</code> object</li>
+</ul>
+</li>
+<li>在<code>BGTask</code>的超时方法里，和正常执行的代码里，均需调用<code>setTaskCompleted(_:bool)</code>方法</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">taskid</span> <span class="p">=</span> <span class="s">&quot;com.neuburg.matt.lengthy&quot;</span>
+<span class="kd">func</span> <span class="nf">application</span><span class="p">(</span><span class="kc">_</span> <span class="n">application</span><span class="p">:</span> <span class="bp">UIApplication</span><span class="p">,</span>
+    <span class="n">didFinishLaunchingWithOptions</span> <span class="n">launchOptions</span><span class="p">:</span>
+    <span class="p">[</span><span class="bp">UIApplication</span><span class="p">.</span><span class="n">LaunchOptionsKey</span> <span class="p">:</span> <span class="nb">Any</span><span class="p">]?)</span> <span class="p">-&gt;</span> <span class="nb">Bool</span> <span class="p">{</span>
+<span class="p">}</span>
+<span class="c1">// let v = MyView()</span>
+<span class="kd">let</span> <span class="nv">ok</span> <span class="p">=</span> <span class="bp">BGTaskScheduler</span><span class="p">.</span><span class="n">shared</span><span class="p">.</span><span class="n">register</span><span class="p">(</span>
+    <span class="n">forTaskWithIdentifier</span><span class="p">:</span> <span class="n">taskid</span><span class="p">,</span>
+    <span class="n">using</span><span class="p">:</span> <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">global</span><span class="p">(</span><span class="n">qos</span><span class="p">:</span> <span class="p">.</span><span class="n">background</span><span class="p">))</span> <span class="p">{</span> <span class="n">task</span> <span class="k">in</span>
+        <span class="n">task</span><span class="p">.</span><span class="n">expirationHandler</span> <span class="p">=</span> <span class="p">{</span>
+            <span class="n">task</span><span class="p">.</span><span class="n">setTaskCompleted</span><span class="p">(</span><span class="n">success</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="c1">//... my task logic</span>
+        <span class="n">task</span><span class="p">.</span><span class="n">setTaskCompleted</span><span class="p">(</span><span class="n">success</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// might check `ok` here</span>
+    <span class="k">return</span> <span class="kc">true</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">applicationDidEnterBackground</span><span class="p">(</span><span class="kc">_</span> <span class="n">application</span><span class="p">:</span> <span class="bp">UIApplication</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// might check to see whether it&#39;s time to submit this request</span>
+    <span class="kd">let</span> <span class="nv">req</span> <span class="p">=</span> <span class="bp">BGProcessingTaskRequest</span><span class="p">(</span><span class="n">identifier</span><span class="p">:</span> <span class="kc">self</span><span class="p">.</span><span class="n">taskid</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">?</span> <span class="bp">BGTaskScheduler</span><span class="p">.</span><span class="n">shared</span><span class="p">.</span><span class="n">submit</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<h3>Debug</h3>
+<ol>
+<li>打满<em>print</em>和断点</li>
+<li>设备上，把应用送到后台再拉到前台</li>
+<li>Xcode上暂停app</li>
+<li><code>(lldb) e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@&quot;my_id&quot;]</code> 模拟launching<ul>
+<li><code>(lldb) e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateExpirationForTaskWithIdentifier:@&quot;my_id&quot;]</code> 模拟超时</li>
+</ul>
+</li>
+<li>控制台输入<code>continue</code>, 运行task function</li>
+<li>当<code>task.setTaskComplete(success: true)</code> 被调用，控制台输出：“Marking simulated task complete,”</li>
+</ol>
+<h3>BGAppRefreshTaskRequest</h3>
+<p>not mentioned</p>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/Windows%E4%B8%8B%E7%94%A8AHK%E6%9D%A5%E6%98%A0%E5%B0%84Mac%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE/">Windows下用AHK来映射Mac常用快捷键</a>
+        <p class="yue">最近用Windows做了一段主力机, 别的问题倒没啥, Windows下有啥干不了的呢, 哪怕鼠标滚轮方向相反, 大量快捷键不同等问题都能在非常短的适应后就不会对自己造成什么困找, 问题是我还得在Windows和Mac环境切来切去, 这样频繁地按错快捷键再纠正也挺烦人的, 决定一劳永逸地解决这个问题, 经过反复搜索和比较, 还是一个以前用Windows的时候就一直敬而远之的软件成了我的首选:AutoHotKey(AHK).以前不想用它就是因为要写脚本, 没有大量的需求的情况下我并不想去通读一遍那并不算短的文档, 这次不同了, 需要定制一堆快捷键, 感觉这个付出是值得的, 一番文档和实验之后, 初步得到如下脚本:</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B4%5D_Color_Image_Gesture/">cs193p_2021笔记[4]_Color_Image_Gesture</a>
+        <p class="yue">cs193p_2021_笔记_1</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

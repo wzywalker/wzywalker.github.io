@@ -1,0 +1,392 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>cs193p_2021笔记[5]_Property-Wrapper - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="cs193p_2021_笔记_1" />
+<meta property="og:title" content="cs193p_2021笔记[5]_Property-Wrapper - Maverick" />
+<meta property="og:description" content="cs193p_2021_笔记_1" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B5%5D_Property-Wrapper/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="cs193p_2021笔记[5]_Property-Wrapper - Maverick" />
+<meta name="twitter:description" content="cs193p_2021_笔记_1" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">cs193p_2021笔记[5]_Property-Wrapper</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/iOS/">
+                    iOS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B5%5D_Property-Wrapper/" 
+                    data-flag-title="cs193p_2021笔记[5]_Property-Wrapper"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p><a href="https://www.jianshu.com/p/998b0ef4a2cd">cs193p_2021_笔记_1</a>
+<a href="https://www.jianshu.com/p/af0ad1bead34">cs193p_2021_笔记_2</a>
+<a href="https://www.jianshu.com/p/d103f8d12052">cs193p_2021_笔记_3_Animation_Transition</a>
+<a href="https://www.jianshu.com/p/41e7309c7f55">cs193p_2021_笔记_4_Color_Image_Gesture</a>
+cs193p_2021_笔记_5_Property Wrapper
+<a href="https://www.jianshu.com/p/a315274a4fd2">cs193p_2021_笔记_6_Persistence</a>
+<a href="https://www.jianshu.com/p/f4ae879eef9c">cs193p_2021_笔记_7_Document Architecture</a>
+<a href="https://www.jianshu.com/p/2136bdc2c6f6">cs193p_2021_笔记_8</a></p><hr />
+<h1>Property Wrappers</h1>
+<p>C#中的<code>Attributes</code>，python中的<code>Decorators</code>, Java的<code>Annonations</code>，类似的设计模式。</p><ul>
+<li>A property wrapper is actually a <code>struct</code>.</li>
+<li>这个特殊的<code>struct</code>封装了一些模板行为应用到它们wrap的vars上：<ol>
+<li>Making a var live in the heap (<code>@State</code>)</li>
+<li>Making a var publish its changes (<code>@Published</code>)</li>
+<li>Causing a View to redraw when a published change is detected (<code>@ObservedObject</code>)</li>
+</ol>
+</li>
+</ul>
+<p>即能够分配到堆上，能够通知状态变化和能重绘等，可以理解为<code>语法糖</code>。</p><div class="highlight"><pre><span></span><span class="p">@</span><span class="n">Published</span> <span class="kd">var</span> <span class="nv">emojiArt</span><span class="p">:</span> <span class="n">EmojiArt</span> <span class="p">=</span> <span class="n">EmojiArt</span><span class="p">()</span>
+
+<span class="c1">// ... is really just this struct ...</span>
+<span class="kd">struct</span> <span class="nc">Published</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">wrappedValue</span><span class="p">:</span> <span class="n">EmojiArt</span>
+    <span class="kd">var</span> <span class="nv">projectedValue</span><span class="p">:</span> <span class="n">Publisher</span><span class="p">&lt;</span><span class="n">EmojiArt</span><span class="p">,</span> <span class="n">Never</span><span class="p">&gt;</span>  <span class="c1">// i.e. $</span>
+<span class="p">}</span>
+
+<span class="c1">// `projected value`的类型取决于wrapper自己，比如本例就是一个`Publisher`</span>
+
+<span class="c1">// 我理解为一个属性和一个广播器</span>
+
+<span class="c1">// ... and Swift (approximately) makes these vars available to you ...</span>
+<span class="kd">var</span> <span class="nv">_emojiArt</span><span class="p">:</span> <span class="n">Published</span> <span class="p">=</span> <span class="n">Published</span><span class="p">(</span><span class="n">wrappedValue</span><span class="p">:</span> <span class="n">EmojiArt</span><span class="p">())</span> 
+<span class="kd">var</span> <span class="nv">emojiArt</span><span class="p">:</span> <span class="n">EmojiArt</span> <span class="p">{</span>
+     <span class="kr">get</span> <span class="p">{</span> <span class="n">_emojiArt</span><span class="p">.</span><span class="n">wrappedValue</span> <span class="p">}</span>
+     <span class="kr">set</span> <span class="p">{</span> <span class="n">_emojiArt</span><span class="p">.</span><span class="n">wrappedValue</span> <span class="p">=</span> <span class="n">newValue</span> <span class="p">}</span>
+ <span class="p">}</span>
+</pre></div>
+<p>把get,set直接通过<code>$emojiArt</code>(即projectedValue)来使用</p><p>当一个<code>Published</code>值发生变化：</p><ul>
+<li>It publishes the change through its <em>projectedValue</em> (<code>$emojiArt</code>) which is a <code>Publisher</code>.</li>
+<li>It also invokes <code>objectWillChange.send()</code> in its enclosing <code>ObservableObject</code>.</li>
+</ul>
+<p>下面列的几种<code>Property wrapper</code>，我们主要关心最核心的两个概念，<code>wrappedValue</code>和<code>projectedValue</code>是什么就行了:</p><h2>@State</h2>
+<p>这是第二次提到了，在<code>Property Observers</code>一节里预告过，基本上点<code>@</code>的，大都为<code>Property Wrapper</code>的内容。</p><ul>
+<li>The wrappedValue is: <code>anything</code> (but almost certainly a value type).</li>
+<li>What it does:<ul>
+<li>stores the wrappedValue in the heap;</li>
+<li>when it changes, <code>invalidates</code> the <code>View</code>.</li>
+</ul>
+</li>
+<li>Projected value (i.e. $): a <code>Binding</code> (to that <em>value in the heap</em>).</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">foo</span><span class="p">:</span> <span class="nb">Int</span>
+<span class="kd">init</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">_foo</span> <span class="p">=</span> <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">initiaValue</span><span class="p">:</span> <span class="mi">5</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<p>注意<code>_</code>和<code>$</code>的区别。</p><h2>@StateObject &amp; @ObservedObject</h2>
+<ul>
+<li>The wrappedValue is: <code>anything</code> that implements the <code>ObservableObject</code> protocol (ViewModels).</li>
+<li>What it does:<ul>
+<li><code>invalidates</code> the <code>View</code> when wrappedValue does <em>objectWillChange.send()</em>.</li>
+</ul>
+</li>
+<li>Projected value (i.e. $): a <code>Binding</code> (to the vars of the wrappedValue (a <em>ViewModel</em>)).</li>
+</ul>
+<blockquote>
+<p><strong>@StateObject V.S. @State</strong></p></blockquote>
+<ul>
+<li>一个类型是<code>ObservableObject</code>s， 一个是value type</li>
+</ul>
+<blockquote>
+<p><strong>@StateObject V.S. @ObservedObject</strong></p></blockquote>
+<ul>
+<li>@StateObject is a &quot;source of truth&quot;，也就是说可以直接赋值：<code>@StateObject var foo = SomeObservableObject()</code></li>
+<li>能用在<em>View, APP, Scene</em>等场景</li>
+<li>如果用在View里，生命周期与View一致</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="p">@</span><span class="n">main</span>
+<span class="kd">struct</span> <span class="nc">EmojiArtApp</span><span class="p">:</span> <span class="n">App</span> <span class="p">{</span>
+    <span class="c1">// stateObject, source of truth</span>
+    <span class="c1">// defined in the app</span>
+    <span class="p">@</span><span class="n">StateObject</span> <span class="kd">var</span> <span class="nv">paletteStore</span> <span class="p">=</span> <span class="n">PaletteStore</span><span class="p">(</span><span class="n">named</span><span class="p">:</span> <span class="s">&quot;default&quot;</span><span class="p">)</span>
+
+    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">Scene</span> <span class="p">{</span>
+    <span class="n">DocumentGroup</span><span class="p">(</span><span class="n">newDocument</span><span class="p">:</span> <span class="p">{</span> <span class="n">EmojiArtDocument</span><span class="p">()</span> <span class="p">})</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span>
+        <span class="n">EmojiArtDocumentView</span><span class="p">(</span><span class="n">document</span><span class="p">:</span> <span class="n">config</span><span class="p">.</span><span class="n">document</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">environmentObject</span><span class="p">(</span><span class="n">paletteStore</span><span class="p">)</span>  <span class="c1">// passed by environment</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<h2>@Binding</h2>
+<ul>
+<li>The wrappedValue is: <code>a value</code> that is bound to something else.</li>
+<li>What it does:<ul>
+<li>gets/sets the value of the wrappedValue from <code>some other source</code>.</li>
+<li>when the bound-to value changes, it <code>invalidates</code> the <code>View</code>.</li>
+<li>Form表单典型应用场景，有UI变化的控件</li>
+<li>手势过程中的State, 或drag时是否targted</li>
+<li>模态窗口的状态</li>
+<li>分割view后共享状态</li>
+<li>总之，数据源只有一个(source of the truth)的场景，就不需要用两个@State而用@Binding,</li>
+</ul>
+</li>
+<li>Projected value (i.e. $): a Binding (self; i.e. the Binding itself)</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">MyView</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+      <span class="p">@</span><span class="n">State</span> <span class="kd">var</span> <span class="nv">myString</span> <span class="p">=</span> <span class="err">“</span><span class="n">Hello</span><span class="err">”</span>               <span class="c1">// 1</span>
+      <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+          <span class="n">OtherView</span><span class="p">(</span><span class="n">sharedText</span><span class="p">:</span> <span class="err">$</span><span class="n">myString</span><span class="p">)</span>        <span class="c1">// 2</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="kd">struct</span> <span class="nc">OtherView</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+      <span class="p">@</span><span class="n">Binding</span> <span class="kd">var</span> <span class="nv">sharedText</span><span class="p">:</span> <span class="n">string</span>             <span class="c1">// 3</span>
+      <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+          <span class="n">Text</span><span class="p">(</span><span class="n">sharedText</span><span class="p">)</span>                        <span class="c1">// 4</span>
+          <span class="n">TextField</span><span class="p">(</span><span class="s">&quot;shared&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="err">$</span><span class="n">sharedText</span><span class="p">)</span>  <span class="c1">// 5 _myString.projectValue.projectValue</span>
+      <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<ol>
+<li><code>_myString</code>是实际变量，包含一个<code>wrappedValue</code>，一个<code>projectedValue</code></li>
+<li><code>myString</code>就是<code>_myString.wrappedValue</code></li>
+<li><code>$myString</code>是<code>_myString.projectedValue</code>，<ul>
+<li>是一个<code>Binding&lt;String&gt;</code>，传值和接值用的就是它</li>
+<li>所以传<code>$myString</code>的地方也可以用<code>_myString.projectedValue</code>代替，学习阶段的话</li>
+</ul>
+</li>
+<li>要把<code>projectedValue</code>层层传递下去，并不是用同一个<code>projectedValue</code>，而是设计成了<code>Binding&lt;T&gt;</code><ul>
+<li>参考上面代码块的第5条</li>
+</ul>
+</li>
+</ol>
+<p>其它</p><ul>
+<li>也可以绑定一个常量：<code>OtherView(sharedText: .constant(“Howdy”))</code></li>
+<li>computed binding: <code>Binding(get:, set:).</code></li>
+</ul>
+<p>比如你的view是一个小组件，里面有一个<code>Binding var user: User</code>，那么在preview里面怎么传入这个User呢？用常量：</p><div class="highlight"><pre><span></span><span class="kd">static</span> <span class="kd">var</span> <span class="nv">preview</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+    <span class="n">myView</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="p">.</span><span class="n">constant</span><span class="p">(</span><span class="n">User</span><span class="p">(...)))</span>
+<span class="p">}</span>
+</pre></div>
+<h2>@EnvironmenetObject</h2>
+<ul>
+<li>The wrappedValue is: <code>ObservableObject</code> obtained via .environmentObject() sent to the View.</li>
+<li>What it does: <code>invalidates</code> the View when wrappedValue does objectWillChange.send().</li>
+<li>Projected value (i.e. $): a <code>Binding</code> (to the vars of the wrappedValue (a ViewModel)).</li>
+</ul>
+<p>与<code>@ObservedObject</code>用法稍有点不同，有单独的赋值接口：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">myView</span> <span class="p">=</span> <span class="n">MyView</span><span class="p">().</span><span class="n">environmentObject</span><span class="p">(</span><span class="n">theViewModel</span><span class="p">)</span>
+<span class="c1">// 而@ObservedObject是一个普通的属性</span>
+<span class="kd">let</span> <span class="nv">myView</span> <span class="p">=</span> <span class="n">MyView</span><span class="p">(</span><span class="n">viewModel</span><span class="p">:</span> <span class="n">theViewModel</span><span class="p">)</span>
+
+<span class="c1">// Inside the View ...</span>
+<span class="p">@</span><span class="n">EnvironmentObject</span> <span class="kd">var</span> <span class="nv">viewModel</span><span class="p">:</span> <span class="n">ViewModelClass</span> 
+<span class="c1">// ... vs ...</span>
+<span class="p">@</span><span class="n">ObservedObject</span> <span class="kd">var</span> <span class="nv">viewModel</span><span class="p">:</span> <span class="n">ViewModelClass</span>
+</pre></div>
+<ul>
+<li>visible to all views in your body (except modallay presented ones)</li>
+<li>多用于多个view共享ViewModel的时候</li>
+</ul>
+<h2>@Environment</h2>
+<ul>
+<li>与<code>@EnvironmentObject</code>完全不是同一个东西</li>
+<li>这是<code>Property Wrapper</code>不只有两个变量（warped..., projected...）的的一个应用</li>
+<li>通过<code>keyPath</code>来使用：<code>@Environment(\.colorScheme) var colorScheme</code></li>
+<li>wrappedValue的类型是通过<code>keyPath</code>声明时设置的</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">view</span><span class="p">.</span><span class="n">environment</span><span class="p">(</span><span class="err">\</span><span class="p">.</span><span class="n">colorScheme</span><span class="p">,</span> <span class="p">.</span><span class="n">dark</span><span class="p">)</span>
+</pre></div>
+<p>so:</p><ul>
+<li>The wrappedValue is: the value of some var in <code>EnvironmentValues</code>.</li>
+<li>What it does: gets/sets a value of some var in <code>EnvironmentValues</code>.</li>
+<li>Projected value (i.e. $): none.</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1">// someView pop 一个 modal 的 myView,传递 environment</span>
+<span class="n">someView</span><span class="p">.</span><span class="n">sheet</span><span class="p">(</span><span class="n">isPresented</span><span class="p">:</span> <span class="n">myCondition</span><span class="p">){</span>
+    <span class="n">myView</span><span class="p">(...</span><span class="kd">init</span><span class="p">...)</span>
+    <span class="p">.</span><span class="n">enviroment</span><span class="p">(</span><span class="err">\</span><span class="p">.</span><span class="n">colorScheme</span><span class="p">,</span> <span class="n">colorScheme</span><span class="p">)</span> 
+<span class="p">}</span>
+</pre></div>
+<p>除了深色模式，还有一个典型的应用场景就是编辑模式<code>\.editMode</code>，比如点了编辑按钮后。</p><blockquote>
+<p><code>EditButton</code>是一个封装了UI和行为的控件，它只做一件事，就是更改<code>\.editmode</code>这个环境变量(的<code>isEditing</code>)</p></blockquote>
+<h2>@Publisher</h2>
+<p>It is an object that <code>emits values</code> and possibly a <code>failure object</code> if it fails while doing so.</p><div class="highlight"><pre><span></span><span class="n">Publisher</span><span class="p">&lt;</span><span class="n">Output</span><span class="p">,</span> <span class="n">Failure</span><span class="p">&gt;</span>
+</pre></div>
+<ul>
+<li>Failure需要实现<code>Error</code>，如果没有，可以传<code>Never</code></li>
+</ul>
+<h3>订阅</h3>
+<p>一种简单用法，<code>sink</code>:</p><div class="highlight"><pre><span></span><span class="n">cancellable</span> <span class="p">=</span> <span class="n">myPublisher</span><span class="p">.</span><span class="n">sink</span><span class="p">(</span>
+    <span class="n">receiveCompletion</span><span class="p">:{</span><span class="n">resultin</span><span class="p">...},</span> <span class="c1">//result is a Completion&lt;Failure&gt; enum</span>
+        <span class="n">receiveValue</span><span class="p">:</span> <span class="p">{</span> <span class="n">thingThePublisherPublishes</span> <span class="k">in</span> <span class="p">.</span> <span class="p">.</span> <span class="p">.</span> <span class="p">}</span>
+  <span class="p">)</span>
+</pre></div>
+<p>返回一个<code>Cancellable</code>，可以随时<code>.cancel()</code>，只要你持有这个<code>cancellable</code>，就能随时用这个sink</p><p>View有自己的订阅方式：</p><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">onReceive</span><span class="p">(</span><span class="n">publisher</span><span class="p">)</span> <span class="p">{</span> <span class="n">thingThePublisherPublishes</span> <span class="k">in</span>
+    <span class="c1">// do whatever you want with thingThePublisherPublishes </span>
+<span class="p">}</span>
+</pre></div>
+<ol>
+<li><code>.onReceive</code> will automatically <code>invalidate</code> your View (causing a redraw).</li>
+<li>既然参数是publisher，所以是一个binding的变量，即带<code>$</code>使用：</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="p">.</span><span class="n">onReceive</span><span class="p">(</span><span class="err">$</span><span class="n">aBindData</span><span class="p">)</span> <span class="p">{</span> <span class="n">bind_data</span> <span class="k">in</span> 
+    <span class="c1">// my code</span>
+<span class="p">}</span>
+</pre></div>
+<p>publisher来源：</p><ol>
+<li><code>$</code> in front of vars marked <code>@Published</code><ul>
+<li>还记得$就是取的projectedValue吗？</li>
+<li>一般的projectedValue是一个<em>Binding</em>，Published的是是个<em>Publisher</em></li>
+</ul>
+</li>
+<li>URLSession’s <code>dataTaskPublisher</code> (publishes the Data obtained from a URL)</li>
+<li><code>Timer</code>’s publish(every:) (periodically publishes the current date and time as a Date)</li>
+<li><code>NotificationCenter</code>’s publisher(for:) (publishes notifications when system events happen)</li>
+</ol>
+<blockquote>
+<p>如果你有一个<code>ObservedObject</code>(Document)，它里面有一个<code>@Publisher</code>(background)，那么注意以下两者的区别：</p></blockquote>
+<ul>
+<li>document.<code>$</code>background: 是一个publisher</li>
+<li><code>$</code>document.background: 是一个binding</li>
+</ul>
+<blockquote>
+<p><code>.onReceive</code>只能接收<code>Publisher</code>的推送，而事实上，<code>onChange</code>（一般用于接收ObservedObject或State)同样也能接收Publisher。</p></blockquote>
+
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B4%5D_Color_Image_Gesture/">cs193p_2021笔记[4]_Color_Image_Gesture</a>
+        <p class="yue">cs193p_2021_笔记_1</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0%5B2%5D/">cs193p_2021_笔记[2]</a>
+        <p class="yue">cs193p_2021_笔记_1</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

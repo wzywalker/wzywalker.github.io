@@ -1,0 +1,186 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>百度地图坐标转换 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="首先, 我们了解一下为什么要坐标转换" />
+<meta property="og:title" content="百度地图坐标转换 - Maverick" />
+<meta property="og:description" content="首先, 我们了解一下为什么要坐标转换" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/%E7%99%BE%E5%BA%A6%E5%9C%B0%E5%9B%BE%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="百度地图坐标转换 - Maverick" />
+<meta name="twitter:description" content="首先, 我们了解一下为什么要坐标转换" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">百度地图坐标转换</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/iOS/">
+                    iOS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/%E7%99%BE%E5%BA%A6%E5%9C%B0%E5%9B%BE%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2/" 
+                    data-flag-title="百度地图坐标转换"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>首先, 我们了解一下为什么要坐标转换</p><blockquote>
+<p>国际经纬度坐标标准为WGS-84,国内必须至少使用国测局制定的GCJ-02,对地理位置进行首次加密。百度坐标在此基础上，进行了BD-09二次加密措施,更加保护了个人隐私。百度对外接口的坐标系并不是GPS采集的真实经纬度，需要通过坐标转换接口进行转换。</p></blockquote>
+<p>其次, 我们在网上搜到有通过
+<code>http://api.map.baidu.com/ag/coord/convert?from=[0/2]&amp;to=4&amp;x=纬度&amp;y=经度</code>
+这种URL来进行转换的, 其中<code>0</code>代表<code>WGS-84</code>即标准GPS设备返回的坐标, <code>2</code>代表国测局的标准, 显然<code>4</code>就是百度地图认的坐标了. 但我遍搜网络, 这个接口是没有文档的(但是确实可用). 因为会碰到跨域的问题(<code>CORS</code>), 所以就用了jQuery中script标签跨域的方式来执行, 结果这个脚本也被百度”回收”了, 当然, 网上还是有痕迹的, 我把它保存了一下, 见此<a href="https://gist.github.com/walkerwzy/718052e1c99e26ab3668">gist</a>. 
+我没在这上面花太多时间, 并没有测它支不支持批量转换(看网友写了一个transMore, 是必须批量送入, 但底层还是一次次分别请求, 不合我意).</p><p>而事实上, 百度已经提供了文档化的<a href="http://lbsyun.baidu.com/index.php?title=webapi/guide/changeposition">坐标转换接口</a>, 并且原生就支持批量请求. 显然, 我们应该用文档化的方法, 只是这种用法需要申请成为一个开发者, 添加一个应用. 这不是小事么, 于是我小包装了一下, 见此<a href="https://gist.github.com/walkerwzy/e21cc369d21bd2301932">gist</a>.</p><p>仅仅有一点小要求, 就是传入的坐标, 键名分别是<code>lon</code>(经度)和<code>lat</code>和(纬度), 并且可以传入一个(传入一个, 返回也是一个), 或者一组</p><p>转换一个坐标:</p>
+<pre><code>BMap.Convertor.translate({lon:lon, lat:lat}, 1, 5, bdkey, function (point, status, message) {
+    if(status) return show(message || &quot;转换坐标出错:&quot;+status, true);
+    var curmarker = new BMap.Marker(point);
+    baidumap.addOverlay(curmarker);
+});
+</code></pre>
+<p>一组坐标:</p>
+<pre><code>BMap.Convertor.translate([{lon:lon, lat:lat},...], 1, 5, bdkey, function (points, status, message) {
+    if(status) return show(message || &quot;转换坐标出错:&quot;+status, true);
+    // 遍历points
+});
+</code></pre>
+
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B7%5D_Document-Architecture/">cs193p_2021笔记[7]_Document-Architecture</a>
+        <p class="yue">cs193p_2021_笔记_1</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/%E9%80%9A%E8%BF%87GPS%E6%95%B0%E6%8D%AE%E5%8F%8D%E5%90%91%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E7%BC%96%E7%A0%81%E5%BE%97%E5%88%B0%E5%BD%93%E5%89%8D%E4%BD%8D%E7%BD%AE%E4%BF%A1%E6%81%AF/">通过GPS数据反向地理信息编码得到当前位置信息</a>
+        <p class="yue">检查可用性</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

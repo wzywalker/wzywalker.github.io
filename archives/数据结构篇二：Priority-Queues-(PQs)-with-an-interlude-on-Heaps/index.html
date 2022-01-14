@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>数据结构篇二：Priority-Queues-(PQs)-with-an-interlude-on-Heaps - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记优先队列和堆的插曲，在优先队列里引入了heap只是个插曲而不算正式介绍，但其实讲得差不多了。" />
+<meta property="og:title" content="数据结构篇二：Priority-Queues-(PQs)-with-an-interlude-on-Heaps - Maverick" />
+<meta property="og:description" content="这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记优先队列和堆的插曲，在优先队列里引入了heap只是个插曲而不算正式介绍，但其实讲得差不多了。" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%8C%EF%BC%9APriority-Queues-%28PQs%29-with-an-interlude-on-Heaps/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="数据结构篇二：Priority-Queues-(PQs)-with-an-interlude-on-Heaps - Maverick" />
+<meta name="twitter:description" content="这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记优先队列和堆的插曲，在优先队列里引入了heap只是个插曲而不算正式介绍，但其实讲得差不多了。" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">数据结构篇二：Priority-Queues-(PQs)-with-an-interlude-on-Heaps</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/CS/">
+                    CS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%8C%EF%BC%9APriority-Queues-%28PQs%29-with-an-interlude-on-Heaps/" 
+                    data-flag-title="数据结构篇二：Priority-Queues-(PQs)-with-an-interlude-on-Heaps"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><p>优先队列和堆的插曲，在优先队列里引入了heap只是个插曲而不算正式介绍，但其实讲得差不多了。</p><hr />
+<h1>Priority Queues (PQs) with an interlude on heaps</h1>
+<ul>
+<li>A priority queue is an <code>Abstract Data Type</code> (ADT)</li>
+<li>except each element has a certain priority<ul>
+<li>determine the order (removed from the PQ)</li>
+</ul>
+</li>
+<li>need <code>comparable data</code></li>
+</ul>
+<p>每次取出最小（或最大）的-&gt;pool，添加到PQ，如何得知极值呢？-&gt; heap</p><h2>Heap</h2>
+<ul>
+<li>a tree based data structure</li>
+<li>statisfies the <code>heap invariant</code>(heap property):<ul>
+<li>if A is a parent node of B then A is <code>ordered with respect ot B</code> for all nodes A, B in the heap</li>
+<li>说人话，A是B的父节点，如果A比B大，那么比B的所有子节点都大，vice versa</li>
+</ul>
+</li>
+</ul>
+<p>Priority Queue有时候也被叫做Heap，因为它只是一个ADT，当然它也可以用别的数据结构实现。</p><p>以下四个，都是heap
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-0e6d73f458be2317.png" /></figure></p><p>这些就不是
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-94d53d52685873e5.png" /></figure></p><p><strong>Usage</strong></p><ul>
+<li>certain implementations of <code>Dijkstra's Shortest Path algorithm</code></li>
+<li>anytime you need the <em>dynamically</em> fetch the <strong>next</strong> <code>best</code> or <code>worst</code> element</li>
+<li><code>Huffman coding</code> -&gt; lossless data compression</li>
+<li>BFS，PQs <code>continuously grab the next</code> most promising node</li>
+<li><code>Minimum Spaning Tree</code> (MST) algorithm</li>
+</ul>
+<p>可见是很多算法的基础</p><p><strong>Complexity</strong></p><ul>
+<li>Binary Heap construction: O(n)</li>
+<li>Polling: O(log n)</li>
+<li>Peeking: O(1)</li>
+<li>Adding: O(log n)</li>
+<li>原生删除：O(n)<ul>
+<li>with hash table: O(log n)</li>
+</ul>
+</li>
+<li>原生contains: O(n)<ul>
+<li>with hash table: O(1)</li>
+</ul>
+</li>
+</ul>
+<p><strong>Turning Min PQ into Max PQ</strong></p><p>大多数编程语言标准库只提供了min PQ。</p><ol>
+<li>在构建min pq的时候，把比较标准从<code>x&gt;=y</code>变成<code>x&lt;=y</code>（operator重载）</li>
+<li>在构建min pq的时候，把x变成<code>-x</code>，取出的时候再取反一次</li>
+</ol>
+<p>原则都是取巧，而且，第二种方法，存在pq里的，并不是你要使用（和本想存储）的对象，所以取出的时候需要处理。</p><h2>Priority Queue with Binary Heap</h2>
+<p>实现了<code>heap invariant</code>的binary tree.</p><p>除了Binary Heap，还有很多</p><ul>
+<li>Fibonacci Heap</li>
+<li>Binomial Heap</li>
+<li>Paring Heap</li>
+<li>...</li>
+</ul>
+<p>都能实现一个PQ</p><p><strong>Adding Elements to Binary Heap</strong></p><ul>
+<li>从尾部(last leaf)添加</li>
+<li>如果违反了heap invairant(即比parent大)，则交换</li>
+<li>向上冒泡</li>
+</ul>
+<p><strong>Removing Elements From a  Binary Heap</strong></p><ol>
+<li>Poll()</li>
+</ol>
+<ul>
+<li>因为root总是优先级最高的元素，<code>poll</code>移掉的就是root</li>
+<li>root当然不能直接移，所以先跟最后一个元素swap</li>
+<li>swap后原root就没有children了，直接移除</li>
+<li>最低优先级的元素到了top，所以要向下冒泡<ul>
+<li>先左后右，先低再高</li>
+<li>即如果两个子级优先级一样，那么直接与左边交换</li>
+<li>否则哪个优先级最低就与哪个子级交换</li>
+<li>子级优先级都比它低，就完成了pool()</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li>Remove(m) 即删除一个特定元素</li>
+</ol>
+<ul>
+<li>linear scan，找到元素位置</li>
+<li>与last node交换，然后移除</li>
+<li>last node用先上向下的原则冒泡<ul>
+<li>即先看能不能往上冒泡，不能的话再看往下冒泡</li>
+</ul>
+</li>
+</ul>
+<p><strong>Complexity</strong>
+Pool(): O(log n)
+Remove(): O(n) (最坏情况下，可能要删的元素在最后一个)</p><p>用hashtable优化remove</p><ul>
+<li>hashtable为lookup和update提供constant time</li>
+<li>因为为Index和value建立了映射，这样不需要通过遍历，直接通过映射就能找到元素<ul>
+<li>如果两个node拥有同样的value呢？</li>
+<li>直接把每个value对应的n个索引全部存起来(set)</li>
+<li>但我应该remove哪一个呢？<ul>
+<li>随便，只要最终satisfy the heap variant</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%8C%E9%80%92%E5%BD%92%E4%B8%8E%E5%88%86%E6%B2%BB/">全排列，递归与分治</a>
+        <p class="yue">能够用递归和分治解决的，特征都是下一级做的事跟上一级一样（抽象），最后一层做真正的业务。比如n个数字的全排列，抽象出来就是每n-1个数字的全排列它的难点就在于抽象，因为等于什么都没描述（我要5个数字的全排列，你就说，那好，你告诉我这4个数字的全排列，我就能告诉你5个数字的全排列）。也就是说，尝试用n和n-1的思维（有点像归纳法，动态规划）去描述问题，而不去看能不能解决。具体到这里，以ABCD为例，我们的请求过程应该是这样的</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AD%EF%BC%9AFenwick-Tree-%28Binary-Indexed-Tree%29/">数据结构篇六：Fenwick-Tree-(Binary-Indexed-Tree)</a>
+        <p class="yue">这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>cs193p_2021笔记[7]_Document-Architecture - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="cs193p_2021_笔记_1" />
+<meta property="og:title" content="cs193p_2021笔记[7]_Document-Architecture - Maverick" />
+<meta property="og:description" content="cs193p_2021_笔记_1" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B7%5D_Document-Architecture/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="cs193p_2021笔记[7]_Document-Architecture - Maverick" />
+<meta name="twitter:description" content="cs193p_2021_笔记_1" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">cs193p_2021笔记[7]_Document-Architecture</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/iOS/">
+                    iOS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B7%5D_Document-Architecture/" 
+                    data-flag-title="cs193p_2021笔记[7]_Document-Architecture"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p><a href="https://www.jianshu.com/p/998b0ef4a2cd">cs193p_2021_笔记_1</a>
+<a href="https://www.jianshu.com/p/af0ad1bead34">cs193p_2021_笔记_2</a>
+<a href="https://www.jianshu.com/p/d103f8d12052">cs193p_2021_笔记_3_Animation_Transition</a>
+<a href="https://www.jianshu.com/p/41e7309c7f55">cs193p_2021_笔记_4_Color_Image_Gesture</a>
+<a href="https://www.jianshu.com/p/e3c2ee1628c6">cs193p_2021_笔记_5_Property Wrapper</a>
+<a href="https://www.jianshu.com/p/a315274a4fd2">cs193p_2021_笔记_6_Persistence</a>
+cs193p_2021_笔记_7_Document Architecture
+<a href="https://www.jianshu.com/p/2136bdc2c6f6">cs193p_2021_笔记_8</a></p><h1>Document Architecture</h1>
+<p>所谓的Dopcument Architecture，其实就是支持把用app产生的作品保存起来，比如你创作的一幅图片，可以保存为<code>.jpg</code>，你用photoshop做的文件是<code>.psd</code>，下次用自己的app加载这个文件，能认出所有组件和模型，比如我们想为document取个名字叫<code>.emojiart</code>。</p><h2>App Architecture</h2>
+<h3>App protocol</h3>
+<ul>
+<li>一个app里只能有一个struct服从<code>App Protocol</code></li>
+<li>mark it with <code>@main</code></li>
+<li>it's <code>var body</code> is <code>some Scene</code></li>
+</ul>
+<h3>Scene protocol</h3>
+<ul>
+<li>A <code>Scene</code> is a container fo a <code>top-lever</code> View that you want to show in your UI</li>
+<li><code>@Environment(\.scenePhase)</code></li>
+<li>three main types of Scenes:</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">WindowGroup</span> <span class="p">{</span><span class="k">return</span> <span class="n">aTopLevelView</span><span class="p">}</span>
+<span class="n">DocumentGroup</span><span class="p">(</span><span class="n">newDocument</span><span class="p">:)</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span> <span class="p">...</span> <span class="k">return</span> <span class="n">aTopLevelView</span><span class="p">}</span>
+<span class="n">DocumentGroup</span><span class="p">(</span><span class="n">viewing</span><span class="p">:</span> <span class="n">viewer</span><span class="p">:)</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span> <span class="p">...</span> <span class="k">return</span> <span class="n">aTopLevelView</span><span class="p">}</span>  <span class="c1">// 只读</span>
+</pre></div>
+<ul>
+<li>后两个类似view里面的<code>ForEach</code>但不完全相同：<ul>
+<li>而是：&quot;<strong>new window</strong>&quot; on Mac, &quot;<strong>splitting the screen</strong>&quot; on iPad -&gt; for create new Scene</li>
+</ul>
+</li>
+<li><code>content</code>参数是一个返回some View的方法<ul>
+<li>返回的是top-level view</li>
+<li>每当新建一个窗口或窗口被分割时都会被调用</li>
+</ul>
+</li>
+</ul>
+<p>当你在iPad上分屏，且两个打开同一应用，就是<code>WindowGroup</code>在管理，为每一个windows生成一个Scene(share the same parameter e.g. view model, 因为代码是同一份，除非额外为每个scene设置自己的viewmodel之类的).</p><p><code>config</code>里保存了document(即viewModel)，也保存了文件位置。</p><h3>SceneStorage</h3>
+<ul>
+<li>能持久化数据</li>
+<li>以窗口/分屏为单位 -&gt; per-Scene basis</li>
+<li>也会invalidate view</li>
+<li>数据类型有严格限制，最通用的是<code>RawRepresentable</code></li>
+</ul>
+<p>[图片上传失败...(image-66d359-1636448439942)]</p><p>一个View里的<code>@State</code>改为<code>@SceneStorage(uniq_id)</code>后，app退出或crash了，仍然能找回原来的值。</p><p>这个时候每个Scene里的值就已经不一样了。</p><h3>AppStorage</h3>
+<ul>
+<li>application-wide basis</li>
+<li>存在UserDefaults里</li>
+<li>服从<code>@SceneStorage</code>的数据才能被存储</li>
+<li>invalidate view</li>
+</ul>
+<h2>DocumentGroup</h2>
+<p><code>DocumentGroup</code> is the document-oriented Scene-building Scene.</p><div class="highlight"><pre><span></span><span class="p">@</span><span class="n">main</span>
+<span class="kd">struct</span> <span class="nc">MyDemoApp</span><span class="p">:</span> <span class="n">App</span> <span class="p">{</span>
+    <span class="p">@</span><span class="n">StateObject</span> <span class="kd">var</span> <span class="nv">paletteStore</span> <span class="p">=</span> <span class="n">PaletteStore</span><span class="p">(</span><span class="n">named</span><span class="p">:</span> <span class="s">&quot;Default&quot;</span><span class="p">)</span>
+    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">Scene</span> <span class="p">{</span>
+        <span class="n">WindowGroup</span> <span class="p">{</span>
+            <span class="n">MyDemoView</span><span class="p">()</span>
+            <span class="p">.</span><span class="n">environmentObject</span><span class="p">(</span><span class="n">paletteStore</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// V.S.</span>
+
+<span class="kd">struct</span> <span class="nc">MyDemoApp</span><span class="p">:</span> <span class="n">App</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">Scene</span> <span class="p">{</span>
+        <span class="n">DocumentGroup</span><span class="p">(</span><span class="n">newDocument</span><span class="p">:</span> <span class="p">{</span><span class="n">myDocument</span><span class="p">()})</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span>
+            <span class="n">MyDemoView</span><span class="p">(</span><span class="n">document</span><span class="p">:</span> <span class="n">config</span><span class="p">.</span><span class="n">document</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<ul>
+<li>不再用<code>@StateObject</code>传递ViewModel，每新建一个Document都会有一个独立的ViewModel<ul>
+<li>必须要服从<code>ReferenceFileDocument</code>(这样能存到文件系统以及从文件系统读取了)</li>
+<li><code>config</code>参数包含了这个ViewModel（就是document)，以及document的url</li>
+<li>很好理解，每一个document肯定有自己的数据（想象一个“最近打开”的功能，每一个文档都是独立的）</li>
+</ul>
+</li>
+<li><code>newDocument</code>里自行提供一个新建document的方法</li>
+<li>封装了关联的（选择document的）UI和行为</li>
+<li>you <strong>MUST</strong> implement <code>Undo</code> in your application</li>
+</ul>
+<p>如果不去实现<code>Undo</code>，也可以直接把model存到document文件里：</p><ol>
+<li>你的ViewModel要能init itself from a <code>Binding&lt;Type&gt;</code><ul>
+<li>如<code>config.$document</code></li>
+</ul>
+</li>
+<li>ViewModel由一个<code>ObservedObject</code>变成一个<code>StateObject</code><ul>
+<li>这次必须服从<code>FileDocument</code></li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">MyDemoApp</span><span class="p">:</span> <span class="n">App</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">Scene</span> <span class="p">{</span>
+        <span class="n">DocumentGroup</span><span class="p">(</span><span class="n">newDocument</span><span class="p">:</span> <span class="p">{</span><span class="n">myDocument</span><span class="p">()})</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span>
+            <span class="c1">// MyDemoView(document: config.document) // 之前的</span>
+            <span class="n">MyDemoView</span><span class="p">(</span><span class="n">document</span><span class="p">:</span> <span class="n">viewModel</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">config</span><span class="p">.</span><span class="err">$</span><span class="n">document</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>把<code>newDocument: {myDocument()}</code>改为<code>viewer: myDocument.self</code>，就成了一个只读的model，（你甚至不需要传入实例），如果你要开发的是一个查看别人文档的应用，这个特性就比较有用了。</p><h3>FileDocument protocol</h3>
+<p>This protocol gets/puts the contents of a document from/to a file. 即提供你的document读到文件系统的能力。</p><div class="highlight"><pre><span></span><span class="c1">// create from a file</span>
+<span class="kd">init</span><span class="p">(</span><span class="n">configuration</span><span class="p">:</span> <span class="n">ReadConfiguration</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="kd">let</span> <span class="nv">data</span> <span class="p">=</span> <span class="n">configuration</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">regularFileContents</span> <span class="p">{</span>
+        <span class="c1">// init yourself from data</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="n">CocoaError</span><span class="p">(.</span><span class="n">fileReadCorruptFile</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// write</span>
+<span class="kd">func</span> <span class="nf">fileWrapper</span><span class="p">(</span><span class="n">configuration</span><span class="p">:</span> <span class="n">WriteConfiguration</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="n">FileWrapper</span> <span class="p">{</span>
+    <span class="n">FileWrapper</span><span class="p">(</span><span class="n">regularFileWithContents</span><span class="p">:</span> <span class="cm">/*my data*/</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<h3>ReferenceFileDocument</h3>
+<ul>
+<li>几乎和<code>FileDocument</code>一致</li>
+<li>继承自<code>ObservableObject</code> -&gt; ViewModel only</li>
+<li>唯一的区别是通过后台线程的一个<code>snapshot</code>来写入</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1">// 先snapshot</span>
+<span class="kd">func</span> <span class="nf">snapshot</span><span class="p">(</span><span class="n">contentType</span><span class="p">:</span> <span class="bp">UTType</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="n">Snapshot</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="c1">// my data or something</span>
+<span class="p">}</span>
+<span class="c1">// then write</span>
+<span class="kd">func</span> <span class="nf">fileWrapper</span><span class="p">(</span><span class="n">snapshot</span><span class="p">:</span> <span class="n">Snapshot</span><span class="p">,</span> <span class="n">configuration</span><span class="p">:</span> <span class="n">WriteConfiguration</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="n">FileWrapper</span> <span class="p">{</span>
+    <span class="n">FileWrapper</span><span class="p">(</span><span class="n">regularFileWithContents</span><span class="p">:</span> <span class="cm">/* snapshpt converted to a Data */</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<p>流程大概是，你的model有变化之后，会先找<code>snapshot</code>方法创建一份镜像，然后再要求你给出一个<code>fileWrapper</code>来写文件。</p><h3>自定义文件类型</h3>
+<p>声明能打开什么类型的文件，通过：UTType(<code>Uniform Type Identifier</code>)</p><p>可以理解为怎么定义并注册（关联）自己的扩展名，就像photoshop关联.psd一样。</p><ol>
+<li>声明(Info tab)，设置<code>Exported/Imported Type Identifier</code>，所以表面上的扩展名，内里还对应了一个唯一的标识符，一般用反域名的格式</li>
+</ol>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-6647d6e837918894.png" /></figure><ol start="2">
+<li>声明拥有权，用的就是上一步标识符，而不是扩展名</li>
+</ol>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-7f6bd8787f7a52b4.png" /></figure><ol start="3">
+<li>告知系统能在<code>Files</code> app里打开这种文档<ul>
+<li>info.plist &gt; Supports Document Browser &gt; YES</li>
+</ul>
+</li>
+<li>代码里添加枚举：</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="kd">extension</span> <span class="bp">UTType</span> <span class="p">{</span>
+    <span class="kd">static</span> <span class="kd">let</span> <span class="nv">emojiart</span> <span class="p">=</span> <span class="bp">UTType</span><span class="p">(</span><span class="n">exportedAs</span><span class="p">:</span> <span class="s">&quot;edu.bla.bla.emojimart&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">static</span> <span class="kd">let</span> <span class="nv">readableContentTypes</span> <span class="p">=</span> <span class="p">[</span><span class="bp">UTType</span><span class="p">.</span><span class="n">emojiart</span><span class="p">]</span>
+</pre></div>
+<h2>Undo</h2>
+<ul>
+<li>use <code>ReferenceFileDocument</code> must implement Undo</li>
+<li>这也是SwiftUI能自动保存的时间节点</li>
+<li>by <code>UndoManager</code> -&gt; <code>@Environment(\.undoManager) var undoManager</code></li>
+<li>and by register an <code>Undo</code> for it: <code>func registerUndo(withTarget: self, howToUndo: (target) -&gt; Void)</code></li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nf">undoablePerform</span><span class="p">(</span><span class="n">operation</span><span class="p">:</span> <span class="nb">String</span><span class="p">,</span> <span class="n">with</span> <span class="n">undoManager</span><span class="p">:</span> <span class="n">UndoManager</span><span class="p">?,</span> <span class="n">doit</span><span class="p">:</span> <span class="p">()</span> <span class="p">-&gt;</span> <span class="nb">Void</span><span class="p">){</span>
+    <span class="kd">let</span> <span class="nv">oldModel</span> <span class="p">=</span> <span class="n">model</span>
+    <span class="n">doit</span><span class="p">()</span>
+    <span class="n">undoManager</span><span class="p">?.</span><span class="n">registerUndo</span><span class="p">(</span><span class="n">withTarget</span><span class="p">:</span> <span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">myself</span> <span class="k">in</span>
+        <span class="n">myself</span><span class="p">.</span><span class="n">model</span> <span class="p">=</span> <span class="n">model</span>
+    <span class="p">}</span>
+    <span class="n">undoManager</span><span class="p">?.</span><span class="n">setActionName</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span> <span class="c1">// 给操作一个名字，如&quot;undo paste&quot;， 非必需</span>
+<span class="p">}</span>
+</pre></div>
+<p>用`undoablyPerform(with:){} 包住的任何改变model的操作就都支持了undo</p><h2>Review</h2>
+<p>回顾一下，我们把应用改造为<code>Document Architechture</code>的步骤：</p><ol>
+<li>应用入口，将<code>WindowGroup</code>改为了<code>DocumentGroup</code>，并修改了相应的传递document的方式</li>
+<li>实现document(即view model) comform to <code>ReferenceFileDocument</code><ul>
+<li>实现snapshot, write to file (<code>FileWrapper</code>), and read from file</li>
+</ul>
+</li>
+<li>自定义一个文件类别（扩展名，标识符，声明拥有者等）</li>
+<li>此时启动应用，入口UI已经是文档选择界面了，所以我说它封装了UI和行为<ul>
+<li>但此时不具备保存的功能，需要进一步实现<code>Undo</code>'</li>
+</ul>
+</li>
+<li>通过<code>undoManager</code>把改动model的行为都包进去实现undo/redo<ul>
+<li>此时document已能自动保存</li>
+</ul>
+</li>
+<li>增加toolbar, 实现手动undo/redo</li>
+<li>顺便注册文档类型，以便在Files应用内能用本app打开<ul>
+<li><code>Info.plist</code> &gt; <code>Supports Document Browser</code> &gt; YES</li>
+</ul>
+</li>
+</ol>
+
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/%E3%80%8AEffective-Objective-C-2-0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/">《Effective-Objective-C-2-0》笔记第1-2章</a>
+        <p class="yue"></p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/%E7%99%BE%E5%BA%A6%E5%9C%B0%E5%9B%BE%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2/">百度地图坐标转换</a>
+        <p class="yue">首先, 我们了解一下为什么要坐标转换</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

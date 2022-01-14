@@ -1,0 +1,216 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>使用openssl创建自签名证书及部署到IIS教程 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="#创建自签名证书" />
+<meta property="og:title" content="使用openssl创建自签名证书及部署到IIS教程 - Maverick" />
+<meta property="og:description" content="#创建自签名证书" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/%E4%BD%BF%E7%94%A8openssl%E5%88%9B%E5%BB%BA%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%8F%8A%E9%83%A8%E7%BD%B2%E5%88%B0IIS%E6%95%99%E7%A8%8B/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="使用openssl创建自签名证书及部署到IIS教程 - Maverick" />
+<meta name="twitter:description" content="#创建自签名证书" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">使用openssl创建自签名证书及部署到IIS教程</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/iOS/">
+                    iOS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/%E4%BD%BF%E7%94%A8openssl%E5%88%9B%E5%BB%BA%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%8F%8A%E9%83%A8%E7%BD%B2%E5%88%B0IIS%E6%95%99%E7%A8%8B/" 
+                    data-flag-title="使用openssl创建自签名证书及部署到IIS教程"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>#创建自签名证书
+首先，创建一个私钥文件：</p>
+<pre><code>openssl genrsa -out myselfsigned.key 2048
+</code></pre>
+<p>然后利用私钥创建自签名证书：</p>
+<pre><code>openssl req -new -x509 -key myselfsigned.key -out myselfsigned.cer -days 36500
+</code></pre>
+<p>执行上面的两个操作之后会提示输入以下几个内容(为了显示正常尽量使用英文)：</p><blockquote>
+<ol>
+<li>Country Name (2 letter code) [AU]:CN //国家简称</li>
+</ol>
+</blockquote>
+<ol>
+<li>State or Province Name (full name) [Some-State]:GuangDong //州或省的名字</li>
+<li>Locality Name (eg, city) []:ShenZhen //区或市县的名称</li>
+<li>Organization Name (eg, company) [Internet Widgits Pty Ltd]:Comapny //公司或组织名</li>
+<li>Organizational Unit Name (eg, section) []:Mobile //单位或者是部门名称</li>
+<li>Common Name (e.g. server FQDN or YOUR name) []:xxxxxx //域名或服务器名或IP</li>
+<li>Email Address []:xxxxx@gmail.com //Email地址</li>
+</ol>
+<p>注, 上述可直接在命令中用<code>-subj</code>跟在语句后面, 如:</p>
+<pre><code>openssl req -new -x509 -key myselfsigned.key -out myselfsigned.cer -days 36500 -subj /CN=域名或服务器名或IP
+</code></pre>
+<p>至此, 生成的myselfsigned.cer分别应用到服务器端以及客户端(通过邮件, 链接等方式下发), 即可使用, 配置IIS见下文</p><p>#创建自己的证书颁发机构(CA)
+即使是测试目的, 也会出现有多个站点需要自定义证书的情况, 不可能要求用户每个站点装一个 我们何不把自己添加成一个证书颁发机构(CA), 然后把这个证书装给客户端, 那么由这个CA颁发的证书都会被自动信任.</p><p>首先, 用同样的语法创建一个证书, 我们把名字取明确一些, 就叫<code>myCA</code>吧(跟第一步生成普通证书是一样一样的, 只是这次我们把它理解成一个证书颁发机构)</p>
+<pre><code>openssl genrsa -out myCA.key 2048
+openssl req -new -x509 -key myCA.key -out myCA.cer -days 36500
+</code></pre>
+<p>然后, 基于这个证书生成一个证书请求(<code>CSR</code>), (同样, 先生成一个key, 要用key来请求)</p>
+<pre><code>openssl genrsa -out server.key 2048
+openssl req -new -out server.req -key server.key -subj /CN=域名
+</code></pre>
+<blockquote>
+<p>注:</p></blockquote>
+<ol>
+<li>一旦域名配置了, 用不同于这个域名的主机名来请求, 就会校验失败</li>
+<li>这里用到了上面说的-subj参数</li>
+</ol>
+<p>最后, 通过服务器证书(我们理解的CA), 对这个签发请求进行签发</p>
+<pre><code>openssl x509 -req -in server.req -out server.cer -CAkey myCA.key -CA myCA.cer -days 36500 -CAcreateserial -CAserial serial
+</code></pre>
+<p>#配置IIS
+我们的使用场景是IIS伺服了一个静态文件服务器(没错, 是用来放iOS企业部署的的plist和ipa文件的), 做到如下几步</p><p>##转化证书格式
+IIS导入证书需要转化为pkcs12格式(X509格式?), 中间会询问一次密码, 牢记, 或者与导出的文件一起保存</p>
+<pre><code>openssl pkcs12 -export -clcerts -in server.cer -inkey server.key -out iis.pfx
+</code></pre>
+<p>现在总结一下, 目前为止, 除去<code>key</code>和<code>car</code>, 生成了<code>myCA.cer</code>, <code>server.cer</code> 和<code>iis.pfx</code>三个文件</p><p>##将myCA.cer添加为”受信任的根证书颁发机构”
+打开IE &gt; 工具 &gt; Internet选项 &gt; 内容 &gt; 证书 &gt; 受信任的根证书颁发机构 &gt; 导入 &gt; 选择iis.pfx &gt; 输入密码 &gt; 导入</p><p>##添加服务器证书
+这需要两个步骤</p><p>首先, 在IIS管理器(<code>inetmgr</code>)的根目录上(就是机器名), 选择”服务器证书”, 导入我们刚才用<code>server.cer</code>生成的<code>iis.pfx</code>, 即给IIS添加了一个证书(如果有多个, 重复以上步骤)</p><p>然后, 找到网站节点, 右键, “编辑绑定”, 添加一个供https访问的端口(默认是443), 此时会要求你选择一个证书, 把刚才通过管理器添加的证书名选出来, 即可.</p><p>最后, 把<code>server.cer</code>通用你们企业自己的方式颁发给需要使用的客户端(邮件, 链接等, 均可), 如果是iPhone, 点击了<code>server.cer</code>文件后, 会导航到设置里面安装, 安装并信任后, 在设置 &gt; 通用 &gt; Profiles里面可以看到你信任的证书使用openssl创建自签名证书及部署到IIS教程</p>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/%E7%94%A8CALayer%E7%BB%98%E5%9B%BE%2C%E6%B7%BB%E5%8A%A0%E5%8A%A8%E7%94%BB%E5%92%8C%E6%B8%90%E5%8F%98/">用CALayer绘图,添加动画和渐变</a>
+        <p class="yue">如果CALayer只有一个简单的 path, 那么直接给 path 赋值是最简单的:</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/error--IB-Designables--Failed-to-update-auto-layout-status/">error--IB-Designables--Failed-to-update-auto-layout-status</a>
+        <p class="yue">首先, 了解一下 IBInspectable / IBDesignable</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

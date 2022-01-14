@@ -1,0 +1,1144 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>《Deep-Learning-with-Python》笔记 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="本来是打算趁这个时间好好看看花书的，前几章看下来确实觉得获益匪浅，但看下去就发现跟不上了，特别是抱着急功近利的心态的话，目前也沉不下去真的一节节吃透地往下看。这类书终归不是入门教材，是需要你有过一定的积累后再回过头来看的。于是想到了《Deep Learning with Python》，忘记这本书怎么来的了，但是在别的地方看到了有人推荐，说是Keras的作者写的非常好的一本入门书，翻了前面几十页后发现居然跟进去了，不该讲的地方没讲比如数学细节，而且思路也极其统一，从头贯穿到尾（比如representations, latent space,  hypothesis space），我觉得很受用。三百多页全英文，居然也没查几个单词就这么看完了，以前看文档最多十来页，也算一个突破了，可见其实还是一个耐心的问题。看完后书上做了很多笔记，于是顺着笔记读了第二遍，顺便就把笔记给电子化了。不是教程，不是导读。Fundamentals of deep learning" />
+<meta property="og:title" content="《Deep-Learning-with-Python》笔记 - Maverick" />
+<meta property="og:description" content="本来是打算趁这个时间好好看看花书的，前几章看下来确实觉得获益匪浅，但看下去就发现跟不上了，特别是抱着急功近利的心态的话，目前也沉不下去真的一节节吃透地往下看。这类书终归不是入门教材，是需要你有过一定的积累后再回过头来看的。于是想到了《Deep Learning with Python》，忘记这本书怎么来的了，但是在别的地方看到了有人推荐，说是Keras的作者写的非常好的一本入门书，翻了前面几十页后发现居然跟进去了，不该讲的地方没讲比如数学细节，而且思路也极其统一，从头贯穿到尾（比如representations, latent space,  hypothesis space），我觉得很受用。三百多页全英文，居然也没查几个单词就这么看完了，以前看文档最多十来页，也算一个突破了，可见其实还是一个耐心的问题。看完后书上做了很多笔记，于是顺着笔记读了第二遍，顺便就把笔记给电子化了。不是教程，不是导读。Fundamentals of deep learning" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/%E3%80%8ADeep-Learning-with-Python%E3%80%8B%E7%AC%94%E8%AE%B0/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="《Deep-Learning-with-Python》笔记 - Maverick" />
+<meta name="twitter:description" content="本来是打算趁这个时间好好看看花书的，前几章看下来确实觉得获益匪浅，但看下去就发现跟不上了，特别是抱着急功近利的心态的话，目前也沉不下去真的一节节吃透地往下看。这类书终归不是入门教材，是需要你有过一定的积累后再回过头来看的。于是想到了《Deep Learning with Python》，忘记这本书怎么来的了，但是在别的地方看到了有人推荐，说是Keras的作者写的非常好的一本入门书，翻了前面几十页后发现居然跟进去了，不该讲的地方没讲比如数学细节，而且思路也极其统一，从头贯穿到尾（比如representations, latent space,  hypothesis space），我觉得很受用。三百多页全英文，居然也没查几个单词就这么看完了，以前看文档最多十来页，也算一个突破了，可见其实还是一个耐心的问题。看完后书上做了很多笔记，于是顺着笔记读了第二遍，顺便就把笔记给电子化了。不是教程，不是导读。Fundamentals of deep learning" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">《Deep-Learning-with-Python》笔记</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/AI/">
+                    AI
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/%E3%80%8ADeep-Learning-with-Python%E3%80%8B%E7%AC%94%E8%AE%B0/" 
+                    data-flag-title="《Deep-Learning-with-Python》笔记"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>本来是打算趁这个时间好好看看花书的，前几章看下来确实觉得获益匪浅，但看下去就发现跟不上了，特别是抱着急功近利的心态的话，目前也沉不下去真的一节节吃透地往下看。这类书终归不是入门教材，是需要你有过一定的积累后再回过头来看的。</p><p>于是想到了《Deep Learning with Python》，忘记这本书怎么来的了，但是在别的地方看到了有人推荐，说是Keras的作者写的非常好的一本入门书，翻了前面几十页后发现居然跟进去了，不该讲的地方没讲比如数学细节，而且思路也极其统一，从头贯穿到尾（比如representations, latent space,  hypothesis space），我觉得很受用。</p><p>三百多页全英文，居然也没查几个单词就这么看完了，以前看文档最多十来页，也算一个突破了，可见其实还是一个耐心的问题。</p><p>看完后书上做了很多笔记，于是顺着笔记读了第二遍，顺便就把笔记给电子化了。不是教程，不是导读。</p><h1>Fundamentals of deep learning</h1>
+<p><strong>核心思想</strong>：
+learng useful <code>representations</code> of input data</p><blockquote>
+<p>what’s a <code>representation</code>?</p><p>At its core, it’s a different way to look at data—to represent or encode data.</p></blockquote>
+<p>简单回顾深度学习之于人工智能的历史，每本书都会写，但每本书里都有作者自己的侧重：</p><ul>
+<li>Artificial intelligence</li>
+<li>Machine learning<ul>
+<li>Machine learning is tightly related to <code>mathematical statistics</code>, but it differs from statistics in several important ways.<ul>
+<li>machine learning tends to deal with large, complex datasets (such as a dataset of millions of images, each consisting of tens of thousands of pixels)</li>
+<li>classical statistical analysis such as Bayesian analysis would be impractical(不切实际的).</li>
+<li>It’s a hands-on discipline in which ideas are proven empirically more often than theoretically.（工程/实践大于理论）</li>
+</ul>
+</li>
+<li>是一种meaningfully transform data<ul>
+<li>Machine-learning models are all about finding appropriate representations for their input data—transformations of the data that make it more amenable to the task at hand, such as a classification task.</li>
+<li>寻找更有代表性的representation, 通过:(coordinate change, linear projections, tranlsations, nonlinear operations)</li>
+<li>只会在<code>hypothesis space</code>里寻找</li>
+<li>以某种反馈为信号作为优化指导</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Deep learning<ul>
+<li>Machine Learing的子集，一种新的learning representation的新方法</li>
+<li>虽然叫神经网络(<code>neural network</code>)，但它既非neural，也不是network，更合理的名字：<ul>
+<li><code>layered representations learning</code> and <code>hierarchical representations learning</code>.</li>
+</ul>
+</li>
+<li>相对少的层数的实现叫<code>shallow learning</code></li>
+</ul>
+</li>
+</ul>
+<h2>Before deep learning</h2>
+<ul>
+<li>Probabilistic modeling<ul>
+<li>the earliest forms of machine learning,</li>
+<li>still widely used to this day.<ul>
+<li>One of the best-known algorithms in this category</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>is the <code>Naive Bayes algorithm</code>(朴素贝叶斯)
+    * 条件概率，把规则理解为“条件”，判断概率，比如垃圾邮件。
+        * A closely related model is the logistic regression</p><ul>
+<li>Early neural networks<ul>
+<li>in the mid-1980s, multiple people independently rediscovered the Backpropagation algorithm</li>
+<li>The <code>first</code> successful practical application of neural nets came in 1989 from Bell Labs -&gt; <strong>LeNet</strong></li>
+</ul>
+</li>
+<li>Kernel methods<ul>
+<li>Kernel methods are <code>a group of classification algorithms</code>(核方法是一组分类算法)<ul>
+<li>the best known of which is the <code>support vector machine</code> (<strong>SVM</strong>).</li>
+<li>SVMs aim at solving classification problems <strong>by</strong> finding good <em>decision boundaries</em> between two sets of points belonging to two different categories.<ol>
+<li>先把数据映射到高维，decision boundary表示为<code>hyperplane</code></li>
+<li>最大化每个类别里离hyperplane最近的点到hyperplane的距离:<code>maximizing the margin</code></li>
+</ol>
+</li>
+<li>The technique of mapping data to a high-dimensional representation 非常消耗计算资源，实际使用的是核函数(<code>kernel function</code>):<ul>
+<li>不把每个点转换到高维，而只是计算每两个点在高维中的距离</li>
+<li>核函数是手工设计的，不是学习的</li>
+</ul>
+</li>
+<li>SVM在分类问题上是经典方案，但难以扩展到大型数据集上</li>
+<li>对于perceptual problems(感知类的问题)如图像分类效果也不好<ul>
+<li>它是一个<code>shallow method</code></li>
+<li>需要事先手动提取有用特征(<code>feature enginerring</code>)-&gt; difficult and  brittle（脆弱的）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Decision trees, random forests, and gradient boosting machines<ul>
+<li>Random Forest<ul>
+<li>you could say that they’re almost always the <em>second-best</em> algorithm for any shallow machine-learning task.</li>
+</ul>
+</li>
+<li>gradient boosting machines (1st):<ul>
+<li>a way to improve any machine-learning model by iteratively training new models that specialize in <code>addressing the weak points of the previous models</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2>What makes deep learning different</h2>
+<p>it completely automates what <em>used to be</em> <strong>the most crucial step</strong> in a machine-learning workflow: <code>feature engineering</code>. 有人认为这叫穷举，思路上有点像，至少得到特征的过程不是靠观察和分析。</p><p><strong>feature engineering</strong></p><blockquote>
+<p>manually engineer good layers of representations for their data</p></blockquote>
+<h1>Getting started with neural networks</h1>
+<h2>Anatomy of a neural network</h2>
+<ul>
+<li><code>Layers</code>, which are combined into a <code>network</code> (or model)<ul>
+<li>layers: 常见的比如卷积层，池化层，全连接层等</li>
+<li>models: layers构成的网络，或多个layers构成的模块（用模块组成网络）<ul>
+<li>Two-branch networks</li>
+<li>Multihead networks</li>
+<li>Inception blocks, residual blocks etc.</li>
+</ul>
+</li>
+<li>The topology of a network defines a hypothesis space</li>
+<li>本书反复强调的就是这个<code>hypothesis space</code>，一定要理解这个思维：<ul>
+<li>By choosing a network topology, you <code>constrain</code> your space of possibilities (hypothesis space) to a specific series of tensor operations, mapping input data to output data.（network的选择约束了tensor变换的步骤）</li>
+<li>所以如果选择了不好的network，可能导致你在错误的<code>hyposhesis space</code>里搜索，以致于效果不好。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>The <code>input data</code> and corresponding <code>targets</code></li>
+<li>The <code>loss</code> function (objective function), which defines the <code>feedback signal</code> used for learning<ul>
+<li>The quantity that will be minimized during training.</li>
+<li>It represents a measure of success for the task at hand.</li>
+<li>多头网络有多个loss function，但基于<code>gradient-descent</code>的网络只允许有一个标量的loss，因此需要把它合并起来（相加，平均...）</li>
+</ul>
+</li>
+<li>The <code>optimizer</code>, which determines how learning proceeds<ul>
+<li>Determines how the network will be updated based on the loss function.</li>
+<li>It implements a specific variant of stochastic gradient descent (SGD).</li>
+</ul>
+</li>
+</ul>
+<h3>Classifying movie reviews: a binary classification example</h3>
+<p><strong>一个二元分类的例子</strong></p><p>情感分析/情绪判断，数据源是IMDB的影评数据.</p><p><strong>理解hidden的维度</strong></p><p>how much freedom you’re allowing the network to have when learning internal representations. 即学习表示（别的地方通常叫提取特征）的自由度。</p><p>目前提出了架构网络的时候的两个问题：</p><ol>
+<li>多少个隐层</li>
+<li>隐层需要多少个神经元（即维度）</li>
+</ol>
+<p>后面的章节会介绍一些原则。</p><p><strong>激活函数</strong></p><p>李宏毅的课程里，从用整流函数来逼近非线性方程的方式来引入激活函数，也就是说在李宏毅的课程里，激活函数是<strong>因</strong>，推出来的公式是<strong>果</strong>，当然一般的教材都不是这个角度，都是有了线性方程，再去告诉你，这样还不够，需要一个<code>activation</code>。</p><p>本书也一样，告诉你，如果只有<code>wX+b</code>，那么只有线性变换，这样会导致对<code>hypothesis space</code>的极大的限制，为了扩展它的空间，就引入了非线性的后续处理。总之，都是在自己的逻辑体系内的。本书的逻辑体系就是<code>hypothesis space</code>，你想要有解，就是在这个空间里。</p><p><strong>网络结构</strong></p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10000</span><span class="p">,)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">))</span>
+</pre></div>
+<p><strong>entropy</strong></p><p><code>Crossentropy</code> is a quantity from the field of Information Theory（信息论） that measures the distance between probability distributions。</p><p>in this case, between the ground-truth distribution and your predictions.</p><p><strong>keras风格的训练</strong></p><p>其实就是模仿了<code>scikit learn</code>的风格。对快速实验非常友好，缺点就是封装过于严重，不利于调试，但这其实不是问题，谁也不会只用keras。</p><div class="highlight"><pre><span></span><span class="c1"># 演示用类名和字符串分别做参数的方式</span>
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;rmsprop&#39;</span><span class="p">,</span>
+            <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
+            <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">])</span>
+
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">optimizers</span>
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">optimizers</span><span class="o">.</span><span class="n">RMSprop</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">),</span>
+            <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
+            <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">])</span>
+
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">losses</span>
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">metrics</span>
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">optimizers</span><span class="o">.</span><span class="n">RMSprop</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">),</span>
+            <span class="n">loss</span><span class="o">=</span><span class="n">losses</span><span class="o">.</span><span class="n">binary_crossentropy</span><span class="p">,</span>
+            <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">metrics</span><span class="o">.</span><span class="n">binary_accuracy</span><span class="p">])</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;rmsprop&#39;</span><span class="p">,</span>
+              <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
+              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;acc&#39;</span><span class="p">])</span>
+
+<span class="c1"># train</span>
+<span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">partial_x_train</span><span class="p">,</span>
+                    <span class="n">partial_y_train</span><span class="p">,</span>
+                    <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                    <span class="n">batch_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+                    <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">))</span>
+</pre></div>
+<p>后续优化，就是对比train和validate阶段的loss和accuracy，找到overfit的节点（比如是第N轮），然后重新训练到第N轮（或者直接用第N轮生成的模型，如果有），用这个模型来预测没有人工标注的数据。</p><p>核心就是要<strong>训练到明显的overfit</strong>为止。这是第一个例子的内容，所以是告诉你怎么用这个简单的网络来进行预测，而不是立即着眼怎么去解决overfit.</p><p><strong>第一个小结</strong></p><ol>
+<li>数据需要预处理成tensor, 了解几种tensor化，或vector化的方式</li>
+<li>堆叠全连接网络(Dense)，以及activation，就能解决很多分类问题</li>
+<li>二元分类的问题通常在Dense后接一个sigmoid函数</li>
+<li>引入二元交叉熵(BCE)作为二元分类问题的loss</li>
+<li>用了rmsprop优化器，暂时没有过多介绍。这些优化器都是为了解决能不能找到局部极值而进行的努力，具体可看上一篇李宏毅的笔记</li>
+<li>使用overfit之前的那一个模型来做预测</li>
+</ol>
+<h3>Classifying newswires: a multiclass classification example</h3>
+<p>这次用路透社的新闻来做多分类的例子，给每篇新闻标记类别。</p><p><strong>预处理，一些要点</strong>:</p><ol>
+<li>不会采用所有的词汇，所以预处理时，根据词频，只选了前1000个词</li>
+<li>用索引来实现文字-数字的对应</li>
+<li>用one-hot来实现数字-向量的对应</li>
+<li>理解什么是序列（其实就是一句话）</li>
+<li>所以句子有长有短，为了矩阵的批量计算（即多个句子同时处理），需要“对齐”（补0和截断）</li>
+<li>理解稠密矩阵(word-embedding)与稀疏矩阵(one-hot)的区别（这里没有讲，用的是one-hot)</li>
+</ol>
+<p><strong>网络和训练</strong></p><ol>
+<li>网络结构不变，每层的神经元为(64, 64, 46)</li>
+<li>前面增加了神经元，16个特征对语言来说应该是不够的）</li>
+<li>最后一层由1变成了46，因为二元的输出只需要一个数字，而多元输出是用one-hot表示的向量，最有可能的类别在这个向量里拥有最大的值。</li>
+</ol>
+<p>4。 损失函数为<code>categorial_crossentropy</code>，这在别的教材里应该就是普通的CE.</p><p><strong>新知识</strong></p><ol>
+<li>介绍了一种不用one-hot而直接用数字表示真值的方法，但是没有改变网络结构（即最后一层仍然输出46维，而不是因为你用了一个标量而只输出一维。<ul>
+<li>看来它仅仅就是一个<strong>语法糖</strong>（loss函数选择<code>sparse_categorial_crossentropy</code>就行了）</li>
+</ul>
+</li>
+<li>尝试把第2层由64改为4，变成<code>bottleneck</code>，演示你有46维的数据要输出的话，前面的层数或少会造成信息压缩过于严重以致于丢失特征。</li>
+</ol>
+<h3>Predicting house prices: a regression example</h3>
+<p>这里用了预测房价的Boston Hosing Price数据集。</p><p>与吴恩达的课程一样，也恰好是在这个例子里引入了对input的normalize，理由也仅仅是简单的把量纲拉平。现在我们应该还知道Normalize还能让数据在进入激活函数前，把值限定在激活函数的梯度敏感区。</p><p>此外，一个知识点就是你对训练集进行Normalize用的均值和标准差，是直接用在测试集上的，而不是各计算各的，可以理解为保持训练集的“分布”。</p><blockquote>
+<p>这也是<code>scikit learn</code>里<code>fit_tranform</code>和直接用<code>transform</code>的原因。</p></blockquote>
+<ol>
+<li>对scalar进行预测是不需要进行激活（即无需把输出压缩到和为1的概率空间）</li>
+<li>loss也直观很多，就是predict与target的差（取平方，除2，除批量等都是辅助），预测与直值的差才是核心。</li>
+</ol>
+<h1>Fundamentals of machine learning</h1>
+<ul>
+<li>Supervised learning<ul>
+<li>binary classification</li>
+<li>multiclass classificaiton</li>
+<li>scalar regression</li>
+<li>vector regression（比如bounding-box)</li>
+<li>Sequence generation (摘要，翻译...)</li>
+<li>Syntax tree prediction</li>
+<li>Object detection (一般bounding-box的坐标仍然是回归出来的)</li>
+<li>Image segmentation</li>
+</ul>
+</li>
+<li>Unsupervised learing<ul>
+<li>是数据分析的基础，在监督学习前也常常需要用无监督学习来更好地“理解”数据集</li>
+<li>主要有降维(<code>Dimensionality reduction</code>)和聚类(<code>clustering</code>)</li>
+</ul>
+</li>
+<li>Self-supervised learning<ul>
+<li>其实还是监督学习，因为它仍需要与某个target做比较</li>
+<li>往往半监督（自监督）学习仍然有小量有标签数据集，在此基础上训练的不完善的model用来对无标签的数据进行打标，循环中对无标签数据打标的可靠度就越来越高，这样总体数据集的可靠度也越来越高了。有点像生成对抗网络里生成器和辨别器一同在训练过程中完善。</li>
+<li><code>autoencoders</code></li>
+</ul>
+</li>
+<li>Reinforcement learning<ul>
+<li>an <code>agent</code> receives information about its <code>environment</code> and learns to choose <code>actions</code> that will maximize some <code>reward</code>.</li>
+<li>可以用训练狗来理解</li>
+<li>工业界的应用除了游戏就是机器人了</li>
+</ul>
+</li>
+</ul>
+<h2>Data preprocessing</h2>
+<ul>
+<li>vectorization</li>
+<li>normalization (small, homogenous)</li>
+<li>handling missing values<ol>
+<li>除非0有特别的含义，不然一般可以对缺失值补0</li>
+<li>你不能保证测试集没有缺失值，如果训练集没看到过缺失值，那么将不会学到忽略缺失值<ul>
+<li><em>复制</em>一些训练数据并且随机drop掉一些特征</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>feature extraction<ul>
+<li>making a problem easier by expressing it in a simpler way. It usually requires understanding the problem <strong>in depth</strong>.</li>
+<li><strong>Before</strong> deep learning, feature engineering used to be <code>critical</code>, because classical <strong>shallow algorithms</strong> didn’t have <code>hypothesis spaces</code> rich enough to learn useful features by themselves. (又见假设空间)</li>
+<li>但是好的特征仍然能让你在处理问题上更优雅、更省资源，也能减小对数据集规模的依赖。</li>
+</ul>
+</li>
+</ul>
+<h2>Overfitting and underfitting</h2>
+<ul>
+<li>Machine learning is the tension between <code>optimization</code> and <code>generalization</code>.</li>
+<li>optimization要求你在训练过的数据集上能达到最好的效果</li>
+<li>generalization则希望你在没见过的数据上有好的效果</li>
+<li>如果训练集上loss小，测试集上也小，说明还有优化(optimize)的余地 -&gt; <code>underfitting</code>看loss<ul>
+<li>just keep training</li>
+</ul>
+</li>
+<li>如果验证集上generalization stop improving(泛化不再进步，一般看衡量指标，比如准确率) -&gt; <code>overfitting</code></li>
+</ul>
+<p>解决overfitting的思路：</p><ul>
+<li><strong>the best solution</strong> is get more trainging data</li>
+<li><strong>the simple way</strong> is to reduce the size of the model<ul>
+<li>模型容量(<code>capacity</code>)足够大，就足够容易<em>记住</em>input和target的映射，没推理什么事了</li>
+</ul>
+</li>
+<li>add constraints -&gt; weight <code>regularization</code></li>
+<li>add dropout</li>
+</ul>
+<h2>Regularization</h2>
+<p><strong>Occam’s razor</strong></p><blockquote>
+<p>given <em>two explanations</em> for something, the explanation most likely to be correct is the <strong>simplest one</strong>—the one that makes <strong>fewer assumptions</strong>.</p></blockquote>
+<p>即为传说中<em>如无必要，勿增实体</em>的<code>奥卡姆剃刀原理</code>，这是在艺术创作领域的翻译，我们这里还是直译的好，即能解释一件事的各种理解中，越简单的，假设条件越少的，往往是最正确的，引申到机器学习，就是如何定义一个<code>simple model</code></p><p>A simple model in this context is:</p><ul>
+<li>a model where the distribution of parameter values has <code>less entropy</code></li>
+<li>or a model with fewer parameters</li>
+</ul>
+<p>实操就是，就是迫使选择那些值比较小的weights，which makes the distribution of weight values more regular. This is called weight <code>regularization</code>。这个解释是我目前看到的最<code>regularization</code>这个名字最好的解释，“正则化”三个字都认识，根本没人知道这三个字是什么意思，翻译了跟没番一样，而使分布更“常规化，正规化”，好像更有解释性。</p><p>别的教材里还会告诉你这里是对大的权重的<strong>惩罚</strong>（设计损失函数加上自身权重后，权重越大，loss也就越大，这就是对大权重的惩罚）</p><ul>
+<li>L1 regularization—The cost added is proportional to the absolute value of the weight coefficients (the L1 norm of the weights).</li>
+<li>L2 regularization—The cost added is proportional to the square of the value of the weight coefficients (the L2 norm of the weights).</li>
+</ul>
+<p>L2 regularization is also called <code>weight decay</code>in the context of neural networks. Don’t let the different name confuse you: weight decay is mathematically <strong>the same as</strong> L2 regularization.</p><blockquote>
+<p>只需要在训练时添加正则化</p></blockquote>
+<h2>Dropout</h2>
+<p>randomly dropping out (setting to zero) a number of output features of the layer during training.</p><p>dropout的作者Geoff Hinton解释dropout的灵感来源于银行办事出纳的不停更换和移动的防欺诈机制，可能认为一次欺诈的成功实施需要员工的配合，所以就尽量降低这种配合的可能性。于是他为了防止神经元也能聚在一起”密谋”，尝试随机去掉一些神经元。以及对输出添加噪声，让模型更难记住某些patten。</p><h2>The universal workflow of machine learning</h2>
+<ol>
+<li>Defining the problem and assembling a dataset<ul>
+<li>What will your input data be?</li>
+<li>What are you trying to predict?</li>
+<li>What type of problem are you facing?</li>
+<li>You hypothesize that your outputs can be predicted given your inputs.</li>
+<li>You hypothesize that your available data is sufficiently informative to learn the relationship between inputs and outputs.</li>
+<li>Just because you’ve assembled exam- ples of inputs X and targets Y doesn’t mean X contains enough information to predict Y.</li>
+</ul>
+</li>
+<li>Choosing a measure of success<ul>
+<li>accuracy? Precision and recall? Customer-retention rate?</li>
+<li>balanced-classification problems,<ul>
+<li>accuracy and area under the <code>receiver operating characteristic curve</code> (ROC AUC)</li>
+</ul>
+</li>
+<li>class-imbalanced problems<ul>
+<li>precision and recall.</li>
+</ul>
+</li>
+<li>ranking problems or multilabel classification<ul>
+<li>mean average precision</li>
+</ul>
+</li>
+<li>...</li>
+</ul>
+</li>
+<li>Deciding on an evaluation protocol<ul>
+<li>Maintaining a hold-out validation set—The way to go when you have plenty of data</li>
+<li>Doing <code>K-fold</code> cross-validation—The right choice when you have too few samples for hold-out validation to be reliable</li>
+<li>Doing <code>iterated K-fold</code> validation—For performing highly accurate model evaluation when <em>little data</em> is available</li>
+</ul>
+</li>
+<li>Preparing your data<ul>
+<li>tensor化，向量化，归一化等</li>
+<li>may do some feature engineering</li>
+</ul>
+</li>
+<li>Developing a model that does better than a baseline<ul>
+<li>baseline:<ul>
+<li>基本上是用纯随机(比如手写数字识别，随机猜测为10%)，和纯相关性推理（比如用前几天的温度预测今天的温度，因为温度变化是连续的），不用任何机器学习做出baseline</li>
+</ul>
+</li>
+<li>model:<ul>
+<li>Last-layer activation<ul>
+<li>sigmoid, relu系列， 等等</li>
+</ul>
+</li>
+<li>Loss function<ul>
+<li>直接的预测值真值的差，如MSE</li>
+<li>度量代理，如crossentropy是ROC AUC的proxy metric</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Optimization configuration<ul>
+<li>What optimizer will you use? What will its learning rate be? In most cases, it’s safe to go with rmsprop and its default learning rate.</li>
+</ul>
+</li>
+<li>Scaling up: developing a model that overfits<ul>
+<li>通过增加layers, 增加capacity，增加training epoch来加速overfitting，从而再通过减模型和加约束等优化</li>
+</ul>
+</li>
+<li>Regularizing your model and tuning your hyperparameters<ul>
+<li>Add dropout.</li>
+<li>Try different architectures: add or remove layers.</li>
+<li>Add L1 and/or L2 regularization.</li>
+<li>Try different hyperparameters (such as the number of units per layer or the learning rate of the optimizer) to find the optimal configuration.</li>
+<li>Optionally, iterate on feature engineering: add new features, or remove features that don’t seem to be informative.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+  <th>Problem type</th>
+  <th>Last-layer activation</th>
+  <th>Loss function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Binary classification</td>
+  <td>sigmoid</td>
+  <td>binary_crossentropy</td>
+</tr>
+<tr>
+  <td>Multiclass, single-label classification</td>
+  <td>softmax</td>
+  <td>categorical_crossentropy</td>
+</tr>
+<tr>
+  <td>Multiclass, multilabel classification</td>
+  <td>sigmoid</td>
+  <td>binary_crossentropy</td>
+</tr>
+<tr>
+  <td>Regression to arbitrary values</td>
+  <td>None</td>
+  <td>mse</td>
+</tr>
+<tr>
+  <td>Regression to values between 0 and 1</td>
+  <td>sigmoi</td>
+  <td>mse or binary_crossentropy</td>
+</tr>
+</tbody>
+</table>
+<h1>Deep learning for computer vision</h1>
+<h2>Convolution Network</h2>
+<p>The convolution operation extracts patches from its input feature map and applies the same transformation to all of these patches, producing an output feature map.</p><ul>
+<li>convolution layers learn local patterns(局部特征)<ul>
+<li>The patterns they learn are translation invariant.（局部特征可在图片别的地方重复）</li>
+<li>有的教材里会说每个滑窗一个特征，然后引入<strong>参数共享</strong>才讲到一个特征其实可以用在所有滑窗</li>
+</ul>
+</li>
+<li>They can learn spatial hierarchies of patterns(低级特征堆叠成高级特征)</li>
+<li>depth axis no longer stand for specific colors as in RGB input; rather, they stand for filters(表示图片时，3个通道有原始含义，卷积开始后通道只表示filter了)</li>
+<li><code>valid</code> and <code>same</code> convolution（加不加padding让filter在最后一个像素时也能计算）</li>
+<li><code>stride</code>，滑窗步长</li>
+<li><code>max-pooling</code> or <code>average-pooling</code><ul>
+<li>usually 2x2 windows by stride 2 -&gt; 下采样(downsample)</li>
+<li>更大的感受野</li>
+<li>更小的输出</li>
+<li>不是唯一的下采样方式（比如在卷积中使用stride也可以）</li>
+<li>一般用max而不是average(寻找最强的表现)</li>
+</ul>
+</li>
+<li>小数据集<ul>
+<li>data augmenetation(旋转平衡缩放shear翻转等)<ul>
+<li>不能产生当前数据集不存在的信息</li>
+<li>所以仍需要dropout</li>
+</ul>
+</li>
+<li>pretrained network(适用通用物体)<ul>
+<li>feature extraction</li>
+<li>fine-tuneing</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Using a pretrained convnet</h3>
+<p>A pretrained network is a saved network that was previously trained <strong>on a large dataset</strong> typically on a large-scale image-classification task.</p><h3>Feature extraction</h3>
+<p>Feature extraction consists of using the representations learned by a previous network to extract interesting features from new samples. These features are then run through a <em>new classifier</em>, which is trained from scratch.</p><ol>
+<li>即只使用别的大型模型提取的representations（特征），来构建自己的分类器。</li>
+<li>原本模型的分类器不但是为特定任务写的，而且基本上丧失了位置和空间信息，只保留了对该任务上的presence probability.</li>
+<li>最初的层一般只能提取到线，边缘，颜色等低级特征，再往后会聚合出一些纹理，更高的层就可能会叠加出一些眼，耳等抽象的特征，所以你的识别对象与pretrained数据源差别很大的时候，就需要考虑把最尾巴的几层layer也舍弃掉。（e.g. VGG16最后一层提取了512个feature map）</li>
+<li>两种用法：<ul>
+<li>跑一次预训练模型你选中的部分，把参数存起来（$\leftarrow$错），把输出当作dataset作为自己构建的分类器的input。<ul>
+<li>快，省资源，但是需要把数据集固定住，等于没法做data augmentation</li>
+<li>跑预训练模型时不需要计算梯度(freeze)</li>
+<li>其实应用预训练模型就等于别人的预处理数据集，而真实的模型只有一个小分类器</li>
+</ul>
+</li>
+<li>合并到自定义的网络中当成普通网络训练<ul>
+<li>慢，但是能做数据增广了</li>
+<li>需手动设置来自预训练模型的梯度不需要计算梯度</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>注：这里为什么单独跑预训练模型不能数据增广呢？</p></blockquote>
+<blockquote>
+<p>教材用的是keras, 它处理数据的方式是做一个generaotr，只要你给定数据增广的规则（参数），哪怕只有一张图，它也是可以无穷无尽地给你生成下一张的。所以每一次训练都能有新的数据喂到网络里。这是出于内存考虑，不需要真的把数据全部加载到内存里。</p></blockquote>
+<blockquote>
+<p>而如果你是一个固定的数据集，比如几万条，那么你把所有的数据跑一遍把这个结果当成数据集（全放在内存里），那也不是不可以在这一步用数据增广。</p></blockquote>
+<h3>Fine-tuning</h3>
+<p>Fine-tuning consists of unfreezing a few of the top layers of a frozen model base used for feature extraction, and jointly training both the newly added part of the model (in this case, the fully connected classifier) and these top layers. This is called fine-tuning because it slightly adjusts the more abstract representations of the model being reused, in order to make them more relevant for the problem at hand.</p><p>前面的feature extraction方式，会把预训练的模型你选中的layers给freeze掉，即不计算梯度。这里之所以叫fine-tuning，意思就是会把最后几层(top-layers)给<code>unfreezing</code>掉，这样的好处是保留低级特征，重新训练高级特征，还保留了原来大型模型的结构，不需要自行构建。</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-78ecf7b5f847c9ef.png" /></figure><blockquote>
+<p>但是： it’s only possible to fine-tune the top layers of the convolutional base once the classifier on <code>top has already been trained</code>. 预训练模型没有frezze住的话loss将会很大，所以变成了先train一个大体差不多的classifier，再联合起来train一遍高级特征和classifier:</p></blockquote>
+<ol>
+<li>Add your custom network on top of an already-trained base network.</li>
+<li>Freeze the base network.</li>
+<li>Train the part you added. (第一次train)</li>
+<li>Unfreeze some layers in the base network.</li>
+<li>Jointly train both these layers and the part you added.（第二次train）</li>
+</ol>
+<p>但千万别把所有层都unfrezze来训练了</p><ol>
+<li>低级特征都为边缘和颜色，无需重新训练</li>
+<li>小数据量训练大型模型，model capacity相当大，非常容易过拟合</li>
+</ol>
+<h3>Visualizing what convents learn</h3>
+<p>并不是所有的深度学习都是黑盒子，至少对图像的卷积网络不是 -&gt; <code>representations of visual concepts</code>, 下面介绍<strong>三种</strong>视觉化和可解释性的representations的方法。</p><h4>Visualizing intermediate activations</h4>
+<p>就是把每个中间层(基本上是&quot;卷积+池化+激活“)可视化出来，This gives a view into how an input is <code>decomposed</code> into the different filters learned by the network.</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="n">layer_outputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">layer</span><span class="o">.</span><span class="n">output</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[:</span><span class="mi">8</span><span class="p">]]</span> <span class="n">activation_model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">layer_outputs</span><span class="p">)</span>
+
+<span class="n">activations</span> <span class="o">=</span> <span class="n">activation_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">img_tensor</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">matshow</span><span class="p">(</span><span class="n">first_layer_activation</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
+
+<span class="c1"># 注意使用的是matshow而不是show</span>
+</pre></div>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-6f4ca30b4b82a0b2.png" /></figure><p>以上代码是利用了keras的Model特性，将所有layers的输出<strong>摊平</strong>（就是做了一个多头的模型），然后再顺便取了第4和第7个feature map画出来，可以看到，图一感兴趣的是<code>对角线</code>，图二提取的是<code>蓝色的亮点</code>。</p><p>结构化这些输出，可以确信初始layer确实提取的是简单特征，越往后越高级（抽象）。</p><p>A deep neural network effectively acts as an <code>information distillation</code>(信息蒸馏) pipeline, with raw data going in (in this case, RGB pictures) and being repeatedly transformed so that irrelevant information is filtered out (for example, the specific visual appearance of the image), and useful information is <code>magnified and refined</code> (for example, the class of the image).</p><blockquote>
+<p>关键词：有用的信息被不断<strong>放大和强化</strong></p></blockquote>
+<p>书里举了个有趣的例子，要你画一辆自行车。你画出来的并不是一辆充满细节的单车，而往往是你抽象出来的单车，你会用基本的线条勾勒出你对单车特征的理解，比如龙头，轮子等关键部件，以及相对位置。画家为什么能画得又真实又好看？那就是他们真的仔细观察了单车，他们绘画的时候用的并不是特征，而是一切细节，然而对于没有受过训练的普通人来说，往往只能用简单几笔勾勒出脑海中的单车的样子（其实并不是样子，而是特征的组合）</p><h4>Visualizing convnet filters</h4>
+<p>通过强化filter对输出的反应并绘制出来，这是从数学方法上直接观察filter，看什么最能“刺激”一个filter，用”梯度上升“最能体现这种思路：</p><p>把output当成loss，用梯度上升（每次修改input_image）训练出来的output就是这个filter的极端情况，可以认为这个filter其实是在提取什么（responsive to）：</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras.applications</span> <span class="kn">import</span> <span class="n">VGG16</span>
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">backend</span> <span class="k">as</span> <span class="n">K</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">VGG16</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="s1">&#39;imagenet&#39;</span><span class="p">,</span> <span class="n">include_top</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">layer_name</span> <span class="o">=</span> <span class="s1">&#39;block3_conv1&#39;</span>
+<span class="n">filter_index</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">layer_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">layer_name</span><span class="p">)</span><span class="o">.</span><span class="n">output</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">layer_output</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">filter_index</span><span class="p">])</span>  <span class="c1"># output就是loss</span>
+
+<span class="n">grads</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">gradients</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">input</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># 对input求微分</span>
+<span class="n">grads</span> <span class="o">/=</span> <span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">grads</span><span class="p">)))</span> <span class="o">+</span> <span class="mf">1e-5</span><span class="p">)</span>
+
+<span class="n">iterate</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">input</span><span class="p">],</span> <span class="p">[</span><span class="n">loss</span><span class="p">,</span> <span class="n">grads</span><span class="p">])</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># 理解静态图的用法</span>
+<span class="n">loss_value</span><span class="p">,</span> <span class="n">grads_value</span> <span class="o">=</span> <span class="n">iterate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">3</span><span class="p">))])</span>
+
+<span class="n">input_img_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">*</span> <span class="mi">20</span> <span class="o">+</span> <span class="mf">128.</span>
+<span class="n">step</span> <span class="o">=</span> <span class="mf">1.</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">40</span><span class="p">):</span>
+    <span class="n">loss_value</span><span class="p">,</span> <span class="n">grads_value</span> <span class="o">=</span> <span class="n">iterate</span><span class="p">([</span><span class="n">input_img_data</span><span class="p">])</span>
+    <span class="n">input_img_data</span> <span class="o">+=</span> <span class="n">grads_value</span> <span class="o">*</span> <span class="n">step</span>  <span class="c1"># 梯度上升</span>
+</pre></div>
+<p>按上述代码的思路结构化输出并绘图：</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-229e54a409162f34.png" /></figure><p>从线条到纹理到物件（眼睛，毛皮，叶子）</p><blockquote>
+<p>each layer in a convnet learns a collection of filters such that their inputs can be expressed as a <code>combination of the filters</code>.</p></blockquote>
+<blockquote>
+<p>This is similar to how the Fourier transform decomposes signals onto a bank of cosine functions.</p></blockquote>
+<p>用傅里叶变换来类比卷积网络每一层就是把input表示成一系列特征的组合。</p><h4>Visualizing heatmaps of class activation</h4>
+<p>which parts of a given image led a convnet to its final classification decision. 即图像有哪一部分对最终的决策起了作用。</p><ul>
+<li><code>class activation map</code> (CAM) visualization,</li>
+<li><code>Grad-CAM</code>: Visual Explanations from Deep Networks via Gradient-based Localization.”</li>
+</ul>
+<blockquote>
+<p>you’re weighting a spatial map of “how intensely the input image activates different channels” by “how important each channel is with regard to the class,” resulting in a spatial map of “how intensely the input image activates the class.</p></blockquote>
+<p>解读上面这句话：</p><p>不同channels（特征）对图像的激活的强度<br />
++<br />
+每个特征对(鉴定为）该类别的重要程度<br />
+=<br />
+该“类别”对图像的激活的强度</p><p>一张两只亚洲象的例图，使用VGG16来做分类，得到92.5%的置信度的亚洲象的判断，为了visualize哪个部分才是“最像亚洲象”的，使用<code>Grad-CAM</code>处理：</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras.applications.vgg16</span> <span class="kn">import</span> <span class="n">VGG16</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">VGG16</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="s1">&#39;imagenet&#39;</span><span class="p">)</span>
+<span class="n">african_e66lephant_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">output</span><span class="p">[:,</span> <span class="mi">386</span><span class="p">]</span>  <span class="c1"># 亚洲象在IMGNET的类别是386</span>
+<span class="n">last_conv_layer</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s1">&#39;block5_conv3&#39;</span><span class="p">)</span> <span class="c1"># top conv layer</span>
+
+<span class="n">grads</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">gradients</span><span class="p">(</span><span class="n">african_elephant_output</span><span class="p">,</span> <span class="n">last_conv_layer</span><span class="o">.</span><span class="n">output</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> 
+<span class="n">pooled_grads</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">iterate</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">input</span><span class="p">],</span>
+                     <span class="p">[</span><span class="n">pooled_grads</span><span class="p">,</span> <span class="n">last_conv_layer</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">pooled_grads_value</span><span class="p">,</span> <span class="n">conv_layer_output_value</span> <span class="o">=</span> <span class="n">iterate</span><span class="p">([</span><span class="n">x</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">512</span><span class="p">):</span>
+    <span class="n">conv_layer_output_value</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">pooled_grads_value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="n">heatmap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">conv_layer_output_value</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-072a8e278c521822.png" /></figure><p>叠加到原图上去（用cv2融合两张图片，即相同维度的数组以不同权重逐像素相加）：</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-516c39ff29ba0d4d.png" /></figure><h1>Deep learning for text and sequences</h1>
+<p>空间上的序列，时间上的序列组成的数据，比如文本，视频，天气数据等，一般用<code>recurrent neural network</code>(RNN)和<code>1D convnets</code></p><blockquote>
+<p>其实很多名词，包括convnets，我并没有在别的地方看到过，好像就是作者自己发明的，但这些不重要，知道它描述的是什么就可以了，不一定要公认术语。</p></blockquote>
+<p>通用场景：</p><ul>
+<li>[分类: 文本分类] Document classification and timeseries classification, such as identifying the topic of an article or the author of a book</li>
+<li>[分类: 文本比较] Timeseries comparisons, such as estimating how closely related two documents or two stock tickers are</li>
+<li>[分类: 生成] Sequence-to-sequence learning, such as decoding an English sentence into French</li>
+<li>[分类: 情感分析]Sentiment analysis, such as classifying the sentiment of tweets or movie reviews as positive or negative</li>
+<li>[回归: 预测]Timeseries forecasting, such as predicting the future weather at a certain location, given recent weather data</li>
+</ul>
+<p>我画蛇添足地加了是分类问题还是回归问题.</p><blockquote>
+<p>none of these deeplearning models truly understand text in a human sense</p></blockquote>
+<p>Deep learning for natural-language processing is <code>pattern recognition</code> applied to words, sentences, and paragraphs, in much <strong>the same</strong> way that computer vision is pattern recognition applied to pixels.</p><h2>tokenizer</h2>
+<p>图像用像素上的颜色来数字化，那文字也把什么数字化呢？</p><ul>
+<li>拆分为词，把每个词转化成向量</li>
+<li>拆分为字（或字符），把每个字符转化为向量</li>
+<li>把字（词）与前n个字（词）组合成单元，转化为向量，（类似滑窗），N-Grams</li>
+</ul>
+<p>all of above are <code>tokens</code>, and breaking text into such tokens is called <code>tokenization</code>. These vectors, packed into sequence tensors, are fed into deep neural networks.</p><p><code>N-grams</code>这种生成的token是无序的，就像一个袋子装了一堆词：<code>bag-of-words</code>: a set of tokens rather than a list of sequence.</p><p>所以句子结构信息丢失了，更适合用于浅层网络。作为一种rigid, brittle（僵硬的，脆弱的）特征工程方式，深度学习采用多层网络来提取特征。</p><h2>vectorizer</h2>
+<p>token -&gt; vector:</p><ul>
+<li>one-hot encoding</li>
+<li>token/word embedding (word2vec)</li>
+</ul>
+<h3>one-hot</h3>
+<ol>
+<li>以token总数量（一般就是字典容量）为维度</li>
+<li>一般无序，所以生成的时候只需要按出现顺序编索引就好了</li>
+<li>有时候也往往伴随丢弃不常用词，以减小维度</li>
+<li>也可以在字符维度编码（维度更低）</li>
+<li>一个小技巧，如果索引数字过大，可以把单词hash到固定维度(未跟进)</li>
+</ol>
+<p>特点/问题：</p><ul>
+<li>sparse</li>
+<li>high-dimensional, 比如几千几万</li>
+<li>no spatial relationship</li>
+<li>hardcoded</li>
+</ul>
+<h3>word embeddings</h3>
+<ul>
+<li>Dense</li>
+<li>Lower-dimensional，比如128，256...</li>
+<li>Spatial relationships (语义接近的向量空间上也接近)</li>
+<li>Learned from data</li>
+</ul>
+<p>to obtain word embeddings:</p><ol>
+<li>当成训练参数之一(以Embedding层的身份)，跟着训练任务一起训练</li>
+<li>pretrained word embeddings<ul>
+<li>Word2Vec(2013, google)<ul>
+<li>CBOW</li>
+<li>Skip-Gram</li>
+</ul>
+</li>
+<li>GloVe(2014, Stanford))</li>
+<li>前提是语言环境差不多，不同学科/专业/行业里的词的关系是完全不同的<ul>
+<li>GloVe从wikipedia和很多通用语料库里训练，可以尝试在许多非专业场景里使用。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>keras加载训练词向量的方式：</p><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_weights</span><span class="p">([</span><span class="n">embedding_matrix</span><span class="p">])</span>
+<span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">trainable</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+<p>pytorch：</p><div class="highlight"><pre><span></span><span class="c1"># TEXT, LABEL为torchtext的Field对象</span>
+<span class="kn">from</span> <span class="nn">torchtext.vocab</span> <span class="kn">import</span> <span class="n">Vectors</span>
+<span class="n">vectors</span><span class="o">=</span><span class="n">Vectors</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;./sgns.sogou.word&#39;</span><span class="p">)</span> <span class="c1">#使用预训练的词向量，维度为300Dimension</span>
+<span class="n">TEXT</span><span class="o">.</span><span class="n">build_vocab</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">vectors</span><span class="o">=</span><span class="n">vectors</span><span class="p">)</span> <span class="c1">#构建词典</span>
+<span class="n">LABEL</span><span class="o">.</span><span class="n">build_vocab</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+
+<span class="n">vocab_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">TEXT</span><span class="o">.</span><span class="n">vocab</span><span class="p">)</span>
+<span class="n">vocab_vectors</span> <span class="o">=</span> <span class="n">TEXT</span><span class="o">.</span><span class="n">vocab</span><span class="o">.</span><span class="n">vectors</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span> <span class="c1">#准备好预训练词向量</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">embedding</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">num_embeddings</span><span class="o">=</span><span class="n">vocab_size</span><span class="err">，</span> <span class="n">embedding_dim</span><span class="o">=</span><span class="n">embedding_size</span><span class="p">)</span>
+
+<span class="c1"># 上面是为了回顾，真正用来做对比的是下面这两句</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">vocab_vectors</span><span class="p">))</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+<blockquote>
+<p>预训练词向量也可以继续训练，以得到task-specific embedding</p></blockquote>
+<h2>Recurrent neural networks(RNN)</h2>
+<p>sequence, time series类的数据，天然会受到前后数据的影响，RNN通过将当前token计算的时候引入上一个token的计算结果（反向的话就能获得下一个token的结果）以获取上下文的信息。</p><p>前面碰到的网络，数据消费完就往前走（按我这种说法，后面还有很多“等着二次消费的”模块，比如inception, resdual等等），叫做<code>feedforward network</code>。显然，RNN中，一个token产生输出后并不是直接丢给下一层，而是还复制了一份丢给了同层的下一个token. 这样，当前token的<code>output</code>成了下一个token的<code>state</code>。</p><ul>
+<li>因为一个output其实含有“前面“所有的信息，一般只需要最后一个output</li>
+<li>如果是堆叠多层网络，则需要返回<strong>所有</strong>output</li>
+</ul>
+<p>序列过长梯度就消失了，所谓的<strong>遗忘</strong> （推导见另一篇笔记，）  -&gt; <code>LSTM</code>, <code>GRU</code></p><h3>Long Short-Term Memory(LSTM)</h3>
+<ol>
+<li>想象有一根传送带穿过sequence</li>
+<li>同一组input和state会进行三次相同的线性变换，有没有联想到<code>transformer</code>用同一个输出去生成<code>q, k, v</code>？</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="n">output_t</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">state_t</span><span class="p">,</span> <span class="n">Uo</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">input_t</span><span class="p">,</span> <span class="n">Wo</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">C_t</span><span class="p">,</span> <span class="n">Vo</span><span class="p">)</span> <span class="o">+</span> <span class="n">bo</span><span class="p">)</span>
+<span class="n">i_t</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">state_t</span><span class="p">,</span> <span class="n">Ui</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">input_t</span><span class="p">,</span> <span class="n">Wi</span><span class="p">)</span> <span class="o">+</span> <span class="n">bi</span><span class="p">)</span> 
+<span class="n">f_t</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">state_t</span><span class="p">,</span> <span class="n">Uf</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">input_t</span><span class="p">,</span> <span class="n">Wf</span><span class="p">)</span> <span class="o">+</span> <span class="n">bf</span><span class="p">)</span> 
+<span class="n">k_t</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">state_t</span><span class="p">,</span> <span class="n">Uk</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">input_t</span><span class="p">,</span> <span class="n">Wk</span><span class="p">)</span> <span class="o">+</span> <span class="n">bk</span><span class="p">)</span>
+
+<span class="n">c_t</span><span class="o">+</span><span class="mi">1</span> <span class="o">=</span> <span class="n">i_t</span> <span class="o">*</span> <span class="n">k_t</span> <span class="o">+</span> <span class="n">c_t</span> <span class="o">*</span> <span class="n">f_t</span>  <span class="c1"># 仍然有q，k，v的意思（i,k互乘，加上f， 生成新c）</span>
+</pre></div>
+<blockquote>
+<p>不要去考虑哪个是<strong>遗忘门</strong>，<strong>记忆门</strong>，还是<strong>输出门</strong>，最终是由weights决定的，而不是设计。</p></blockquote>
+<p>Just keep in mind what the LSTM cell is meant to do:</p><blockquote>
+<p>allow past information to be <code>reinjected</code> at a later time, thus fighting the vanishing-gradient problem.</p></blockquote>
+<p>关键词：reinject</p><h3>dropout</h3>
+<p>不管是keras还是pytorch，都帮你隐藏了dropout的坑。 你能看到应用这些框架的时候，是需要你把dropout传进去的，而不是手动接一个dropoutlayer，原因是需要在序列每一个节点上应用同样的dropout mask才能起作用，不然就会起到反作用。</p><p>keras封装得要复杂一点：</p><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span>
+                    <span class="n">dropout</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                    <span class="n">recurrent_dropout</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                    <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">float_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+</pre></div>
+<h3>stacking recurrent layers</h3>
+<p>前面说过，设计好的模型的一个判断依据是至少让模型能跑到overfitting。如果到了overfitting，表现还不是很好，那么可以考虑增加模型容量（叠更多层，以及拓宽layer的输出维度）</p><p>堆叠多层就需要用到每个节点上的输出，而不只关心最后一个输出了。</p><h3>Bidriectional</h3>
+<p>keras奇葩的bidirectional语法：</p><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Bidirectional</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">32</span><span class="p">)))</span>
+</pre></div>
+<p>其实这是设计模式在类的封装上的典型应用，善用继承和多态，无侵入地扩展类的方法和属性，而不是不断魔改原代码，加参数，改API。但在脚本语言风格里的环境里，这么玩就有点格格不入了。</p><h2>Sequence processing with convnets</h2>
+<ol>
+<li>卷积用到序列上去也是可以的</li>
+<li>一个向量只表示一个token，如果把token的向量打断就违背了token是最小单元的初衷，所以序列上的卷积，不可能像图片上两个方向去滑窗了。(<code>Conv1D</code>的由来)</li>
+<li>一个卷积核等于提取了n个关联的上下文（有点类似<code>n-grams</code>），堆叠得够深感受野更大，可能得到更大的上下文。</li>
+<li>但仍然理解为filter在全句里提取局部特征</li>
+</ol>
+<p>归桕结底，图片的最小单元是一个像素（一个数字），而序列（我们这里说文本）的最小单元是token，而token又被我们定义为vector（一组数字）了，那么卷积核就限制在至少要达到最小单元(vector)的维度了。</p><h3>Combining CNNs and RNNs to process long sequences</h3>
+<p>卷积能通过加深网络获取更大的感受野，但仍然是“位置无关”的，因为每个filter本就是在整个序列里搜索相同的特征。</p><p>但是它确实提取出了特征，是否可把位置关系等上下文的作业交给下游任务RNN做呢？</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-bc08eb7926b73ca5.png" /></figure><p>不但实现，而且堆叠两种网络，还可以把数据集做得更大（CNN是矩阵运算，还能用GPU加速）。</p><h1>Advanced deep-learning best practices</h1>
+<p>这一章是介绍了更多的网络（从keras的封装特性出发）结构和模块，以及batch normalization, model ensembling等知识。</p><h2>beyond Sequential model</h2>
+<p>前面介绍的都是Sequential模型，就是一个接一个地layer前后堆叠，现实中有很多场景并不是一进一出的：</p><ol>
+<li>multi-input model</li>
+</ol>
+<p>假设为二手衣物估价：</p><ul>
+<li>格式化的元数据（品牌，性别，年龄，款式）: one-hot, dense</li>
+<li>商品的文字描述：RNN or 1D convnet</li>
+<li>图片展示：2D convnet</li>
+<li>每个input用适合自己的网络做输出，然后合并起来作为一个input，回归一个价格</li>
+</ul>
+<ol start="2">
+<li>multi-output model (multi-head)</li>
+</ol>
+<p>一般的检测器通常就是多头模型，因为既要回归对象类别，还要回归出对象的位置</p><ol start="3">
+<li>graph-like model</li>
+</ol>
+<p>这个名字很好地形容了做深度学习时看别人的网络是什么样的方式：看图。现代的SOTA的网络往往既深且复杂，而网络结构画出来也不再是一条线或几个简单分支，这本书干脆把它们叫图形网络：<code>Inception</code>, <code>Residual</code></p><p>为了能架构这些复杂的网络，keras介绍了新的语法，先看看怎么重写<code>Sequential</code>:</p><div class="highlight"><pre><span></span><span class="n">seq_model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">seq_model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">64</span><span class="p">,)))</span>
+<span class="n">seq_model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+<span class="n">seq_model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">))</span>
+
+<span class="c1"># 重写</span>
+<span class="n">input_tensor</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">64</span><span class="p">,))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">input_tensor</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">output_tensor</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">output_tensor</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">summayr</span><span class="p">()</span>
+</pre></div>
+<p>我们自己实现过静态图，最终去执行的时候能从尾追溯到头，并从头来开始计算，这里也是一样的：</p><ol>
+<li>input, output是Tensor类，所以有完整的层次信息</li>
+<li>output往上追溯，最终溯到缺少一个input</li>
+<li>这个input恰好也是Model的构造函数之一，闭环了。</li>
+</ol>
+<p>书里说的更简单，output是input不断transforming的结果。如果传一个没有这个关系的input进去，就会报错。</p><p><strong>demo</strong></p><p>用一个QA的例子来演示多输入（一个问句，一段资料），输出为答案在资料时的索引（简化为单个词，所以只有一个输出）</p><div class="highlight"><pre><span></span><span class="n">text_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;text&#39;</span><span class="p">)</span>
+<span class="n">embedded_text</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span>
+    <span class="mi">64</span><span class="p">,</span> <span class="n">text_vocabulary_size</span><span class="p">)(</span><span class="n">text_input</span><span class="p">)</span>
+<span class="n">encoded_text</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">32</span><span class="p">)(</span><span class="n">embedded_text</span><span class="p">)</span>  <span class="c1"># lstm 处理资讯</span>
+<span class="n">question_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;question&#39;</span><span class="p">)</span>
+
+
+<span class="n">embedded_question</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span>
+    <span class="mi">32</span><span class="p">,</span> <span class="n">question_vocabulary_size</span><span class="p">)(</span><span class="n">question_input</span><span class="p">)</span>
+<span class="n">encoded_question</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">16</span><span class="p">)(</span><span class="n">embedded_question</span><span class="p">)</span> <span class="c1"># lstm 处理问句</span>
+
+<span class="n">concatenated</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">encoded_text</span><span class="p">,</span> <span class="n">encoded_question</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># 竖向拼接（即不增加内容只增加数量）</span>
+<span class="n">answer</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">answer_vocabulary_size</span><span class="p">,</span>
+                      <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">concatenated</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">([</span><span class="n">text_input</span><span class="p">,</span> <span class="n">question_input</span><span class="p">],</span> <span class="n">answer</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;rmsprop&#39;</span><span class="p">,</span>
+              <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span>
+              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;acc&#39;</span><span class="p">])</span>
+</pre></div>
+<p>这里是把答案直接给回归出来了(one-hot)，如果是给出答案的首尾位置，那肯定只能用索引了。</p><p><strong>demo</strong></p><p>多头输出的：</p><div class="highlight"><pre><span></span><span class="c1"># 线性回归</span>
+<span class="n">age_prediction</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;age&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="c1"># 逻辑回归</span>
+<span class="n">income_prediction</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">num_income_groups</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;income&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="c1"># 二元逻辑回归</span>
+<span class="n">gender_prediction</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;gender&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">posts_input</span><span class="p">,</span>
+              <span class="p">[</span><span class="n">age_prediction</span><span class="p">,</span> <span class="n">income_prediction</span><span class="p">,</span> <span class="n">gender_prediction</span><span class="p">])</span>
+</pre></div>
+<p>梯度回归要求loss是一个标量，keras提供了方法将三个loss加起来，同时为了量纲统一，还给了权重参数：</p><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;rmsprop&#39;</span><span class="p">,</span>
+<span class="n">loss</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mse&#39;</span><span class="p">,</span> <span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span> <span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">],</span> <span class="n">loss_weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">])</span>
+</pre></div>
+<h2>Directed acyclic graphs of layers</h2>
+<p>有向无环图。可以理解为最终不会回到出发点。</p><p>现在会介绍的是几个<code>Modules</code>，意思是可以把它当成一个layer，来构造你的网络/模型。</p><h3>Inception Modules</h3>
+<ul>
+<li>inspired by <code>network-in-network</code></li>
+<li>对同一个输入做不同（层数/深度）的卷积（保证最终相同的下采样维度），最后合并为一个输出</li>
+<li>因为卷积的深度不尽相同，学到的空间特征也有粗有细</li>
+</ul>
+<h3>Residual Connections</h3>
+<ul>
+<li>有些地方叫shortcut</li>
+<li>用的是相加，不是concatenate, 如果形状变了，对earlier activation做linear transformation</li>
+<li>解决<code>vanishing gradients</code> and <code>representational bottlenecks</code></li>
+<li>adding residual connections to any model that has more than 10 layers is likely to be beneficial.</li>
+</ul>
+<p><strong>representational bottlenecks</strong></p><p>序列模型时，每一层的表示都来自于前一层，如果前一层很小，比如维度过低，那么携带的信息量也被压缩得很有限了，整个模型都会被这个“瓶颈”限制。比如音频信号处理，降维就是降频，比如到0-15kHz，但是下游任务也没法recover dropped frequencies了。所有的损失都是永久的。</p><p>Residual connections, by <code>reinjecting</code> earlier information downstream, partially solve this issue for deep-learning models.（又一次强调<code>reinject</code>）</p><h3>Lyaer weight sharihng</h3>
+<p>在网络的不同位置用同一个layer，并且参数也相同。等于共享了相同的知识，相同的表示，以及是同时(simultaneously)训练的。</p><p>一个语义相似度的例子，输入是A和B还是B和A，是一样的（即可以互换）。架构网络的时候，用LSTM来处理句子，需要做两个LSTM吗？当然可以，但是也可以只做一个LSTM，分别喂入两个句子，合并两个输出来做分类。就是考虑到这种互换性，既然能互换，也就是这个layer也能应用另一个句子，因此就不必要再新建一个LSTM.</p><h3>Models as layers</h3>
+<p>讲了两点：</p><ol>
+<li>model也可以当layer使用</li>
+<li>多处使用同一个model也是共享参数，如上一节。</li>
+</ol>
+<p>举了个双摄像头用以感知深度的例子，每个摄像头都用一个Xception网络提取特征，但是可以共用这个网络，因为拍的是同样的内容，只需要处理两个摄像头拍到的内容的差别就能学习到深度信息。因为希望是用同样的特征提取机制的。</p><p>都是蜻蜓点水。</p><h2>More Advanced</h2>
+<h3>Batch Normalization</h3>
+<ol>
+<li>第一句话就是说为了让样本数据看起来<strong>更相似</strong>，说明这是初衷。</li>
+<li>然后是能更好地泛化到未知数据（同样也是因为bn后就<strong>更相似</strong>了）</li>
+<li>深度网络中每一层之后也需要做<ul>
+<li>还有一个书里没讲到的原因，就是把值移到激活函数的梯度大的区域（比如0附近），否则过大过小的值在激活函数的曲线里都是几乎没有梯度的位置</li>
+</ul>
+</li>
+<li>内部用的指数移动平均(<code>exponential moving average</code>)</li>
+<li>一些层数非常深的网络必须用BN，像resnet 50, 101, 152, inception v3, xception等</li>
+</ol>
+<h3>Depthwise Separable Convolution</h3>
+<p>之前的卷积，不管有多少个layer，都是放到矩阵里一次计算的，DSC把每一个layer拆开，单独做卷积（不共享参数），因为没有一个巨大的矩阵，变成了几个小矩阵乘法，参数量也大大变少了。</p><ol>
+<li>对于小样本很有效</li>
+<li>对于大规模数据集，它可以成为里面的固定结构的模块（它也是Xception的基础架构之一）</li>
+</ol>
+<blockquote>
+<p>In the future, it’s likely that depthwise separable convolutions will <code>completely replace regular convolutions</code>, whether for 1D, 2D, or 3D applications, due to their higher representational efficiency.</p></blockquote>
+<p>?!!</p><h3>Model ensembling</h3>
+<ol>
+<li>Ensembling consists of <strong>pooling together</strong> the predictions of a set of different models, to produce better predictions.</li>
+<li>期望每一个<code>good model</code>拥有<code>part of the truth</code>(部分的真相)。盲人摸象的例子，没有哪个盲人拥有直接感知一头象的能力，机器学习可能就是这样一个盲人。</li>
+<li>The key to making ensembling work is the <code>diversity</code> of the set of classifiers -&gt; 关键是要“多样性”。 <code>Diversity</code> is what makes ensembling work.</li>
+<li>千万<strong>不要</strong>去ensembling同样的网络仅仅改变初始化而去train多次的结果。</li>
+<li>比较好的实践有ensemble <code>tree-based</code> models(random forests, gradient-boosted trees) 和深度神经网络</li>
+<li>以及<code>wide and deep</code> category of models, blending deep learning with shallow learning.</li>
+</ol>
+<p>同样是蜻蜓点水。</p><h1>Generative deep learning</h1>
+<p>Our perceptual modalities, our language, and our artwork all have <code>statistical structure</code>. Learning this structure is what deep-learning algorithms excel at.</p><p>Machine-learning models can learn the <code>statistical latent space</code> of images, music, and stories, and they can then<code>sample from this space</code>, <strong>creating new artworks</strong> with characteristics similar to those the model has seen in its training data.</p><h2>Text generation with LSTM</h2>
+<h3>Language model</h3>
+<p>很多地方都在按自己的理解定义<code>language model</code>，这本书定义很明确，能为根据前文预测下一个或多个token建立概率模型的网络。</p><blockquote>
+<p>any network that can model the probability of the next token given the previous ones is called a language model.</p></blockquote>
+<ol>
+<li>所以首先，它是一个network</li>
+<li>它做的事是model一个probability</li>
+<li>内容是the next token</li>
+<li>条件是previous tokens</li>
+</ol>
+<p>一旦你有了这样一个language model，你就能<code>sample from it</code>，这就是前面笔记里的sample from lantent space, 然后generate了。</p><h3>greedy sampling and stochastic sampling</h3>
+<p>如果根据概率模型每次都选“最可能”的输出，在连贯性上被证明是不好的，而且也丧失了创造性，所以还是给了一定的随机性能选到“不那么可能”的输出。</p><p>因为人类思维本身也是<code>跳跃</code>的。</p><p>考虑两个输出下一个token时的极端情况：</p><!-- --> | <!-- --> | <!-- --> | <!-- -->
+<p>------- | ------- | ------- | -------
+纯随机，所有可选词的概率是均等的 | 毫无意义 | <code>max entropy</code> | 创造性高
+greedy sampling | 毫无生趣 | <code>minimum entropy</code> | 可预测性高</p><p>实现方式：<code>softmax temperature</code></p><p>除一个<code>温度</code>，如果温度大于1，那么温度越大，被除数缩幅度就越大（这样温差就越小，分布会更平均）-&gt; 偏向了纯随机的概率结构（均等）</p><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="k">def</span> <span class="nf">reweight_distribution</span><span class="p">(</span><span class="n">original_distribution</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="n">distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">original_distribution</span><span class="p">)</span> <span class="o">/</span> <span class="n">temperature</span>
+    <span class="n">distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">distribution</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">distribution</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">distribution</span><span class="p">)</span>
+</pre></div>
+<p>写成公式
+$
+\frac{e^{\frac{log(d)}{T}}}{\sum e^{\frac{log(d)}{T}}}
+$
+这是对温度和sigmoid做了融合：</p><ol>
+<li>一个是对目标分布取自然对数后除温度再当成e的指数给幂回去（如果不除温度，那就是先log再e，等于是原数）</li>
+<li>标准的sigmoid方程</li>
+</ol>
+<blockquote>
+<p>这里回顾一个概念：Sampling from a space</p></blockquote>
+<p>书里大量用了这个概念，结合代码，其实就是一个predict函数，也就是说，一般人理解的“<code>预测，推理</code>”，是从业务逻辑方面来理解，作者更愿意从统计学和线性代数角度来理解。</p><p>两种训练方法：</p><ol>
+<li>每次用N个字，来预测第N+1个字，即output只有1个(voc_size, 1)，训练的是language model</li>
+<li>每次用N个字(a, b), 来预测(a+1, b+1)， output有N个(voc_size, N)，训练的是特定的任务，比如写诗，作音乐</li>
+</ol>
+<p>过程：</p><ol>
+<li>准备数据，X为一组句子，Y为每一个句子对应的下一个字（全部向量化）</li>
+<li>搭建一个LSTM + Dense 的网络，输出根据具体情况要么为1，要么为N</li>
+<li>每一个epoch里均进行预测（如果不是为了看过程，有必要吗？我们要最后一轮的预测不就行了？）<ul>
+<li>进行一次fit(就是train)，得到优化后的参数</li>
+<li>随机取一段文本，用作种子（用来生成第一个字）</li>
+<li>计算生成多少个字，就开始for循环<ul>
+<li>向量化当前的种子（会越来越长）</li>
+<li>predict，得到每个字的概率</li>
+<li>softmax temperature，平滑概率，取出next_token</li>
+<li>next_token转回文本，附加到seed后面</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3>DeepDream</h3>
+<p>看了一遍，不感兴趣。核心思路跟视觉化filter的思路是一样的：<code>gradient ascent</code></p><ol>
+<li>从对每个layer里的单个filter做梯度上升变成了对整个layer做梯度上升</li>
+<li>不再从随机噪声开始，而是从一张真实图片开始，实现这些layer里对图片影响最大的patterns的distorting</li>
+</ol>
+<h3>Neural style transfer</h3>
+<p>Neural style transfer consists of applying the <code>style</code> of a reference image to a target image while conserving the <code>content</code> of the target image.</p><ul>
+<li>两个对象：<code>reference</code>, <code>target</code> image</li>
+<li>两个概念：<code>style</code>和<code>content</code></li>
+</ul>
+<p>对<code>B</code>的content应用<code>A</code>的style，我们可以理解为“笔刷”，或者用前些年的流行应用来解释：把一副画水彩化，或油画化。</p><p>把style分解为不同spatial scales上的：纹理，颜色，和visual pattern</p><p>想用深度学习来尝试解决这个问题，首先至少得定义损失函数是什么样的。</p><p>If we were able to mathematically define <code>content</code> and <code>style</code>, then an appropriate loss function to minimize would be the following:</p><div class="highlight"><pre><span></span><span class="n">loss</span> <span class="o">=</span> <span class="n">distance</span><span class="p">(</span><span class="n">style</span><span class="p">(</span><span class="n">reference_image</span><span class="p">)</span> <span class="o">-</span> <span class="n">style</span><span class="p">(</span><span class="n">generated_image</span><span class="p">))</span> <span class="o">+</span>
+        <span class="n">distance</span><span class="p">(</span><span class="n">content</span><span class="p">(</span><span class="n">original_image</span><span class="p">)</span> <span class="o">-</span> <span class="n">content</span><span class="p">(</span><span class="n">generated_image</span><span class="p">))</span>
+</pre></div>
+<p>即对新图而言，<code>纹理要无限靠近A，内容要无限靠近B</code>。</p><ul>
+<li>the content loss<ul>
+<li>图像内容属于高级抽象，因此只需要top layers参与就行了，实际应用中只取了最顶层</li>
+</ul>
+</li>
+<li>the style loss<ul>
+<li>应用<code>Gram matrix</code><ul>
+<li>the inner product of the feature maps of a given layer</li>
+<li>correlations between the layer's feature</li>
+<li>需要生成图和参考图的每一个对应的layer拥有相同的纹理(same <code>textures</code> at different <code>spatial scales</code>)，因此需要所有的layer参与</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>从这里应该也能判断出要搭建网络的话，input至少由三部分（三张图片）构成了。</p><p><strong>demo</strong></p><ul>
+<li>input为参考图，目标图，和生成图（占位），concatenate成一个tensor</li>
+<li>用VGG19来做特征提取</li>
+<li>计算loss<ol>
+<li>用生成图和<code>目标图</code>的<code>top_layer</code>以L2 norm距离做loss</li>
+<li>用生成图和<code>参考图</code>的<code>every</code> layer以L2 Norm做loss并累加</li>
+<li>对生成图偏移1像素做regularization loss（具体看书）</li>
+<li>上述三组loss累加，为一轮的loss</li>
+</ol>
+</li>
+<li>用loss计算对input(即三联图)的梯度</li>
+</ul>
+<h2>Generating images</h2>
+<blockquote>
+<p>Sampling from a latent space of images to create entirely new images</p></blockquote>
+<p>熟悉的句式又来了。</p><p>核心思想：</p><ol>
+<li>low-dimensional <code>latent space</code> of representations<ul>
+<li>一般是个vector space</li>
+<li>any point can be mapped to a realistic-looking image</li>
+</ul>
+</li>
+<li>the module capable of <code>realizing this mapping</code>, can take point as input, then output an image, this called:<ul>
+<li>generator -&gt; GAN</li>
+<li>decoder -&gt; VAE</li>
+</ul>
+</li>
+</ol>
+<p>VAE v.s. GAN</p><ul>
+<li>VAEs are great for learning latent spaces that are <code>well structured</code></li>
+<li>GANs generate images that can potentially be <code>highly realistic</code>, but the latent space they come from may not have as much structure and continuity.</li>
+</ul>
+<h3>VAE（variational autoencoders）</h3>
+<p>given a <code>latent space</code> of representations, or an embedding space, <code>certain directions</code> in the space <strong>may</strong> encode interesting axes of variation in the original data. -&gt; inspired by <code>concept space</code></p><p>比如包含人脸的数据集的latent space里，是否会存在<code>smile vectors</code>，定位这样的vector，就可以修改图片，让它projecting到这个latent space里去。</p><p><strong>Variational autoencoders</strong></p><p>Variational autoencoders are a kind of <em>generative model</em> that’s especially appropriate for the task of <strong>image editing</strong> via concept vectors.</p><p>They’re a modern take on <code>autoencoders</code> (a type of network that aims to <code>encode</code>an input to a <code>low-dimensional</code> latent space and then decode it back) that mixes ideas from deep learning with <strong>Bayesian inference</strong>.</p><ul>
+<li>VAE把图片视作隐藏空间的参数进行统计过程的结果。</li>
+<li>参数就是表示一种正态分布的mean和variance（实际取的log_variance)</li>
+<li>用这个分布可以进行采样(sample)</li>
+<li>映射回original image</li>
+</ul>
+<ol>
+<li>An encoder module turns the input samples <em>input_img</em> into two parameters in a latent space of representations, <code>z_mean</code> and <code>z_log_variance</code>.</li>
+<li>You randomly sample a point z from the latent normal distribution that’s assumed to generate the input image, via $z = z_mean + e^{z_log_variance} \times \epsilon$, where $\epsilon$ is a random tensor of small values.</li>
+<li>A decoder module maps <em>this point</em> in the latent space back to the original input image.</li>
+</ol>
+<blockquote>
+<p>Because epsilon is random, the process ensures that every point that’s <strong>close to the latent location</strong> where you encoded input_img (z-mean) can be decoded to something <strong>similar</strong> to input_img, thus forcing the latent space to be continuously meaningful.</p></blockquote>
+<ol>
+<li>所以VAE生成的图片是可解释的，比如在latent space中距离相近的两点，decode出来的图片相似度也就很高。</li>
+<li>多用于编辑图片，并且能生成动画过程（因为是连续的）</li>
+</ol>
+<p>伪代码(不算，可以说是骨干代码）：</p><div class="highlight"><pre><span></span><span class="n">z_mean</span><span class="p">,</span> <span class="n">z_log_variance</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">input_img</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">z_mean</span> <span class="o">+</span> <span class="n">exp</span><span class="p">(</span><span class="n">z_log_variance</span><span class="p">)</span> <span class="o">*</span> <span class="n">epsilon</span>  <span class="c1"># sampling</span>
+<span class="n">reconstructed_img</span> <span class="o">=</span> <span class="n">decoder</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">input_img</span><span class="p">,</span> <span class="n">reconstructed_img</span><span class="p">)</span>
+</pre></div>
+<p>VAE encoder network</p><div class="highlight"><pre><span></span><span class="n">img_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">latent_dim</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">input_img</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">shape_before_flattening</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">int_shape</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Flatten</span><span class="p">()(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">z_mean</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">latent_dim</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">z_log_var</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">latent_dim</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+<ol>
+<li>可见是一个标准的multi-head的网络</li>
+<li>可见所谓的latent space，其实就是transforming后的结果</li>
+<li>encode的目的是回归出两个参数（本例是两个2维参数）</li>
+<li>两个参数一个理解为mean, 一个理解为log_variance</li>
+</ol>
+<p>decoder过程就是对mean和var随机采样（得到z)，然后不断上采样(<code>Conv2DTranspose</code>)得到形状与源图一致的输出(得到z_decode)的过程。</p><ol>
+<li>z_decode跟z做BCE loss</li>
+<li>还要加一个regularization loss防止overfitting</li>
+</ol>
+<blockquote>
+<p>此处请看书，演示了自定义的loss。因为keras高度封装，所以各种在封装之外的自定义的用法尤其值得关注。比如这里，自定义了loss之后，Model和fit里就不需要传Y，compile时也不需要传loss了。</p></blockquote>
+<blockquote>
+<p>loss是在最后一层layer里计算的，并且通过一个layer方法<code>add_loss</code>，把loss和input通知给了network（如果你想知道注入点的话）</p></blockquote>
+<p>使用模型的话，就是生成两组随机数，当成mean和log_variance，观察decode之后的结果。</p><h3>GAN</h3>
+<p><code>Generative adversarial network</code>可以创作以假乱真的图片。通过训练最好的造假和和最好的鉴别者来达到“创造”越来越逼近人类创作的作品。</p><ul>
+<li><strong>Generator</strong> network: Takes as input a random vector (a random point in the latent space), and decodes it into a synthetic image</li>
+<li><strong>Discriminator</strong> network (or adversary): Takes as input an image (real or synthetic), and predicts whether the image came from the training set or was created by the generator network.</li>
+</ul>
+<p><strong>deep convolutional GAN (DCGAN)</strong></p><ul>
+<li>a GAN where the generator and discriminator are deep convnets.</li>
+<li>In particular, it uses a <code>Conv2DTranspose</code> layer for image upsampling in the generator.</li>
+</ul>
+<p>训练生成器是冲着能让鉴别器尽可能鉴别为真的方向的：the generator is trained to <code>fool</code> the discriminator。</p><blockquote>
+<p>这句话其实暗含了一个前提，下面会说，就是此时discriminator是确定的。即在确定的鉴别能力下，尽可能去拟合generator的输出，让它能通过当前鉴别器的测试。</p></blockquote>
+<p>书中说训练DCGAN很复杂，而且很多trick, 超参靠的是经验而不是理论支撑，摘抄并笔记a bag of tricks如下：</p><ul>
+<li>We use <code>tanh</code> as the last activation in the generator, instead of sigmoid, which is more commonly found in other types of models.</li>
+<li>We sample points from the latent space using a <code>normal distribution</code> (Gaussian distribution), not a uniform distribution.</li>
+<li>Stochasticity is good to induce robustness. Because GAN training results in a dynamic equilibrium, GANs are likely to get stuck in all sorts of ways. Introducing randomness during training helps prevent this. We introduce randomness in two ways:<ul>
+<li>by using <code>dropout</code> in the discriminator</li>
+<li>and by adding <code>random noise</code> to the labels for the discriminator.</li>
+</ul>
+</li>
+<li>Sparse gradients can hinder GAN training. In deep learning, sparsity is often a desirable property, <strong>but not in GANs</strong>. Two things can induce gradient sparsity: <code>max pooling</code> operations and <code>ReLU</code> activations.<ul>
+<li>Instead of max pooling, we recommend using <code>strided convolutions</code> for downsampling(用步长卷积代替pooling),</li>
+<li>and we recommend using a <code>LeakyReLU</code> layer instead of a ReLU activation. It’s similar to ReLU, but it relaxes sparsity constraints by allowing small negative activation values.</li>
+</ul>
+</li>
+<li>In generated images, it’s common to see <code>checkerboard artifacts</code>(stirde和kernel size不匹配千万的) caused by unequal coverage of the pixel space in the generator.<ul>
+<li>To fix this, we use a kernel size that’s divisible by the stride size whenever we use a strided <code>Conv2DTranpose</code> or Conv2D in both the generator and the discriminator.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Train</strong></p><ol>
+<li>Draw random points in the latent space (random noise).</li>
+<li>Generate images with generator using this random noise.</li>
+<li>Mix the generated images with real ones.</li>
+<li>Train discriminator using these mixed images, with corresponding targets:<ul>
+<li>either “real” (for the real images) or “fake” (for the generated images).</li>
+<li>所以鉴别器是<code>单独训练的</code>（前面笔记铺垫过了）</li>
+<li>下面就是train整个DCGAN了：</li>
+</ul>
+</li>
+<li>Draw new random points in the latent space.</li>
+<li>Train gan using these random vectors, with targets that all say “these are real images.” This updates the weights of the generator (only, because the discriminator is frozen inside gan) to move them toward getting the discriminator to predict “these are real images” for generated images: this trains the generator to fool the discriminator.<ul>
+<li>只train网络里的generator</li>
+<li>discriminator不训练，因为是要用“已经训练到目前程度的”discriminator来做下面的任务</li>
+<li>任务就是只送入伪造图，并声明所有图都是真的，去让generator生成能逼近这个声明的图</li>
+<li>generator就是这么训练出来的。</li>
+<li>所以实际代码是一次epoch是由train一个<code>discriminator</code>和train一个<code>GAN</code>组成.</li>
+</ul>
+</li>
+</ol>
+<p>因为鉴别器和生成器是一起训练的，因此前几轮生成的肯定是噪音，但前几轮鉴别器也是瞎鉴别的。</p>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/ES6%E4%B8%ADgenerator%E4%BC%A0%E5%8F%82%E4%B8%8E%E8%BF%94%E5%9B%9E%E5%80%BC/">ES6中generator传参与返回值</a>
+        <p class="yue">先看两个例子,1,</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0/">李宏毅MACHINE-LEARNING-2021-SPRING笔记</a>
+        <p class="yue"></p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

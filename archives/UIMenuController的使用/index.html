@@ -1,0 +1,241 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>UIMenuController的使用 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="#1, 基本使用" />
+<meta property="og:title" content="UIMenuController的使用 - Maverick" />
+<meta property="og:description" content="#1, 基本使用" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/UIMenuController%E7%9A%84%E4%BD%BF%E7%94%A8/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="UIMenuController的使用 - Maverick" />
+<meta name="twitter:description" content="#1, 基本使用" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">UIMenuController的使用</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/iOS/">
+                    iOS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/UIMenuController%E7%9A%84%E4%BD%BF%E7%94%A8/" 
+                    data-flag-title="UIMenuController的使用"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>#1, 基本使用
+以对一个UILabel长按弹出菜单为例
+##子类化UILabel
+因为需要覆盖这几个方法:
+<code>- (BOOL)canBecomeFirstResponder</code>; 返回YES 
+同时需要在每次UI元素出现的时候去<code>becomeFirstResponder</code>一次,才能显示出菜单. 在我的实测中, 我在<code>ViewDidLoad</code>里面这么做了, 当UI导航到别的页面(导航控件, 或modal页面), 然后回来, 菜单又失效了, 所以我写到<code>ViewWillAppear</code>里面去了, 通过</p><p><code>- (BOOL)canPerformAction:(SEL)action withSender:(nullable id)sender</code>;
+这个方法会在每一个menuItem生成的时候调用一次, 因此在方法体里就要根据action来判断是否需要显示在菜单里, 如果不需要, 则返回<code>NO</code>. 也就是说, 如果你什么都不做, 直接返一个<code>YES</code>, 那么所有的默认菜单项都会显示出来, 此处我们只要一个<code>Copy</code>选项吧:</p>
+<pre><code>- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    return (action == @selector(copy:));
+}
+</code></pre>
+<p>##添加触发方式
+如果是以长按为触发, 则添加长按手势, 代码片段如下:</p>
+<pre><code>// 在awakeFromNib里面添加即可
+UILongPressGestureRecognizer *menuGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(menu:)];
+    menuGesture.minimumPressDuration = 0.2;
+    [self addGestureRecognizer:menuGesture];
+
+- (void)menu:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        UIMenuController *menu = [UIMenuController sharedMenuController];
+        [menu setTargetRect:self.frame inView:self.superView]; // 把谁的位置告诉控制器, 菜单就会以其为基准在合适的位置出现
+        [menu setMenuVisible:YES animated:YES];
+    }
+}
+</code></pre>
+<p>##编写菜单行为
+上面我们只要了copy, 那么就覆盖默认的copy方法:</p>
+<pre><code>- (void)copy:(id)sender {
+    UIPasteboard *paste = [UIPasteboard generalPasteboard];
+    paste.string = self.text;
+}
+</code></pre>
+<p>#2, 添加自定义菜单项
+自定义菜单只需要在菜单控制器添加几个item即可, 结合上例, 我的那个label是显示电话号码的, 那么就让它多显示一个”打电话”和一个”发短信”菜单吧, 唯一需要注意的是, 在设置自定义菜单项时, 设置的items只影响自定义部分, 标准菜单项仍然是由<code>canPerformAction</code>决定的:</p>
+<pre><code>UIMenuItem *itemCall = [[UIMenuItem alloc] initWithTitle:@&quot;Call&quot; action:@selector(call:)];
+UIMenuItem *itemMessage = [[UIMenuItem alloc] initWithTitle:@&quot;Message&quot; action:@selector(message:)];
+[[UIMenuController sharedMenuController] setMenuItems: @[itemCall, itemMessage]];
+[[UIMenuController sharedMenuController] update];
+</code></pre>
+<blockquote>
+<p>注, 添加了两个菜单后, canPerformAction需要相应变化, 自己想想应该怎么改. 也可以在下一节看代码. 当然也要自行写完里面的call和message方法, 参照copy的写法即可</p></blockquote>
+<p>#3, UITableViewCell长按显示菜单
+##标准菜单项
+UITableView里面长项条目显示标准菜单, 只需要实现下述代理方法即可:</p>
+<pre><code>- (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+    return (action == @selector(copy:)); // 只显示Copy
+}
+
+- (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+    if (action == @select(copy:)) {
+        UIPasteboard *paste = [UIPasteboard generalPasteboard];
+        paste.string = cell.detailLabel.text; // 自行写业务逻辑
+    }
+}
+</code></pre>
+<p>#4, TableViewCell添加自定义菜单项</p><p>同样也得子类化一个TableViewCell,目的也是为了覆盖同样的几个方法:</p>
+<pre><code>- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    return (action == @selector(copy:) || action == @selector(call:) || action == @selector(message:)); // 此处我们把三个行为都写全了, 回答上一节的问题
+}
+
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+</code></pre>
+<p>但因为tableView已经实现了菜单, 所以不需要显式为每个cell去<code>becomeFirtResponder</code>了.</p><p>添加菜单项的方法同上, 写菜单行为的方法同<code>copy:</code>, 都是一样的.</p><blockquote>
+<p>注: 你们或许已经发现了, 添加自定义菜单项的时候, 仍然需要<code>canPerformAction</code>, 在这里, 与tableView代理里面的同名方法有什么关系? 是的, 两个都要写, tableView里面的只会影响标准菜单, 文档说只支持这两个<code>UIResponderStandardEditActions</code> (copy/paste)</p></blockquote>
+<blockquote>
+<p>注: 然而, <code>- (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender</code>这个方法却有点别扭, 一来不需要去实现了, 二来又不能注释掉(你们自己试一下), 等于一定要留一个空的方法体在那里…</p></blockquote>
+
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/Drawing/">Drawing</a>
+        <p class="yue">《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第2章</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/OC%E9%9D%99%E6%80%81%E5%BA%93%E9%87%8CNSClassFromString%E5%BE%97%E5%88%B0nil%E7%9A%84%E8%A7%A3%E5%86%B3/">OC静态库里NSClassFromString得到nil的解决</a>
+        <p class="yue">如果你在静态库中有从类名反射回类的代码, 如下:</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

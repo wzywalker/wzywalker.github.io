@@ -1,90 +1,857 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="english"><id>/</id><title>Maverick</title><updated>2022-01-14T05:05:23.941174+08:06</updated><author><name>AlanDecode</name><email>hi@imalan.cn</email></author><link href="/" rel="alternate"/><generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator><logo>https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png</logo><subtitle>This is Maverick, Theme Galileo.</subtitle><entry><id>/archives/typography/</id><title>Typography</title><updated>2022-01-14T05:05:23.941300+00:00</updated><author><name>AlanDecode</name><email>hi@imalan.cn</email><uri>https://wzy.one</uri></author><content>&lt;div class="notice"&gt;This is an sample article. Typography matters in Maverick.&lt;/div&gt;&lt;!--more--&gt;
-&lt;h2&gt;L2 Heading&lt;/h2&gt;
-&lt;h3&gt;L3 Heading&lt;/h3&gt;
-&lt;h4&gt;L4 Heading&lt;/h4&gt;
-&lt;h5&gt;L5 Heading&lt;/h5&gt;
-&lt;h6&gt;L6 Heading&lt;/h6&gt;
-&lt;h2&gt;Paragraph&lt;/h2&gt;
-&lt;p&gt;We are creating a world that all may enter without privilege or prejudice accorded by race, economic power, military force, or station of birth.&lt;/p&gt;&lt;p&gt;We are creating a world where anyone, anywhere may express his or her beliefs, no matter how singular, without fear of being coerced into silence or conformity.&lt;/p&gt;&lt;h2&gt;Inline elements&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;Bold&lt;/strong&gt;, &lt;ruby&gt;Ruby&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;ルビ&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;, &lt;em&gt;Italic&lt;/em&gt;, &lt;del&gt;Strikethrough&lt;/del&gt;, &lt;a href="https://www.imalan.cn"&gt;Link&lt;/a&gt;&lt;sup class="footnote-ref" id="fnref-1"&gt;&lt;a href="#fn-1"&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;&lt;h2&gt;Blockquote and nested blockquote&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="english"><id>/</id><title>Maverick</title><updated>2022-01-14T09:08:46.694062+08:06</updated><author><name>AlanDecode</name><email>hi@imalan.cn</email></author><link href="/" rel="alternate"/><generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator><logo>https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png</logo><subtitle>This is Maverick, Theme Galileo.</subtitle><entry><id>/archives/%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%8C%E9%80%92%E5%BD%92%E4%B8%8E%E5%88%86%E6%B2%BB/</id><title>全排列，递归与分治</title><updated>2022-01-14T09:08:46.694620+00:00</updated><author><name>walker</name><email>hi@imalan.cn</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;能够用递归和分治解决的，特征都是下一级做的事跟上一级一样（抽象），最后一层做真正的业务。比如n个数字的全排列，抽象出来就是每n-1个数字的全排列&lt;/p&gt;&lt;p&gt;它的难点就在于抽象，因为等于什么都没描述（我要5个数字的全排列，你就说，那好，你告诉我这4个数字的全排列，我就能告诉你5个数字的全排列）。&lt;/p&gt;&lt;p&gt;也就是说，尝试用n和n-1的思维（有点像归纳法，动态规划）去描述问题，而不去看能不能解决。&lt;/p&gt;&lt;p&gt;具体到这里，以ABCD为例，我们的请求过程应该是这样的&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;A打头的话，BCD的全排列 swap(0, 0)&lt;/li&gt;
+&lt;li&gt;B打头的话，ACD的全排列 swap(0, 1)&lt;/li&gt;
+&lt;li&gt;...swap(0,2)&lt;/li&gt;
+&lt;li&gt;...swap(0,3)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;自己是可以数出来的：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;A固定，BCD的所有排列 swap&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;,0&lt;span class="o"&gt;)&lt;/span&gt;
+  B固定，CD的所有排列 swap&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;,1&lt;span class="o"&gt;)&lt;/span&gt;
+      C固定，D的所有排列 swap&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;,2&lt;span class="o"&gt;)&lt;/span&gt;（1）
+      D固定，C的所有排列 swap&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;,3&lt;span class="o"&gt;)&lt;/span&gt;（1）
+  C固定，同B（2）
+  D固定，同B（2）
+  计6种
+B固定，同A，&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;6&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; swap&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;,1&lt;span class="o"&gt;)&lt;/span&gt;
+C固定，同A，&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;6&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; swap&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;,2&lt;span class="o"&gt;)&lt;/span&gt;
+D固定，同A，&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;6&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; swap&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;,3&lt;span class="o"&gt;)&lt;/span&gt;
+结果应该是24
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;所有缩进部分都是递归，所以真正的业务代码就是一句话，交换每次比较的数组的第一个和剩下的几个的位置，然后递归下去&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;ctr&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;perm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;None&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;global&lt;/span&gt; &lt;span class="n"&gt;ctr&lt;/span&gt;
+    &lt;span class="n"&gt;end&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;start&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;ctr&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+            &lt;span class="c1"&gt;# 思路是，我每次只动一个数字，然后固定住这个数字，看剩下的数字有多少种排列&lt;/span&gt;
+            &lt;span class="c1"&gt;# 代码里每次把固定的数字挪到开头&lt;/span&gt;
+            &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+            &lt;span class="n"&gt;perm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="vm"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;__main__&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;arr&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="n"&gt;perm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ctr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;output: 24&lt;/p&gt;&lt;p&gt;可能是我理解能力的问题，所有人都没有解释为什么有swap，可能是太直观吧，毕竟swap才是真正在”排列“的业务代码。我还是自己写一遍才想明白，记录一下吧。&lt;/p&gt;</content><link href="/archives/%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%8C%E9%80%92%E5%BD%92%E4%B8%8E%E5%88%86%E6%B2%BB/" rel="alternate"/><published>2022-01-14T00:00:00+08:06</published></entry><entry><id>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%80%EF%BC%9AArray%2C-Linked-List%2C-Stack%2C-Queues/</id><title>数据结构篇一：Array,-Linked-List,-Stack,-Queues</title><updated>2022-01-14T09:08:46.694571+00:00</updated><author><name>walker</name><email>hi@imalan.cn</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;p&gt;前几个比较基础,只记录了些关键字和提纲&lt;/p&gt;&lt;h1&gt;Static and Dynamic Arrays&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;static array&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;fixed length&lt;/li&gt;
+&lt;li&gt;indexable&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;usage:&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;sequential data&lt;/li&gt;
+&lt;li&gt;IO routines as buffers&lt;/li&gt;
+&lt;li&gt;lookup tables and inverse lookup tables&lt;/li&gt;
+&lt;li&gt;return multiple values&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;operation complexity:
+access: O(1)
+search: &lt;code&gt;O(n)&lt;/code&gt;
+insert: &lt;code&gt;O(n)&lt;/code&gt;
+append: O(1)
+delet: &lt;code&gt;O(n)&lt;/code&gt;
+需要遍历的操作就是O(n)&lt;/p&gt;&lt;p&gt;Q: How to implement a dynamic array?
+A:&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;static array with an initial capacity&lt;/li&gt;
+&lt;li&gt;add new elements, keep tracking the size&lt;/li&gt;
+&lt;li&gt;if exceed capacity, create a new static array with &lt;code&gt;twice the capacity&lt;/code&gt;&lt;ul&gt;
+&lt;li&gt;and copy the original elements into it&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Singly and Doubly Linked Lists&lt;/h2&gt;
+&lt;p&gt;单向/双向链表&lt;/p&gt;&lt;p&gt;sequential list of nodes that hold data which point to other nodes also containing data.&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;节点序列，&lt;/li&gt;
+&lt;li&gt;节点拥有指向别的节点的数据（指针）&lt;/li&gt;
+&lt;li&gt;别的节点也拥有这种指针&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;usage:&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;many &lt;code&gt;List, Queue &amp;amp; Stack&lt;/code&gt; implementations&lt;/li&gt;
+&lt;li&gt;circular lists&lt;/li&gt;
+&lt;li&gt;model real world objects such as &lt;code&gt;trains&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;implementation of adjancy list for graphs&lt;/li&gt;
+&lt;li&gt;separate chaining -&amp;gt; ?&lt;ul&gt;
+&lt;li&gt;deal with hashing collisions -&amp;gt; ?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;blockquote&gt;
-&lt;p&gt;安得广厦千万间，大庇天下寒士俱欢颜！风雨不动安如山。&lt;/p&gt;&lt;blockquote&gt;
-&lt;p&gt;呜呼！何时眼前突兀见此屋，吾庐独破受冻死亦足！&lt;/p&gt;&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;h2&gt;Code&lt;/h2&gt;
-&lt;p&gt;Inline code: &lt;code&gt;int a=1;&lt;/code&gt;. Code block:&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;main&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;argc&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kt"&gt;char&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;argv&lt;/span&gt;&lt;span class="p"&gt;){&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
-&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;std&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;cout&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Hello World!&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
-&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
-&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;List&lt;/h2&gt;
-&lt;h3&gt;Unordered List&lt;/h3&gt;
+&lt;p&gt;上述两上问号后续在&lt;code&gt;Hash Table&lt;/code&gt;一节里自然就解惑了&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Terminology&lt;/strong&gt;
+Head / Tail / Pointer / Node&lt;/p&gt;&lt;p&gt;Singly vs Doubly&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;Doubly holds a &lt;code&gt;next&lt;/code&gt; and &lt;code&gt;prev&lt;/code&gt; reference, which Singly has no &lt;code&gt;prev&lt;/code&gt;&lt;ul&gt;
+&lt;li&gt;插入删除的时候需要更新所有引用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;both maintain a reference of &lt;code&gt;head&lt;/code&gt; and &lt;code&gt;tail&lt;/code&gt; for quick additions / removals&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;insertion&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;create a traverser and move by sepcific steps&lt;/li&gt;
+&lt;li&gt;create new node&lt;/li&gt;
+&lt;li&gt;singly:&lt;ul&gt;
+&lt;li&gt;原node的next指向新node&lt;/li&gt;
+&lt;li&gt;新node的next指向原next的node&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;doubly:&lt;ul&gt;
+&lt;li&gt;新node的next和prev分别指向原node和下一个node&lt;/li&gt;
+&lt;li&gt;两个node分别用next和prev指向新node&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;removal&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;singly需要两个游标:&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;pt1指向head, pt2指向head-&amp;gt;next&lt;/li&gt;
+&lt;li&gt;pt1, pt2一起移动，直到pt2找到目标&lt;/li&gt;
+&lt;li&gt;pt2再向前移动一步&lt;/li&gt;
+&lt;li&gt;pt1位置的node用next指向pt2位置&lt;/li&gt;
+&lt;li&gt;now can sefely remoing the element between pt1 and pt2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;doubly却只需要一个：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;pointer找到目标元素&lt;/li&gt;
+&lt;li&gt;用prev和next找到上一个和下一个&lt;/li&gt;
+&lt;li&gt;下一个和下一个node分别互相指向&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Complexity&lt;/strong&gt;
+searth: &lt;code&gt;O(n)&lt;/code&gt;
+insert at head/tail: O(1)
+remove at head: O(1)
+remove at tail: &lt;code&gt;O(n)&lt;/code&gt; (singly) / O(1) (doubly)
+因为即使我们知道tail在哪，在单向链表中，我们也找不到它的前一个去设置为新的tail
+remove in middle: &lt;code&gt;O(n)&lt;/code&gt;&lt;/p&gt;&lt;h1&gt;Stack&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;iPhone&lt;ul&gt;
-&lt;li&gt;iPhone X&lt;/li&gt;
-&lt;li&gt;iPhone 11&lt;/li&gt;
+&lt;li&gt;one-ended linear data structure (LIFO)&lt;/li&gt;
+&lt;li&gt;two operation: &lt;code&gt;push&lt;/code&gt; and &lt;code&gt;pop&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Usage&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;undo mechanisms&lt;/li&gt;
+&lt;li&gt;compiler syntax checking for matching brackets and braces&lt;ul&gt;
+&lt;li&gt;开括号压入栈内，每碰到一个闭括号，与栈顶的比较，匹配就出栈，不匹配就报错&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;iPad&lt;/li&gt;
-&lt;li&gt;MacBook&lt;/li&gt;
+&lt;li&gt;model a pile of books or plates&lt;ul&gt;
+&lt;li&gt;汉诺塔(tower of hanoi)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3&gt;Ordered List&lt;/h3&gt;
+&lt;/li&gt;
+&lt;li&gt;tracking previous function calls&lt;/li&gt;
+&lt;li&gt;DFS on a graph&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Complexity&lt;/strong&gt;
+push/pop/peek/size: O(1)
+search: &lt;code&gt;O(n)&lt;/code&gt;&lt;/p&gt;&lt;p&gt;双向链表实现一个Stack，基本上就是操作tail&lt;/p&gt;&lt;h1&gt;Queues&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;a linear data structure, model real world queues (FIFO)&lt;/li&gt;
+&lt;li&gt;two primary operations: &lt;code&gt;enqueue&lt;/code&gt;, &lt;code&gt;dequeue&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Usage&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;any waiting line models a queue&lt;/li&gt;
+&lt;li&gt;keep track of the x most recently added elements -&amp;gt; ?&lt;/li&gt;
+&lt;li&gt;web server request management where you want first come first serve&lt;/li&gt;
+&lt;li&gt;BFS graph traversal&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Complexity&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;只有&lt;code&gt;contains, revomval&lt;/code&gt;需要遍历，其它操作（出入列等）都是O(1)&lt;/p&gt;&lt;p&gt;实现一个BFS：&lt;/p&gt;&lt;p&gt;基本就是动态往 queue 里添加子节点,当前级别元素访问完后, 再 dequeue 出来的就是所有的下一级子节点
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-abaa7e896e83cc30.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;双向列表实现Queue，入列用tail，出列用head，即添加的总在尾巴，永远从头部取出。&lt;/p&gt;</content><link href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%80%EF%BC%9AArray%2C-Linked-List%2C-Stack%2C-Queues/" rel="alternate"/><published>2022-01-14T00:00:00+08:06</published></entry><entry><id>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%94%EF%BC%9AHash-Tables/</id><title>数据结构篇五：Hash-Tables</title><updated>2022-01-14T09:08:46.694525+00:00</updated><author><name>walker</name><email>hi@imalan.cn</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
+&lt;h1&gt;Hash Tables&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;key-value pair&lt;/li&gt;
+&lt;li&gt;using &lt;code&gt;Hashing&lt;/code&gt; technique&lt;/li&gt;
+&lt;li&gt;often used tracking item frequencies&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;what's &lt;em&gt;hash function&lt;/em&gt;?&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;maps a key &lt;code&gt;x&lt;/code&gt; to a whole number in a fixed &lt;code&gt;range&lt;/code&gt;.&lt;ul&gt;
+&lt;li&gt;e.g. $H(x) = (x^2 - 6x + 9) % 10$ maps (0, 9)&lt;/li&gt;
+&lt;li&gt;这个方程会为不同的x产生一样的y -&amp;gt; &lt;code&gt;hash collision&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;can hash arbitrary objects like string, list, tuple...&lt;/li&gt;
+&lt;li&gt;must be &lt;code&gt;deterministic&lt;/code&gt;(确定的x产生确定的y)&lt;ul&gt;
+&lt;li&gt;因此key的应该是&lt;code&gt;immutable&lt;/code&gt;的类型&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;关键词是&lt;code&gt;range&lt;/code&gt;，你设计的function总要mod一下，将结果限制在一个范围内。这里你应该暂时能推测出hashtable的key可能就是数字吧？&lt;/p&gt;&lt;p&gt;&lt;strong&gt;hash collision&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;separate chaining&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;用一种数据结构（通常是链表）保留所有冲突的值&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;open addressing&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;为冲突的值选择一个offset（地址/值）保存 -&amp;gt; &lt;code&gt;probing sequence P(x)&lt;/code&gt;&lt;/p&gt;&lt;p&gt;不管是怎么解决冲突，&lt;strong&gt;worst&lt;/strong&gt;的情况下，hash table的操作时间也会由O(1)变成O(n)&lt;/p&gt;&lt;p&gt;怎么用HT来查找呢？不是把hash后的结果拼到原数据上，而是每次查询前，对key进行一次hash function，就能去查询了。&lt;/p&gt;&lt;h2&gt;Open Addressing&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;probing sequences&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;linear probing: P(x) = ax + b&lt;/li&gt;
+&lt;li&gt;quadratic probing: p(x) = $ax^2 + bx + c$&lt;/li&gt;
+&lt;li&gt;double hashing: p(k, x) = $x * H_2(k)$ 双重hash&lt;/li&gt;
+&lt;li&gt;pseudo random number generator: p(k, x) = x * rng(H(k), x) 用H(k)(即hash value)做种的随机数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;总之就是在这样一个序列里找下一个位置&lt;/p&gt;&lt;p&gt;假设一个table size 为N的HT，使用开放寻址的伪代码：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;span class="n"&gt;keyHash&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;H&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;k&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;   &lt;span class="c1"&gt;# 直接计算出来的hash value&lt;/span&gt;
+&lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;keyHash&lt;/span&gt;  &lt;span class="c1"&gt;# 偏移过后存在HT里的index&lt;/span&gt;
+
+&lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="n"&gt;table&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;keyHash&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;P&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;k&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;N&lt;/span&gt;  &lt;span class="c1"&gt;# 加上偏移，考虑size（N）&lt;/span&gt;
+    &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="c1"&gt;# 游标加1&lt;/span&gt;
+
+&lt;span class="c1"&gt;# now can insert (k,v) at table[index]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Chaos with cycles&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Linear Probling (LP)&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;LP中，如果你&lt;em&gt;运气不好&lt;/em&gt;，产生的序列的下一个值永远是occupied的状态（一般是值域小于size），就进入死循环了。&lt;/p&gt;&lt;p&gt;假设p(x) = 3x, H(k) = 4, N = 9
+那么H(k)+P(x) % N 只会产生{4,7,1}，如果这三个位置被占用，那就陷入了永远寻找下一个的无限循环中。&lt;/p&gt;&lt;p&gt;一般是限制probing function能返回刚好N个值。&lt;/p&gt;&lt;blockquote&gt;
+&lt;p&gt;当p(x)=ax的a与size的N互质，即没有公约数，&lt;code&gt;GCD(a, N) = 1&lt;/code&gt;一般能产生刚好N个值。(Greatest Common Denominator)&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注意，为了性能和效率的平衡，有&lt;code&gt;load factor&lt;/code&gt;的存在，所以到了阈值，size就要加倍，N的变化，将会使得&lt;code&gt;GCD(a, N) = 1&lt;/code&gt;的a的选择有变化，而且之前对N取模，现在取值也变发生变化，这时候需要重新map&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;重新map不再按元素当初添加的顺序，而是把现有HT里的值按索引顺序重新map一遍。比如第一个是k6, 即第6个添加进来的，但是现在第一个就重新计算它的值，填到新的HT里面去。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Quadratic Probing （QP）&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;QP 同样有chaos with cycles的问题，通用解决办法，三种：&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;p(x) = $x^2$, size选一个 prime number &amp;gt; 3, and $\alpha \leq \frac{1}{2}$&lt;/li&gt;
+&lt;li&gt;p(x) = $(x^2 + x) / 2$, keep the size a power of 2 （不需要是素数了）&lt;/li&gt;
+&lt;li&gt;p(x)= $(-1^x) \times x^2$, make size prime N $\equiv 3$ mod 4 ???&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Double Hashing&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Double Hashing: P(x) = $x \times H_2(k)$可见仍然类似一个一次的线性方程，$H_2(k)$就类似于ax中的a，设为$\delta$，相比固定的a, 这里只是变成了动态的，这样不同的key的待选序列就是不一样的（可以理解为系数不同了）&lt;/p&gt;&lt;p&gt;解决chaos:&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;size N to be a prime number&lt;/li&gt;
+&lt;li&gt;calculate: $\delta = H_2(k)$ mod N&lt;ul&gt;
+&lt;li&gt;$\delta=0$ 时offset就没了，所以需要人为改为1&lt;/li&gt;
+&lt;li&gt;$1 \leq \delta \lt N$ and GCD($\delta$, N) = 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;可见，虽然系数是“动态”的了，但是取值还是（1，N）中的一个而已，hash只是让其动起来的一个原因，而不是参与计算的值。&lt;/p&gt;&lt;p&gt;我们本来就是在求hash value，结果又要引入另一个hash function，显然这个$H_2$不能像外层这样复杂，一般是针对常见的key类型(string, int...-&amp;gt; fundamental data type)的&lt;code&gt;universal hash functions&lt;/code&gt;&lt;/p&gt;&lt;blockquote&gt;
+&lt;p&gt;因为N要是一个素数，所以在double size的时候，还要继续往上找直到找到一个素数为止，比如N=7, double后，N=14，那么最终，N=17&lt;/p&gt;&lt;/blockquote&gt;
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-8818bf0d1d733dc7.png" /&gt;&lt;/figure&gt;&lt;h3&gt;Issues with removing&lt;/h3&gt;
+&lt;p&gt;因为冲突的hash value需要probing，probing的依据是从序列里依次取出下一个位置，检查这个位置&lt;strong&gt;有没有被占用&lt;/strong&gt;，那么问题就来了，如果一个本被占用的位置，因为元素需要删除，反而变成没有占用了，这有点类似删除树节点，不但要考虑删除，还要考虑这个位置怎么接续。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;lazy deletion&lt;/strong&gt;
+但HT机制比树要复杂，为了避免反复应用probing函数重新摆放后续所有节点，干脆就在删除的位置放置一个预设的标识，我们称为墓碑(&lt;code&gt;tombstone&lt;/code&gt;)，而不是直接置空，然后所有的查找和添加加上这一条规则，就能快速删除又无需重新排序。&lt;/p&gt;&lt;p&gt;大量删除会造成空间浪费，但无需立即处理：&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;添加元素允许添加到墓碑位置&lt;/li&gt;
+&lt;li&gt;到达阈值容量需要倍增的时候有一次重排，这个时候就可以移除所有的墓碑&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;如果查找一个hash value，连续3个都是墓碑，第4个才是它，这是不是有点浪费时间？
+确实，所以还可以优化，当你查找过一次之后，就可以把它移到第一个墓碑的位置，这样，&lt;strong&gt;下次&lt;/strong&gt;查询的时候速度就会快很多了。&lt;/p&gt;&lt;p&gt;整个机制，叫&lt;code&gt;lazy deletion&lt;/code&gt;&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-c6d9f3a99c26345f.png" /&gt;&lt;/figure&gt;</content><link href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%94%EF%BC%9AHash-Tables/" rel="alternate"/><published>2022-01-14T00:00:00+08:06</published></entry><entry><id>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AB%EF%BC%9ABalanced-Binary-Search-Trees%28BBST%29/</id><title>数据结构篇八：Balanced-Binary-Search-Trees(BBST)</title><updated>2022-01-14T09:08:46.694474+00:00</updated><author><name>walker</name><email>hi@imalan.cn</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
+&lt;h1&gt;Balanced Binary Search Trees (BBST)&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;满足low (logarithmic) height for fast insertions and deletions&lt;/li&gt;
+&lt;li&gt;clever usage of a &lt;code&gt;tree invairant&lt;/code&gt; and &lt;code&gt;tree rotation&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;AVL Tree&lt;/h2&gt;
+&lt;p&gt;一种BBST，满足O(log n)的插入删除和查找复杂度，也是第一种BBST，后续出现的更多的：2-3 tree, AA tree, scapegoat tree, red-black tree(avl的最主要竞争对手)&lt;/p&gt;&lt;p&gt;能保持平衡的因子：Balance Factor (&lt;code&gt;BF&lt;/code&gt;)&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;BF(node) = H(node.right) - H(node.left)&lt;/li&gt;
+&lt;li&gt;H(x) = height of node = # of edges between (x, furthest leaf)&lt;/li&gt;
+&lt;li&gt;平衡就是左右平均分配，所以要么均分，要么某一边多一个，BF其实就是(-1, 0, 1)里的一个了 &amp;lt;- avl tree invariant&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;一个node需要存：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;本身的(comparable) value&lt;/li&gt;
+&lt;li&gt;balance factor&lt;/li&gt;
+&lt;li&gt;the &lt;code&gt;height&lt;/code&gt; of this node&lt;/li&gt;
+&lt;li&gt;left/right pointer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使树保持左右平衡主要是靠rotation，极简情况下（三个node），我们有两种基本情况（left-left, right-right），有其它情况就旋转一次变成这两种情况之一：
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-80a75204b823272d.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;h2&gt;Insertion&lt;/h2&gt;
+&lt;p&gt;一次插入需要考虑的是，插在哪边，以及插入后对bf, height和balance的破坏
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-fbcb86360e02615e.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;其中修复平衡就是上图中几个基本结构的转换&lt;/p&gt;&lt;h2&gt;Removal&lt;/h2&gt;
+&lt;p&gt;avl树就是一棵BST，删除节点分两步：&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;按照bst的方法查找节点，即小的在左边找，大的在右边找&lt;/li&gt;
+&lt;li&gt;也按bst的原则删除元素，即找到元素后，把左边的最大值或右边的最小值拿过来补上删除的位置&lt;/li&gt;
+&lt;li&gt;这一步是多出来的，显然是要更新一下节点的bf和height，及重新balance一次了。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;前两部分参考BST一章，流程伪代码：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;remove&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; &lt;span class="o"&gt;...&lt;/span&gt;
+    &lt;span class="c1"&gt;# Code for BST item removal here&lt;/span&gt;
+    &lt;span class="o"&gt;...&lt;/span&gt;
+    &lt;span class="c1"&gt;# Update balance factor&lt;/span&gt;
+    &lt;span class="n"&gt;update&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="c1"&gt;# Rebalance tree&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;balance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+</content><link href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AB%EF%BC%9ABalanced-Binary-Search-Trees%28BBST%29/" rel="alternate"/><published>2022-01-14T00:00:00+08:06</published></entry><entry><id>/archives/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/</id><title>翻转二叉树</title><updated>2022-01-14T09:08:46.694430+00:00</updated><author><name>walker</name><email>hi@imalan.cn</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;最近在找工作，所以这些算法梗又出现在了我的阅读视野里，比如经典的homebrew作者吐槽的翻转二叉树的问题。
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-652e430c381052f9.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;我本以为是根和叶节点倒转过来，原来是同层里面的左右翻转。&lt;/p&gt;&lt;p&gt;那么就是把左边换到右边，右边换到左边呗，可以考虑递归。我一直用一个原则理解递归，就是把命令传达下去（比如上面的左右互换，就完了），而不关心细节，只有最末端的那个大头兵才是真正做业务的人，写了一下，递归加业务也就4行代码：&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-0707b335ec49e5e5.png" /&gt;&lt;/figure&gt;&lt;p&gt;具体到这个问题，就是我把left和right互换就是了
+然后left和right你们做好自己的子级的互换，我不管，所以核心代码就一句
+&lt;code&gt;left, right = right, left&lt;/code&gt;，前面是为了稳妥，通过了之后，直接用python这种左右互换的特性，那就真是一句代码了：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;invertTree&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;TreeNode&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;TreeNode&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;
+    &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;right&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;left&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invertTree&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;left&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invertTree&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;right&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+</content><link href="/archives/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="alternate"/><published>2022-01-14T00:00:00+08:06</published></entry><entry><id>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%83%EF%BC%9ASuffix-Array%2C-Longest-Common-Prefix-%28LCP%29-array/</id><title>数据结构篇七：Suffix-Array,-Longest-Common-Prefix-(LCP)-array</title><updated>2022-01-14T09:08:46.694360+00:00</updated><author><name>walker</name><email>hi@imalan.cn</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
+&lt;h1&gt;Suffix Array&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;字符串的所有子字符串后缀组成数组&lt;/li&gt;
+&lt;li&gt;对子串根据首字母进行排序&lt;/li&gt;
+&lt;li&gt;排序后原有的index就被打乱了&lt;/li&gt;
+&lt;li&gt;这个乱序的indices就是&lt;code&gt;Suffix Array&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;做尾缀子串的时候通常是从单个字母开始越找越多，这就有了一个原生顺序，然后用首字母排序后，这个顺序就被打乱了&lt;/p&gt;&lt;p&gt;提供了一种&lt;code&gt;compressd representation&lt;/code&gt; of sorted suffixes而无需真的把这些子串存起来。&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;A space efficient alternative to a &lt;code&gt;suffix tree&lt;/code&gt;&lt;ul&gt;
+&lt;li&gt;a compressd version of a &lt;code&gt;trie&lt;/code&gt;?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;能做所有&lt;code&gt;suffix tree&lt;/code&gt;能做的事，并加添加了&lt;code&gt;Longest Common Prefix&lt;/code&gt;(LCP) array&lt;/p&gt;&lt;h1&gt;Longest Common Prefix (LCP) array&lt;/h1&gt;
+&lt;p&gt;继续上面的Suffix Array，字母排序后，我们一个个地用每一个元素同上一个元素比，标记相同前缀的字母个数，这个数字序列就是&lt;code&gt;LCP&lt;/code&gt;&lt;/p&gt;&lt;p&gt;比如adc, adfgadc, 前缀&lt;code&gt;ab&lt;/code&gt;是相同的，那就是2。&lt;/p&gt;&lt;p&gt;第一个元素没有“上一个”去比，所以LCP数组第1位永远是0？（是的，其实是undefined，但一般设0）&lt;/p&gt;&lt;p&gt;衡量的是相邻的suffix array元素的前缀间有多少个字母相同。&lt;/p&gt;&lt;p&gt;当前也可以和下一个元素比（这样最后一个元素的LCP肯定是0了，原理同上）&lt;/p&gt;&lt;h2&gt;Find unique substrings&lt;/h2&gt;
+&lt;p&gt;找到（或计数）一个数组的所有（不重复的）子元素。可以逐个substring遍历，$O(n^2)$，下面看看更快也更省空间的LCP方案。&lt;/p&gt;&lt;p&gt;找“AZAZA”的不重复子串:
+A,AZ,AZA,AZAZ,AZAZA,Z,ZA,ZAZ,ZAZA,&lt;code&gt;A,AZ,AZA,Z,AZ,A&lt;/code&gt;，把重复的标注了出来。
+LCP是这样的：
+LCP|Sorted Suffixes|
+-|-
+0|A
+1|AZA
+3|AZAZA
+0|ZA
+2|ZAZA&lt;/p&gt;&lt;p&gt;我们知道第一列指的是“重复个数”，也就是说，如果按我们手写的那样去遍历，至少有这么多重复的子串，重复的既是“个数”，也是“组合方式”。&lt;/p&gt;&lt;p&gt;所以如果我们只需要计数的话，把右边的数出来就知道有会有多少个重复的了，此例为6.&lt;/p&gt;&lt;p&gt;$$\tt unique\ count = \underbrace{\frac{n(n+1)}{2}}_{substr\ count} - \underbrace{\sum_{i=1}^n LCP[i]}_{duplicates}$$&lt;/p&gt;
+&lt;p&gt;这是LCP的应用之一，利用了LCP本身就是在数重复次数的特征。&lt;/p&gt;&lt;h2&gt;K common substring problem&lt;/h2&gt;
+&lt;p&gt;n个字符串，找出一个子串，它至少是k个字符串的子串，求最大子串。$2\leq k \leq n$&lt;/p&gt;&lt;p&gt;即如果有k=2，那么这个子串只需要是其中两个的子串就行了，如果k=n，那么就需要是每一个字符串的子串。&lt;/p&gt;&lt;p&gt;直接上图
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-1bb731fa712f79ec.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;图1演示k=3时，找到了&lt;code&gt;ca&lt;/code&gt;，即3个串里都有的是&lt;code&gt;ca&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;图2演示k=2时，找到了&lt;code&gt;bca&lt;/code&gt;，即&lt;code&gt;bca&lt;/code&gt;存在2个串里&lt;/li&gt;
+&lt;li&gt;图3演示的是用了size=4的滑窗才包含了3个字符串，以及最大匹配是&lt;code&gt;AG&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;步骤：&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;首先，用几个分隔符把字符串拼接起来&lt;ul&gt;
+&lt;li&gt;分隔符字符串里不会出现&lt;/li&gt;
+&lt;li&gt;分隔符的排序要小于所有字符&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;图中染色的依据是prefix是哪个串里的就染成什么颜色&lt;/li&gt;
+&lt;li&gt;开始滑窗比较&lt;ul&gt;
+&lt;li&gt;滑窗必须要能包含k种颜色&lt;/li&gt;
+&lt;li&gt;所以滑窗大小不是固定的，有时候相邻几个都是来自同一个字符串&lt;/li&gt;
+&lt;li&gt;滑窗里除0外的最小值，就是符合条件的最大共同长度，如图3，最大匹配长度是2&lt;/li&gt;
+&lt;li&gt;课程里动画演示滑窗其实不是用滑的，而是用的爬行&lt;ul&gt;
+&lt;li&gt;即下界往下，包含了所有颜色之后，上界也往下，这样蠕行前进，每一步判断滑窗里的内容&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;额外需要一个hash table来保存切片与颜色的映射关系。&lt;ul&gt;
+&lt;li&gt;如果是例子这么简单，我可以直接检查第一个出现的分隔符，是#就是绿色，出现$就是蓝色，%就是红色&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;核心就是：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;取子串是从后向前取的&lt;/li&gt;
+&lt;li&gt;但比较是从前向后比的&lt;/li&gt;
+&lt;li&gt;前面的元素可能来自任何一个子串（只要足够长）&lt;/li&gt;
+&lt;li&gt;从前面排序，客观上就把来自不同字符串的相同字母打头的子串给排到一起了&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这就是为什么在&lt;code&gt;Suffix&lt;/code&gt; Array的内容里面出现Longest Common &lt;code&gt;Prefix&lt;/code&gt;的内容的原因了.&lt;/p&gt;&lt;p&gt;聪明。&lt;/p&gt;&lt;h2&gt;Longest Repeated Substring (LRS)&lt;/h2&gt;
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-47d0018c79e7b2b6.png" /&gt;&lt;/figure&gt;&lt;p&gt;这个比暴力遍历要简单太多，直接找LCP最大值即可&lt;/p&gt;</content><link href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%83%EF%BC%9ASuffix-Array%2C-Longest-Common-Prefix-%28LCP%29-array/" rel="alternate"/><published>2022-01-14T00:00:00+08:06</published></entry><entry><id>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%9B%9B%EF%BC%9ABinary-Trees-and-Binary-Search-Trees-%28BST%29/</id><title>数据结构篇四：Binary-Trees-and-Binary-Search-Trees-(BST)</title><updated>2022-01-14T09:08:46.694307+00:00</updated><author><name>walker</name><email>hi@imalan.cn</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
+&lt;p&gt;Tree: 满足以下定义的&lt;code&gt;undirected graph&lt;/code&gt;(无向图)&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;An acyclic(非循环的) connected graph&lt;/li&gt;
+&lt;li&gt;N nodes and N-1 edges&lt;/li&gt;
+&lt;li&gt;有且只有一条路径连接&lt;em&gt;任意&lt;/em&gt;两个顶点&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;任意一个节点都可以被理解为root&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Binary Tree&lt;/strong&gt;
+拥有最多两个节点的Tree&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Binary Search Tree&lt;/strong&gt;
+服从以下特性的&lt;code&gt;binary tree&lt;/code&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;左子树的元素小于右子树&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;拥有重复元素是允许的，但多数情况下我们只研究不重复的元素&lt;/p&gt;&lt;p&gt;这是一个有效的BST吗？
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-eb53cdabc9882549.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;是的（对于单链下来的，几乎会直接就满足右边比左边大）&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Usage&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;BSTs&lt;ul&gt;
+&lt;li&gt;implementation of some map and set ADTs&lt;/li&gt;
+&lt;li&gt;red black trees&lt;/li&gt;
+&lt;li&gt;AVL trees&lt;/li&gt;
+&lt;li&gt;splay trees&lt;/li&gt;
+&lt;li&gt;...&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;binary heaps&lt;/li&gt;
+&lt;li&gt;syntax trees (by compiler and calculators)&lt;/li&gt;
+&lt;li&gt;Treap - a probabilistic DS (uses a randomized BST)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Complexity&lt;/strong&gt;
+增删查平均为O(log n)，但最差情况下都为O(n)，即线性时间&lt;/p&gt;&lt;h2&gt;Adding elements to a BST&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;第一个为root&lt;/li&gt;
+&lt;li&gt;每一个新数，比顶点大，放右边，比顶点小，放左边，顺序下行&lt;ul&gt;
+&lt;li&gt;不是从左到右摆满再做subtree&lt;/li&gt;
+&lt;li&gt;比如3,6,9, 会得一棵全部数字摆在右边的数，而不是顶3左6右9的三角形&lt;/li&gt;
+&lt;li&gt;这也是为什么极端情况下，时间复杂度是&lt;code&gt;O(n)&lt;/code&gt;，因为就是一条线到底&lt;/li&gt;
+&lt;li&gt;这也是&lt;code&gt;balanced binary search trees&lt;/code&gt;被引入的原因&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Removing elements from a BST&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;find&lt;ul&gt;
+&lt;li&gt;从root开始，小的走左右，大的走右边&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;replace (to maintain the BST invariant)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;找继任者的时候，如果删除元素没有子节点，只有左或右子节点，都很好办，但如果它有两个子节点，那么应该用哪个来接续呢？&lt;/p&gt;&lt;p&gt;原则仍然是要服从左边的比右边的小，所以你其实有两种选择：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;把左边最大的数选出来 或&lt;/li&gt;
+&lt;li&gt;把右边最小的数选出来&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因为它们的“来源”，肯定是能保证bst invariant的
+    * 这个数是要替换这个节点的，所以要比这个节点左边的数都大，及比右边所有的数都小，显然就是左边的最大数，或右边的最小数了。
+    * 只是把找到的元素复制过去后，多了的那个怎么办呢？&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;递归&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;新找到的元素当然要从原来的位置删除，这时又根据它是否叶节点，单子节点还是全节点，来反复进行前面的操作，最终总是可以退出的
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-fe4933def0919bb4.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-030c4c0da9747aa2.png" /&gt;&lt;/figure&gt;&lt;h2&gt;Tree Traversals&lt;/h2&gt;
+&lt;p&gt;(Preorder, Inorder, Postorder &amp;amp; Level order)
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-65233a21bae1e3f0.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;preorder，在遍历左侧元素的时候，每次已经先取到元素了（最顶层）&lt;/li&gt;
+&lt;li&gt;inorder里，遍历元素的时候，直到所有的left走完了，才取到第一个元素（最底层的）&lt;/li&gt;
+&lt;li&gt;postorder里，也是遍历到最底层，但是下一步就是取兄弟节点了&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-25f43a6703718c58.png" /&gt;&lt;/figure&gt;&lt;p&gt;inorder一个重要特征：它是从小到大排好序的！
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-269f5d45ae7e362f.png" /&gt;&lt;/figure&gt;
+preorder 和 postorder没什么特征，举一个post的例子观察下&lt;/p&gt;&lt;p&gt;而levelorder则是一&lt;code&gt;层&lt;/code&gt;一层地取的：&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-351d8f633be89c7e.png" /&gt;&lt;/figure&gt;
+这就是广度优先了（&lt;code&gt;Breadth First Searth&lt;/code&gt;)BFS&lt;p&gt;实现BFS&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;每处理一个parent的时候，把parent加到结果数组里&lt;/li&gt;
+&lt;li&gt;parent的子节点加到队列里&lt;/li&gt;
+&lt;li&gt;每次从队列里取出一个值加到结果数组里（步骤1）&lt;/li&gt;
+&lt;li&gt;该值的child加到队列里（步骤2）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;其实就是步骤1，2的重复，比如：
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-3c0e0102be2241f7.png" /&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[11], [6, 15] 处理第1个数11， 队列里多了两个元素6， 15
+[11, 6], [15, 3, 8] 从队列里取出6， 加入结果，它的子元素(3, 8)加入队列
+[11, 6, 15], [3, 8, 13, 17]
+[11, 6, 15, 3], [8, 13, 17, 1, 5]
+[11, 6, 15, 3, 8], [13, 17, 1, 5] 这一步，8没有子节点了，队列变短了
+[11, 6, 15, 3, 8, 13], [17, 1, 5, 12, 14]
+[11, 6, 15, 3, 8, 13, 17], [1, 5, 12, 14, 19] 17只有一个child
+[11, 6, 15, 3, 8, 13, 17, 1, 5, 12, 14, 19] 剩下的都没child了，全部拼进去
+&lt;/code&gt;&lt;/pre&gt;
+</content><link href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%9B%9B%EF%BC%9ABinary-Trees-and-Binary-Search-Trees-%28BST%29/" rel="alternate"/><published>2022-01-14T00:00:00+08:06</published></entry><entry><id>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%89%EF%BC%9AUnion-Find/</id><title>数据结构篇三：Union-Find</title><updated>2022-01-14T09:08:46.694257+00:00</updated><author><name>walker</name><email>hi@imalan.cn</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
+&lt;h1&gt;Union Find&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;keep track of elements in different sets&lt;/li&gt;
+&lt;li&gt;primary operations: &lt;code&gt;find&lt;/code&gt; and &lt;code&gt;union&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Usage&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;Kruskal's &lt;code&gt;minimum spanning tree&lt;/code&gt; algorithm&lt;/li&gt;
+&lt;li&gt;Grid percolation&lt;/li&gt;
+&lt;li&gt;Network connectivity&lt;/li&gt;
+&lt;li&gt;Least common ancestor in trees&lt;/li&gt;
+&lt;li&gt;Image processing&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Complexity&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;construction: O(n)&lt;/li&gt;
+&lt;li&gt;union/join/size/check connected/: $\alpha$(n) :接近常量时间&lt;/li&gt;
+&lt;li&gt;count: O(1)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;给定一个无向图，如果它任意两个顶点都联通并且是一棵树，那么我们就称之为生成树(&lt;code&gt;Spanning Tree&lt;/code&gt;)。如果是带权值的无向图，那么权值之和最小的生成树，我们就称之为最小生成树(MST, &lt;code&gt;Minimum Spanning Tree&lt;/code&gt;)。
+-&amp;gt; 用最少的边连接所有的顶点&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;sort edges by ascending edge weight&lt;/li&gt;
+&lt;li&gt;walk through edges&lt;ul&gt;
+&lt;li&gt;检查顶点，如果两个顶点都已经unified，就忽略&lt;ul&gt;
+&lt;li&gt;其实就是这两个点分别被别的边连过了&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;否则就添加edge，并且unify顶点&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;看到这里，首先想知道什么是unified，看实现，也就是在一个集合里(component)
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-a4f39c808d78f8ee.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;观察C_J，因为C和J已经在一个组里了，这条边就不需要了&lt;/li&gt;
+&lt;li&gt;观察D_E，一旦连上后，紫色和绿色其实就是一个组了&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-9fbda901cd75db13.png" /&gt;&lt;/figure&gt;&lt;ul&gt;
+&lt;li&gt;观察D_H，一旦连上后，紫色和红色也成为了一个组&lt;/li&gt;
+&lt;li&gt;连接B_C，所有顶点就全部连上了，并且只有一条紫线&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Find: 找元素在哪个component里，然后找到它的root
+Union: 找两个元素分别在哪个component里，然后找到它们的root，如果不是同一个root，就让其中一个成为另一个的parent&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;component的个数与root的个数一致&lt;/li&gt;
+&lt;li&gt;root的个数只减不增（因为通常只合并而不拆分）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;union find里&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;为每个元素分配一个索引，每个元素指向自己（即初始是n个root，n个component)&lt;/li&gt;
+&lt;li&gt;描述两两之间的关系，以任一元素为parent （谁来描述？）&lt;/li&gt;
+&lt;li&gt;有一个元素已经属于别的component里的，就将它也加到那个component里去&lt;ul&gt;
+&lt;li&gt;如果这个元素也是别的component里的顶点，就把整个组指向另一个组的root&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Path Compression Union Find&lt;/h2&gt;
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-3e8c2a735b8429ce.png" /&gt;&lt;/figure&gt;&lt;p&gt;由一层层找到root改为所有顶点直接指向顶点（星形结构），实现路径压缩&lt;/p&gt;&lt;p&gt;这段代码演示的是，查找p的root节点，在查找的过程中，顺便进行了路径压缩
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-0ba57aa842233469.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;合并的逻辑就是比较谁的元素多就把谁当作root，另一个component的root的parent设为元素多的组的root&lt;br /&gt;
+合并完成后组数就少了1
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-9821cff4bb811594.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;看代码，这一步里面并没有路径压缩，也就是小组里面的元素并没有&lt;strong&gt;进一步&lt;/strong&gt;再星状地指向新的parent，仍然指向的是老的组的root。&lt;/p&gt;</content><link href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%89%EF%BC%9AUnion-Find/" rel="alternate"/><published>2022-01-14T00:00:00+08:06</published></entry><entry><id>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/</id><title>数据结构篇九：Indexed-Priority-Queue</title><updated>2022-01-14T09:08:46.694201+00:00</updated><author><name>walker</name><email>hi@imalan.cn</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
+&lt;h1&gt;Indexed Priority Queue&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;a traditional priority queue variant&lt;/li&gt;
+&lt;li&gt;top node supports &lt;code&gt;quick update and deletions of key-value paris&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-e287109fa63ae3be.png" /&gt;&lt;/figure&gt;&lt;p&gt;观察这个图，数据是Anna, Bella...等等，&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;首先，为这一堆数据进行任意排序，得到一堆索引(0,1,...)&lt;/li&gt;
+&lt;li&gt;然后组一个binary heap，这样每个元素又获得一个索引，就是在heap上的序号（&lt;code&gt;Position Map&lt;/code&gt;）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;通过两组索引迅速找到key（就是人名）在堆中的位置，比如：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;George，ki = 6, pm = 1&lt;/li&gt;
+&lt;li&gt;kelly, ki = 10, pm = 10&lt;/li&gt;
+&lt;li&gt;...&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;现在能迅速找到数据源在堆上的位置了，那么如果反过来呢？比如堆上索引3是数据源的谁？&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;pm = 3 -&amp;gt; ki = 8 -&amp;gt; Issac &lt;strong&gt;BINGO!!!&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;但神奇的事发生了，有人希望复用ki这个自然数序列（闲的蛋疼？），于是多做了一个数组，把ki定义为heap上的索引，与元素原来的ki进行映射（&lt;code&gt;Inverse Map&lt;/code&gt;）:IM
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-ce50aadafe092a41.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;可以看到，这张图上张个ki到im的映射，与pm到ki的映射其实是一样的，也就是说重定义了一下，并没有引入新的东西。(pm表里找到3，对应的第一行ki表里就是8）&lt;/p&gt;&lt;p&gt;这个时候，我们直接用ki的3就能找到im的8，继而找到数据源的&lt;em&gt;Issac&lt;/em&gt;了。&lt;/p&gt;&lt;h2&gt;Insertion&lt;/h2&gt;
+&lt;p&gt;上面的数组，我们往里面添加第12条数据试试:&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;{ki:12, pm: 12, im:12, value:2}&lt;/li&gt;
+&lt;li&gt;显然违反了binary heap的 invariant，向上冒泡，也就是跟{ki:12, pm:5, im:2, value:4}的节点互换&lt;/li&gt;
+&lt;li&gt;此时，数据源肯定不会变，但是节点变了，pm的值就要交换（5， 12 互换）&lt;/li&gt;
+&lt;li&gt;pm变了，把pm当成ki的映射表im也要变（12， 11互换）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-1470af2b119b338e.png" /&gt;&lt;/figure&gt;&lt;p&gt;仔细观察图片，搞清楚第一行ki在两次互换时的身份就明白了&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;pm的互换是直观的，就是节点的位置&lt;/li&gt;
+&lt;li&gt;知道pm互换的依据后（2，5），在第一行找2，5对应的im值互换，因为在这个映射里，相当于pm与原ki的映射，pm此时是（2，5）了。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;同样逻辑继续冒泡就是了。&lt;/p&gt;&lt;p&gt;pseudo code:&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Inserts a value into the min indexed binary &lt;/span&gt;
+&lt;span class="c1"&gt;# heap. The key index must not already be in &lt;/span&gt;
+&lt;span class="c1"&gt;# the heap and the value must not be null. &lt;/span&gt;
+&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;insert&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;
+    &lt;span class="c1"&gt;# ‘sz’ is the current size of the heap&lt;/span&gt;
+    &lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sz&lt;/span&gt;  &lt;span class="c1"&gt;# 对应上图，意思就第一行索引器是ki&lt;/span&gt;
+    &lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;sz&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ki&lt;/span&gt;  &lt;span class="c1"&gt;# 对应上图，意思就是一行索引器是pm&lt;/span&gt;
+    &lt;span class="n"&gt;swim&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sz&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;     &lt;span class="c1"&gt;# 这里传进去的pm，即heap上节点的索引&lt;/span&gt;
+    &lt;span class="n"&gt;sz&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sz&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;  &lt;span class="c1"&gt;# 添加成功，size加1&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;理论上，添加元素到最后一个, sz和ki应该是相等的（因为都是尾巴上）&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Swims up node i (zero based) until heap &lt;/span&gt;
+&lt;span class="c1"&gt;# invariant is satisfied.&lt;/span&gt;
+&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;swim&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="c1"&gt;# 比父节点小就冒泡，注意入参i是节点上的索引，即pm&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;less&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="p"&gt;)):&lt;/span&gt; 
+        &lt;span class="n"&gt;swap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;  &lt;span class="c1"&gt;# 所以这里传的也是pm&lt;/span&gt;
+        &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;
+        &lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;
+
+&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;swap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; 
+    &lt;span class="c1"&gt;# 我们交换了节点，需要交换pm表里的值，和im表里的值&lt;/span&gt;
+    &lt;span class="c1"&gt;# 交换pm的值需要数据源的索引，即ki，而ki能从im表里用pm算出来&lt;/span&gt;
+    &lt;span class="c1"&gt;# 所以ki = im[pm] 这里i,j是pm，所以im[i]自然就是i对应ki&lt;/span&gt;
+    &lt;span class="c1"&gt;# pm[ki]当然就是pm[im[i]]了：&lt;/span&gt;
+    &lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;]],&lt;/span&gt; &lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;
+    &lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;less&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;还是那句话，理解清楚那三行映射表里第一行的动态含义，就不会有问题。&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;pm表要key index来索引&lt;/li&gt;
+&lt;li&gt;im表要node index来索引&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在操作时，只需要知道传入的是哪种索引，及时转化就行了。&lt;/p&gt;&lt;p&gt;有了索引，lookup的时间复杂度就是常量时间了：O(1)&lt;/p&gt;&lt;h2&gt;Polling and Removals&lt;/h2&gt;
+&lt;p&gt;没有什么特殊的,仍然是找到节点,与最后一个交换,移除最后一个节点,然后再看最后一个在堆里是上升还是下降.
+仍然是记得每一步交换,相应的几个索引值也需要随之交换.(polling 其实就是移除第1个节点,本质上还是 removal)
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-dd5ee538c3b4b8ae.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;pseudo code&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Deletes the node with the key index ki&lt;/span&gt;
+&lt;span class="c1"&gt;# in the heap. The key index ki must exist &lt;/span&gt;
+&lt;span class="c1"&gt;# and be present in the heap.&lt;/span&gt;
+&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;remove&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="c1"&gt;# 注意，这里送进来的是ki，而不是node index(pm)&lt;/span&gt;
+    &lt;span class="c1"&gt;# 说明业务需求一般是操作数据源，而不是操作堆&lt;/span&gt;
+    &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;    &lt;span class="c1"&gt;# 转成节点索引&lt;/span&gt;
+    &lt;span class="n"&gt;sz&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sz&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="c1"&gt;# 与最后一个元素交换，用size来做节点索引&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# 下面三个子函数送入的就是节点索引了&lt;/span&gt;
+    &lt;span class="n"&gt;swap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sz&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; 
+    &lt;span class="n"&gt;sink&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;swim&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;null&lt;/span&gt;  &lt;span class="c1"&gt;# 数据源对应的值置空，所以用ki&lt;/span&gt;
+    &lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;        &lt;span class="c1"&gt;# 数据源对应的节点置空，所以用ki&lt;/span&gt;
+    &lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;sz&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;        &lt;span class="c1"&gt;# 反查表用节点索引，此处size就是最后一个节点的索引&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;sink pseudo code&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Sinks the node at index i by swapping &lt;/span&gt;
+&lt;span class="c1"&gt;# itself with the smallest of the left &lt;/span&gt;
+&lt;span class="c1"&gt;# or the right child node.&lt;/span&gt;
+&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;sink&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="c1"&gt;# 这是堆操作,传入的索引也是节点索引,没问题&lt;/span&gt;
+    &lt;span class="c1"&gt;# sink是下沉，但不是跟BTS一样找左侧最大右则最小那种直接换&lt;/span&gt;
+    &lt;span class="c1"&gt;# 而是一层层往下换&lt;/span&gt;
+    &lt;span class="c1"&gt;# 即一次while只跟左右子级比大小，确实比子级还小的话，就替换，然后再跟下一层比较&lt;/span&gt;
+    &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="n"&gt;true&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="c1"&gt;# 利用二叉树特性算出子节点&lt;/span&gt;
+        &lt;span class="c1"&gt;# 默认左边最小，然后再看右边是不是更小&lt;/span&gt;
+        &lt;span class="n"&gt;left&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
+        &lt;span class="n"&gt;right&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;
+        &lt;span class="n"&gt;smallest&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;left&lt;/span&gt;
+    &lt;span class="c1"&gt;# 右边不越界，且小于左边，就设右边&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;right&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;sz&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;less&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;right&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;left&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;smallest&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;right&lt;/span&gt;
+    &lt;span class="c1"&gt;# 左侧都越界了，或已经比最小值大了，说明不需要下沉了&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;left&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;=&lt;/span&gt; &lt;span class="n"&gt;sz&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="n"&gt;less&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;smallest&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;break&lt;/span&gt;
+    &lt;span class="c1"&gt;# 只要没有break，说明能交换，然后把交换后的作为下一个循环的起点&lt;/span&gt;
+    &lt;span class="n"&gt;swap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;smallest&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;smallest&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Updates&lt;/h2&gt;
+&lt;p&gt;更新节点要简单的多:&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;用ki找到value，把值更新&lt;/li&gt;
+&lt;li&gt;然后根据新value实际情况上浮或下沉&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Updates the value of a key in the binary &lt;/span&gt;
+&lt;span class="c1"&gt;# heap. The key index must exist and the&lt;/span&gt;
+&lt;span class="c1"&gt;# value must not be null.&lt;/span&gt;
+&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;update&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;
+    &lt;span class="n"&gt;sink&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;swim&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Decrease and Increase key&lt;/h2&gt;
+&lt;p&gt;不好说，先看代码吧：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# For both these functions assume ki and value &lt;/span&gt;
+&lt;span class="c1"&gt;# are valid inputs and we are dealing with a&lt;/span&gt;
+&lt;span class="c1"&gt;# min indexed binary heap.&lt;/span&gt;
+&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;decreaseKey&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;less&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]):&lt;/span&gt; 
+        &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt; 
+        &lt;span class="n"&gt;swim&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+
+&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;increaseKey&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; 
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;less&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt; 
+        &lt;span class="n"&gt;sink&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;代码里是跟一个固定值比较，只要ki对应的值比它大(desreaseKey)或小(increaseKey），就用这个固定值来替换它，并且在value改变后根据实际情况上浮或下沉。&lt;/p&gt;</content><link href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/" rel="alternate"/><published>2022-01-14T00:00:00+08:06</published></entry><entry><id>/archives/HMM%E3%80%81NER%E3%80%81PoS%E3%80%81Viterbi%E7%AC%94%E8%AE%B0/</id><title>HMM、NER、PoS、Viterbi笔记</title><updated>2022-01-14T09:08:46.694120+00:00</updated><author><name>walker</name><email>hi@imalan.cn</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;开局一句话，隐马尔可夫，就是在“溯源”，即产生你这个现象的源头在哪。&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;比如你掷出的这个显示为6的骰子，是来自于六面体的还是四面体的，或是来自于普通的还是灌铅了的&lt;/li&gt;
+&lt;li&gt;又比如你一句话里的某一个词，它是处于开始位置还是中间位置，或是它是一个人名还是一个地点或是一个介词&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;任何一种表现形式，都有一个它的“原因”或“属性”。 现在正式开始，来自我能理解的网络资料，我的课程，以及一些思考&lt;/p&gt;&lt;p&gt;首先几个基础概念：&lt;/p&gt;&lt;h1&gt;命名实体识别(NER)&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;实体&lt;/strong&gt;：人物(PER)，地点(LOC)，等
+&lt;strong&gt;BIOES&lt;/strong&gt;: 开始(Begin)， 中间(Inner)， 结尾(E)，单个(Single)，其它(Other)&lt;/p&gt;&lt;p&gt;比如人名：张北京，就可以被识别为$\Rightarrow$ B-PER, I-PER, E-PER&lt;/p&gt;&lt;h1&gt;Part-of-Speech Tagging（词性标注）&lt;/h1&gt;
+&lt;p&gt;词性标注是为输入文本中的每个词性标注词分配词性标记的过程。标记算法的输入是一系列(标记化的)单词和标记集，输出是一系列标记，每个标记一个。&lt;/p&gt;&lt;p&gt;标记是一项消除歧义的任务;单词是模糊的，有不止一个可能的词性(歧义)，我们的目标是为这种情况找到正确的标签。例如，book可以是动词(book that flight)，也可以是名词(hand me that book)。That可以是一个限定词(Does that flight serve dinner)，也可以是一个补语连词(I thought that your flight was earlier)。后置标记的目标是解决这些分辨率模糊，为上下文选择合适的标记&lt;/p&gt;&lt;h1&gt;Sequence model&lt;/h1&gt;
+&lt;p&gt;Sequence models are central to NLP: they are models where there is some sort of &lt;code&gt;dependence through time&lt;/code&gt; between your inputs.&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;The classical example of a sequence model is the &lt;code&gt;Hidden Markov Model&lt;/code&gt; for &lt;strong&gt;part-of-speech tagging&lt;/strong&gt;. (词性标注)&lt;/li&gt;
+&lt;li&gt;Another example is the &lt;code&gt;conditional random field&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;HMM模型的典型应用是词性标注&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-e5cb79cffa5019d4.png" /&gt;&lt;/figure&gt;&lt;p&gt;词性标注语料库是统计标注算法的关键训练(和测试)集。三个主要的标注语料库始终用于训练和测试英语词性标注器。&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;布朗语料库是1961年在美国出版的500篇不同体裁的书面文本的100万单词样本。&lt;/li&gt;
+&lt;li&gt;《华尔街日报》语料库收录了1989年发表在《华尔街日报》上的100万个单词。&lt;/li&gt;
+&lt;li&gt;总机语料库由1990-1991年收集的200万字电话对话组成。语料库的创建是通过在文本上运行一个自动的词性标记，然后由人工注释器手工更正每个标记。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;HMM&lt;/h1&gt;
+&lt;p&gt;HMM是一个序列模型(&lt;code&gt;sequence model&lt;/code&gt;)。序列模型或序列分类器是一个模型，其工作是为序列中的每个单元分配一个标签或类，从而将一个观察序列(观察状态)映射到一个标签序列(隐藏状态)。HMM是一种概率序列模型：给定一个单位序列(单词、字母、语素、句子等等)，它计算可能的标签序列的概率分布，并选择最佳标签序列。&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;3个骰子，6面体，4面体，8面体(D6, D4, D8)&lt;/li&gt;
+&lt;li&gt;每次随机选出一个骰子投掷，得到一个数字&lt;/li&gt;
+&lt;li&gt;共十次，得到10个数字&lt;/li&gt;
+&lt;/ul&gt;
 &lt;ol&gt;
-&lt;li&gt;打开冰箱&lt;ol&gt;
-&lt;li&gt;右手放在冰箱门拉手上&lt;/li&gt;
-&lt;li&gt;左手扶住冰箱主体&lt;/li&gt;
-&lt;li&gt;右手向后用力&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;可见状态链&lt;/code&gt;：10次投掷得到10个数字(1,3,5...)$\Rightarrow$对应你看得的10个单词&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;隐含状态链&lt;/code&gt;：每一次投掷都有可能拿到三种骰子之一，(D6, D6, D4...) $\Rightarrow$对应为每个单词的词性&lt;/li&gt;
+&lt;li&gt;转换概率（&lt;code&gt;transition probability&lt;/code&gt;）：隐含状态之间的概率($\Rightarrow$对应为语法)：&lt;ul&gt;
+&lt;li&gt;每一次拿到某种骰子之后，下一次拿到三种骰子的概率（[1/3,1/3,1/3],...)&lt;/li&gt;
+&lt;li&gt;或者说主动决策下一次用哪个骰子的概率[a,b,c...] (相加为1)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可见状态之间没有转换概率&lt;/li&gt;
+&lt;li&gt;输出概率（&lt;code&gt;emission probability&lt;/code&gt;）：隐含状态和可见状态之间的概率，比如D4下1的概率为1/4，D6下为1/6 (表现概率，激发概率，多种翻译)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-2fd9773a2d64efcb.png" /&gt;&lt;/figure&gt;&lt;p&gt;应用HMM模型时候，往往是缺失了一部分信息的，&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;有时候你知道骰子有几种，每种骰子是什么，但是不知道掷出来的骰子序列；&lt;/li&gt;
+&lt;li&gt;有时候你只是看到了很多次掷骰子的结果，剩下的什么都不知道。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如何应用算法去估计这些缺失的信息，就成了一个很重要的问题，这也是HMM模型能做的几件事：&lt;/p&gt;&lt;h2&gt;Decoding&lt;/h2&gt;
+&lt;p&gt;解码的过程就是在给出一串序列和已知HMM模型的情况下，找到最可能的隐性状态序列。&lt;/p&gt;&lt;p&gt;比如结果是：1 6 3 5 2 7 3 5 2 4, 求最可能的骰子序列&lt;/p&gt;&lt;h3&gt;Viterbi algorithm&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;掷出1的最大概率是4面体： P1(D4) = P(1|D4) * P(D4) = 1/4 * 1/3&lt;/li&gt;
+&lt;li&gt;掷出6的最大概率是 P2(D6) = P(6|D6) * P(D6) = 1/6 * 1/3&lt;/li&gt;
+&lt;li&gt;连续1，6的概率就成了1的概率 * 2的概率 P2(D6) = P1(D4) * P2(D6) = 1/216&lt;/li&gt;
+&lt;li&gt;1,6,3 =&amp;gt; P3(D4) = P2(D6) * P(3|D4) * P(D4) = $\frac{1}{216} \cdot \frac{1}{3} \cdot \frac{1}{4}$&lt;/li&gt;
+&lt;li&gt;and so on&lt;/li&gt;
+&lt;li&gt;但这个例子忽略了转移概率，即P(D6|D4), P(D4|D6,D4)，或者说默认了转移概率就是1/3，即每次挑中三个骰子的机率均等。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Evaluation&lt;/h2&gt;
+&lt;p&gt;根据条件和序列结果求这一序列的概率是多少，比如三种骰子，投出了1，6，3的结果：&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-e2f2a555373b67f9.png" /&gt;&lt;/figure&gt;&lt;ul&gt;
+&lt;li&gt;第1列表示第一次投掷得到1的可能性和为0.18&lt;/li&gt;
+&lt;li&gt;第2列为1 6的的可能性和为0.05&lt;/li&gt;
+&lt;li&gt;第3列为1 6 3的可能性和为0.03&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果远低于或远高于这个概率，必然有做过手脚的骰子。&lt;/p&gt;&lt;h2&gt;转移概率的矩阵表示&lt;/h2&gt;
+&lt;p&gt;这次假定不同的骰子是用来作弊的，作弊者会根据情况来挑选骰子，这样转移概率就不可能是均等的了：&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-00fdee7b3f2b1889.png" /&gt;&lt;/figure&gt;&lt;p&gt;很幸运，这么复杂的概率转移图，竟然能用矩阵表达：
+$A = 
+\begin{bmatrix}
+0.15 &amp;amp; 0.45 &amp;amp; 0.4 \
+0.25 &amp;amp; 0.35 &amp;amp; 0.4 \
+0.10 &amp;amp; 0.55 &amp;amp; 0.35
+\end{bmatrix}
+$&lt;/p&gt;&lt;p&gt;既然是3行3列，显然$A_{ij}$就是从i切换到j的概率，比如$A_{12}$ 就应该是这个人把骰子从作弊骰子1切换到2的概率。&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-1ccbc3eca7a3c79b.png" /&gt;&lt;/figure&gt;&lt;p&gt;相应地，发射概率（即不同骰子摇出的点数的概率）也能表示为矩阵：
+$B = 
+\begin{bmatrix}
+0.16 &amp;amp; 0.16 &amp;amp; 0.16 &amp;amp; 0.16 &amp;amp; 0.16 &amp;amp; 0.16 \
+0.02 &amp;amp; 0.02 &amp;amp; 0.02 &amp;amp; 0.02 &amp;amp; 0.02 &amp;amp; 0.90 \
+0.40 &amp;amp; 0.20 &amp;amp; 0.25 &amp;amp; 0.05 &amp;amp; 0.05 &amp;amp; 0.05 \
+\end{bmatrix}
+$&lt;/p&gt;&lt;p&gt;现在有了转移概率和发射概率，我们再来看看前面的掷出1，6，3的骰子的概率：
+骰子设为D1 D2 D3, 每一轮的可能性为P1 P2 P3, 则P = P3D1 + P3D2 + P3D3 即第3轮时3种骰子能投出3的概率和&lt;/p&gt;&lt;p&gt;我来推导一下P3D1怎么来的，上面的表格是我从别人的博客里复制的，这里就不做一个一模一样的图了，我们一步步来吧：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;第一次投掷每个骰子的概率应该是隐含了各为1/3吧？(这个好像叫&amp;quot;&lt;code&gt;初始隐状态&lt;/code&gt;&amp;quot; $\pi$)&lt;/li&gt;
+&lt;li&gt;P1D1 = 0.16 * 0.33, 即1/3概率拿到D1，0.16概率投出1，同理：&lt;ul&gt;
+&lt;li&gt;P1D2 = 0.02 * 0.33&lt;/li&gt;
+&lt;li&gt;P1D3 = 0.40 * 0.33&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;P2D1 =&lt;ul&gt;
+&lt;li&gt;P1D1 * $A_{00}$ * $B_{05}$ = P1D1 * 0.15 * 0.16 即P1D1前提下，乘上D1换到D1的概率，再乘上D1选出6的概率&lt;/li&gt;
+&lt;li&gt;$+$&lt;/li&gt;
+&lt;li&gt;P1D2 * $A_{10}$ * $B_{05}$ = P1D1 * 0.25 * 0.16 即P1D2前提下，乘上D2换到D1的概率，再乘上D1选出6的概率&lt;/li&gt;
+&lt;li&gt;$+$&lt;/li&gt;
+&lt;li&gt;P1D3 * $A_{20}$ * $B_{05}$ = P1D1 * 0.10 * 0.16 即P1D3前提下，乘上D3换到D1的概率，再乘上D1选出6的概率&lt;/li&gt;
+&lt;li&gt;以此类推得到P2D2, P2D3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;P3D2 = （&lt;em&gt;D1的概率太平均，这次换个D2来演示&lt;/em&gt;）&lt;ul&gt;
+&lt;li&gt;P2D1 * $A_{01}$ * $B_{12}$ = P2D1 * 0.45 * 0.02 即P2D1前提下，乘上D1换到D2的概率，再乘上D2选出3的概率&lt;/li&gt;
+&lt;li&gt;$+$&lt;/li&gt;
+&lt;li&gt;P2D2 * $A_{11}$ * $B_{12}$ = P2D1 * 0.35 * 0.02 即P2D2前提下，乘上D2换到D2的概率，再乘上D2选出3的概率&lt;/li&gt;
+&lt;li&gt;$+$&lt;/li&gt;
+&lt;li&gt;P2D3 * $A_{21}$ * $B_{12}$ = P2D1 * 0.35 * 0.02 即P2D3前提下，乘上D3换到D2的概率，再乘上D2选出3的概率&lt;/li&gt;
+&lt;li&gt;以此类推得到P3D1, P3D2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;P = P3D1 + P3D2 + P3D3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$$
+\sum_{r\in R}\prod_t^TP(v(t)|w_r(t)) | w_r(t-1))
+$$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;v: visible 可见序列&lt;/li&gt;
+&lt;li&gt;w: 隐性状态序列&lt;/li&gt;
+&lt;li&gt;R: 所有隐状态的可能性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;t-1隐状态前提下得到t的概率（转移概率）如D2换到D3的概率&lt;/li&gt;
+&lt;li&gt;上一概率前提下得到v(t)的概率，如D3扔出1的概率&lt;/li&gt;
+&lt;li&gt;一种隐状态下出序列的结果为累乘&lt;/li&gt;
+&lt;li&gt;所有隐状态下出该序列的结果为3的累加&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;简单来说：&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;可见序列$v(t)$的概率依赖当前$t$下的隐状态（比如是不是作弊了的骰子）$w_r(t)$&lt;ul&gt;
+&lt;li&gt;得到：$P(v(t)\ \color{red}|\ w_r(t))$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;当前隐状态$w_r(t)$又有两个特征:&lt;ol&gt;
+&lt;li&gt;由$w_r(t-1)$转换而来的: $P(v(t)|w_r(t))\color{red}{|}w_r(t-1)$&lt;/li&gt;
+&lt;li&gt;$T$是链式的，概率累乘： $\color{red}{\prod_t^T}P(v(t)|w_r(t)) | w_r(t-1))$&lt;/li&gt;
 &lt;/ol&gt;
 &lt;/li&gt;
-&lt;li&gt;把大象放进冰箱&lt;/li&gt;
-&lt;li&gt;关上冰箱&lt;/li&gt;
+&lt;li&gt;最后一步时的隐状态显然是几种之一，累加起来就是所有可能性：&lt;ul&gt;
+&lt;li&gt;$\color{red}{\sum_{r\in R}}\prod_t^TP(v(t)|w_r(t)) | w_r(t-1))$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h2&gt;Horizontal rule&lt;/h2&gt;
-&lt;hr /&gt;
-&lt;h2&gt;Math&lt;/h2&gt;
-&lt;p&gt;Inline Math: $m\times n$, math block:&lt;/p&gt;&lt;p&gt;$$C_{m\times k}=A_{m\times n}\cdot B_{n\times k}$$&lt;/p&gt;
-&lt;h2&gt;Figures&lt;/h2&gt;
-&lt;h3&gt;Single figure&lt;/h3&gt;
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="./assets/2934349b033b5bb5a19efc7233d3d539b700bcf5.jpg" /&gt;&lt;figcaption&gt;Princess Mononoke&lt;/figcaption&gt;&lt;/figure&gt;&lt;h3&gt;Photoset&lt;/h3&gt;
-&lt;div class="photoset"&gt;&lt;div class="photos"&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="./assets/IMG_0073.jpeg" /&gt;&lt;/figure&gt; &lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="./assets/1463017562.jpg" /&gt;&lt;/figure&gt; &lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="./assets/IMG_0053.jpeg" /&gt;&lt;/figure&gt;&lt;/div&gt;&lt;div class="photos"&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="./assets/IMG_0039.jpeg" /&gt;&lt;/figure&gt; &lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="./assets/IMG_0051.jpeg" /&gt;&lt;/figure&gt; &lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="./assets/IMG_0005.jpeg" /&gt;&lt;/figure&gt;&lt;/div&gt;&lt;/div&gt;&lt;h2&gt;Table&lt;/h2&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-  &lt;th&gt;header&lt;/th&gt;
-  &lt;th&gt;header&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-  &lt;td&gt;cell 1&lt;/td&gt;
-  &lt;td&gt;cell 2&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-  &lt;td&gt;cell 3&lt;/td&gt;
-  &lt;td&gt;cell 4&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2&gt;Link Card&lt;/h2&gt;
-&lt;div class="links"&gt;
-&lt;a style="display:block" target="_blank" href="https://www.imalan.cn" class="board-item"&gt;             &lt;div class="board-thumb"&gt;&lt;img src="https://secure.gravatar.com/avatar/1741a6eef5c824899e347e4afcbaa75d?s=200&amp;r=G&amp;d="&gt;&lt;/div&gt;             &lt;div class="board-title"&gt;AlanDecode&lt;/div&gt;&lt;/a&gt;
-&lt;/div&gt;&lt;section class="footnotes"&gt;
+&lt;h1&gt;应用&lt;/h1&gt;
 &lt;ol&gt;
-&lt;li id="fn-1"&gt;&lt;p&gt;Home page for AlanDecode&lt;a href="#fnref-1" class="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;初始概率&lt;/li&gt;
 &lt;/ol&gt;
-&lt;/section&gt;
-</content><link href="/archives/typography/" rel="alternate"/><published>2018-11-09T23:41:00+08:06</published></entry><entry><id>/archives/overview/</id><title>Overview of Maverick</title><updated>2022-01-14T05:05:23.941236+00:00</updated><author><name>AlanDecode</name><email>hi@imalan.cn</email><uri>https://wzy.one</uri></author><content>&lt;h2&gt;Overview&lt;/h2&gt;
-&lt;p&gt;Maverick is a static blog generator built with python. Like Hexo and Jekyll, it takes Markdown(&lt;code&gt;.md&lt;/code&gt;) files as input, and output beautifully formated and well structured website pages(&lt;code&gt;.html&lt;/code&gt;). It has a lot built-in useful features(feed, search, sitemap, etc.), with extended Markdown syntax and enhanced image processing pipeline.&lt;/p&gt;&lt;p&gt;If you are tired of intricate plugins and complicated configurations, just give Maverick a try. You focus on writing, let Maverick take care of the rest.&lt;/p&gt;&lt;p&gt;Pull requests are surely welcome. If you have any questions or suggestions, please head to &lt;a href="https://github.com/AlanDecode/Maverick/issues"&gt;issue area&lt;/a&gt; and leave us a message. Before that, let's finish this document.&lt;/p&gt;&lt;h2&gt;Usage&lt;/h2&gt;
-&lt;p&gt;Maverick is build with modern Python, currently at least &lt;strong&gt;Python 3.5&lt;/strong&gt; is required, make sure you have it installed on your machine.&lt;/p&gt;&lt;h3&gt;Install&lt;/h3&gt;
-&lt;p&gt;Clone this repository:&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git clone https://github.com/AlanDecode/Maverick.git ./Maveric &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;cd&lt;/span&gt; ./Maveric
+&lt;p&gt;以&lt;code&gt;BMES&lt;/code&gt;为例（参考NER），把其认为是隐状态，然后认为每个词（里的字）是由隐状态产生的。&lt;/p&gt;&lt;p&gt;即&lt;code&gt;B&lt;/code&gt;对应的字可能有“&lt;code&gt;中&lt;/code&gt;”，“&lt;code&gt;国&lt;/code&gt;”，等等，能作为词语打头的字都可能由隐状态&lt;code&gt;B&lt;/code&gt;产生，其它状态依次类推。&lt;/p&gt;&lt;p&gt;就像我们三种骰子的初始概率，完全取决于每种骰子占总数的多少一样，HHM应用到语言模型里，初始概率就是先把文字全部用&lt;code&gt;BMES&lt;/code&gt;表示，然后分别数出个数，与总数做个对比。（此时已经可以判断出&lt;code&gt;M&lt;/code&gt;和&lt;code&gt;E&lt;/code&gt;的概率只能是0了。&lt;/p&gt;&lt;ol start="2"&gt;
+&lt;li&gt;转移概率&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;应该是4个循环吧，每次把当前状态后面跟上四个状态的情况都数出来，就是一个隐状态到其它四个状态的转移概率，四行拼到一起就是一个转移概率的矩阵，类似上面的三种骰子互相切换的矩阵。&lt;/p&gt;&lt;p&gt;也可以用字典，比如 BE BS BB BM等共16个键，两两遍历整个字符串完后，16个count就出来了，group后就能得到概率了。&lt;/p&gt;&lt;ol start="3"&gt;
+&lt;li&gt;观测概率（发射概率）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这个就是每一个隐状态下对应不同表面文字的概率了，比如：{s:{&amp;quot;周&amp;quot;: 0.3357, &amp;quot;爬&amp;quot;:0.00003}...}&lt;/p&gt;&lt;p&gt;要知道，三种概率里面是有很多0的，意思就是在现有的语法体系里面不可能出现的场景，比如第一个字不可能是M和E，B后面不可能跟S，B，而M后面不可能跟B，S，以及S后面不可能跟M，E等，再比如假如哪个字永远不可能是第一个字，那么它的观测概率在S里面就永远是0，等等。&lt;/p&gt;&lt;p&gt;这里要计算的话，因为隐状态是用文字推断出来的，所以这个映射关系还在，那么整理一下两个数组就能把每个隐状态能对应的文字全部映射上了。&lt;/p&gt;&lt;hr /&gt;
+&lt;p&gt;以下是我课程里的笔记，理解了上面的内容，理解下面是没有任何障碍的。&lt;/p&gt;&lt;h1&gt;viterbi in NLP&lt;/h1&gt;
+&lt;p&gt;$\overbrace{
+  \enclose{circle}{0} 
+  \xrightarrow[农]{2.5}
+  \enclose{circle}{1} 
+  \xrightarrow[产]{4.0}
+  \enclose{circle}{2} 
+}^{1.4}
+\xrightarrow[物]{2.3}
+\enclose{circle}{3}$&lt;/p&gt;&lt;p&gt;$\enclose{circle}{0} 
+\xrightarrow[农]{2.5}
+\underbrace{
+  \enclose{circle}{1} 
+  \xrightarrow[产]{4.0}
+  \enclose{circle}{2} 
+  \xrightarrow[物]{2.3}
+  \enclose{circle}{3}
+}_{2.1}$&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;node: $\enclose{circle}{2}$ ，圆圈，就是位置索引&lt;/li&gt;
+&lt;li&gt;edge: 词， 箭头，很好理解：string[0,1] = '农'&lt;/li&gt;
+&lt;li&gt;Each edge weight is a &lt;code&gt;negative log probality&lt;/code&gt;&lt;ul&gt;
+&lt;li&gt;-log(P(农)) = 2.5&lt;/li&gt;
+&lt;li&gt;-log(P(产)) = 4.0&lt;/li&gt;
+&lt;li&gt;-log(P(农产)) = 1.4&lt;/li&gt;
+&lt;li&gt;-log(P(产物)) = 2.1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Each path is a segmentation for the sentence&lt;/li&gt;
+&lt;li&gt;Each path weight is a sentence &lt;code&gt;unigram&lt;/code&gt; negative log probability&lt;ul&gt;
+&lt;li&gt;-log(P(农产)) + -log(P(物)) = 1.4 + 2.3 = 3.7&lt;/li&gt;
+&lt;li&gt;农 + 产 + 物 = 2.5 + 4.0 + 2.3 = 8.8&lt;/li&gt;
+&lt;li&gt;农 + 产物 = 2.5 + 2.1 = 4.6&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;two step&lt;/h2&gt;
+&lt;p&gt;1.前向，从左往右，找到&lt;strong&gt;最佳路径&lt;/strong&gt;的分数
+2.后向，从右往左，创建一条最佳路径&lt;/p&gt;&lt;h3&gt;forward algorithm&lt;/h3&gt;
+&lt;p&gt;pseudo code&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;best_score&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;each&lt;/span&gt; &lt;span class="n"&gt;node&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;graph&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ascending&lt;/span&gt; &lt;span class="n"&gt;order&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="n"&gt;best_score&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="err"&gt;∞&lt;/span&gt;
+  &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;each&lt;/span&gt; &lt;span class="n"&gt;incoming&lt;/span&gt; &lt;span class="n"&gt;edge&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;node&lt;/span&gt;
+    &lt;span class="n"&gt;score&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;best_score&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;edgeprev_node&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;edge&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;score&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;score&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;best_score&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+      &lt;span class="n"&gt;best_score&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;score&lt;/span&gt;
+      &lt;span class="n"&gt;best_edge&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;edge&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Install all dependencies:&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip install -r requirements.txt
+&lt;p&gt;example:
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-5696be9edbfe968d.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;初始节点打分0，其它节点打分为$\infty$&lt;/li&gt;
+&lt;li&gt;每个节点打分由其(&lt;code&gt;incoming edge&lt;/code&gt;)(即来源箭头)和来源节点的打分构成&lt;/li&gt;
+&lt;li&gt;如果有多个来源，则计算出该来源的得分，与该节点当前的得分做对比，取得分低的那个&lt;/li&gt;
+&lt;li&gt;把该节点的分值和来源edge存到该节点上（edge就是词）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;简单来说，还是和之前的骰子一样，每一次算出到当前节点的最低分数的路径。&lt;/li&gt;
+&lt;li&gt;上图中，我们就把e1, e2, e5选出来了，这个过程中，删除了e3, e4这几条路径&lt;/li&gt;
+&lt;li&gt;best_score=(0.0, 2.5, 1.4, 3.7), best_edge = (NULL, e1, e2, e5)&lt;/li&gt;
+&lt;li&gt;用字典来把Node映射上去：{0:(0.0, NULL), 1:(2.5, e1), 2:(1.4, e2), 3:(3.7, e5)}&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;backward algorithm&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;best_path&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[]&lt;/span&gt;
+&lt;span class="n"&gt;next_edge&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;best_edge&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;best_edge&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;length&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="n"&gt;next_edge&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="n"&gt;NULL&lt;/span&gt;
+  &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="n"&gt;next_edge&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;best_path&lt;/span&gt;
+  &lt;span class="n"&gt;next_edge&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;best_edge&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;next_edge&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;prev_node&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;reverse&lt;/span&gt; &lt;span class="n"&gt;best&lt;/span&gt; &lt;span class="n"&gt;path&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;If error occurs, please verify your Python and pip version. Then edit the default configuration file:&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;vi ./config.py
-&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;For now let's use the default settings. Type this command in your terminal:&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;python ./build.py
-&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;...and a sample static site is generated in &lt;code&gt;test_dist&lt;/code&gt; folder! You can then upload them to GitHub Pages or any other server.&lt;/p&gt;&lt;h3&gt;Generate your own site&lt;/h3&gt;
-&lt;p&gt;By default, Maverick searches all &lt;code&gt;.md&lt;/code&gt; files recursively under &lt;code&gt;test_src&lt;/code&gt; folder, so put your Markdown files in it and run &lt;code&gt;python ./build.py&lt;/code&gt; then everything you need will be in &lt;code&gt;test_dist&lt;/code&gt; folder. Maverick uses so-called &lt;code&gt;YAML frontmatter&lt;/code&gt; to get meta data of your articles, if you have tried Hexo or Jekyll, you should be familiar with it; if you don't, let's look into it now.&lt;/p&gt;&lt;p&gt;......&lt;/p&gt;&lt;p&gt;Read the full documentation &lt;a href="https://github.com/AlanDecode/Maverick"&gt;here&lt;/a&gt;.&lt;/p&gt;&lt;h2&gt;License&lt;/h2&gt;
-&lt;p&gt;MIT © &lt;a href="https://github.com/AlanDecode"&gt;AlanDecode&lt;/a&gt;.&lt;/p&gt;</content><link href="/archives/overview/" rel="alternate"/><published>2019-12-11T22:23:00+08:06</published></entry></feed>
+&lt;p&gt;举例：
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-44847f9d5d3afdad.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;从图片可知，&lt;code&gt;path&lt;/code&gt;就是&lt;code&gt;edge&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;初始path是空，[]&lt;/li&gt;
+&lt;li&gt;从&lt;code&gt;forward&lt;/code&gt;的结果字典里找到node 3的best_edge，就是e5 [e5]&lt;/li&gt;
+&lt;li&gt;e5的来源的是node 2&lt;/li&gt;
+&lt;li&gt;从字典里找到2的best_edge，是e2 [e5, e2]&lt;/li&gt;
+&lt;li&gt;e2的来源是node 0&lt;/li&gt;
+&lt;li&gt;0的best_edge是NULL，结束递归&lt;/li&gt;
+&lt;li&gt;reverse: [e2, e5]&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-70f72bf0f000be99.png" /&gt;&lt;/figure&gt;&lt;p&gt;这个很好理解&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;0到农，到农产，到农产物的概率，表示为0.0+ -log(p(农/农产/农产物))&lt;/li&gt;
+&lt;li&gt;在农的前提下，就有农到产，和农到产物：best(1) + -log(P(产/产物))&lt;/li&gt;
+&lt;li&gt;在产的前提下，就只有best(2) + -log(P(物))了&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;应用到NLP：&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-3ae73c172b3b89c1.png" /&gt;&lt;/figure&gt;&lt;p&gt;这里就是把node, egde具体了一下：&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;多包了一层for-each，意思是前面的代码是处理一行的&lt;/li&gt;
+&lt;li&gt;node对应是单词结尾(word_end)，其实就是一个index，前面说过了&lt;/li&gt;
+&lt;li&gt;edge对应是单词(word)，前面也说过了，即&lt;code&gt;string[5,7]&lt;/code&gt;的意思&lt;/li&gt;
+&lt;li&gt;score由uni-gram来计算&lt;/li&gt;
+&lt;li&gt;计算上，就是找到以基准字当作单词结尾，然后前面的字跟它拼起来的所有可能性，找最低分：&lt;ul&gt;
+&lt;li&gt;比如abcdefg, 如果当前是e，那么分别比较：abced, bcde, cde, de&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;接上例，输出结果应该这么解读：&lt;ul&gt;
+&lt;li&gt;以b为结尾的单词，最有可能的是xxx, 它的得分是，它的索引是，&lt;/li&gt;
+&lt;li&gt;以c为结尾的单词，最有可能是bc或是abc，它的得分是，bc/abc的索引是(1,2)，这样&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-c77fa980960418be.png" /&gt;&lt;/figure&gt;&lt;ol&gt;
+&lt;li&gt;显然这里已经知道edge不知道是一个词，而且是一个词的首尾边界&lt;/li&gt;
+&lt;li&gt;也知道存到best_edges里面的其实就是词的位置索引&lt;/li&gt;
+&lt;li&gt;反向的时候，从最后一个索引找到得分最低的词，再从这个单词向前找，一直找到&lt;ul&gt;
+&lt;li&gt;所以next_edge[0]其实就是当前单词词首，[1]就是词尾&lt;/li&gt;
+&lt;li&gt;所以把当前单词存进去后，向前搜索就要以next_edge[0]为字典，找对应的best_edge&lt;/li&gt;
+&lt;li&gt;再从best_edge里面解析出最合适的单词的首尾索引，存到结果数组里&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</content><link href="/archives/HMM%E3%80%81NER%E3%80%81PoS%E3%80%81Viterbi%E7%AC%94%E8%AE%B0/" rel="alternate"/><published>2022-06-14T00:00:00+08:06</published></entry></feed>

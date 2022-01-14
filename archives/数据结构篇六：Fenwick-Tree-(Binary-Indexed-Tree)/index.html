@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>数据结构篇六：Fenwick-Tree-(Binary-Indexed-Tree) - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记" />
+<meta property="og:title" content="数据结构篇六：Fenwick-Tree-(Binary-Indexed-Tree) - Maverick" />
+<meta property="og:description" content="这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AD%EF%BC%9AFenwick-Tree-%28Binary-Indexed-Tree%29/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="数据结构篇六：Fenwick-Tree-(Binary-Indexed-Tree) - Maverick" />
+<meta name="twitter:description" content="这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">数据结构篇六：Fenwick-Tree-(Binary-Indexed-Tree)</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/CS/">
+                    CS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AD%EF%BC%9AFenwick-Tree-%28Binary-Indexed-Tree%29/" 
+                    data-flag-title="数据结构篇六：Fenwick-Tree-(Binary-Indexed-Tree)"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><hr />
+<h1>Fenwick Tree (Binary Indexed Tree)</h1>
+<p>树状数组</p><p><strong>Motivation</strong></p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-cb667ca0d52fbf56.png" /></figure><ul>
+<li>计算数组里任意连续片段的和，最直观的方案当然是累加：线性时间O(n)</li>
+<li>但是如果你有一个记录了每个节点到当前位置时的累加和的数组（<code>prefix sum</code>），立刻变成了常量时间</li>
+<li>问题是更新数据变成了线性时间（后续所有的求和都要改一遍）<ul>
+<li>great for <code>static arrays</code></li>
+</ul>
+</li>
+</ul>
+<p>所以引入了:
+<code>Fenwick Tree</code> is an efficient data structure for performing range/point queries/updates.(即在上面的动机上，还考虑了update的效率)</p><p>前面的例子在update时效率不高，所以Fenwick Tree用了一种聪明的方式，不是累加所有的值，而是分段累加，具体实现看下图：
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-2917913fd143f6b8.png" /></figure></p><ul>
+<li>把索引值用二进制表示</li>
+<li><code>LSB</code>的解释看图，实际应用上，就是看从低位到高位第一个1的右边有几个0，假设为<code>n</code>个</li>
+<li>那么该cell上存的值就是前$2^n$个cell的值的和</li>
+</ul>
+<p>图中例子是索引10，不直观，我们换成12， 二进制是1100， 最右边有2个零，那么它保存它$2^2=4$个位置的和。
+也就是说，如果你要求和，如果用了cell 12位置的值的话，至少可以省掉3次累加。</p><p>当然，它还有更牛逼的特性，结合range query一起来看吧：
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-f7a5660ce53dd6d3.png" /></figure></p><p>蓝线表示的是当然位置上累加了前几个位置的值，已经很有规律了</p><p>假如计算前11个值的和，过程是：</p><ol>
+<li>11的索引是1011，右边没有0，所以当前的和为A[11]</li>
+<li>根据$2^0$来移位，来到10。<ul>
+<li>右边一个0，所以它管$2^1$个presum，目前A[11] + A[10]</li>
+<li>下一个索引自然要减2了，来到8</li>
+</ul>
+</li>
+<li>8是1000，3个零，所以它存了$2^3=8$个值的和，那就是全部了</li>
+</ol>
+<p>所以：sum = A[11] + A[10] + A[8]</p><ul>
+<li>心算sum(0,7)巩固一下</li>
+<li>用sum(11,15)演示子区间，其实就是多减1次，至于是减到10还是减到11，看描述，比如这里11是要参与计算的，那就是把前10个减掉就行了。</li>
+</ul>
+<p>上面演示的都是<code>worst</code>的情况，即首位为1，除了这种情况，别的位都至少存了前$2^n$个元素的值（比如16，直接得到16个元素的和）</p><blockquote>
+<p>这里都没讲你是怎么做这个tree的，而是怎么使用它。先弄清楚使用场景再谈构建。</p></blockquote>
+<h2>Point Update</h2>
+<p>复习一下<code>LSB</code>，虽然可以直接数最右边的零的个数，但数学其实是：</p><ul>
+<li>13 = 1101 ($2^3 + 2^2 + 2^0 \Rightarrow 10^3 + 10^2 + 10^0 $)</li>
+<li>减去最右边的1和0 =&gt; 1100 （$2^3+2^2=12$) 所以下一个数是12</li>
+<li>减去最右边的1和0 =&gt; 1000 就是8了</li>
+<li>再减就是0了</li>
+</ul>
+<p>而按$2^n$来计算个数的话就是这样的：</p><ul>
+<li>13 = 1101, 没有0，就是移1位，变成12</li>
+<li>12 = 1100， 2个0， 就是移4位，变成8</li>
+<li>8 = 1000， 3个0， 移8位，变成0</li>
+</ul>
+<p>现在来讲update，前面知道，update会级联影响到所以把该cell考虑进去的节点，因此，它需要反着往上找（极端情况当然是找到最后一个元素，通常这个元素就是整个数组的值，所以任何元素的更改，肯定都会影响到它）</p><p>前面找下一个节点用的是减法，现在就要用加法了，比如我更新了cell 9, 用以上两种任意一种方法来计算：</p><ul>
+<li>$9 = 2^3 + 1 \Rightarrow 10^3 + 1 = 1001, +1 = 1010 = 10$</li>
+<li>1010 + 10 = 1100 = 12</li>
+<li>1100 + 100 = 10000 = 16 到顶了，</li>
+</ul>
+<p>所以需要把9, 10, 12, 16分别应用这个point的更新，也就是说只有这几个cell把9计算进去了。</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-5c481cd5c7dfd9bc.png" /></figure><p>当然，可以看一下左边的示意图，更直观</p><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span> 
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">:</span>
+        <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span> 
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">LSB</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+<p>代码非常简单，就是不断通过LSB找下一个位置去更新就行了。</p><h2>Construction</h2>
+<p>现在来讲构建</p><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">construct</span><span class="p">(</span><span class="n">values</span><span class="p">):</span> <span class="n">N</span> <span class="o">:=</span> <span class="n">length</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+    <span class="c1"># Clone the values array since we’re # doing in place operations</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">deepCopy</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="o">...</span> <span class="n">N</span><span class="p">:</span>
+        <span class="n">j</span> <span class="o">:=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">LSB</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">:</span>
+            <span class="n">tree</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">tree</span>
+</pre></div>
+<p>几乎就一句话，就是把元素按原数据摆好（即不加别的节点）后，每次找到当前元素影响的上一级（不再向上冒泡）</p><ul>
+<li>比如1，把1算进去的有2，虽然上面还有4， 8， 16，但只把1更新到2</li>
+<li>到2的上一级是4 (2 + lsb(2) = 4), 把节点2的现值（已经加了节点1）加到4去</li>
+<li>所以核心算法始终只有两个变量，i，j代表最近的包含关系</li>
+</ul>
+<p><strong>一些算法换成位运算</strong></p><ul>
+<li>lsb(i): <code>i &amp; -i</code></li>
+<li>i -= lsb(i) =&gt; <code>i &amp;= ~lsb(i)</code></li>
+</ul>
+
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%8C%EF%BC%9APriority-Queues-%28PQs%29-with-an-interlude-on-Heaps/">数据结构篇二：Priority-Queues-(PQs)-with-an-interlude-on-Heaps</a>
+        <p class="yue">这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记优先队列和堆的插曲，在优先队列里引入了heap只是个插曲而不算正式介绍，但其实讲得差不多了。</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/iOS-App-%E7%AD%BE%E5%90%8D%E7%9A%84%E5%8E%9F%E7%90%86/">iOS-App-签名的原理</a>
+        <p class="yue">原文转载: https://wereadteam.github.io/2017/03/13/Signature/iOS 签名机制挺复杂，各种证书，Provisioning Profile，entitlements，CertificateSigningRequest，p12，AppID，概念一堆，也很容易出错，本文尝试从原理出发，一步步推出为什么会有这么多概念，希望能有助于理解 iOS App 签名的原理和流程。</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

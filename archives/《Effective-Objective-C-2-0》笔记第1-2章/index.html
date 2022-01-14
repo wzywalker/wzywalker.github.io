@@ -1,0 +1,467 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>《Effective-Objective-C-2-0》笔记第1-2章 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="" />
+<meta property="og:title" content="《Effective-Objective-C-2-0》笔记第1-2章 - Maverick" />
+<meta property="og:description" content="" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/%E3%80%8AEffective-Objective-C-2-0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="《Effective-Objective-C-2-0》笔记第1-2章 - Maverick" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">《Effective-Objective-C-2-0》笔记第1-2章</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/iOS/">
+                    iOS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/%E3%80%8AEffective-Objective-C-2-0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/" 
+                    data-flag-title="《Effective-Objective-C-2-0》笔记第1-2章"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-d4af961b2a73f75a.png" /></figure><blockquote>
+<p>这个书当然中文版的，也很经典，我也读过了，但是嘛，老规矩，有原版还是读一遍原版，再加上英文水平也只有那么好，有机会能多读读在就多读读吧。一共就7章，52节，200多页，并不多。
+此外，因为很多名词其实我们平时直接叫的就是英文，中文版里统统都给了一个中文翻译，反而更陌生了，有种“访达”的即视感。</p></blockquote>
+<h1>Chapter 1: Accustoming Yourself to Objective-C</h1>
+<h2>Item 1: Familiarize Yourself with Objective-C’s Roots</h2>
+<ol>
+<li><code>messaging structure</code> v.s. <code>function callihng</code><ul>
+<li>in messaging structure, the <strong>runtime</strong> decides which code gets executed, while in function, the  <strong>compiler</strong> decides.</li>
+<li><code>dynamic binding</code> v.s. <code>virtual table</code>  &lt;= 多态</li>
+</ul>
+</li>
+<li><code>runtime component</code> v.s. <code>compiler</code><ul>
+<li>含有所有让面向对象的OC能工作的 <em>data structures</em> and <em>functions</em><ul>
+<li>比如，含有所有的memory-management methods</li>
+</ul>
+</li>
+<li>更新runtime component就能提升性能，而无需重新编译</li>
+</ul>
+</li>
+<li>Objective-C is a superset of C<ul>
+<li>所以语法基本类似：<code>NSString *str = @&quot;The String</code></li>
+<li>表示声明了一个变量，类型是<em>NSString *</em>，是一个指向NSString的指针</li>
+<li>所有OC对象必须如此声明，对象内存也总是分配在heap space上<ul>
+<li>这是分配到stack上：<code>NSString stackString</code> &lt;- 报错</li>
+</ul>
+</li>
+<li>但指向这个对象的指针（<strong>pointer</strong>）是分配在<code>stack frame</code>里的，多个指向同一对象的指针就分配了多个内存<ul>
+<li>每个内存大小就是一枚指针的大小</li>
+<li>值也是一样</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>The memory allocated in the <code>heap</code> has to be <strong>managed directly</strong><ul>
+<li>OC将堆内存管理抽象了出来，<code>runtime</code>进一步抽象成一套内存管理架构：<code>reference counting</code></li>
+</ul>
+</li>
+<li>整个系统框架都要使用结构体，用对象会有额外的开销</li>
+</ol>
+<h2>Item 2: Minimize Importing Headers in Headers</h2>
+<p>Objective-C, just like C and C++, makes use of <code>header files</code> and implementation files.</p><ol>
+<li><code>forward declaring</code> -&gt; <code>@class SomeClass</code><ul>
+<li>头文件里并不知道知道一些类的实现细节，只需要知道有这么一个类就行了</li>
+<li>但是<code>.m</code>文件里就要自行去import一次这个class了</li>
+<li>原则就是尽量延后引入头文件的时机，减少编译时间</li>
+<li>还解决了互相引用的问题</li>
+<li>引用<code>super class</code>, <code>protocol</code>等必须要知道细节，不能应用<code>forward declaring</code><ul>
+<li>所以最好把protocol单独放在一个头文件，避免无谓地引用大文件，增加编译时间</li>
+<li>但是<code>delegate</code>放到<code>class-continuation category</code>里面写更好（即在<strong>.m</strong>文件里写protocol和import），无需暴露到公共头文件</li>
+</ul>
+</li>
+<li>关键词：<code>减小依赖</code>，<code>缩减编译时间</code></li>
+</ul>
+</li>
+</ol>
+<h2>Item 3: Prefer Literal Syntax over the Equivalent Methods</h2>
+<ul>
+<li>尽量使用字面量语法（<code>Literal Syntax</code>）创建和使用对象</li>
+<li>字面量语法只是一个语法糖（<code>syntactic sugar</code>），推荐使用字面量，会减少代码量，但最好知道它对应的原始方法。（但是还是会有所区别，看下例）</li>
+<li>用字面量初始数组，如果不是最后一个元素是nil，会报错，而原始的<code>arrayWithObjects:</code>方法则会在碰到第一个nil时当成是终止参数而正常执行（只保留nil前的元素初始化数组）<ul>
+<li>作者说这反而是好事，未预料到的情况成功执行比报错更可怕，抛异常能更早地发现错误</li>
+</ul>
+</li>
+<li>只能创建Foundation框架的对象，自定义对象不行（一般也没必要）</li>
+<li>使用字面量语法创建出来的String, Array, Dict等都<code>immutable</code>的</li>
+</ul>
+<h2>Item 4: Prefer Typed Constants to Preprocessor #define</h2>
+<ul>
+<li><code>#define</code>本质是替换</li>
+<li><code>#define</code>出来的是没有类型信息的</li>
+<li>如果是声明在头文件中，引用了此头文件的代码都会应用此替换<ul>
+<li>即使被重定义了，编译器也不会产生警告</li>
+</ul>
+</li>
+<li>而常量就带了类型信息<ul>
+<li><code>static NSString * const MyStringConstants = &quot;Hello world;</code></li>
+<li>注意星号的位置，这里表示指针指向的是整个常量</li>
+<li>如果把星号写到const后，那表示指针就是那个常量...</li>
+</ul>
+</li>
+<li>定义常量的位置很重要（预处理指令也一样），不打算公开的话就在<code>.m</code>文件里定义</li>
+<li>命令也很重要</li>
+<li>否则成了全局变量，很可能”不经意“引起变量冲突/覆盖</li>
+<li><code>static const</code>要一起使用，单独的<code>const</code>会报错<ul>
+<li><code>static</code>不再是别的语言中的<strong>静态变量</strong>，而保是一个作用域声明</li>
+<li>一个编译单元（<code>translation unit</code>）个输出一个目标文件（<code>object file</code>）<ul>
+<li>考虑你编译一个c++文件，一个文件生成一个目标（二进制）文件，然后再链接。</li>
+<li>所以一个编译单元一般是一个<code>.m</code>文件</li>
+</ul>
+</li>
+<li>结合起来，<code>static</code>就是在一个目标文件内可见</li>
+<li>如果不加<code>static</code>，编译器会添加一个<code>external symbol</code>（后面有详述），这样就有重定义风险了（<code>duplicate symbol</code>）</li>
+</ul>
+</li>
+<li>最后，事实上<code>static const</code>一起用，编译器做的仍然是<strong>替换</strong>，而没有去创建符号（但此时已经有类型信息了）</li>
+</ul>
+<p>*如果需要公开，则添加到全局符号表（<code>global symbol table</code>）中：</p><div class="highlight"><pre><span></span><span class="c1">// In the header file</span>
+<span class="k">extern</span><span class="w"> </span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="n">EOCStringConstant</span><span class="p">;</span><span class="w"></span>
+
+<span class="c1">// In the implementation file</span>
+<span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="n">EOCStringConstant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">@&quot;VALUE&quot;</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+<ul>
+<li>上面解释了<code>static</code>，现在来解释<code>extern</code><ul>
+<li><code>extern</code>表示向编译器保证全局符号表中将会有这个符号，其实就是要编译器不要继续检查</li>
+<li>它知道链接成二进制文件后，肯定能找到这个常量</li>
+</ul>
+</li>
+<li>所以在<code>.m</code>文件里正常定义和赋值，在<strong>任意</strong><code>.h</code>文件时给编译器打个招呼就行了</li>
+<li>命名规范：<ul>
+<li>如果是限定可见域的，用<code>k</code>开头就行了</li>
+<li>如果会公开的，那么就用函数名作前缀（系统框架都是这么做的）</li>
+</ul>
+</li>
+</ul>
+<p><strong>external symbol</strong> V.S. <strong>global symbol</strong></p><blockquote>
+<p>前文你已经知道了两种提升作用域的方式，区别在</p><ul>
+<li>一个是通过不对const加static（添加external symbol），</li>
+<li>一个是额外声明extern（添加到blobal symbol talbe）</li>
+</ul>
+</blockquote>
+<h2>Item 5: Use Enumerations for States, Options, and Status Codes</h2>
+<ul>
+<li>枚举只是一种常量命名方式</li>
+<li>语法很奇葩：<code>enum EOCConnectionState</code> state = EOCConnectionStateDisconnected;<ul>
+<li>看高亮的部分，别人只要写一个type，它要连enum带名称写全</li>
+</ul>
+</li>
+<li>所以一般会<code>typedef</code>一下：<code>typedef enum EOCConnectionState EOCConnectionState;</code><ul>
+<li>现在就可以用<code>EOCConnectionState</code>这个type来定义变量了</li>
+</ul>
+</li>
+<li>用enum来做选项(options)的时候，因为不是互斥的关系，选择bitwise OR operator来会直观很多（就是每一个二进制位代表一个状态）</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="k">enum</span><span class="w"> </span><span class="n">UIViewAutoresizing</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">UIViewAutoresizingNone</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">UIViewAutoresizingFlexibleLeftMargin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">UIViewAutoresizingFlexibleWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">UIViewAutoresizingFlexibleRightMargin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">UIViewAutoresizingFlexibleTopMargin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">UIViewAutoresizingFlexibleHeight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">UIViewAutoresizingFlexibleBottomMargin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-8ccf27650b1d81ed.png" /></figure><ul>
+<li>Foundation框架定义了一些辅助宏，以便支持新的C++标准对宏定义的增强同时还能兼容老的标准: <code>NS_ENUM</code>和<code>NS_OPTIONS</code><ul>
+<li>特别是c++对枚举值里的bitwise操作结果需要显式转换</li>
+<li>所以用到了<strong>可组合</strong>的option类的枚举，最好用<code>NS_OPTIONS</code>宏，否则用<code>NS_ENUM</code>就够了</li>
+</ul>
+</li>
+<li>对enum应用<code>switch</code>最好不要加<code>default</code>，这样你添加了新的枚举值而忘记了处理，能及时得到错误反馈</li>
+</ul>
+<h1>Chapter 2: Objects, Messaging, and the Runtime</h1>
+<h2>Item 6: Understand Properties</h2>
+<ul>
+<li><code>Properties</code> are an Objective-C feature providing encapsulation of the data an object contains.<ul>
+<li>stored by <code>instance variables</code></li>
+<li>accessed through <code>accessor methods</code> (getter, setter)<ul>
+<li>can be written by complier automatically &lt;= <code>autosynthesis</code></li>
+<li>introduced a <code>dot syntax</code> to  accessing the data</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>看一下C++写法：</p><div class="highlight"><pre><span></span><span class="err">@</span><span class="n">interface</span><span class="w"> </span><span class="n">EOCPerson</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">NSObject</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="err">@</span><span class="k">public</span><span class="w"></span>
+<span class="w">    </span><span class="n">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">_firstName</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">_lastName</span><span class="p">;</span><span class="w"> </span>
+<span class="err">@</span><span class="k">private</span><span class="w"></span>
+<span class="w">    </span><span class="n">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">_someInternalData</span><span class="p">;</span><span class="w"> </span>
+<span class="p">}</span><span class="w"></span>
+<span class="err">@</span><span class="n">end</span><span class="w"></span>
+</pre></div>
+<ul>
+<li>对象布局在编译期就确定了，所以就硬编码了每个属性在对象内存中的偏移量</li>
+<li>所以如果对象布局变化了（比如增加了实例变量），这些偏移量就会出错，必须要重新编译。<ul>
+<li>如果链接代码时使用了不同版本的类定义，就会产生这种“不兼容”的问题</li>
+</ul>
+</li>
+<li>OC的解决方案是，把偏移量仍由“实例变量”存储<ul>
+<li>但是交由“类对象“(class object)保管</li>
+<li>偏移量在运行期查找 -&gt; 类的定义变了，偏移量也就变了（实时的）<ul>
+<li>甚至可以在运行期向类中新增实例变量</li>
+<li>nonfragile Application Binary Interface(ABI)</li>
+<li>这样就可以不止在声明文件里定义实例变量，还可以在class-continuation和实现文件里面定义了</li>
+</ul>
+</li>
+<li>尽量不要直接访问实例变量</li>
+</ul>
+</li>
+<li>使用<code>点语法</code>访问属性<ul>
+<li>编译器会转换为对存取方法的调用</li>
+<li>编译器会为属性生成相应的实例变量，并自动合成（生成相应的存取方法）<ul>
+<li>编译期进行，所以你看不到实际的代码</li>
+<li>也可以手写同样的代码（这时你就可以自定义实例方法的签名了）</li>
+<li><code>@dynamic</code>能阻止合成 &lt;= 相信运行期能找到</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Property Attributes</h3>
+<ol>
+<li>原子性(<code>Atomicity</code>)，读写的时候加锁</li>
+<li>读/写权限</li>
+<li>内存管理语义<ul>
+<li>assign: on scalar type</li>
+<li>strong: 拥有关系，设置新值流程：retain new -&gt; release old -&gt; set new</li>
+<li>weak: 非拥有关系</li>
+<li>unsafe_unretained: 类似assign，但适用于对象类型（而不只有scalar type)<ul>
+<li>与weak的区别在目标对象在销毁时，该属性值不会自动清空</li>
+</ul>
+</li>
+<li>copy: 类似strong，但是相比起retain，它直接是复制了一份，通常用于拥有可变类型的变量，比如<code>NSString *</code>，可变版的string也能赋值给NSString，这就会引起赋值后值还自己变了的可能性</li>
+</ul>
+</li>
+<li>方法名<ul>
+<li>getter=<name>，需要注意的是有些bool类型的通常会设置为<code>isXXXX</code></li>
+<li>setter=<name>，但很少这么做</li>
+</ul>
+</li>
+</ol>
+<p>如果自己来实现accessor methods，那么就要自己去保证这些方法符合这些attributes，比如内存管理语义为copy，那么在设置的时候就要拷贝传入的值：</p><div class="highlight"><pre><span></span><span class="k">@interface</span> <span class="nc">EOCPerson</span> : <span class="bp">NSManagedObject</span><span class="w"> </span>
+<span class="k">@property</span><span class="w"> </span><span class="p">(</span><span class="k">copy</span><span class="p">)</span><span class="w"> </span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">firstName</span><span class="p">;</span><span class="w"></span>
+<span class="k">@property</span><span class="w"> </span><span class="p">(</span><span class="k">copy</span><span class="p">)</span><span class="w"> </span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">lastName</span><span class="p">;</span><span class="w"></span>
+<span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">initWithFirstName:</span><span class="p">(</span><span class="bp">NSString</span><span class="o">*</span><span class="p">)</span><span class="nv">firstName</span><span class="w"> </span><span class="nf">lastName:</span><span class="p">(</span><span class="bp">NSString</span><span class="o">*</span><span class="p">)</span><span class="nv">lastName</span><span class="p">;</span><span class="w"></span>
+<span class="k">@end</span><span class="w"></span>
+
+<span class="c1">// 实现文件：</span>
+<span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="n">initWithFirstName</span><span class="o">:</span><span class="p">(</span><span class="bp">NSString</span><span class="o">*</span><span class="p">)</span><span class="n">firstName</span><span class="w"> </span><span class="n">lastName</span><span class="o">:</span><span class="p">(</span><span class="bp">NSString</span><span class="o">*</span><span class="p">)</span><span class="n">lastName</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="nb">self</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nb">super</span><span class="w"> </span><span class="n">init</span><span class="p">]))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">_firstName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">firstName</span><span class="w"> </span><span class="k">copy</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="n">_lastName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">lastName</span><span class="w"> </span><span class="k">copy</span><span class="p">];</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">self</span><span class="p">;</span><span class="w"> </span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+<blockquote>
+<ul>
+<li>读写操作的原子性并不是线程安全</li>
+<li>iOS中使用同步锁开销较大</li>
+<li>实际iOS程序碰到多线程读写属性的场景也非常少</li>
+<li>所以基本上都是声明为<code>nonatomic</code></li>
+</ul>
+</blockquote>
+<h2>Item 7: Access Instance Variables Primarily Directly When Accessing Them Internally</h2>
+<p>在对象内部优先访问实例变量。</p><p>直接访问而不用点语法的影响：</p><ul>
+<li>不经过消息派发，速度快（编译器生成的代码会直接访问相应的内存）</li>
+<li>不会调用setter，也绕过了相应的内存管理语义</li>
+<li>不会触发KVO</li>
+<li>没有机会在getter, setter中设置断点来调试</li>
+<li>没有机会<code>lazy intialization</code>，而getter机制能在首次被调用到的时候才去初始化实例变量</li>
+<li>初始化和dealloc的时候总是要直接用实例变量</li>
+</ul>
+<p>作者建议尽量在读取实例变量的时候直接访问，设置的时候用属性（会自动考虑内存管理语义）</p><h2>Item 8: Understand Object Equality</h2>
+<p>其实就是理解NSObject自带的<code>isEqual:</code>方法。</p><ul>
+<li><code>==</code>就是比指针</li>
+<li><code>isEqual:</code>比的是<code>hash</code>，所以自定义的类要实现equality就要自行实现这两个方法<ul>
+<li>hash不同必然对象不同，但由于有hash collisions的存在，反过来并不成立</li>
+<li>尽量用对象的不可变部分来做hash</li>
+</ul>
+</li>
+</ul>
+<p>一个做hash的方法：</p><div class="highlight"><pre><span></span><span class="p">-</span> <span class="p">(</span><span class="n">NSUInteger</span><span class="p">)</span><span class="nf">hash</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">firstNameHash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">_firstName</span><span class="w"> </span><span class="n">hash</span><span class="p">];</span><span class="w"> </span>
+<span class="w">    </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">lastNameHash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">_lastName</span><span class="w"> </span><span class="n">hash</span><span class="p">];</span><span class="w"> </span>
+<span class="w">    </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">ageHash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_age</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">firstNameHash</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n">lastNameHash</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n">ageHash</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<h2>Item 9: Use the Class Cluster Pattern to Hide Implementation Detail</h2>
+<div class="highlight"><pre><span></span><span class="p">+</span> <span class="p">(</span><span class="bp">UIButton</span><span class="o">*</span><span class="p">)</span><span class="nf">buttonWithType:</span><span class="p">(</span><span class="n">UIButtonType</span><span class="p">)</span><span class="nv">type</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+<ul>
+<li>作者将上述这种解释为“类族”，即它的返回值可能是各种button，但归根结底，都是<code>UIButton</code>，就是靠着switch各种type来实例化各种子类。</li>
+<li>同时，因为OC没有abstract class，为了避免直接使用抽象基类，一般不提供init方法，并在基类相关方法里干脆抛异常</li>
+<li>这里使用<code>isMemberOfClass</code>就要小心，它是kind，但不一定是member</li>
+<li>系统框架里有很多<code>class cluster</code>，特别是<code>collection</code><ul>
+<li>所以<code>if([anArray class] == [NSArray class])</code>是false（原因就是它是被当作“<strong>抽象基类</strong>来设计的，实际上是隐藏在公共接口后面的某个内部类型）</li>
+<li>同样，用<code>isKindOfClass:</code>至少能判断是在这个类族里</li>
+</ul>
+</li>
+</ul>
+<h2>Item 10: Use Associated Objects to Attach Custom Data to Existing Classes</h2>
+<p>扩展现有类，我们可以继承，但有时候一些特殊机制创建的类却无法继承，可以通过<code>Associated Object</code>来添加这些信息。</p><ul>
+<li>以键值对来存储，所以是可以存储多个关联数据的</li>
+<li>可以指定storage policy，对应内存管理语义</li>
+</ul>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-81839f3b17902713.png" /></figure><p>方法:</p><div class="highlight"><pre><span></span><span class="c1">// Sets up an association of object to value with the given key and policy.</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">objc_setAssociatedObject</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">object</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kt">id</span><span class="w"> </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">objc_AssociationPolicy</span><span class="w"> </span><span class="n">policy</span><span class="p">)</span><span class="w"></span>
+
+<span class="c1">// Retrieves the value for the association on object with the given key.</span>
+<span class="kt">id</span><span class="w"> </span><span class="n">objc_getAssociatedObject</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">object</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">key</span><span class="p">)</span><span class="w"></span>
+
+<span class="c1">// Removes all associations against object.</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">objc_removeAssociatedObjects</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">object</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+<p>书中写了一个例子，alertView的代理方法来处理按了什么键，而一个页面中如果有多个alertView，且用同一个代理对象，那么处理需要更精细（比如需要知道是哪个警告框弹的，我一般用tag）。
+而如果把处理方法定义为一个block，并把它关联到UIAlertView类，那么处理逻辑就可以跟定义alertView写在一起了。</p><p>todo, item 11-14</p>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/libxml-tree-h-file-not-found/">libxml-tree-h-file-not-found</a>
+        <p class="yue">stackoverflow用户对添加libxml2库表现出了极大的抱怨，原因在要把它好好地添加进去实在是太复杂了。我就是因为出现了'libxml/tree.h file not found’错误，才发现的这篇贴子，照着做，错误就消除了，备注如下：原始地址：http://stackoverflow.com/questions/1428847/libxml-tree-h-no-such-file-or-directory见e.w. parris的答案Adding libxml2 is a big, fat, finicky pain in the ass. If you're going to do it, do it before you get too far in building your project.You need to add it in two ways:1. Target settings</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B7%5D_Document-Architecture/">cs193p_2021笔记[7]_Document-Architecture</a>
+        <p class="yue">cs193p_2021_笔记_1</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

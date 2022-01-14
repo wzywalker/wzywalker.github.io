@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>RNN梯度消失与梯度爆炸推导 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="" />
+<meta property="og:title" content="RNN梯度消失与梯度爆炸推导 - Maverick" />
+<meta property="og:description" content="" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/RNN%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1%E4%B8%8E%E6%A2%AF%E5%BA%A6%E7%88%86%E7%82%B8%E6%8E%A8%E5%AF%BC/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2021-05-09T00:00:00-00.00" />
+<meta name="twitter:title" content="RNN梯度消失与梯度爆炸推导 - Maverick" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">RNN梯度消失与梯度爆炸推导</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2021-05-09
+                </time>
+                
+                in <a no-style class="category" href="/category/AI/">
+                    AI
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/RNN%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1%E4%B8%8E%E6%A2%AF%E5%BA%A6%E7%88%86%E7%82%B8%E6%8E%A8%E5%AF%BC/" 
+                    data-flag-title="RNN梯度消失与梯度爆炸推导"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-1a8b2a5bad603588.png" /></figure>
+$
+\large
+\begin{aligned}
+h_t &amp;=\sigma(z_t) = \sigma(Ux_t+Wh_{t-1} + b) \
+y_t &amp;= \sigma(Vh_t + c)
+\end{aligned}
+$<h2>梯度消失与爆炸</h2>
+<p>假设一个只有 3 个输入数据的序列，此时我们的隐藏层 h1、h2、h3 和输出 y1、y2、y3 的计算公式：</p><p>$
+\large
+\begin{aligned}
+h_1 &amp;= \sigma(Ux_1 + Wh_0 + b) \
+h_2 &amp;= \sigma(Ux_2 + Wh_1 + b) \
+h_3 &amp;= \sigma(Ux_3 + Wh_2 + b) \
+y_1 &amp;= \sigma(Vh_1 + c) \
+y_2 &amp;= \sigma(Vh_2 + c) \
+y_3 &amp;= \sigma(Vh_3 + c)
+\end{aligned}
+$</p><p>RNN 在时刻 t 的损失函数为 Lt，总的损失函数为 $L = L1 + L2 + L3 \Longrightarrow  \sum_{t=1}^TL_T$</p><p>t = 3 时刻的损失函数 L3 对于网络参数 U、W、V 的梯度如下：</p><p>$$
+\begin{aligned}
+\frac{\partial L_3}{\partial V} &amp;= \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial V} \\
+\frac{\partial L_3}{\partial U} &amp;= \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial U} + \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial U} + \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial h_1} \frac{\partial h_1}{\partial U} \\
+\frac{\partial L_3}{\partial W} &amp;= \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial W} 
+\+ \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial W} 
+\+ \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial h_1} \frac{\partial h_1}{\partial W} \\
+\end{aligned}
+$$</p>
+<p>其实主要就是因为：</p><ul>
+<li>对V求偏导时，$h_3$是常数</li>
+<li>对U求偏导时：<ul>
+<li>$h_3$里有U，所以要继续对h3应用<code>chain rule</code></li>
+<li>$h_3$里的$W, b$是常数，但是$h_2$里又有U，继续<code>chain rule</code></li>
+<li>以此类推，直到$h_0$</li>
+</ul>
+</li>
+<li>对W求偏导时一样</li>
+</ul>
+<p>所以：</p><ol>
+<li>参数矩阵 V (对应输出 $y_t$) 的梯度很显然并没有长期依赖</li>
+<li>U和V显然就是连乘($\prod$)后累加($\sum$)</li>
+</ol>
+<p>$$
+\begin{aligned}
+\frac{\partial L_t}{\partial U} = \sum_{k=0}^{t} \frac{\partial L_t}{\partial y_t} \frac{\partial y_t}{\partial h_t}
+(\prod_{j=k+1}^{t}\frac{\partial h_j}{\partial h_{j-1}})
+\frac{\partial h_k}{\partial U} \\
+\frac{\partial L_t}{\partial W} = \sum_{k=0}^{t} \frac{\partial L_t}{\partial y_t} \frac{\partial y_t}{\partial h_t}
+(\prod_{j=k+1}^{t}\frac{\partial h_j}{\partial h_{j-1}})
+\frac{\partial h_k}{\partial W}
+\end{aligned}
+$$</p>
+<p>其中的连乘项就是导致 RNN 出现梯度消失与梯度爆炸的罪魁祸首，连乘项可以如下变换：</p><ul>
+<li>$h_j = tanh(Ux_j + Wh_{j-1} + b)$</li>
+<li>$\prod_{j=k+1}^{t}\frac{\partial h_j}{\partial h_{j-1}} =\prod_{j=k+1}^{t} tanh' \times W$</li>
+</ul>
+<p>tanh' 表示 tanh 的导数，可以看到 RNN 求梯度的时候，实际上用到了 (tanh' × W) 的连乘。当 (tanh' × W) &gt; 1 时，多次连乘容易导致梯度爆炸；当 (tanh' × W) &lt; 1 时，多次连乘容易导致梯度消失。</p>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+    <span class="ga-tag">
+        <a class="ga-highlight" href="/tag/RNN/">#RNN</a>
+    </span>
+    
+    <span class="ga-tag">
+        <a class="ga-highlight" href="/tag/%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1/">#梯度消失</a>
+    </span>
+    
+    <span class="ga-tag">
+        <a class="ga-highlight" href="/tag/%E6%A2%AF%E5%BA%A6%E7%88%86%E7%82%B8/">#梯度爆炸</a>
+    </span>
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/Semi-supervised-Learning/">Semi-supervised-Learning</a>
+        <p class="yue">李宏毅机器学习2021spring的家庭作业里面有一个Semi-supervised Learning的任务。具体来说，就是一个图片分类的任务（11个食品类别），但只给了你几百个有标注的图片，同时，还给了你几千张没有标的图片（用来训练，而不是测试）。思路也很简单，既然样本量过小，我们就得自己扩充样本量，但这次不是用数据增广(Augumentation)，而是自己造样本：</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/RNN%E4%B8%ADbidirectional%E5%92%8Cnum_layer%E5%AF%B9output%E5%92%8Chidden%E5%BD%A2%E7%8A%B6%E7%9A%84%E5%BD%B1%E5%93%8D/">RNN中bidirectional和num_layer对output和hidden形状的影响</a>
+        <p class="yue">Batch first</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

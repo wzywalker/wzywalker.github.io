@@ -1,0 +1,262 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>矩阵最小二乘法求解仿射变换矩阵 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="一个矩形三个顶点(0,0), (50, 0), (50, 50), 变换后为(30, 30), (30, 130), (130, 130), 求其仿射矩阵。我们分别设起始和结束矩阵的坐标为：$(a_x, a_y), (b_x, b_y), (c_x, c_y)$， 变换后的加一个prime（$ ^\prime$)符号，以此类推。" />
+<meta property="og:title" content="矩阵最小二乘法求解仿射变换矩阵 - Maverick" />
+<meta property="og:description" content="一个矩形三个顶点(0,0), (50, 0), (50, 50), 变换后为(30, 30), (30, 130), (130, 130), 求其仿射矩阵。我们分别设起始和结束矩阵的坐标为：$(a_x, a_y), (b_x, b_y), (c_x, c_y)$， 变换后的加一个prime（$ ^\prime$)符号，以此类推。" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/%E7%9F%A9%E9%98%B5%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E6%B1%82%E8%A7%A3%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2021-01-17T00:00:00-00.00" />
+<meta name="twitter:title" content="矩阵最小二乘法求解仿射变换矩阵 - Maverick" />
+<meta name="twitter:description" content="一个矩形三个顶点(0,0), (50, 0), (50, 50), 变换后为(30, 30), (30, 130), (130, 130), 求其仿射矩阵。我们分别设起始和结束矩阵的坐标为：$(a_x, a_y), (b_x, b_y), (c_x, c_y)$， 变换后的加一个prime（$ ^\prime$)符号，以此类推。" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">矩阵最小二乘法求解仿射变换矩阵</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2021-01-17
+                </time>
+                
+                in <a no-style class="category" href="/category/AI/">
+                    AI
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/%E7%9F%A9%E9%98%B5%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E6%B1%82%E8%A7%A3%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5/" 
+                    data-flag-title="矩阵最小二乘法求解仿射变换矩阵"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>一个矩形三个顶点<code>(0,0), (50, 0), (50, 50)</code>, 变换后为<code>(30, 30), (30, 130), (130, 130)</code>, 求其仿射矩阵。</p><p>我们分别设起始和结束矩阵的坐标为：$(a_x, a_y), (b_x, b_y), (c_x, c_y)$， 变换后的加一个prime（$ ^\prime$)符号，以此类推。<br />
+要知道，一个3X2的矩阵是不可能右乘一个矩阵得到一个3X2的矩阵（只能左乘一个3X3的），<br />
+然后，每一个新坐标，都是由原坐标的(x, y)经过变换得到(x', y‘），即使是新坐标的X值，也是需要原坐标的(x, y)值参与过来进行变化的（乘以合适的系数），然后还要加上偏移的系数，以<code>x'</code>为例，应该是这样：$a^\prime_x = a_x m_{00} + a_y m_{01} + m_{02} $
+我们根据矩阵特征，补一个1，构造这个矩阵看看效果：
+$$
+\begin{bmatrix}
+\color{red}{a_x} &amp; \color{red}{a_y} &amp; \color{red}1 \
+b_x &amp; b_y &amp; 1 \
+c_x &amp; c_y &amp; 1 \
+\end{bmatrix}
+\begin{bmatrix}
+\color{red}{m_{00}} \ \color{red}{m_{01}} \ \color{red}{m_{02}}
+\end{bmatrix} = 
+\begin{bmatrix}
+\color{red}{a^\prime_x} \ b^\prime_x \ c^\prime_x
+\end{bmatrix} \tag{红色部分即为上面的等式}
+$$
+这只是把三个x给变换出来了，<strong>其实你也可以认为这是把y给变换出来了</strong>（因为原理一样，只是系数不同）。<br />
+做到这一步，我们已经知道要如何求y坐标了，即我们只补一列的话，只能得到一个坐标的x值（或y值），要求另一半，根据坐标相乘的原理，看来只能把前三列置零，再把后三列复制进去了（__这样仿射矩阵也就变成6X1了__），其实就是上面矩阵乘法的重复，只不过交错一下形成x,y交错的排列：
+$$
+\begin{bmatrix}
+a_x &amp; a_y &amp; 1 &amp; 0 &amp; 0 &amp; 0 \
+0 &amp; 0 &amp; 0 &amp; a_x &amp; a_y &amp; 1 \
+b_x &amp; b_y &amp; 1 &amp; 0 &amp; 0 &amp; 0 \
+0 &amp; 0 &amp; 0 &amp; b_x &amp; b_y &amp; 1 \
+c_x &amp; c_y &amp; 1 &amp; 0 &amp; 0 &amp; 0 \
+0 &amp; 0 &amp; 0 &amp; c_x &amp; c_y &amp; 1 
+\end{bmatrix}
+\begin{bmatrix}
+m_{00} \ m_{01} \ m_{02} \ m_{10} \ m_{11} \ m_{12}
+\end{bmatrix} = 
+\begin{bmatrix}
+a^\prime_x \ a^\prime_y \ b^\prime_x \ b^\prime_y \ c^\prime_x \ c^\prime_y \
+\end{bmatrix}
+$$
+原理当然就是把第一个公式补全：
+$$
+\begin{cases}
+    ; a^\prime_x = a_x m_{00} + a_y m{01} + m_{02} \
+    ; a^\prime_y = a_x m_{10} + a_y m{11} + m_{12} \
+    \
+    ; b^\prime_x = b_x m_{00} + b_y m{01} + m_{02} \
+    ; b^\prime_y = b_x m_{10} + b_y m{11} + m_{12} \
+    \
+    ; c^\prime_x = c_x m_{00} + c_y m{01} + m_{02} \
+    ; c^\prime_y = c_x m_{10} + c_y m{11} + m_{12} \
+\end{cases}
+$$
+最小二乘的公式如下：
+$$
+\begin{equation}
+\lVert A\beta - Y \rVert{^2_2} \quad A \in \mathbb{R}^{(m\times n+1)}, \beta \in \mathbb{R}^{(n+1)\times 1}, Y \in \mathbb{R}^{m\times 1} \
+\hat \beta = (A^TA)^{-1}A^TY
+\end{equation}
+$$
+<a href="https://iewaij.github.io/introDataScience/OLS.html">推导过程见此</a></p><blockquote>
+<p>奇异矩阵没有逆矩阵，$(A^TA)^{-1}$会出现无法求解的问题，也就是该方法对数据是有约束的，这个有解，另议。</p></blockquote>
+<p>我们把A和Y都做出来了，直接套用公式即可，为了编程方便，我们把前后矩阵设为A和B，仿射矩阵为M，就成了：
+$$
+M = (A^TA)^{-1}A^TB
+$$</p><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">]]</span>
+<span class="n">B</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="p">[</span><span class="mi">130</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="p">[</span><span class="mi">130</span><span class="p">,</span> <span class="mi">130</span><span class="p">]]</span>
+
+<span class="c1"># 分别整理成上面分析的6x6和6x1的矩阵</span>
+<span class="c1"># 先定义变量保留6个坐标的值</span>
+<span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ay</span><span class="p">),</span> <span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">),</span> <span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">)</span> <span class="o">=</span> <span class="n">A</span>
+<span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ay1</span><span class="p">),</span> <span class="p">(</span><span class="n">bx1</span><span class="p">,</span> <span class="n">by1</span><span class="p">),</span> <span class="p">(</span><span class="n">cx1</span><span class="p">,</span> <span class="n">cy1</span><span class="p">)</span> <span class="o">=</span> <span class="n">B</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="n">ax</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="p">])</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ay1</span><span class="p">,</span> <span class="n">bx1</span><span class="p">,</span> <span class="n">by1</span><span class="p">,</span> <span class="n">cx1</span><span class="p">,</span> <span class="n">cy1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># 比手写6X1矩阵要省事</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">A</span><span class="p">)</span> <span class="o">@</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">B</span> <span class="c1"># 套公式</span>
+<span class="n">M</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+<p>输出：</p><div class="highlight"><pre><span></span>array<span class="o">([[</span> <span class="m">2</span>.,  <span class="m">0</span>., <span class="m">30</span>.<span class="o">]</span>,
+       <span class="o">[</span> <span class="m">0</span>.,  <span class="m">2</span>., <span class="m">30</span>.<span class="o">]])</span>
+</pre></div>
+<hr />
+<p>上就是最小二乘的一个应用，也给了一篇链接介绍推导，后来我翻阅学习线代时的笔记，其实有从投影方面给的解释，直观易懂，于是<a href="https://www.jianshu.com/p/39db42a6dd5a">另写了篇博文</a>来介绍这个推导。</p>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+    <span class="ga-tag">
+        <a class="ga-highlight" href="/tag/%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95/">#最小二乘法</a>
+    </span>
+    
+    <span class="ga-tag">
+        <a class="ga-highlight" href="/tag/%E4%BB%BF%E5%B0%84/">#仿射</a>
+    </span>
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/%E4%BB%8E%E6%8A%95%E5%BD%B1%E3%80%81%E6%AD%A3%E4%BA%A4%E8%A1%A5%E8%A7%92%E5%BA%A6%E8%AF%81%E6%98%8E%EF%BC%88%E6%8E%A8%E5%AF%BC%EF%BC%89%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E5%85%AC%E5%BC%8F/">从投影、正交补角度证明（推导）最小二乘法公式</a>
+        <p class="yue">学习线性回归的时候，会教我们$X\theta=y$可以直接用最小二乘法直接把$\theta$求出来：$\theta=(X^TX)^{-1}X^Ty$并且还在我之前的博文里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。首先，在吴恩达的教材里，这个并不叫最小二乘(least suqare），而是叫Normal Equation method，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(Projection)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：首先，预备知识子空间</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/">add_subplots方法传递额外参数</a>
+        <p class="yue">用matplotlib绘制3D图，最快的用法ax = plt.axes(projection=&#39;3d&#39;)</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

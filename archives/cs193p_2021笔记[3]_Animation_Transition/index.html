@@ -1,0 +1,306 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>cs193p_2021笔记[3]_Animation_Transition - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="cs193p_2021_笔记_1" />
+<meta property="og:title" content="cs193p_2021笔记[3]_Animation_Transition - Maverick" />
+<meta property="og:description" content="cs193p_2021_笔记_1" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B3%5D_Animation_Transition/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="cs193p_2021笔记[3]_Animation_Transition - Maverick" />
+<meta name="twitter:description" content="cs193p_2021_笔记_1" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">cs193p_2021笔记[3]_Animation_Transition</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/iOS/">
+                    iOS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B3%5D_Animation_Transition/" 
+                    data-flag-title="cs193p_2021笔记[3]_Animation_Transition"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p><a href="https://www.jianshu.com/p/998b0ef4a2cd">cs193p_2021_笔记_1</a>
+<a href="https://www.jianshu.com/p/af0ad1bead34">cs193p_2021_笔记_2</a>
+cs193p_2021_笔记_3_Animation_Transition
+<a href="https://www.jianshu.com/p/41e7309c7f55">cs193p_2021_笔记_4_Color_Image_Gesture</a>
+<a href="https://www.jianshu.com/p/e3c2ee1628c6">cs193p_2021_笔记_5_Property Wrapper</a>
+<a href="https://www.jianshu.com/p/a315274a4fd2">cs193p_2021_笔记_6_Persistence</a>
+<a href="https://www.jianshu.com/p/f4ae879eef9c">cs193p_2021_笔记_7_Document Architecture</a>
+<a href="https://www.jianshu.com/p/2136bdc2c6f6">cs193p_2021_笔记_8</a></p><hr />
+<h1>Animation</h1>
+<ul>
+<li>One way to do animation is by animating a Shape.</li>
+<li>The other way to do animation is to animate Views via their <code>ViewModifiers</code>.</li>
+<li>Only <code>changes</code> can be animated<ul>
+<li>ViewModifier arguments (not all, i.e. fonts)</li>
+<li>Shapes</li>
+<li>the <em>existance</em> of a View in the UI<ul>
+<li>比如if-else和ForEach</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>You can only animate changes to Views in <em>containers that are already on screen</em> (<code>CTAAOS</code>).</li>
+</ul>
+<p>两个golden rule:</p><ol>
+<li>要有view modifier的属性变化</li>
+<li>要在屏幕上</li>
+</ol>
+<p>才会触发动画（其实就是上面的最后两条）</p><ul>
+<li>课程的动画例子里，用了if-else来生成view，这样导致了新生成的view不会触发动画</li>
+<li>比如点开两张牌，新点开的那张牌由于之前牌的内容并没有出现在屏幕上，导致动画没有触发</li>
+<li>所以把view的结构由if-else的生成和销毁机制，变成了透明度切换机制<ul>
+<li>即正面和反面都在屏幕上，只不过透明度相反，以在视觉上要么是正面要么是反面</li>
+<li>本以为透明度为0就会销毁视图(UIKit？)，看样子并不是这样的，大胆用opacity就好了</li>
+</ul>
+</li>
+</ul>
+<h2>隐式调用</h2>
+<div class="highlight"><pre><span></span><span class="n">Text</span><span class="p">(</span><span class="err">“👻</span> <span class="err">”</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">opacity</span><span class="p">(</span><span class="n">scary</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">0</span><span class="p">)</span>                             <span class="c1">// 普通modifier, 即如果没有动画，也需要的状态（即代码也不会删）</span>
+    <span class="p">.</span><span class="n">rotationEffect</span><span class="p">(</span><span class="n">Angle</span><span class="p">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">upsideDown</span> <span class="p">?</span> <span class="mi">180</span> <span class="p">:</span> <span class="mi">0</span><span class="p">))</span>    <span class="c1">// 动画modifier，即定制的动画效果，不需要动画的时候，就不需要这一行</span>
+    <span class="p">.</span><span class="n">animation</span><span class="p">(</span><span class="n">Animation</span><span class="p">.</span><span class="n">easeInOut</span><span class="p">)</span>                         <span class="c1">// 触发</span>
+</pre></div>
+<ul>
+<li>上述所有<code>ViewModifier</code>都会被动画<ul>
+<li><code>scary, upsideDown</code>等值改变时也会触发动画</li>
+</ul>
+</li>
+<li>隐式调用会冒泡（所以不要对一个container view做<code>.animation</code>，还有定位的问题)</li>
+<li>animation的参数就是一个struct： duration, delay, repeat, curve...</li>
+</ul>
+<p>对于不能动画的modifier，看一下这个实例（上为修改前，下为修改后）
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-07ab5fb5d490609e.png" /></figure></p><ol>
+<li>把font设为常量，把缩放变成一个geometric effect</li>
+<li>同时也说明<code>.animation()</code>不止作用于它前面的</li>
+</ol>
+<h2>显式调用</h2>
+<div class="highlight"><pre><span></span><span class="n">withAnimation</span><span class="p">(.</span><span class="n">linear</span><span class="p">(</span><span class="n">duration</span><span class="p">:</span> <span class="mi">2</span><span class="p">))</span> <span class="p">{</span>
+    <span class="c1">// do something that will cause ViewModifier/Shape arguments to </span>
+<span class="n">change</span> <span class="n">somewhere</span> <span class="p">}</span>
+</pre></div>
+<ul>
+<li>It will appear in closures like <code>.onTapGesture</code>.</li>
+<li>显式动画不会覆盖掉隐式动画</li>
+<li>很少有处理用户手势而不包<code>.withAnimation</code>的</li>
+</ul>
+<h1>Transition</h1>
+<ul>
+<li>转场，主要用于view的出现和消失</li>
+<li>一对<code>ViewModifier</code>，一个<code>before</code>, 一个<code>after</code></li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">ZStack</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">isFaceUp</span> <span class="p">{</span>
+        <span class="n">RoundedRectangle</span><span class="p">()</span> <span class="c1">// default .transition is .opacity </span>
+        <span class="n">Text</span><span class="p">(</span><span class="err">“👻</span> <span class="err">”</span><span class="p">).</span><span class="n">transition</span><span class="p">(.</span><span class="n">scale</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mi">10</span><span class="p">).</span><span class="n">transition</span><span class="p">(.</span><span class="n">identity</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>Unlike .animation(), .transition() does not get redistributed to a container’s content Views. So putting .transition() on the ZStack above only works if the entire ZStack came/went.</p><p>(Group and ForEach do distribute .transition() to their content Views, however.)</p><p>意思是<code>.transition</code>并不会向下传递，如果对<code>ZStack</code>做转场，只会把整个容器进行转场而不是里面的view（见实例二）</p><ul>
+<li>转场只是一个声明，并没有触发动画（其实就是设置了<code>ViewModifier</code>）</li>
+<li>所以转场没有隐式调用</li>
+<li>只对CTAAOS有用</li>
+</ul>
+<p><code>.onAppear</code>或<code>.onDisappear</code>时，container必然是在屏幕上的，所以这是一个写<code>.transition</code>的好地方（记得要<code>withAnimation</code>)</p><p>built-in transitions:</p><ul>
+<li>AnyTransition.opacity: 通过<code>.opacity</code> modifier来实现淡入淡出</li>
+<li>AnyTransition.scale: 通过<code>.frame</code> modifier来实现缩放</li>
+<li>AnyTransition.offset(CGSize): 通过<code>.offset</code>来实现移动</li>
+<li>AnyTransition.modifier(active:identity:): 你提供两个<code>ViewModifier</code></li>
+</ul>
+<p>通过<code>AnyTransition.animation</code>(Animation`)来定制动画细节：</p><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">transition</span><span class="p">(.</span><span class="n">opacity</span><span class="p">.</span><span class="n">animation</span><span class="p">(.</span><span class="n">linear</span><span class="p">(</span><span class="n">duration</span><span class="p">:</span> <span class="mi">20</span><span class="p">)))</span>
+</pre></div>
+<h1>动画机制</h1>
+<p>其实就是给出一系列的数据点，系统会根据这些数据点把时间切分，你给的数据点越多，切的时间块也就越多，而且系统会根据你的线性函数来决定是平均还是怎样去切分这些时间块：</p><ul>
+<li>the animation system divides the animation duration up into little pieces.</li>
+<li>The animation system then tells the Shape/ViewModifier the current piece it should show.</li>
+<li>And the Shape/ViewModifier makes sure that its code always reflects that.</li>
+</ul>
+<p>系统通知变量当前的值，UI根据这个值实时绘制当前的View，不断销毁重建，就是动画的过程。</p><p>系统是用一个变量来通知这个进度的：<code>Animatable</code> protocol的唯一成员变量：<code>animatableData</code>:</p><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nv">animatableData</span><span class="p">:</span> <span class="kr">Type</span>
+</pre></div>
+<ul>
+<li>Type只需要满足<code>VectorArithmetic</code>协议，其实就是一个可以被细分的值，基本上是Float, Double, CGFloat，以及<code>AnimatablePair</code>(其实就是两个<code>VectorArithmetic</code>)</li>
+<li>想要支持动画的<code>Shape</code>, <code>ViewModifier</code>，只需要实现<code>Animatable</code>协议即可（即提供一个<code>animatableData</code>属性）</li>
+</ul>
+<p>Because it’s communicating both ways, this animatableData is a <code>read-write</code> var.</p><ul>
+<li>The <code>setting</code> of this var is the animation system telling the Shape/VM which piece to draw.</li>
+<li>The <code>getting</code> of this var is the animation system getting the <code>start/end</code> points of an animation.</li>
+</ul>
+<p><strong>实例一</strong></p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-fba5209a5b350e63.png" /></figure><ul>
+<li>view modifier里面有一个变量<code>rotation</code>（ZStack, content, rotation3DEffect)</li>
+<li>那么外层在<code>withAnimation{}</code>的时候，我们是期望rotation的值能动起来的<ul>
+<li>内置的viewmodifier当然会自己动，如<code>opacity</code>等</li>
+</ul>
+</li>
+<li>那么我们首先就要让<code>Cardify</code> conform to <code>Animatable</code>（例子中的AnimatableModifer = Animatable + ViewModifer)</li>
+<li>然后我们就要实现<code>animatableData</code>, 因为系统事实上就是不断去更新这个data值</li>
+<li>教材里把它进行了封装（当然你也可以直接用它），这只是思维方式上的区别</li>
+<li><code>animatedData</code>会随时间变化，自然会不断invalidate view，然后rebuild view，动画就产生了。</li>
+</ul>
+<p><strong>实例二</strong></p><p>课程里有这么个需求：卡片由<code>LazyVGrid</code>提供布局，且卡片出现和消失的时候都要有动画。</p><p>出现和消失？那当然就是<code>Transition</code>的事了:</p><div class="highlight"><pre><span></span><span class="n">Card</span><span class="p">()</span>
+  <span class="p">.</span><span class="n">transition</span><span class="p">(</span><span class="n">AnyTransition</span><span class="p">.</span><span class="n">asymmetric</span><span class="p">(</span><span class="n">insertion</span><span class="p">:</span> <span class="p">.</span><span class="n">scale</span><span class="p">,</span> 
+                                         <span class="n">removal</span><span class="p">:</span> <span class="p">.</span><span class="n">opacity</span><span class="p">)))</span>
+</pre></div>
+<p>运行时发现消失的时候有动画，出现的动画却没有。原因是<code>transition</code>只会在<em>出现和消失</em>时触发，而我们的卡片是包在grid容器里的，所以grid出现在屏幕上的时候，就带着卡片一起出现了，transition并不会向下传递（前文也已经说过了，这里刚好印证）。</p><ol>
+<li>所以解决方法当然可以“延迟”呈现这些卡片</li>
+<li>课程里用了另一种方法，机制当然也是延迟，但不是那么地直白：</li>
+</ol>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-9e94c3c0c3e5037d.png" /></figure><ul>
+<li>就是利用了<code>.onAppear</code>来阻断容器和卡片的连续生成，而改用容器呈现后，再逐个“添加”的方式，让每一张卡片都有一个单独出现的机会</li>
+<li>同时也必须利用<code>@State</code>, 让每添加一张卡片都会invalidate view一次</li>
+<li>也能看出，animate能animate的就是属性和transition</li>
+</ul>
+<blockquote>
+<p>当然，课程最后改成了“发牌”的机制，手动添加卡片，彻底阻断了卡片和容器一起出现的场景。</p></blockquote>
+<p>这就带我们来到了实例三，同一个view在不同容器间的动画，怎么计算各自尺度下同一个view的位置：<code>matchedGeometryEffect</code></p><p><strong>实例三</strong></p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-020342ac0df98dc9.png" /></figure><ul>
+<li>想要有牌一张张发出去的效果，自然会想到添加延时</li>
+<li>实现成了同时做动画，只不过越到后面的牌，延时越长（动作越慢），而不是我们想象的先后触发</li>
+</ul>
+<p>为了让不同的牌发出去时有立体效果，还以index为依据设置了<code>zIndex</code>，最终效果：</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/strip.jpg" /></figure>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/%E5%B0%86%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9%E7%94%A8%E4%BD%9CTime-Machine%E5%B9%B6%E5%8A%A0%E5%AF%86/">将共享文件夹用作Time-Machine并加密</a>
+        <p class="yue">怎么在局域网创建一个共享文件夹不在此文讨论范围内, 比如windows文件夹简单右键共享一下, 就能走完本教程. 以下是在macOS上设置Time Machine的操作.#Step 1: 各种命名</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/iOS%E5%B1%8F%E5%B9%95%E6%BB%9A%E5%8A%A8%E6%97%B6Timer%E4%BF%9D%E6%8C%81%E5%B7%A5%E4%BD%9C%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/">iOS屏幕滚动时Timer保持工作的几种方式</a>
+        <p class="yue">iOS当前线程的RunLoop在TableView等scrollView滑动时将DefaultMode切换到了TrackingRunLoopMode。因为Timer默认是添加在RunLoop上的DefaultMode上的，当Mode切换后Timer就停止了运行。</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

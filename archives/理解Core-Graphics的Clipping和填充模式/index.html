@@ -1,0 +1,261 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>理解Core-Graphics的Clipping和填充模式 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="先来看一个例子" />
+<meta property="og:title" content="理解Core-Graphics的Clipping和填充模式 - Maverick" />
+<meta property="og:description" content="先来看一个例子" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/%E7%90%86%E8%A7%A3Core-Graphics%E7%9A%84Clipping%E5%92%8C%E5%A1%AB%E5%85%85%E6%A8%A1%E5%BC%8F/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="理解Core-Graphics的Clipping和填充模式 - Maverick" />
+<meta name="twitter:description" content="先来看一个例子" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">理解Core-Graphics的Clipping和填充模式</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/iOS/">
+                    iOS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/%E7%90%86%E8%A7%A3Core-Graphics%E7%9A%84Clipping%E5%92%8C%E5%A1%AB%E5%85%85%E6%A8%A1%E5%BC%8F/" 
+                    data-flag-title="理解Core-Graphics的Clipping和填充模式"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>先来看一个例子
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-3e7b6d49d93084a7.png" /></figure>
+画一个箭头，其中箭尾有分叉，一般来说，是画一个三角，画一个矩形（实心矩形一般也直接用很粗的线条），最后再叠一个三角（with <code>CGBlendModel.clear</code>)，这里就不多介绍了：</p><div class="highlight"><pre><span></span><span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">rect</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">{</span>       
+    <span class="kd">let</span> <span class="nv">p</span> <span class="p">=</span> <span class="bp">UIBezierPath</span><span class="p">()</span>
+    <span class="c1">// shaft</span>
+    <span class="bp">UIColor</span><span class="p">.</span><span class="n">yellow</span><span class="p">.</span><span class="kr">set</span><span class="p">()</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">19</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">lineWidth</span> <span class="p">=</span> <span class="mi">20</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">stroke</span><span class="p">()</span>
+
+    <span class="c1">// point</span>
+    <span class="bp">UIColor</span><span class="p">.</span><span class="n">red</span><span class="p">.</span><span class="kr">set</span><span class="p">()</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">removeAllPoints</span><span class="p">()</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">fill</span><span class="p">()</span>
+
+    <span class="c1">// snip</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">removeAllPoints</span><span class="p">()</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">101</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">90</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">110</span><span class="p">,</span> <span class="mi">101</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">with</span><span class="p">:</span><span class="n">CGBlendMode</span><span class="p">.</span><span class="n">clear</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<p>我们来看看<code>clipping</code>怎么用</p><ol>
+<li>fill三角箭头（出于堆叠上目的可以最后画）</li>
+<li>找到箭尾的三个顶点<ul>
+<li>用<code>boundingBoxOfClipPath</code>来创建整个画板大小的矩形</li>
+<li>应用<code>clipping</code>把小三角挖掉</li>
+</ul>
+</li>
+</ol>
+<p>3，画一根黄色箭柄粗细的线（从底向上）
+    * 因为小三角区域被clipping掉了，结果就成了图示的模样</p><div class="highlight"><pre><span></span><span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">rect</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// obtain the current graphics context</span>
+        <span class="kd">let</span> <span class="nv">con</span> <span class="p">=</span> <span class="n">UIGraphicsGetCurrentContext</span><span class="p">()</span><span class="o">!</span>
+
+        <span class="c1">// punch triangular hole in context clipping region</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">90</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">100</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">90</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">110</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">100</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">closePath</span><span class="p">()</span>
+        <span class="c1">// 添加整个区域为rect</span>
+        <span class="c1">// 然后再clip设定为不渲染的区域</span>
+        <span class="c1">// 后续的渲染全会避开这个区域</span>
+        <span class="c1">// 我们后面把这个rect设为蓝色试试(顺便改为一个小一点的rect)</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">addRect</span><span class="p">(</span><span class="n">con</span><span class="p">.</span><span class="n">boundingBoxOfClipPath</span><span class="p">)</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">clip</span><span class="p">(</span><span class="n">using</span><span class="p">:.</span><span class="n">evenOdd</span><span class="p">)</span>
+<span class="c1">//        con.fillPath()</span>
+
+        <span class="c1">// draw the vertical line</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">setStrokeColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">yellow</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">100</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">19</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">setLineWidth</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">strokePath</span><span class="p">()</span>
+
+        <span class="c1">// draw the red triangle, the point of the arrow</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">red</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">80</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">25</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">0</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">120</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">25</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">fillPath</span><span class="p">()</span>
+    <span class="p">}</span>
+</pre></div>
+<p>能够完美run起来，但是我对clipping的机制还是有点不理解，一些关键点的讲解，和我的问题，一条条过：</p><ol>
+<li>我们用构建了箭尾的三角形，然后<code>closePath</code>，那是因为我们只画了两条线，如果事实上第三条线连回了原点，那么这个<code>closePath</code>就不需要了</li>
+</ol>
+<ul>
+<li>（图一）演示了不close的话就直接只有两条线了</li>
+</ul>
+<ol start="2">
+<li>我想看看clipping到底发生了啥，于是注释掉了clip的那一行，得到了（图二）</li>
+</ol>
+<ul>
+<li>之所以长那样是因为随后设置了stroke的参数（20像素的黄色）</li>
+<li>stroke时，画板上有三个元素：一个三角，一个矩形，一条线段，全部用20宽的黄线描边了，一切如预期</li>
+</ul>
+<ol start="3">
+<li>于是我尝试添加rect时只取了中间一小块，并涂成蓝色，不clip试试，得到（图三）。</li>
+<li>知道了新rect的位置，把clip加回来，发现箭尾有了，箭头却没了（图四）</li>
+<li>rect与clip的关系已经出来了，尝试把红三角的y通通加50，移到了蓝矩形范围内，得到证明（图五）</li>
+</ol>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-9f8872c1aeb16bd1.png" /></figure><p>那么clipping到底能对哪些起作用呢？是上面的rect吗？<strong>当然不是</strong>！</p><p>在clip方法被调用的时候，画布里有多少封闭元素，就会被应用clip。由于我们选择的是<code>evenOdd</code>模式，那么就会简单计数，某像素覆盖奇数次显示，偶数次则不显示。</p><p>上例中，<code>con.clip(using:)</code>方法调用时，画布里有两个封闭元素，一个三角，一个矩形，三角包在矩形里，那么计数为2，就不予显示了。</p><blockquote>
+<p>事实上，判定奇偶的依据是该点向外做无限长的射线，判定有几条边与射线相交。同时，同样的设定可以用来解释<code>.winding</code>模式，即不但与相交的边有交，还与相交时，那条边是顺时针方向绘制的（+1）还是逆时针方向绘制的（-1）,总结果为0则不填充。<a href="https://www.jianshu.com/p/5cf8048b083b">参考</a></p></blockquote>
+<p>那就玩一玩验证下吧</p><ol>
+<li>把矩形改成了圆圈，线宽也改小一点，得到（图一）<em>绿色三角形是我后加的，因为被黄实线盖住了</em></li>
+<li>再在里面添加了一个小圆，得到（图二）</li>
+<li>这时候按照奇偶原则，小圆里的像素是偶数，而小圆里的三角则是奇数了，那么应该就只有大圆减掉小圆的部分，和小圆内的三角会被渲染了（图三），与预期一致</li>
+</ol>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-f7d438f54a215645.png" /></figure><p>现在再来回顾书上先套一个画布大小的矩形，再画一个三角形，你大概应该知道目的了（凑奇偶），我们矩形区域过小时绘制不了红色三角，纯粹也是因为奇数，往下移到矩形区域内，立马变偶数了。(当然，要在原位置渲染我们可以先中止clip:<code>con.resetClip()</code>再绘图）</p>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/Fixing-Chrome-58%2B-%5Bmissing_subjectAltName%5D-with-openssl-when-using-sel/">Fixing-Chrome-58+-[missing_subjectAltName]-with-openssl-when-using-sel</a>
+        <p class="yue">原文链接说在前面</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/Mac%E8%BF%9C%E7%A8%8BWindows-10%E9%87%8C%E7%94%A8Anaconda%E8%A3%85%E7%9A%84Jupyter-lab/">Mac远程Windows-10里用Anaconda装的Jupyter-lab</a>
+        <p class="yue">家里台式机配置比笔记本好多了，但又习惯了苹果本，怎么在小本本上直接跑windows上的jutyper呢？首先，给Windows 10 装上OpenSSH如果你不是用的Anaconda等虚拟环境而是把python和jupyter lab装在了本机以及写在了path里，理论上你用ssh连上windows后在shell里直接jupyter lab就好了，可是我是用了Anaconda的，ssh进去以及windows自身的命令行环境里都是执行不了conda和jupyter的</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

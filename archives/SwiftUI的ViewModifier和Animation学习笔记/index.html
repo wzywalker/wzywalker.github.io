@@ -1,0 +1,315 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>SwiftUI的ViewModifier和Animation学习笔记 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="我们通过这篇文章练习如下几个知识点，借用的是斯坦福CS193p的课程里的demo，但是代码是我写的，也就是对着最终的效果写出我的实现的意思ViewModifier" />
+<meta property="og:title" content="SwiftUI的ViewModifier和Animation学习笔记 - Maverick" />
+<meta property="og:description" content="我们通过这篇文章练习如下几个知识点，借用的是斯坦福CS193p的课程里的demo，但是代码是我写的，也就是对着最终的效果写出我的实现的意思ViewModifier" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/SwiftUI%E7%9A%84ViewModifier%E5%92%8CAnimation%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="SwiftUI的ViewModifier和Animation学习笔记 - Maverick" />
+<meta name="twitter:description" content="我们通过这篇文章练习如下几个知识点，借用的是斯坦福CS193p的课程里的demo，但是代码是我写的，也就是对着最终的效果写出我的实现的意思ViewModifier" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">SwiftUI的ViewModifier和Animation学习笔记</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/iOS/">
+                    iOS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/SwiftUI%E7%9A%84ViewModifier%E5%92%8CAnimation%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" 
+                    data-flag-title="SwiftUI的ViewModifier和Animation学习笔记"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>我们通过这篇文章练习如下几个知识点，借用的是斯坦福CS193p的课程里的demo，但是代码是我写的，也就是对着最终的效果写出我的实现的意思</p><h2>ViewModifier</h2>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-198e1892136de13d.png" /></figure><p>首先，我们的卡片分为正面和背面，背面是纯色很简单，正面有一个圆环，和一张图片（实际是<code>emoji</code>，也就是<code>String</code>)，我们用<code>ZStack</code>布局好后即可：</p><div class="highlight"><pre><span></span><span class="n">ZStack</span> <span class="p">{</span>
+            <span class="n">Group</span> <span class="p">{</span>
+                <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">).</span><span class="n">fill</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">white</span><span class="p">)</span>
+                <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">).</span><span class="n">stroke</span><span class="p">(</span><span class="n">lineWidth</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">)</span>
+    				<span class="n">CountDownCircle</span><span class="p">()</span>  <span class="c1">// 卡片内容1</span>
+    				<span class="n">Text</span><span class="p">(</span><span class="n">card</span><span class="p">.</span><span class="n">content</span><span class="p">)</span> <span class="c1">// 卡片内容2</span>
+            <span class="p">}.</span><span class="n">opacity</span><span class="p">(</span><span class="n">isFaceUp</span> <span class="p">?</span> <span class="mf">1.0</span> <span class="p">:</span> <span class="mf">0.0</span><span class="p">)</span>
+                <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">)</span>
+                    <span class="p">.</span><span class="n">opacity</span><span class="p">(</span><span class="n">isFaceUp</span> <span class="p">?</span> <span class="mf">0.0</span> <span class="p">:</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="p">}</span>
+</pre></div>
+<p>所以其实卡片内容就是emoji和圆环，因此我们就想，可不可以在我绘制好这两个内容后，调用一个通用方法就能把它变成一张卡片呢？</p><p><code>ViewModifier</code>就是干这个的，使用语法如同：<code>myView.modifier(Cardify(isFaceUp:))</code>
+提取出来的<code>modifier</code>如下：</p><div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">Cardify</span><span class="p">:</span> <span class="n">ViewModifier</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">isFaceUp</span><span class="p">:</span> <span class="nb">Bool</span>
+
+    <span class="kd">func</span> <span class="nf">body</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="n">Content</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+        <span class="n">ZStack</span> <span class="p">{</span>
+            <span class="n">Group</span> <span class="p">{</span>
+                <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">).</span><span class="n">fill</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">white</span><span class="p">)</span>
+                <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">).</span><span class="n">stroke</span><span class="p">(</span><span class="n">lineWidth</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">)</span>
+                <span class="n">content</span>  <span class="c1">// 正面卡片内容</span>
+            <span class="p">}.</span><span class="n">opacity</span><span class="p">(</span><span class="n">isFaceUp</span> <span class="p">?</span> <span class="mf">1.0</span> <span class="p">:</span> <span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">opacity</span><span class="p">(</span><span class="n">isFaceUp</span> <span class="p">?</span> <span class="mf">0.0</span> <span class="p">:</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c1">// 反面卡片内容</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<h2>Extension</h2>
+<p>更进一步，SwiftUI不是有很多<code>View.font(..).opacity(...)</code>的用法么，其中的<code>font</code>，<code>opacity</code>就是这些modifier，然后扩展（<code>extension</code>）给<code>View</code>的，我们也可以：</p><div class="highlight"><pre><span></span><span class="kd">extension</span> <span class="nc">View</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">cardify</span><span class="p">(</span><span class="n">isFaceUp</span><span class="p">:</span> <span class="nb">Bool</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">modifier</span><span class="p">(</span><span class="n">Cardify</span><span class="p">(</span><span class="n">isFaceUp</span><span class="p">:</span> <span class="n">isFaceUp</span><span class="p">))</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>很简单的语法，这样最终<code>myView.cardify(isFaceUp:)</code>就能把当前内容给“<strong>卡片化</strong>”了</p><h2>Animation</h2>
+<p>想点击卡片翻面的时候有一个翻页效果，有一个原生的<code>rotation3DEffect</code>方法：</p><div class="highlight"><pre><span></span><span class="n">myView</span><span class="p">.</span><span class="n">rotation3DEffect</span><span class="p">(</span>
+            <span class="p">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">animatableData</span><span class="p">),</span>
+            <span class="n">axis</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>  <span class="c1">// 沿Y轴翻转，即水平翻转</span>
+            <span class="p">)</span>
+</pre></div>
+<p>实际效果如下：
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/strip.jpg" /></figure></p><p>动画加长了，我们能看清卡片虽然有了翻面的动面，但是在开始动画的一瞬间，卡片的正面就显示出来了，我们来解决这个问题，所以我这里并不是系统讲解动画，而是在对解决问题的思路做个笔记。</p><blockquote>
+<p>题外话，我觉得<code>SwiftUI</code>和<code>Flutter</code>诞生时代相同，很多理念也驱同，在动画方面，也是放弃了以前要么从头画起，要么用封装得很好的有限几个动画的思路，基本上让你能用自绘+插值的方式来自己控制动画（有点类似关键帧，但关键帧的帧与帧之间也是自动的），而现在你可以完全对一个过程进行Linear interpolation，来控制动画过程（Flutter中的<code>lerp</code>函数就是干这个的，本节也有SwiftUI的类似实现）。</p></blockquote>
+<p>比如这个翻转，<code>Objective-C</code>里直接就给你实现好了，在SwiftUI里，给的是一个最基本的几何变换，至于这上面的效果，就要你自己实现了。我认为这是对的。</p><p>按课程里的思路，卡片要么正面，要么反面，是由<code>isFaceUp</code>决定的，加入动画后，那需要这个属性在进行了50%（也就是90˚）的时候才改值</p><p>而这个属性是卡片的属性，与动画无关，所以<strong>第一个决策</strong>，就是把动画函数写到<code>ViewModifier</code>里面去，传进去的是卡片的属性，但是在<code>modifier</code>里，我们把它适当转化成应该转的角度（0˚或90˚）,这样在<code>modifier</code>里面不管做什么变化，都不影响外部调用者自己的语义了（方法和参数都没变）：</p><div class="highlight"><pre><span></span><span class="kd">init</span><span class="p">(</span><span class="n">isFaceUp</span><span class="p">:</span> <span class="nb">Bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// step1 这里接的是布尔值，但是我们需要把它转成对应的翻转角度</span>
+        <span class="n">animatableData</span> <span class="p">=</span> <span class="n">isFaceUp</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="mi">180</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 重新定义了isFaceUp，改由翻转角度的大小决定</span>
+    <span class="c1">// 从而解决isFaceUp在第一时间就改变的问题</span>
+    <span class="kd">var</span> <span class="nv">isFaceUp</span><span class="p">:</span> <span class="nb">Bool</span> <span class="p">{</span>
+        <span class="c1">// step3</span>
+        <span class="n">animatableData</span> <span class="o">&lt;</span> <span class="mi">90</span>
+    <span class="p">}</span>
+</pre></div>
+<p>剩下的就是语法了，我们要实现一个<code>Animatable</code>的协议，与<code>ViewModifier</code>协议合并成<code>AnimatableModifier</code>，它只有一个属性，用我的话来说，就是前面提到的“动画插值”，我一直用这一个概念来理解这些新库里的动画原理，你也可以有你的理解。</p><p>总之，它需要你指定一个提供插值的来源，在这个例子中，这个来源就是<code>rotation3DEffect</code>函数，因为它会自动执行动画，显然里面的“<strong>角度</strong>”参数是会自己变的，我们要的就是捕捉这个“<strong>角度</strong>”，组合起来，看代码：</p><div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">Cardify</span><span class="p">:</span> <span class="n">AnimatableModifier</span> <span class="p">{</span>
+    <span class="kd">init</span><span class="p">(</span><span class="n">isFaceUp</span><span class="p">:</span> <span class="nb">Bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// step1 把参数转化成动画插值的（最终）值</span>
+        <span class="n">animatableData</span> <span class="p">=</span> <span class="n">isFaceUp</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="mi">180</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nv">isFaceUp</span><span class="p">:</span> <span class="nb">Bool</span> <span class="p">{</span>
+        <span class="c1">// step3 通过插值来反推正反面</span>
+        <span class="n">animatableData</span> <span class="o">&lt;</span> <span class="mi">90</span>
+    <span class="p">}</span>
+
+    <span class="c1">// step0</span>
+    <span class="c1">// 把写死的角度变成插值</span>
+    <span class="kd">var</span> <span class="nv">animatableData</span><span class="p">:</span> <span class="nb">Double</span> <span class="c1">// 这个类型是自定义的， 我们要用它来旋转角度，所以是double</span>
+
+    <span class="kd">func</span> <span class="nf">body</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="n">Content</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+        <span class="n">ZStack</span> <span class="p">{</span>
+            <span class="n">Group</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="n">isFaceUp</span> <span class="p">{</span>
+    					<span class="c1">// 卡片正面代码                </span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                	   <span class="c1">// 卡片反面代码</span>
+                <span class="p">}</span>
+        <span class="c1">// step2</span>
+        <span class="c1">// 课程里是有额外的角度参数，并且与animatableData进行了绑定</span>
+        <span class="c1">// 其实为了演示插值的作用，不包装更直观</span>
+        <span class="p">.</span><span class="n">rotation3DEffect</span><span class="p">(</span>
+            <span class="p">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">animatableData</span><span class="p">),</span>
+            <span class="n">axis</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+            <span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>效果如下，其实就是解决了如何捕捉动画进度的问题，也就是<code>animatableData</code>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/strip.jpg" /></figure></p><h2>Animation2</h2>
+<p>多一个例子，课程里每张卡片翻开就会倒计时，原本是一个大饼，我根据我的喜好改成了圆环（其实是我学教程的习惯，尽可能不去做跟教程一样的事，避免思维惰性）</p><p>那么怎么让进度条动起来呢？终于讲到了怎么手动计算<strong>插值</strong>，并把这组值推给动画库让它动起来的过程了。</p><p>有了上一个例子，我查看了一个<code>Shape</code>的定义，原生就conform to protocol <code>Animatable</code>的，所以我们直接添加一个<code>AnimatedData</code>试试。</p><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nv">animatableData</span><span class="p">:</span> <span class="nb">Double</span>   <span class="c1">// degrees</span>
+</pre></div>
+<blockquote>
+<p>这里跟上例有一点区别，上一例动画是系统库做好的，我们只是<code>capture value</code>，所以几乎只要把那个变量摆在那，别处需要的时候直接使用就可以了，而现在我们是要主动更改这个data，从而实现绘图的不断更新，所以稍微复杂了些。</p></blockquote>
+<p>课程里把起点和终点都做成了动画参数，可能是为了演示<code>AnimatablePair</code>，而本例中起点其实是不变的，所以我实事求是，把它用最简单的方法来实现，同时，放弃对象化思维，使用动画插值的思维，不去考虑插值与原来的类的属性有什么关系，直接把插值用在需要变化的位置，这是做教学的话最直观的方案了，按我的做法，代码几乎没有变化，就多了一行和改了一行：</p><div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">CountDownCircle</span><span class="p">:</span> <span class="n">Shape</span> <span class="p">{</span>
+
+<span class="cm">/* </span>
+<span class="cm">以下注释掉的是教程的用法，保留了data与angle的关系</span>
+<span class="cm">    var endAngle: Angle  //</span>
+<span class="cm">    var animatableData: Double {</span>
+<span class="cm">        get {</span>
+<span class="cm">            endAngle.degrees</span>
+<span class="cm">        }</span>
+<span class="cm">        set {</span>
+<span class="cm">            print(&quot;set: \(newValue)&quot;)</span>
+<span class="cm">            endAngle = Angle.degrees(newValue)</span>
+<span class="cm">        }</span>
+<span class="cm">*/</span>    
+    <span class="c1">// 我直观展示这个插值的用法</span>
+    <span class="kd">var</span> <span class="nv">animatableData</span><span class="p">:</span> <span class="nb">Double</span>   <span class="c1">// degrees</span>
+
+    <span class="kd">func</span> <span class="nf">path</span><span class="p">(</span><span class="k">in</span> <span class="n">rect</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Path</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nv">p</span> <span class="p">=</span> <span class="n">Path</span><span class="p">()</span>
+        <span class="kd">let</span> <span class="nv">center</span> <span class="p">=</span> <span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">rect</span><span class="p">.</span><span class="n">midX</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">rect</span><span class="p">.</span><span class="n">midY</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">.</span><span class="n">addArc</span><span class="p">(</span><span class="n">center</span><span class="p">:</span> <span class="n">center</span><span class="p">,</span>
+                 <span class="n">radius</span><span class="p">:</span> <span class="p">(</span><span class="n">rect</span><span class="p">.</span><span class="n">width</span><span class="o">-</span><span class="mf">10.0</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span>
+                 <span class="n">startAngle</span><span class="p">:</span> <span class="n">Angle</span><span class="p">.</span><span class="n">degrees</span><span class="p">(</span><span class="mi">0</span><span class="o">-</span><span class="mi">90</span><span class="p">),</span>
+                 <span class="n">endAngle</span><span class="p">:</span> <span class="n">Angle</span><span class="p">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">animatableData</span><span class="p">),</span> <span class="c1">//endAngle（教程用endAngle）,</span>
+                 <span class="n">clockwise</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">p</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>改造很简单，就是把告诉动画库“<strong>结束角度</strong>”是一个需要变动的值就好了，我们调用的时候把一个<strong>能自己变化的值</strong>送到这个参数里就能动起来。对调用者进行一点准备：</p><div class="highlight"><pre><span></span><span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">animatedData</span><span class="p">:</span> <span class="nb">Double</span> <span class="p">=</span> <span class="mf">0.0</span>
+
+    <span class="kd">private</span> <span class="kd">func</span> <span class="nf">startRemainingCountdown</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">animatedData</span> <span class="p">=</span> <span class="err">剩余进度</span>
+        <span class="n">withAnimation</span><span class="p">(.</span><span class="n">linear</span><span class="p">(</span><span class="n">duration</span><span class="p">:</span> <span class="err">剩余时间</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">animatedData</span> <span class="p">=</span> <span class="mf">0.0</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+<p>这里做了两件事：</p><ol>
+<li><code>@State</code>的用法，<code>View</code>是无状态的，现在我们要做动画，需要保持一些状态，这里我们保持一个“进度”的值</li>
+<li>添加了一个触发动画的函数，就是设置动画初值，设置终止值，然后通过<code>withAnimation</code>函数让它自动生成插值序列，这就是我前面提过的类似的<code>Flutter</code>的<code>lerp</code>方法，SwiftUI中没找到，但是变相提供了用系统动画来提供插值的做法。</li>
+</ol>
+<p>使用就很简单了，把“<strong>进度</strong>”填到相应的参数位，然后选择一个时机触发，我们这里选择的是<code>onAppear</code></p><div class="highlight"><pre><span></span><span class="n">CountDownCircle</span><span class="p">(</span><span class="n">animatableData</span><span class="p">:</span> <span class="o">-</span><span class="n">animatedData</span><span class="o">*</span><span class="mi">360</span><span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">stroke</span><span class="p">(</span><span class="n">style</span><span class="p">:</span> <span class="n">strokeStyle</span><span class="p">).</span><span class="n">opacity</span><span class="p">(</span><span class="mf">0.4</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">onAppear</span> <span class="p">{</span>
+            <span class="n">startRemainingCountdown</span><span class="p">()</span>
+        <span class="p">}</span>
+</pre></div>
+<blockquote>
+<p>需要注意的是<code>withAnimation</code>过程中对值的更改我们并不能显式捕捉，至少我试图把它显示在UI上观察它的变化是失败的，直接显示了最终值，而在接这个变化的插值的底层函数里，我能在<code>animatableData</code>的<code>set</code>方法里看到确实设置了无数的插值，暂时没有理解<code>withAnimation</code>真的有有没有直接对两个数字直接生成一系列中间值</p></blockquote>
+<p>效果如下：
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/strip.jpg" /></figure></p><h2>后记</h2>
+<p>动画我之前写过一篇：<a href="https://www.jianshu.com/p/0e4c8f0e1c23">用CALayer绘图,添加动画和渐变</a>，很明显可以看到，以前的写法仍然是黑匣子，即告诉动画库，请给我动画，动画的要求是blablabla，而现在都走了插值的路线，即把一系列值告诉你，你按照每个值直接绘图就是了，绘成啥样我自己负责。这就是我这篇文章反复强调的思路的变化，我喜欢这种思路。</p>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/%E5%BC%80%E5%8F%91apple-pay%E7%A2%B0%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">开发apple-pay碰到的问题总结</a>
+        <p class="yue">本来想简单总结一下Apple Pay 开发过程中的几个问题, 结果被这篇文章全碰上了, 干脆全文转载, 作者对相关资源整理得比较详细, 比较有参考价值, 建议阅读, 我做个概述.总的来说, 我们做过 APNs 推送的话, 申请 商户ID 并关联到 apple id, 申请证书, 生成provisioning profile等步骤都差不多然后我真机调试有两个地方没通过, 下文也总结了, 我拎出来单独说一下:1, Payment request is invalid: check your entitlements. Connection to remote alert view service failed</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/%E6%88%91%E6%9C%80%E5%B8%B8%E7%94%A8%E7%9A%84%E5%87%A0%E4%B8%AAXcode%E5%BF%AB%E6%8D%B7%E9%94%AE/">我最常用的几个Xcode快捷键</a>
+        <p class="yue"></p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

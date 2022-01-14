@@ -1,0 +1,272 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>用CALayer绘图,添加动画和渐变 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="如果CALayer只有一个简单的 path, 那么直接给 path 赋值是最简单的:" />
+<meta property="og:title" content="用CALayer绘图,添加动画和渐变 - Maverick" />
+<meta property="og:description" content="如果CALayer只有一个简单的 path, 那么直接给 path 赋值是最简单的:" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/%E7%94%A8CALayer%E7%BB%98%E5%9B%BE%2C%E6%B7%BB%E5%8A%A0%E5%8A%A8%E7%94%BB%E5%92%8C%E6%B8%90%E5%8F%98/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="用CALayer绘图,添加动画和渐变 - Maverick" />
+<meta name="twitter:description" content="如果CALayer只有一个简单的 path, 那么直接给 path 赋值是最简单的:" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">用CALayer绘图,添加动画和渐变</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/iOS/">
+                    iOS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/%E7%94%A8CALayer%E7%BB%98%E5%9B%BE%2C%E6%B7%BB%E5%8A%A0%E5%8A%A8%E7%94%BB%E5%92%8C%E6%B8%90%E5%8F%98/" 
+                    data-flag-title="用CALayer绘图,添加动画和渐变"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>如果CALayer只有一个简单的 path, 那么直接给 path 赋值是最简单的:</p>
+<pre><code>shapeLayer = [CAShapeLayer layer];
+shapeLayer.bounds = self.bounds;
+shapeLayer.anchorPoint = CGPointMake(0, 0);
+
+CGFloat endAngle = (1+_percentage)*M_PI;
+shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:center
+                                                 radius:radius
+                                             startAngle:startAngle
+                                               endAngle:endAngle
+                                              clockwise:YES].CGPath;
+shapeLayer.strokeColor = _highlightColor.CGColor;
+shapeLayer.fillColor = [UIColor clearColor].CGColor;
+shapeLayer.lineWidth = arcWidth;
+shapeLayer.lineCap = kCALineCapRound;
+[self.layer addSublayer:shapeLayer];         
+</code></pre>
+<p>对 线条类的 path 可以应用<code>strokeEnd</code>属性来绘制动画:</p>
+<pre><code>CASpringAnimation *pathAnimation = [CASpringAnimation animationWithKeyPath:@&quot;strokeEnd&quot;];
+pathAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
+pathAnimation.toValue = [NSNumber numberWithFloat:1.0f];
+pathAnimation.mass = 4.0f;              // 物体质量 1
+pathAnimation.stiffness = 200;          // 弹簧刚性 100
+pathAnimation.damping = 20;             // 弹簧阻尼 10
+pathAnimation.initialVelocity = 1.0f;  // 初始速度 0
+pathAnimation.duration = pathAnimation.settlingDuration;
+pathAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+[shapeLayer addAnimation:pathAnimation forKey:@&quot;strokeEndAnimation&quot;];
+</code></pre>
+<p>再加点渐变吧</p>
+<pre><code>// 增加渐变图层
+CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+gradientLayer.frame = self.bounds;
+gradientLayer.colors = gradientColorSet;
+gradientLayer.startPoint = CGPointMake(1,0);
+gradientLayer.endPoint = CGPointMake(0, _percentage);
+
+[self.layer addSublayer:gradientLayer];
+// [self.layer addSublayer:shapeLayer]; // 移除之前的图层
+gradientLayer.mask = shapeLayer; // 当作渐变图层的 mask
+</code></pre>
+<p>组合效果如下:
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-86b02253763d02a7.gif" /></figure></p><p>要绘制弧形, 对照这个图就很简单了:
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-cde25599cbf959f6.png" /></figure></p><p>补充知识:</p><p>1, <code>CALayer</code>的动画用不了<code>animateWithDuration:animations:completion:</code>怎么办?</p><blockquote>
+<p>因为这是<code>UIView</code>的方法, 你要把它加到一个<code>CATransaction</code>里面去</p></blockquote>
+<p>2, 即使加到<code>CATransaction</code>里面了, 怎么我对<code>frame</code>做的动画还是没有生效?</p><blockquote>
+<p>因为<code>frame</code>是一个复合属性, 它由<code>position</code>, <code>bounds</code>等属性决定, 所以你只是用错了属性.</p></blockquote>
+<p>示例:</p>
+<pre><code>    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        // 完成回调
+    }];
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@&quot;bounds.size.width&quot;];
+    animation.duration = self.defaultLayoutTransitionDuration;
+    animation.fromValue = @(0.0f); 
+    animation.toValue = @(finalFrame.size.width); 
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+    [line.layer addAnimation:animation forKey:@&quot;lineLayerAnimation&quot;];
+    line.bounds = finalFrame;
+    [CATransaction commit];
+</code></pre>
+<p>其它有关 CALayer 的不同<strong>生命周期</strong>里绘制的解说请参考<a href="http://blog.csdn.net/kyfxbl/article/details/50640978">这篇文章</a>, 全文转载如下</p><p>在iOS中绘图，可以使用<code>UIView</code>，也可以使用<code>CALayer</code>。实际上，UIView也是由底层的CALayer完成绘制的工作</p><p>#UIView和CALayer的关系</p><p>每个UIView内部都有一个CALayer对象，由它来完成绘制的工作。和view一样，layer也是一个树形的结构</p><p>当不需要自定义组件的时候，用UIView的API就足以胜任，把需要的子view通过addSubview()方法放到view的层次里即可；但是如果需要自己绘制一些图形，就需要在UIView的drawRect()方法或是CALayer的相关方法中，调用CoreGraphics的API来画图</p><p>跟几个朋友也讨论过这个问题，我认为用layer来画是更好的办法，因为相对于view，layer是更轻量级的组件，可以节省系统资源。同时layer是动画的基本单元，加动画特效也更容易。并且view负责响应手势等，把绘制的代码都放在layer里，逻辑上也更加清晰</p><p>但是需要注意，layer不能直接响应触摸事件，所以手势识别还是需要通过view来完成
+在UIView中绘图</p><p>在UIView中绘图非常简单，当调用</p>
+<pre><code>self.setNeedsDisplay()
+</code></pre>
+<p>iOS系统会自动调用view上的<code>drawRect()</code>方法，可以在<code>drawRect()</code>方法中绘制图形
+在CALayer中绘图</p><p>在layer中绘图，生命周期比view复杂一些</p><p>首先也是调用layer上的<code>setNeedsDisplay()</code>触发的</p><p>#display</p><p>首先会进入layer的<code>display()</code>方法，在这里可以把CGImage赋给layer的contents，那么会直接把该CGImage作为此layer的样式，不会进入后续的方法</p>
+<pre><code>// 绘图方法
+override func display() {
+
+    if let img = getFrameImage(wheelStyle) {
+        contents = img.CGImage
+    }        
+}
+</code></pre>
+<p>#displayLayer</p><p>如果没有实现display()方法，或者调用了super.display()，并且设置了layer的<code>delegate</code>，那么iOS系统会调用delegate的<code>displayLayer()</code>方法</p>
+<pre><code>let myLayer : MyLayer = MyLayer()
+myLayer.delegate = self;
+myLayer.frame = bounds;
+
+override func displayLayer(layer: CALayer) {
+
+    if let img = getFrameImage(wheelStyle) {
+        contents = img.CGImage
+    }
+}
+</code></pre>
+<p>#drawInContext</p><p>如果没有设置delegate，或者delegate没有实现<code>displayLayer()</code>方法，那么接下来会调用layer的<code>drawInContext</code>方法</p>
+<pre><code>override func drawInContext(ctx: CGContext) {
+
+    CGContextSetLineWidth(ctx, 1);
+    CGContextMoveToPoint(ctx, 80, 40);
+    CGContextAddLineToPoint(ctx, 80, 140);
+    CGContextStrokePath(ctx);
+}
+</code></pre>
+<p>#drawLayerInContext</p><p>如果layer没有实现<code>drawInContext</code>方法，那么接下来就会调用delegate的<code>drawLayerInContext</code>方法</p>
+<pre><code>override func drawLayer(layer: CALayer, inContext ctx: CGContext) {
+    CGContextSetLineWidth(ctx, 1);
+    CGContextMoveToPoint(ctx, 80, 40);
+    CGContextAddLineToPoint(ctx, 80, 140);
+    CGContextStrokePath(ctx);
+}
+</code></pre>
+<p>#总结</p><p>所以，一般来说，可以在layer的<code>display()</code>或者<code>drawInContext()</code>方法中来绘制</p><p>在display()中绘制的话，可以直接给contents属性赋值一个CGImage，在<code>drawInContext()</code>里就是各种调用CoreGraphics的API</p><p>假如绘制的逻辑特别复杂，希望能从layer中剥离出来，那么可以给layer设置delegate，把相关的绘制代码写在delegate的<code>displayLayer()</code>和<code>drawLayerInContext()</code>方法。这2个方法与<code>display()</code>和<code>drawInContext()</code>是分别一一对应的</p>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/apple-store%E9%93%BE%E6%8E%A5%E6%A0%BC%E5%BC%8F%E6%96%87%E6%A1%A3/">apple-store链接格式文档</a>
+        <p class="yue">The app on Appstore has specific URL format http://itunes.apple.com/[country-code]/app/[app-name]/id+[id_value]?mt=[1...12]</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/%E4%BD%BF%E7%94%A8openssl%E5%88%9B%E5%BB%BA%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%8F%8A%E9%83%A8%E7%BD%B2%E5%88%B0IIS%E6%95%99%E7%A8%8B/">使用openssl创建自签名证书及部署到IIS教程</a>
+        <p class="yue">#创建自签名证书</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

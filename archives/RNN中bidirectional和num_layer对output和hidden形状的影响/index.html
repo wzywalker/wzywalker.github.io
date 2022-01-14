@@ -1,0 +1,394 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>RNN中bidirectional和num_layer对output和hidden形状的影响 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="Batch first" />
+<meta property="og:title" content="RNN中bidirectional和num_layer对output和hidden形状的影响 - Maverick" />
+<meta property="og:description" content="Batch first" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/RNN%E4%B8%ADbidirectional%E5%92%8Cnum_layer%E5%AF%B9output%E5%92%8Chidden%E5%BD%A2%E7%8A%B6%E7%9A%84%E5%BD%B1%E5%93%8D/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2021-04-13T00:00:00-00.00" />
+<meta name="twitter:title" content="RNN中bidirectional和num_layer对output和hidden形状的影响 - Maverick" />
+<meta name="twitter:description" content="Batch first" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">RNN中bidirectional和num_layer对output和hidden形状的影响</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2021-04-13
+                </time>
+                
+                in <a no-style class="category" href="/category/AI/">
+                    AI
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/RNN%E4%B8%ADbidirectional%E5%92%8Cnum_layer%E5%AF%B9output%E5%92%8Chidden%E5%BD%A2%E7%8A%B6%E7%9A%84%E5%BD%B1%E5%93%8D/" 
+                    data-flag-title="RNN中bidirectional和num_layer对output和hidden形状的影响"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <h2>Batch first</h2>
+<p>首先，我们要习惯接受<code>batch_first=False</code>（就是默认值）的思维，因为NLP中批量处理句子，是每一句取第一个词，第二个词，以此类推。
+按我们习惯的把数据放在同一批（即<code>batch_first=True</code>）的思路虽然可以做到（善用切片即可），但是绕了弯路。但是如果第1批都是第1个字，第2批全是第2个字，这会自然很多（<strong>行优先</strong>）。</p><p>所以至少<code>Pytorch</code>内部，你设了True，内部也是按False来处理的，只是给了你一个语法糖（当然你组织数据就必须按True来组织了。</p><p>看个实例：</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-9aea1f2ec2540d06.png" /></figure><ol>
+<li>假定批次是64，句长截为70，在还没有向量化的数据中，那么显然一次的输入应该为(70x64)，批次在第2位</li>
+<li>注意第一行，全是2，这是设定的<code>&lt;bos&gt;</code>，这已经很好地表示了在行优先的系统里（比如<code>Matlab</code>就是列优先），会自然而且把<strong>每句话</strong>的第一个词读出来的设定了。</li>
+</ol>
+
+<pre><code># 我用的torchtext的Field进行演示， SRC是一个Field
+[SRC.vocab.itos[i] for i in range(1,4)]  
+['&lt;pad&gt;', '&lt;bos&gt;', '&lt;eos&gt;']
+</code></pre>
+<ol start="3">
+<li>可见，2是开始，3是结束，1是空格（当然这是我设置的）</li>
+<li>同时也能注意到，最后一行有的是3，有的是1，有的都不是，就说明句子是以70为长度进行截断的，自然结束的是3，补<code>&lt;pad&gt;</code>的是1，截断的那么那个字是多少就是多少</li>
+<li>竖向取一条就是一整句话，打印出来就是箭头指向的那一大坨（共70个数字）</li>
+<li>对它进行<code>index_to_string</code>(itos)，则还原出了这句话</li>
+<li>nn.Embedding做了两件事：</li>
+</ol>
+<ul>
+<li>根据vocabulary进行one-hot（稀疏）$\rightarrow$ 所以你要告诉它词典大小</li>
+<li>然后再embedding成指定的低维向量（稠密）</li>
+<li>所以70个数字就成了70x300，拼上维度，就是70x64x300</li>
+</ul>
+<p>既然讲到这了，多讲两行，假定hidden_dim=256, 一个<code>nn.RNN</code>会输出的<code>outputs</code>和<code>hidden</code>的形状如下：</p>
+<pre><code>&gt;&gt;&gt; outputs.shape
+torch.Size([70, 64, 256])
+&gt;&gt;&gt; hidden.shape
+torch.Size([1, 64, 256])
+</code></pre>
+<ol>
+<li>即300维进去，256维出来，但是因为句子有70的长度，那就是70个output，hidden是从前传到后的，当然是最后一个</li>
+<li>也因此，如果你不需要叠加多层RNN，你只需要最后一个字的output就行了<code>outputs[-1,:,:]</code>, 这个结果送到全连接层里去进行分类。</li>
+</ol>
+<h2>自己写一个RNN</h2>
+<p>其实就是要自己把上述形状变化做对就行了。就是几个线性变换，所以我们用<code>nn.Linear</code>来拼接:</p><ol>
+<li>input: 2x5x3 $\Rightarrow$ 5个序列，每一个2个词，每个词用3维向量表示</li>
+<li>hidden=10, 无embedding，num_class=7</li>
+<li>期待形状：</li>
+</ol>
+<ul>
+<li>output: 2x5x7</li>
+<li>hidden:1x5x10</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">RNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">=</span> <span class="n">hidden_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i2h</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span> <span class="o">+</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i2o</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span> <span class="o">+</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">softmax</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LogSoftmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">hidden</span><span class="p">):</span>
+        <span class="n">combined</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="nb">input</span><span class="p">,</span> <span class="n">hidden</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># input shape: (2, 5, 3)</span>
+        <span class="c1"># hidden shape: (2, 5, 10)</span>
+        <span class="c1"># combine shape (2, 5, 13)</span>
+        <span class="n">hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">i2h</span><span class="p">(</span><span class="n">combined</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">i2o</span><span class="p">(</span><span class="n">combined</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">hidden</span>
+
+    <span class="k">def</span> <span class="nf">initHidden</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
+
+<span class="n">hidden_size</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">num_class</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="nb">input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,(</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">rnn</span> <span class="o">=</span> <span class="n">RNN</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">hidden_size</span><span class="p">,</span><span class="n">num_class</span><span class="p">)</span>
+<span class="n">out</span><span class="p">,</span> <span class="n">hid</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">))</span>
+<span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">hid</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+<p>output:</p>
+<pre><code>(torch.Size([2, 5, 7]), torch.Size([2, 5, 10]))
+</code></pre>
+<p>可见，output是一样的，hidden的形状不一样，事实上每一个字确实是会产生hidden的，但是pytorch并没有把它返出来（消费掉就没用了）。这里就pass了，我们主要是看一下双向和多层的情况下形状的变化，下面我们用pytorch自己的RNN来测试。</p><h1>num_layers</h1>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">num_layers</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">rnn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">RNN</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="n">num_layers</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">h0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">num_layers</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="c1"># 几层就需要初始几个hidden</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># input: 5x3 -&gt; 1x12 # N个批次， 5个序列(比如5个字，每个字由3个数字的向量组成)</span>
+<span class="n">o</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">h0</span><span class="p">)</span> <span class="c1"># 5个output, 一个final hidden</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;output shape&#39;</span><span class="p">,</span> <span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hidden shape&#39;</span><span class="p">,</span> <span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+<p>输出：</p>
+<pre><code>output shape torch.Size([5, 2, 12])  # 2个批次，5个词，12维度输出
+hidden shape torch.Size([3, 2, 12]) # 3层会输出3个hidden，2个批次
+</code></pre>
+<p>加上embedding, RNN改成GRU</p><div class="highlight"><pre><span></span><span class="c1"># 这次加embedding</span>
+<span class="c1"># 顺便把 RNN 改 GRU</span>
+<span class="n">vocab_size</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">embed_size</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">hidden_size</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="c1"># 要求词典长度不超过5，输出向量长度为10</span>
+<span class="n">emb</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">vocab_size</span><span class="p">,</span> <span class="n">embed_size</span><span class="p">)</span> 
+<span class="c1"># 输入为embeding维度，输出（和隐层）为8维度</span>
+<span class="n">rnn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">embed_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># 这次设了num_layers=2，就要求有两个hidden了</span>
+<span class="n">h0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+<span class="c1"># 因为数据会用embedding包一次，所以input没有了维度要求（只有大小要求，每个数字要小于字典长度）</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">))</span> 
+<span class="n">e</span> <span class="o">=</span> <span class="n">emb</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;input.shape:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;embedding.shape:&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># (3,4)会扩展成（3,4,10), 10维是rnn的input维度，正好</span>
+<span class="n">o</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">h0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;output.shape:</span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">, hidden.shape:</span><span class="si">{</span><span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+<pre><code>input.shape: torch.Size([5, 3])
+embedding.shape: torch.Size([5, 3, 10])
+output.shape:torch.Size([5, 3, 8]), hidden.shape:torch.Size([2, 3, 8])
+</code></pre>
+<p>唯一要注意的变化就是input，因为embedding是把字典大小的维度转换成指定大小的维度，暗含了你里面的每一个数字都是字典的索引，所以你组装demo数据的时候，要生成小于字典大小(<code>vocab_size</code>）的数字作为输入。</p><h2>bidirectional</h2>
+<p>这次加<strong>bidirectional</strong></p><ul>
+<li>batch_first = False</li>
+<li>x (5, 3) -&gt; 3个序列，每个序列5个数</li>
+<li>embedding(5, 10) -&gt; 输入字典长5，输出向量长10 -&gt; (5, 3, 10) -&gt; 3个序列，每个序列5个10维向量</li>
+<li>hidden必须为8维，4个（num_layers=2, bidirection),3个批次 -&gt; (4,3,8)</li>
+<li>rnn(10, 8) -&gt; 输入10维，输出8维</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># 这次加 bidirection</span>
+
+<span class="n">vocab_size</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">embed_size</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">hidden_size</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">num_layers</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="c1"># 要求词典长度不超过5，输出向量长度为10</span>
+<span class="n">emb</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">vocab_size</span><span class="p">,</span> <span class="n">embed_size</span><span class="p">)</span> 
+<span class="c1"># 输入为embeding维度，输出（和隐层）为8维度</span>
+<span class="n">rnn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">embed_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="n">num_layers</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># 这次设了num_layers=2，就要求有两个hidden了</span>
+<span class="c1"># 加上双向，就有4个了，这里乘以2</span>
+<span class="c1"># h0 = (torch.rand(2, batch_size, hidden_size), torch.rand(2, batch_size, hidden_size))</span>
+<span class="n">h0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">num_layers</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+<span class="c1"># 因为数据会用embedding包一次，所以input没有了维度要求（只有大小要求，每个数要小于字典长度）</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">))</span> 
+<span class="n">e</span> <span class="o">=</span> <span class="n">emb</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;input.shape:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;embedding.shape:&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># (3,4)会扩展成（3,4,10), 10维是rnn的input维度，正好</span>
+<span class="c1"># hidden = torch.cat((h0[-2,:,:], h0[-1,:,:]),1)</span>
+<span class="n">o</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">h0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;output.shape:</span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">, hidden.shape:</span><span class="si">{</span><span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+<pre><code>input.shape: torch.Size([5, 3])
+embedding.shape: torch.Size([5, 3, 10])
+output.shape:torch.Size([5, 3, 16]), hidden.shape:torch.Size([4, 3, 8])
+</code></pre>
+<p>可见，双向会使输出多一倍，可以用<code>[:hidden_size], [hidden_size:]</code>分别取出来，我们<strong>验证</strong>一下，用框架生成一个双向的GRU，然后手动生成一个正向的一个负向的，复制参数，看一下输出：</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch.autograd</span> <span class="kn">import</span> <span class="n">Variable</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># 制作一个正序和反序的input</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span>
+<span class="n">random_input</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">normal_</span><span class="p">(),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">reverse_input</span> <span class="o">=</span> <span class="n">random_input</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">:,</span> <span class="p">:]</span>
+
+<span class="n">bi_grus</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">reverse_gru</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">gru</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">reverse_gru</span><span class="o">.</span><span class="n">weight_ih_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">weight_ih_l0_reverse</span>
+<span class="n">reverse_gru</span><span class="o">.</span><span class="n">weight_hh_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">weight_hh_l0_reverse</span>
+<span class="n">reverse_gru</span><span class="o">.</span><span class="n">bias_ih_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">bias_ih_l0_reverse</span>
+<span class="n">reverse_gru</span><span class="o">.</span><span class="n">bias_hh_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">bias_hh_l0_reverse</span>
+<span class="n">gru</span><span class="o">.</span><span class="n">weight_ih_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">weight_ih_l0</span>
+<span class="n">gru</span><span class="o">.</span><span class="n">weight_hh_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">weight_hh_l0</span>
+<span class="n">gru</span><span class="o">.</span><span class="n">bias_ih_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">bias_ih_l0</span>
+<span class="n">gru</span><span class="o">.</span><span class="n">bias_hh_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">bias_hh_l0</span>
+
+<span class="n">bi_output</span><span class="p">,</span> <span class="n">bi_hidden</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="p">(</span><span class="n">random_input</span><span class="p">)</span>
+<span class="n">output</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="n">gru</span><span class="p">(</span><span class="n">random_input</span><span class="p">)</span>
+<span class="n">reverse_output</span><span class="p">,</span> <span class="n">reverse_hidden</span> <span class="o">=</span> <span class="n">reverse_gru</span><span class="p">(</span><span class="n">reverse_input</span><span class="p">)</span>  <span class="c1"># 分别取[(4,3,2,1,0),:,:] -&gt; 即倒序送入input</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;bi_output:&#39;</span><span class="p">,</span> <span class="n">bi_output</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bi_output</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bi_output</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>                <span class="c1"># 双向输出中的后半截</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">reverse_output</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="c1"># 反向输出</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>                   <span class="c1"># 单独一个rnn的输出 </span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bi_output</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>                <span class="c1"># 双向输出中的前半截</span>
+</pre></div>
+
+<pre><code>bi_output: torch.Size([5, 1, 2])
+tensor([[-0.2336, -0.3068],
+        [ 0.0660, -0.6004],
+        [ 0.0859, -0.5620],
+        [ 0.2164, -0.5750],
+        [ 0.1229, -0.3608]])
+tensor([-0.3068, -0.6004, -0.5620, -0.5750, -0.3608])
+tensor([-0.3068, -0.6004, -0.5620, -0.5750, -0.3608])
+tensor([-0.2336,  0.0660,  0.0859,  0.2164,  0.1229])
+tensor([-0.2336,  0.0660,  0.0859,  0.2164,  0.1229])
+</code></pre>
+<p>现在你们应该知道<code>bidirectional</code>的双倍输出是怎么回事了，再来看看hidden</p><div class="highlight"><pre><span></span><span class="n">hidden</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">reverse_hidden</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">bi_hidden</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">bi_hidden</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">reverse_hidden</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">hidden</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+</pre></div>
+
+<pre><code>(torch.Size([1, 1, 1]), torch.Size([1, 1, 1]), torch.Size([2, 1, 1]))
+(tensor([ 0.1229, -0.3068]), tensor([-0.3068]), tensor([0.1229]))
+</code></pre>
+<ul>
+<li>正向的输出就是单向rnn</li>
+<li>反向的输出就是把数据反传的单向rnn</li>
+<li>双向rnn出来的第最后一个hidden（后半截）就是反向完成后的hidden</li>
+</ul>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-5ee75456f3cd94de.png" /></figure><p>由打印出来的数据可知：</p><ul>
+<li>最后一个hidden，就是反向RNN的最后一个hidden（时间点在开头）</li>
+<li>也是双向RNN里的第一个输出（<strong>的最后一个元素</strong>）</li>
+<li>也是单向RNN（但是数据反传）（或者正向，但逆时序）里的最后一个输出</li>
+</ul>
+<hr />
+<p>双向RNN里</p><ul>
+<li>倒数第二个hidden，是正向的最后一个hidden（时间点在结尾）</li>
+<li>它也是output里面的值，它是双向输出里的最后一个的<strong>第一个元素</strong></li>
+</ul>
+<p>总的来说</p><ul>
+<li>output由正反向输出横向拼接（所有）</li>
+<li>hidden由正反向hidden竖向拼接（top layer)</li>
+</ul>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-d12e030fa3d7527e.png" /></figure>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+    <span class="ga-tag">
+        <a class="ga-highlight" href="/tag/RNN/">#RNN</a>
+    </span>
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/RNN%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1%E4%B8%8E%E6%A2%AF%E5%BA%A6%E7%88%86%E7%82%B8%E6%8E%A8%E5%AF%BC/">RNN梯度消失与梯度爆炸推导</a>
+        <p class="yue"></p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/%E5%87%A0%E7%A7%8D%E6%95%99%E6%9D%90%E9%87%8C%E6%B1%82%E8%A7%A3Ax%3D0%E7%AC%94%E8%AE%B0/">几种教材里求解Ax=0笔记</a>
+        <p class="yue">如果一个矩阵化简为</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>-bin-bash和-bin-sh的区别 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="[该文不严谨, 文末有补充]脚本test.sh内容：" />
+<meta property="og:title" content="-bin-bash和-bin-sh的区别 - Maverick" />
+<meta property="og:description" content="[该文不严谨, 文末有补充]脚本test.sh内容：" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/-bin-bash%E5%92%8C-bin-sh%E7%9A%84%E5%8C%BA%E5%88%AB/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="-bin-bash和-bin-sh的区别 - Maverick" />
+<meta name="twitter:description" content="[该文不严谨, 文末有补充]脚本test.sh内容：" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">-bin-bash和-bin-sh的区别</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/Skill/">
+                    Skill
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/-bin-bash%E5%92%8C-bin-sh%E7%9A%84%E5%8C%BA%E5%88%AB/" 
+                    data-flag-title="-bin-bash和-bin-sh的区别"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>[该文不严谨, 文末有补充]</p><p>脚本test.sh内容：</p>
+<pre><code>#!/bin/sh
+source pcy.sh #pcy.sh并不存在
+echo hello
+</code></pre>
+<p>执行./test.sh，屏幕输出为：</p>
+<pre><code>./test.sh: line 2: pcy.sh: No such file or directory
+</code></pre>
+<p>由此可见，在<code>#!/bin/sh</code>的情况下，source不成功，<strong>不会运行</strong>source后面的代码。
+修改test.sh脚本的第一行，变为<code>#!/bin/bash</code>，再次执行./test.sh，屏幕输出为：</p>
+<pre><code>./test.sh: line 2: pcy.sh: No such file or directory
+hello
+</code></pre>
+<p>由此可见，在<code>#!/bin/bash</code>的情况下，虽然source不成功，但是还是运行了source后面的echo语句。
+但是紧接着我又试着运行了一下<code>sh ./test.sh</code>，这次屏幕输出为：</p>
+<pre><code>./test.sh: line 2: pcy.sh: No such file or directory
+</code></pre>
+<p>表示虽然脚本中指定了#!/bin/bash，但是如果使用sh 方式运行，如果source不成功，也不会运行source后面的代码。</p><p>为什么会有这样的区别呢？</p><p>junru同学作了解释</p><ol>
+<li>sh一般设成bash的软链</li>
+</ol>
+
+<pre><code>[work@zjm-testing-app46 cy]$ ll /bin/sh
+lrwxrwxrwx 1 root root 4 Nov 13 2006 /bin/sh -&gt; bash
+</code></pre>
+<ol start="2">
+<li>在一般的linux系统当中（如redhat），使用sh调用执行脚本相当于打开了bash的POSIX标准模式</li>
+<li>也就是说 /bin/sh 相当于 /bin/bash --posix</li>
+</ol>
+<p>所以，sh跟bash的区别，实际上就是bash有没有开启posix模式的区别</p><p>so，可以预想的是，如果第一行写成 #!/bin/bash --posix，那么脚本执行效果跟#!/bin/sh是一样的（遵循posix的特定规范，有可能就包括这样的规范：“当某行代码出错时，不继续往下解释”）</p><p>来源: <a href="http://www.cnblogs.com/baizhantang/archive/2012/09/11/2680453.html"><a href="http://www.cnblogs.com/baizhantang/archive/2012/09/11/2680453.html">http://www.cnblogs.com/baizhantang/archive/2012/09/11/2680453.html</a></a></p><h1>其它解释</h1>
+<p>等等,  这里就完了吗? 这里有更明确的说法</p><p>在<code>CentOS</code>里，/bin/sh是一个指向/bin/bash的符号链接: (只是在 CentOS 里哦)</p>
+<pre><code>[root@centosraw ~]# ls -l /bin/*sh
+-rwxr-xr-x. 1 root root 903272 Feb 22 05:09 /bin/bash
+-rwxr-xr-x. 1 root root 106216 Oct 17  2012 /bin/dash
+lrwxrwxrwx. 1 root root      4 Mar 22 10:22 /bin/sh -&gt; bash
+</code></pre>
+<p><strong>但在Mac OS上不是</strong>，/bin/sh和/bin/bash是两个<strong>不同</strong>的文件，尽管它们的大小只相差100字节左右:</p>
+<pre><code>iMac:~ wuxiao$ ls -l /bin/*sh
+-r-xr-xr-x  1 root  wheel  1371648  6 Nov 16:52 /bin/bash
+-rwxr-xr-x  2 root  wheel   772992  6 Nov 16:52 /bin/csh
+-r-xr-xr-x  1 root  wheel  2180736  6 Nov 16:52 /bin/ksh
+-r-xr-xr-x  1 root  wheel  1371712  6 Nov 16:52 /bin/sh
+-rwxr-xr-x  2 root  wheel   772992  6 Nov 16:52 /bin/tcsh
+-rwxr-xr-x  1 root  wheel  1103984  6 Nov 16:52 /bin/zsh
+</code></pre>
+<p>来源: <a href="https://github.com/qinjx/30min_guides/blob/master/shell.md"><a href="https://github.com/qinjx/30min_guides/blob/master/shell.md">https://github.com/qinjx/30min_guides/blob/master/shell.md</a></a></p>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/%E9%87%8D%E8%A3%85mac%E7%B3%BB%E7%BB%9F%E5%90%8Essh%E5%BC%82%E5%B8%B8/">重装mac系统后ssh异常</a>
+        <p class="yue">表现在两个方面: ssh 登录服务器, 和通过ssh 使用 git, 报的错都是Permissino denied (publickey)git异常的解决</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/%E6%8A%8AGAE%E7%A8%8B%E5%BA%8F%E9%80%9A%E8%BF%87SSH%E9%83%A8%E7%BD%B2%E5%88%B0VPS/">把GAE程序通过SSH部署到VPS</a>
+        <p class="yue">大部分在文档上都写了, 写这篇文章的目的是发现现在appcfg.py update xxxx的时候会打开浏览器访问google请求授权(后台内建了一个本地server, 端口是8090, 授权成功后会带授权码请求本地的8090端口, 所以我们在 ssh 环境中是没有浏览器的, 该怎么解决呢?我玩 linux 不多, 就以我的知识量这么解决:</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

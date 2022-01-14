@@ -1,0 +1,224 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>数据结构篇三：Union-Find - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记" />
+<meta property="og:title" content="数据结构篇三：Union-Find - Maverick" />
+<meta property="og:description" content="这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%89%EF%BC%9AUnion-Find/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="数据结构篇三：Union-Find - Maverick" />
+<meta name="twitter:description" content="这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">数据结构篇三：Union-Find</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/CS/">
+                    CS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%89%EF%BC%9AUnion-Find/" 
+                    data-flag-title="数据结构篇三：Union-Find"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><hr />
+<h1>Union Find</h1>
+<ul>
+<li>keep track of elements in different sets</li>
+<li>primary operations: <code>find</code> and <code>union</code></li>
+</ul>
+<p><strong>Usage</strong></p><ul>
+<li>Kruskal's <code>minimum spanning tree</code> algorithm</li>
+<li>Grid percolation</li>
+<li>Network connectivity</li>
+<li>Least common ancestor in trees</li>
+<li>Image processing</li>
+</ul>
+<p><strong>Complexity</strong></p><ul>
+<li>construction: O(n)</li>
+<li>union/join/size/check connected/: $\alpha$(n) :接近常量时间</li>
+<li>count: O(1)</li>
+</ul>
+<p>给定一个无向图，如果它任意两个顶点都联通并且是一棵树，那么我们就称之为生成树(<code>Spanning Tree</code>)。如果是带权值的无向图，那么权值之和最小的生成树，我们就称之为最小生成树(MST, <code>Minimum Spanning Tree</code>)。
+-&gt; 用最少的边连接所有的顶点</p><ul>
+<li>sort edges by ascending edge weight</li>
+<li>walk through edges<ul>
+<li>检查顶点，如果两个顶点都已经unified，就忽略<ul>
+<li>其实就是这两个点分别被别的边连过了</li>
+</ul>
+</li>
+<li>否则就添加edge，并且unify顶点</li>
+</ul>
+</li>
+</ul>
+<p>看到这里，首先想知道什么是unified，看实现，也就是在一个集合里(component)
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-a4f39c808d78f8ee.png" /></figure></p><ul>
+<li>观察C_J，因为C和J已经在一个组里了，这条边就不需要了</li>
+<li>观察D_E，一旦连上后，紫色和绿色其实就是一个组了</li>
+</ul>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-9fbda901cd75db13.png" /></figure><ul>
+<li>观察D_H，一旦连上后，紫色和红色也成为了一个组</li>
+<li>连接B_C，所有顶点就全部连上了，并且只有一条紫线</li>
+</ul>
+<p>Find: 找元素在哪个component里，然后找到它的root
+Union: 找两个元素分别在哪个component里，然后找到它们的root，如果不是同一个root，就让其中一个成为另一个的parent</p><ul>
+<li>component的个数与root的个数一致</li>
+<li>root的个数只减不增（因为通常只合并而不拆分）</li>
+</ul>
+<p>union find里</p><ul>
+<li>为每个元素分配一个索引，每个元素指向自己（即初始是n个root，n个component)</li>
+<li>描述两两之间的关系，以任一元素为parent （谁来描述？）</li>
+<li>有一个元素已经属于别的component里的，就将它也加到那个component里去<ul>
+<li>如果这个元素也是别的component里的顶点，就把整个组指向另一个组的root</li>
+</ul>
+</li>
+</ul>
+<h2>Path Compression Union Find</h2>
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-3e8c2a735b8429ce.png" /></figure><p>由一层层找到root改为所有顶点直接指向顶点（星形结构），实现路径压缩</p><p>这段代码演示的是，查找p的root节点，在查找的过程中，顺便进行了路径压缩
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-0ba57aa842233469.png" /></figure></p><p>合并的逻辑就是比较谁的元素多就把谁当作root，另一个component的root的parent设为元素多的组的root<br />
+合并完成后组数就少了1
+<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-9821cff4bb811594.png" /></figure></p><p>看代码，这一步里面并没有路径压缩，也就是小组里面的元素并没有<strong>进一步</strong>再星状地指向新的parent，仍然指向的是老的组的root。</p>
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/">数据结构篇九：Indexed-Priority-Queue</a>
+        <p class="yue">这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%9B%9B%EF%BC%9ABinary-Trees-and-Binary-Search-Trees-%28BST%29/">数据结构篇四：Binary-Trees-and-Binary-Search-Trees-(BST)</a>
+        <p class="yue">这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>

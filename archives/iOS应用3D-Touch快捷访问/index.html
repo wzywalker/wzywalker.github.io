@@ -1,0 +1,246 @@
+<!DOCTYPE HTML>
+<html lang="english">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+        }
+    </script>
+    
+<title>iOS应用3D-Touch快捷访问 - Maverick</title>
+<meta name="author" content="walker" />
+<meta name="description" content="#用法添加快捷项(UIApplicationShortcutItem)" />
+<meta property="og:title" content="iOS应用3D-Touch快捷访问 - Maverick" />
+<meta property="og:description" content="#用法添加快捷项(UIApplicationShortcutItem)" />
+<meta property="og:site_name" content="Maverick" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/iOS%E5%BA%94%E7%94%A83D-Touch%E5%BF%AB%E6%8D%B7%E8%AE%BF%E9%97%AE/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-14T00:00:00-00.00" />
+<meta name="twitter:title" content="iOS应用3D-Touch快捷访问 - Maverick" />
+<meta name="twitter:description" content="#用法添加快捷项(UIApplicationShortcutItem)" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
+                        <p>This is Maverick, Theme Galileo.</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">iOS应用3D-Touch快捷访问</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>walker</span>
+                <time>
+                    2022-01-14
+                </time>
+                
+                in <a no-style class="category" href="/category/iOS/">
+                    iOS
+                </a>
+                
+                
+                <span class="leancloud_visitors" 
+                    id="/archives/iOS%E5%BA%94%E7%94%A83D-Touch%E5%BF%AB%E6%8D%B7%E8%AE%BF%E9%97%AE/" 
+                    data-flag-title="iOS应用3D-Touch快捷访问"> · <i class="leancloud-visitors-count"></i> Views</span>
+                
+            </span>
+            <div class="ga-content_body">
+                <p>#用法</p><h2>添加快捷项(UIApplicationShortcutItem)</h2>
+<p>有两种途径, 编辑<code>Info.plist</code>或代码添加</p><h3>Info.plist</h3>
+<div class="highlight"><pre><span></span><span class="nt">&lt;key&gt;</span>UIApplicationShortcutItems<span class="nt">&lt;/key&gt;</span>
+<span class="nt">&lt;array&gt;</span>
+    <span class="nt">&lt;dict&gt;</span>
+       <span class="cm">&lt;!--图标, 必须--&gt;</span>
+    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemIconType<span class="nt">&lt;/key&gt;</span>
+    	<span class="nt">&lt;string&gt;</span>UIApplicationShortcutIconTypeCapturePhoto<span class="nt">&lt;/string&gt;</span>
+    	<span class="cm">&lt;!--标题, 必须--&gt;</span>
+    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemTitle<span class="nt">&lt;/key&gt;</span>
+    	<span class="nt">&lt;string&gt;</span>Scan<span class="nt">&lt;/string&gt;</span>
+    	<span class="cp">&lt;!-副标题--&gt;</span>
+    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemSubtitle<span class="nt">&lt;/key&gt;</span>
+    	<span class="nt">&lt;string&gt;</span>QR Code<span class="nt">&lt;/string&gt;</span>
+    	<span class="cm">&lt;!--快捷项标识符--&gt;</span>
+    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemType<span class="nt">&lt;/key&gt;</span>
+    	<span class="nt">&lt;string&gt;</span>$(PRODUCT_BUNDLE_IDENTIFIER).Scan<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;/dict&gt;</span>
+<span class="nt">&lt;/array&gt;</span>
+</pre></div>
+<p>完整可选项见<a href="https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/iPhoneOSKeys.html">文档</a></p><h3>代码添加</h3>
+<div class="highlight"><pre><span></span><span class="c1">// Construct the items.</span>
+<span class="kd">let</span> <span class="nv">shortcut3</span> <span class="p">=</span> <span class="bp">UIMutableApplicationShortcutItem</span><span class="p">(</span>
+    <span class="n">type</span><span class="p">:</span> <span class="n">ShortcutIdentifier</span><span class="p">.</span><span class="n">Third</span><span class="p">.</span><span class="n">type</span><span class="p">,</span> 
+    <span class="n">localizedTitle</span><span class="p">:</span> <span class="s">&quot;Play&quot;</span><span class="p">,</span> 
+    <span class="n">localizedSubtitle</span><span class="p">:</span> <span class="s">&quot;Will Play an item&quot;</span><span class="p">,</span> 
+    <span class="n">icon</span><span class="p">:</span> <span class="bp">UIApplicationShortcutIcon</span><span class="p">(</span><span class="n">type</span><span class="p">:</span> <span class="p">.</span><span class="n">play</span><span class="p">),</span> 
+    <span class="n">userInfo</span><span class="p">:</span> <span class="p">[</span>
+        <span class="n">AppDelegate</span><span class="p">.</span><span class="n">applicationShortcutUserInfoIconKey</span><span class="p">:</span> <span class="n">UIApplicationShortcutIconType</span><span class="p">.</span><span class="n">play</span><span class="p">.</span><span class="n">rawValue</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="kd">let</span> <span class="nv">shortcut4</span> <span class="p">=</span> <span class="p">...</span> <span class="c1">// 同上</span>
+
+<span class="c1">// Update the application providing the initial &#39;dynamic&#39; shortcut items.</span>
+<span class="n">application</span><span class="p">.</span><span class="n">shortcutItems</span> <span class="p">=</span> <span class="p">[</span><span class="n">shortcut3</span><span class="p">,</span> <span class="n">shortcut4</span><span class="p">]</span>
+</pre></div>
+<h2>良好实践</h2>
+<ol>
+<li>实现一个<code>(BOOL)handleShortcutItem:(UIApplicationShortcutItem *)shortcutItem</code>返<code>BOOL</code>值的方法, 里面进行业务操作</li>
+<li>实现代理方法:</li>
+</ol>
+
+<pre><code>- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler {
+    completionHandler([self handleShortcutItem:shortcutItem]);
+}
+</code></pre>
+<ol start="3">
+<li>在<code>didBecomeActive</code>方法里判断是否需要 handle 快捷方式</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">applicationDidBecomeActive:</span><span class="p">(</span><span class="bp">UIApplication</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nv">application</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">handleShortcutItem</span><span class="o">:</span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nil</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<ol start="4">
+<li>3说明如果你需要提取一个属性<code>launchedShortcutItem</code></li>
+<li>如果提取了属性, 那么<code>didFinishLaunch</code>也可以顺便改为:</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="kt">BOOL</span><span class="w"> </span><span class="n">shouldPerformAdditionalDelegateHandling</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">YES</span><span class="p">;</span><span class="w"></span>
+<span class="bp">UIApplicationShortcutItem</span><span class="w"> </span><span class="o">*</span><span class="n">shortcutItem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="bp">UIApplicationShortcutItem</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">launchOptions</span><span class="p">[</span><span class="n">UIApplicationLaunchOptionsShortcutItemKey</span><span class="p">];</span><span class="w"></span>
+<span class="k">if</span><span class="p">(</span><span class="n">shortcutItem</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shortcutItem</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">shouldPerformAdditionalDelegateHandling</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NO</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c1">// 你的其它初始代码</span>
+
+<span class="k">return</span><span class="w"> </span><span class="n">shouldPerformAdditionalDelegateHandling</span><span class="p">;</span><span class="w">  </span><span class="c1">// 通常这里返的是 YES;</span>
+</pre></div>
+<p>试试吧</p><p>#参考资料</p><ol>
+<li><a href="https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/Adopting3DTouchOniPhone/">官方文档</a></li>
+<li><a href="https://developer.apple.com/library/content/samplecode/ApplicationShortcuts/Introduction/Intro.html#//apple_ref/doc/uid/TP40016545">示例代码</a></li>
+<li><a href="https://developer.apple.com/documentation/uikit/uiapplicationshortcuticontype">快捷图标</a></li>
+<li><a href="https://github.com/DeskConnect/SBShortcutMenuSimulator">模拟器支持</a></li>
+<li><a href="https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/iPhoneOSKeys.html">iOS Keys</a> 一些键值的说明</li>
+</ol>
+
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <a class="ga-highlight" href="/archives/%E7%90%86%E8%A7%A3__bridge/">理解__bridge</a>
+        <p class="yue">比较受用, 全文转载, 原文点此##为什么使用要使用 Object-C++在 iOS 开发当中，难免会使用到 OC 跟 C++混编的情况，一是为了程序对负责计算性能的提高，二是因为某些三方开源库是用 C++ 来写的，这两个原因也是让我下决心学好 C++ 的因素，毕竟开源才是王道，一直只写着 OC 却不能窥其究竟，确实难受，让只能让人停留在门外，坐井观天。##什么是桥接 ？桥接，是 object-c 在 ARC 环境下开发出来的一种用作转换 C 指针跟 OC 类指针的一种转换技术。</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/archives/UIImage%E8%BD%ACNSData%E6%9C%89%E6%97%B6%E4%B8%BAnil/">UIImage转NSData有时为nil</a>
+        <p class="yue">一般, 我们会用UIImagePNGRepresentation, UIImagePNGRepresentation来达到目的, 但有时候, 发现它的返回值为nil...不需要怀疑这么简单处理有什么问题, 文档 就是如此:</p>
+    </div>
+
+</section>
+
+
+    
+        <script>
+            var initValine = function () {
+                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+            }
+        </script>
+        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+        <div id="vcomments"></div>
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Maverick</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-06T12:00+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!--katex-->
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    
+    </body>
+</html>
