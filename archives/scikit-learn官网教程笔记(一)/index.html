@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="english">
-    <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="renderer" content="webkit">
@@ -8,19 +9,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
     <meta name="generator" content="Maverick 1.2.1" />
-    <meta name="template" content="Galileo" />
+    <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/2c80736c6795903d11b9000926ef666b.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/285ab69ade0ed03d76402217cdc4c128.json"
         }
+
     </script>
     
 <title>scikit-learn官网教程笔记(一) - walker's code blog</title>
@@ -40,47 +41,27 @@
 
 
     
-    </head>
-    
-    <body>
-        
-        <div class="container">
-            <header id="ga-header">
-                <div first>
-                    <aside id="ga-brand">
-                        <h1 class="brand"><a class="no-style" href="/">walker's code blog</a></h1>
-                        <p>coder, reader</p>
-                    </aside>
-                </div>
-                <div second id="ga-nav">
-                    <nav class="navs">
-                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
-                    </nav>
-                </div>
-            </header>
-            <div class="wrapper">
-                
-<main>    
-    <section class="ga-section ga-content">
-        <article class="yue">
-            <h1 class="ga-post_title">scikit-learn官网教程笔记(一)</h1>
-            <span class="ga-post_meta ga-mono">
-                <span>walker</span>
-                <time>
-                    2021-03-02
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
+<main>
+    <section class="prism-section row" id="prism__content">
+        <article class="yue col-md-8 offset-md-2">
+            <h1 class="prism-post-title">scikit-learn官网教程笔记(一)</h1>
+            <div class="prism-post-time">
+                <time class="text-uppercase">
+                    March 02 2021
                 </time>
-                
-                in <a no-style class="category" href="/category/posts/">
-                    posts
-                </a>
-                
-                
-                <span class="leancloud_visitors" 
-                    id="/archives/scikit-learn%E5%AE%98%E7%BD%91%E6%95%99%E7%A8%8B%E7%AC%94%E8%AE%B0%28%E4%B8%80%29/" 
-                    data-flag-title="scikit-learn官网教程笔记(一)"> · <i class="leancloud-visitors-count"></i> Views</span>
-                
-            </span>
-            <div class="ga-content_body">
+            </div>
+            <div class="prism-content-body">
                 <p>当初翻scikit learn文档的时候，越翻越多，干脆把它的教程拿出来看了看，只有前面的部分，主要想看看scikit learn角度整理的知识体系，果然，一开始就是从监督和非监督讲起：</p><h2>Machine learning</h2>
 <p>In general, a learning problem considers a set of n samples of data and then tries to predict properties of unknown data.</p><p>Learning problems fall into a few categories:</p><ul>
 <li><a href="https://scikit-learn.org/stable/supervised_learning.html#supervised-learning">supervised learning</a>, in which the data comes with additional attributes that we want to predict. This problem can be either:<ul>
@@ -125,7 +106,7 @@
 
 <pre><code>array([8])
 </code></pre>
-<figure style="flex: 50.81967213114754" ><img loading="lazy" width="496" height="488" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5f41cd44fe4cf94f9dbfee9954b82ec6.png" /></figure><div class="highlight"><pre><span></span><span class="c1"># better practise</span>
+<figure  style="flex: 50.81967213114754" ><img width="496" height="488" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5f41cd44fe4cf94f9dbfee9954b82ec6.png" alt=""/></figure><div class="highlight"><pre><span></span><span class="c1"># better practise</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 
 <span class="c1"># flatten the images</span>
@@ -209,7 +190,7 @@ weighted avg       0.97      0.97      0.97       899
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
-<figure style="flex: 54.00696864111498" ><img loading="lazy" width="620" height="574" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2088af7c0ab08ef8b680eab7d06d4bcd.png" /></figure><h2>Conventions</h2>
+<figure  style="flex: 54.00696864111498" ><img width="620" height="574" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2088af7c0ab08ef8b680eab7d06d4bcd.png" alt=""/></figure><h2>Conventions</h2>
 <h3>Type Casting</h3>
 <p>Unless otherwise specified, input will be cast to float64:</p><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">random_projection</span>
@@ -348,7 +329,7 @@ print(iris_y_test)
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">regr</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">))</span> 
     <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">this_X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
-<figure style="flex: 75.50607287449392" ><img loading="lazy" width="746" height="494" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/22a14395fafb62dcbaabdca600191fd6.png" /></figure><h2>Ridge regression:</h2>
+<figure  style="flex: 75.50607287449392" ><img width="746" height="494" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/22a14395fafb62dcbaabdca600191fd6.png" alt=""/></figure><h2>Ridge regression:</h2>
 <p>A solution in high-dimensional statistical learning is to shrink the regression coefficients to zero: any two randomly chosen set of observations are likely to be uncorrelated. This is called Ridge regression.</p><p>This is an example of <code>bias/variance</code> tradeoff:</p><p>the <strong>larger</strong> the ridge <code>alpha</code> parameter,</p><ul>
 <li>the <strong>higher</strong> the <code>bias</code></li>
 <li>the <strong>lower</strong> the <code>variance</code>.</li>
@@ -472,7 +453,7 @@ ElasticNet optimal alpha: 0.001 and L1 ratio: 0.5000
 
 <span class="c1"># 观察图像的不同，其实可以理解为样本过少时的”过拟合“，引入忽略的指标后虽然对训练集的准确率大打折扣，但确实降低了方差</span>
 </pre></div>
-<figure style="flex: 76.02459016393442" ><img loading="lazy" width="742" height="488" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/97bc036cb6f5c3ce99362eb4bbba4c3d.png" /></figure><h4>Diabetes dataset</h4>
+<figure  style="flex: 76.02459016393442" ><img width="742" height="488" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/97bc036cb6f5c3ce99362eb4bbba4c3d.png" alt=""/></figure><h4>Diabetes dataset</h4>
 <p>换个数据源，<code>estimator</code>并不需要更换，如果需要换超参，前文也已经讲过了：</p><div class="highlight"><pre><span></span><span class="n">diabetes_X</span><span class="p">,</span> <span class="n">diabetes_y</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_diabetes</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">diabetes_X_train</span> <span class="o">=</span> <span class="n">diabetes_X</span><span class="p">[:</span><span class="o">-</span><span class="mi">20</span><span class="p">]</span>
 <span class="n">diabetes_X_test</span>  <span class="o">=</span> <span class="n">diabetes_X</span><span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">:]</span>
@@ -508,7 +489,7 @@ ElasticNet optimal alpha: 0.001 and L1 ratio: 0.5000
 <h3>Different algorithms for the same problem</h3>
 <p>Different algorithms can be used to solve the same mathematical problem. For instance the <code>Lasso</code> object in scikit-learn solves the lasso regression problem using a <code>coordinate descent</code> method, that is efficient on <strong>large datasets</strong>. However, scikit-learn also provides the <code>LassoLars</code> object using the <code>LARS</code> algorithm, which is very efficient for problems in which the weight vector estimated is very <strong>sparse</strong> (i.e. problems with <strong>very few</strong> observations).</p><h2>Classification</h2>
 <h3>Logistic Regerssion</h3>
-<figure style="flex: 66.66666666666667" ><img loading="lazy" width="400" height="300" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/386b1a1250985ccfdacd014b942dff98.png" /></figure><div class="highlight"><pre><span></span><span class="n">log</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1e5</span><span class="p">)</span>
+<figure  style="flex: 66.66666666666667" ><img width="400" height="300" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/386b1a1250985ccfdacd014b942dff98.png" alt=""/></figure><div class="highlight"><pre><span></span><span class="n">log</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1e5</span><span class="p">)</span>
 <span class="n">log</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">iris_X_train</span><span class="p">,</span> <span class="n">iris_y_train</span><span class="p">)</span>
 </pre></div>
 
@@ -580,7 +561,7 @@ LogisticRegression score: 0.933333
           <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">))</span>
 <span class="n">models</span> <span class="o">=</span> <span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">models</span><span class="p">)</span>
 </pre></div>
-<figure style="flex: 79.81132075471699" ><img loading="lazy" width="846" height="530" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/73af5427b414af6455402c92562d3524.png" /></figure><h2>cross validation</h2>
+<figure  style="flex: 79.81132075471699" ><img width="846" height="530" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/73af5427b414af6455402c92562d3524.png" alt=""/></figure><h2>cross validation</h2>
 <p><a href="https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation">https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation</a></p><p><strong>RAW DEMO</strong>: KFold cross-validation:</p><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">svm</span>
 
@@ -726,89 +707,134 @@ score: 0.946047678795483
 <p><a href="https://scikit-learn.org/stable/tutorial/statistical_inference/unsupervised_learning.html">https://scikit-learn.org/stable/tutorial/statistical_inference/unsupervised_learning.html</a></p>
             </div>
         </article>
-        <div id="ga-tags">
+        <div class="prism-post-meta col-md-8 offset-md-2">
+    <span>walker</span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/scikit-learn/">#scikit-learn</a>
+    <span>/</span>
+    <span>
+        <a class="category no-link" href="/category/posts/" target="_self">
+        posts
+        </a>
     </span>
+    
+    
+    <span>/</span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/scikit-learn/" target="_self">#scikit-learn</a>
+    </span>
+    
+    
+    
+    <span>/</span>
+    <span class="leancloud_visitors" id="/archives/scikit-learn%E5%AE%98%E7%BD%91%E6%95%99%E7%A8%8B%E7%AC%94%E8%AE%B0%28%E4%B8%80%29/" data-flag-title="scikit-learn官网教程笔记(一)"><span class="leancloud-visitors-count"></span> Views</span>
     
 </div>
     </section>
 
     
-<section id="ga-content_pager">
-
-    <div class="next">
-        <a class="ga-highlight" href="/archives/%E5%87%A0%E7%A7%8D%E6%95%99%E6%9D%90%E9%87%8C%E6%B1%82%E8%A7%A3Ax%3D0%E7%AC%94%E8%AE%B0/">几种教材里求解Ax=0笔记</a>
-        <p class="yue">如果一个矩阵化简为</p>
-    </div>
-
-
-    <div class="prev">
-        <a class="ga-highlight" href="/archives/%E4%BB%8E%E6%8A%95%E5%BD%B1%E3%80%81%E6%AD%A3%E4%BA%A4%E8%A1%A5%E8%A7%92%E5%BA%A6%E8%AF%81%E6%98%8E%EF%BC%88%E6%8E%A8%E5%AF%BC%EF%BC%89%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E5%85%AC%E5%BC%8F/">从投影、正交补角度证明（推导）最小二乘法公式</a>
-        <p class="yue">学习线性回归的时候，会教我们$X\theta=y$可以直接用最小二乘法直接把$\theta$求出来：$\theta=(X^TX)^{-1}X^Ty$并且还在我之前的博文里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。首先，在吴恩达的教材里，这个并不叫最小二乘(least suqare），而是叫Normal Equation method，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(Projection)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：首先，预备知识子空间</p>
-    </div>
-
+<section id="prism__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+    <ul>
+        
+        <li class="next">
+            <a class="no-link" href="/archives/%E5%87%A0%E7%A7%8D%E6%95%99%E6%9D%90%E9%87%8C%E6%B1%82%E8%A7%A3Ax%3D0%E7%AC%94%E8%AE%B0/" target="_self" title="几种教材里求解Ax=0笔记"><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</a>
+        </li>
+        
+        
+        <li class="prev">
+            <a class="no-link" href="/archives/%E4%BB%8E%E6%8A%95%E5%BD%B1%E3%80%81%E6%AD%A3%E4%BA%A4%E8%A1%A5%E8%A7%92%E5%BA%A6%E8%AF%81%E6%98%8E%EF%BC%88%E6%8E%A8%E5%AF%BC%EF%BC%89%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E5%85%AC%E5%BC%8F/" target="_self" title="从投影、正交补角度证明（推导）最小二乘法公式">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </li>
+        
+    </ul>
 </section>
 
 
     
-        <script>
-            var initValine = function () {
-                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
-            }
-        </script>
-        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
-        <div id="vcomments"></div>
+    <script>
+        var initValine = function() {
+            new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+        }
+
+    </script>
+    <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+    <div class="prism-comment-section container" id="prism__comment">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div id="vcomments"></div>
+            </div>
+        </div>
+    </div>
     
 
 </main>
 
-                <footer class="ga-mono" id="ga-footer">
-                    <section>
-                        <span id="ga-uptime"></span>
-                        <span class="brand">walker's code blog</span>
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
                     </section>
-                    <section>
-                        <p class="copyright">
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
                             <span>Copyright © 2022 AlanDecode</span>
-                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
                         </p>
-                        <div class="copyright">
-                            <span class="footer-addon">
-                                
-                            </span>
-                            <nav class="social-links">
-                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
-                            </nav>
-                        </div>
-                    </section>
-                    <script>
-                        var site_build_date = "2019-12-06T12:00+08:00"
-                    </script>
-                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
-                </footer>
-            </div>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+            </footer>
         </div>
     </div>
-
-    <!--katex-->
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
-    <script>
-    mathOpts = {
-        delimiters: [
-            {left: "$$", right: "$$", display: true},
-            {left: "\\[", right: "\\]", display: true},
-            {left: "$", right: "$", display: false},
-            {left: "\\(", right: "\\)", display: false}
-        ]
-    };
-    </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
     
-    </body>
+</body>
+
 </html>

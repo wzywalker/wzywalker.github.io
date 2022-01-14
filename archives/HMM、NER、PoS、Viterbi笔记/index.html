@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="english">
-    <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="renderer" content="webkit">
@@ -8,19 +9,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
     <meta name="generator" content="Maverick 1.2.1" />
-    <meta name="template" content="Galileo" />
+    <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/2c80736c6795903d11b9000926ef666b.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/285ab69ade0ed03d76402217cdc4c128.json"
         }
+
     </script>
     
 <title>HMM、NER、PoS、Viterbi笔记 - walker's code blog</title>
@@ -40,47 +41,27 @@
 
 
     
-    </head>
-    
-    <body>
-        
-        <div class="container">
-            <header id="ga-header">
-                <div first>
-                    <aside id="ga-brand">
-                        <h1 class="brand"><a class="no-style" href="/">walker's code blog</a></h1>
-                        <p>coder, reader</p>
-                    </aside>
-                </div>
-                <div second id="ga-nav">
-                    <nav class="navs">
-                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
-                    </nav>
-                </div>
-            </header>
-            <div class="wrapper">
-                
-<main>    
-    <section class="ga-section ga-content">
-        <article class="yue">
-            <h1 class="ga-post_title">HMM、NER、PoS、Viterbi笔记</h1>
-            <span class="ga-post_meta ga-mono">
-                <span>walker</span>
-                <time>
-                    2021-06-14
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
+<main>
+    <section class="prism-section row" id="prism__content">
+        <article class="yue col-md-8 offset-md-2">
+            <h1 class="prism-post-title">HMM、NER、PoS、Viterbi笔记</h1>
+            <div class="prism-post-time">
+                <time class="text-uppercase">
+                    June 14 2021
                 </time>
-                
-                in <a no-style class="category" href="/category/posts/">
-                    posts
-                </a>
-                
-                
-                <span class="leancloud_visitors" 
-                    id="/archives/HMM%E3%80%81NER%E3%80%81PoS%E3%80%81Viterbi%E7%AC%94%E8%AE%B0/" 
-                    data-flag-title="HMM、NER、PoS、Viterbi笔记"> · <i class="leancloud-visitors-count"></i> Views</span>
-                
-            </span>
-            <div class="ga-content_body">
+            </div>
+            <div class="prism-content-body">
                 <p>开局一句话，隐马尔可夫，就是在“溯源”，即产生你这个现象的源头在哪。</p><ul>
 <li>比如你掷出的这个显示为6的骰子，是来自于六面体的还是四面体的，或是来自于普通的还是灌铅了的</li>
 <li>又比如你一句话里的某一个词，它是处于开始位置还是中间位置，或是它是一个人名还是一个地点或是一个介词</li>
@@ -93,7 +74,7 @@
 <li>The classical example of a sequence model is the <code>Hidden Markov Model</code> for <strong>part-of-speech tagging</strong>. (词性标注)</li>
 <li>Another example is the <code>conditional random field</code>.</li>
 </ul>
-<p>HMM模型的典型应用是词性标注</p><figure style="flex: 94.51219512195122" ><img loading="lazy" width="1240" height="656" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8246ff19ee962171c5d3b15abd234eec.png" /></figure><p>词性标注语料库是统计标注算法的关键训练(和测试)集。三个主要的标注语料库始终用于训练和测试英语词性标注器。</p><ol>
+<p>HMM模型的典型应用是词性标注</p><figure  style="flex: 94.51219512195122" ><img width="1240" height="656" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8246ff19ee962171c5d3b15abd234eec.png" alt=""/></figure><p>词性标注语料库是统计标注算法的关键训练(和测试)集。三个主要的标注语料库始终用于训练和测试英语词性标注器。</p><ol>
 <li>布朗语料库是1961年在美国出版的500篇不同体裁的书面文本的100万单词样本。</li>
 <li>《华尔街日报》语料库收录了1989年发表在《华尔街日报》上的100万个单词。</li>
 <li>总机语料库由1990-1991年收集的200万字电话对话组成。语料库的创建是通过在文本上运行一个自动的词性标记，然后由人工注释器手工更正每个标记。</li>
@@ -115,7 +96,7 @@
 <li>可见状态之间没有转换概率</li>
 <li>输出概率（<code>emission probability</code>）：隐含状态和可见状态之间的概率，比如D4下1的概率为1/4，D6下为1/6 (表现概率，激发概率，多种翻译)</li>
 </ol>
-<figure style="flex: 106.16438356164383" ><img loading="lazy" width="1240" height="584" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1c9b14ebecf2d171b7f511296c425412.png" /></figure><p>应用HMM模型时候，往往是缺失了一部分信息的，</p><ul>
+<figure  style="flex: 106.16438356164383" ><img width="1240" height="584" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1c9b14ebecf2d171b7f511296c425412.png" alt=""/></figure><p>应用HMM模型时候，往往是缺失了一部分信息的，</p><ul>
 <li>有时候你知道骰子有几种，每种骰子是什么，但是不知道掷出来的骰子序列；</li>
 <li>有时候你只是看到了很多次掷骰子的结果，剩下的什么都不知道。</li>
 </ul>
@@ -130,20 +111,20 @@
 <li>但这个例子忽略了转移概率，即P(D6|D4), P(D4|D6,D4)，或者说默认了转移概率就是1/3，即每次挑中三个骰子的机率均等。</li>
 </ol>
 <h2>Evaluation</h2>
-<p>根据条件和序列结果求这一序列的概率是多少，比如三种骰子，投出了1，6，3的结果：</p><figure style="flex: 169.86301369863014" ><img loading="lazy" width="1240" height="365" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/3008ce6fdd893286e56d1b7f9ad1a342.png" /></figure><ul>
+<p>根据条件和序列结果求这一序列的概率是多少，比如三种骰子，投出了1，6，3的结果：</p><figure  style="flex: 169.86301369863014" ><img width="1240" height="365" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/3008ce6fdd893286e56d1b7f9ad1a342.png" alt=""/></figure><ul>
 <li>第1列表示第一次投掷得到1的可能性和为0.18</li>
 <li>第2列为1 6的的可能性和为0.05</li>
 <li>第3列为1 6 3的可能性和为0.03</li>
 </ul>
 <p>如果远低于或远高于这个概率，必然有做过手脚的骰子。</p><h2>转移概率的矩阵表示</h2>
-<p>这次假定不同的骰子是用来作弊的，作弊者会根据情况来挑选骰子，这样转移概率就不可能是均等的了：</p><figure style="flex: 83.33333333333333" ><img loading="lazy" width="500" height="300" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8259518e5781e3ce798778e8da69de85.png" /></figure><p>很幸运，这么复杂的概率转移图，竟然能用矩阵表达：
+<p>这次假定不同的骰子是用来作弊的，作弊者会根据情况来挑选骰子，这样转移概率就不可能是均等的了：</p><figure  style="flex: 83.33333333333333" ><img width="500" height="300" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8259518e5781e3ce798778e8da69de85.png" alt=""/></figure><p>很幸运，这么复杂的概率转移图，竟然能用矩阵表达：
 $A = 
 \begin{bmatrix}
 0.15 &amp; 0.45 &amp; 0.4 \
 0.25 &amp; 0.35 &amp; 0.4 \
 0.10 &amp; 0.55 &amp; 0.35
 \end{bmatrix}
-$</p><p>既然是3行3列，显然$A_{ij}$就是从i切换到j的概率，比如$A_{12}$ 就应该是这个人把骰子从作弊骰子1切换到2的概率。</p><figure style="flex: 102.04081632653062" ><img loading="lazy" width="500" height="245" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/653c3cb7f8c2f3a541d170421fe489bf.png" /></figure><p>相应地，发射概率（即不同骰子摇出的点数的概率）也能表示为矩阵：
+$</p><p>既然是3行3列，显然$A_{ij}$就是从i切换到j的概率，比如$A_{12}$ 就应该是这个人把骰子从作弊骰子1切换到2的概率。</p><figure  style="flex: 102.04081632653062" ><img width="500" height="245" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/653c3cb7f8c2f3a541d170421fe489bf.png" alt=""/></figure><p>相应地，发射概率（即不同骰子摇出的点数的概率）也能表示为矩阵：
 $B = 
 \begin{bmatrix}
 0.16 &amp; 0.16 &amp; 0.16 &amp; 0.16 &amp; 0.16 &amp; 0.16 \
@@ -266,7 +247,7 @@ $$</p>
       <span class="n">best_edge</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span><span class="n">edge</span>
 </pre></div>
 <p>example:
-<figure style="flex: 82.65765765765765" ><img loading="lazy" width="734" height="444" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5aa5426eb70b4c6cd0b8c4b1dacda749.png" /></figure></p><ul>
+<figure  style="flex: 82.65765765765765" ><img width="734" height="444" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5aa5426eb70b4c6cd0b8c4b1dacda749.png" alt=""/></figure></p><ul>
 <li>初始节点打分0，其它节点打分为$\infty$</li>
 <li>每个节点打分由其(<code>incoming edge</code>)(即来源箭头)和来源节点的打分构成</li>
 <li>如果有多个来源，则计算出该来源的得分，与该节点当前的得分做对比，取得分低的那个</li>
@@ -287,7 +268,7 @@ $$</p>
 <span class="n">reverse</span> <span class="n">best</span> <span class="n">path</span>
 </pre></div>
 <p>举例：
-<figure style="flex: 102.56410256410257" ><img loading="lazy" width="800" height="390" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c97b27230bd42318efb72375c245c50b.png" /></figure></p><ul>
+<figure  style="flex: 102.56410256410257" ><img width="800" height="390" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c97b27230bd42318efb72375c245c50b.png" alt=""/></figure></p><ul>
 <li>从图片可知，<code>path</code>就是<code>edge</code></li>
 <li>初始path是空，[]</li>
 <li>从<code>forward</code>的结果字典里找到node 3的best_edge，就是e5 [e5]</li>
@@ -297,12 +278,12 @@ $$</p>
 <li>0的best_edge是NULL，结束递归</li>
 <li>reverse: [e2, e5]</li>
 </ul>
-<figure style="flex: 53.25581395348837" ><img loading="lazy" width="458" height="430" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c7650195782b845d9be6e36dac55f277.png" /></figure><p>这个很好理解</p><ol>
+<figure  style="flex: 53.25581395348837" ><img width="458" height="430" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c7650195782b845d9be6e36dac55f277.png" alt=""/></figure><p>这个很好理解</p><ol>
 <li>0到农，到农产，到农产物的概率，表示为0.0+ -log(p(农/农产/农产物))</li>
 <li>在农的前提下，就有农到产，和农到产物：best(1) + -log(P(产/产物))</li>
 <li>在产的前提下，就只有best(2) + -log(P(物))了</li>
 </ol>
-<p>应用到NLP：</p><figure style="flex: 73.99193548387096" ><img loading="lazy" width="734" height="496" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5e643e29e4fe62ef780ba545dc3a04fb.png" /></figure><p>这里就是把node, egde具体了一下：</p><ol>
+<p>应用到NLP：</p><figure  style="flex: 73.99193548387096" ><img width="734" height="496" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5e643e29e4fe62ef780ba545dc3a04fb.png" alt=""/></figure><p>这里就是把node, egde具体了一下：</p><ol>
 <li>多包了一层for-each，意思是前面的代码是处理一行的</li>
 <li>node对应是单词结尾(word_end)，其实就是一个index，前面说过了</li>
 <li>edge对应是单词(word)，前面也说过了，即<code>string[5,7]</code>的意思</li>
@@ -317,7 +298,7 @@ $$</p>
 </ul>
 </li>
 </ol>
-<figure style="flex: 90.2439024390244" ><img loading="lazy" width="592" height="328" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9de76a49c53e036f86c0c2e7a950c8cd.png" /></figure><ol>
+<figure  style="flex: 90.2439024390244" ><img width="592" height="328" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9de76a49c53e036f86c0c2e7a950c8cd.png" alt=""/></figure><ol>
 <li>显然这里已经知道edge不知道是一个词，而且是一个词的首尾边界</li>
 <li>也知道存到best_edges里面的其实就是词的位置索引</li>
 <li>反向的时候，从最后一个索引找到得分最低的词，再从这个单词向前找，一直找到<ul>
@@ -330,101 +311,146 @@ $$</p>
 
             </div>
         </article>
-        <div id="ga-tags">
+        <div class="prism-post-meta col-md-8 offset-md-2">
+    <span>walker</span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/HMM/">#HMM</a>
+    <span>/</span>
+    <span>
+        <a class="category no-link" href="/category/posts/" target="_self">
+        posts
+        </a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/NER/">#NER</a>
+    
+    <span>/</span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/HMM/" target="_self">#HMM</a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/PoS/">#PoS</a>
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/NER/" target="_self">#NER</a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/Viterbi/">#Viterbi</a>
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/PoS/" target="_self">#PoS</a>
     </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/Viterbi/" target="_self">#Viterbi</a>
+    </span>
+    
+    
+    
+    <span>/</span>
+    <span class="leancloud_visitors" id="/archives/HMM%E3%80%81NER%E3%80%81PoS%E3%80%81Viterbi%E7%AC%94%E8%AE%B0/" data-flag-title="HMM、NER、PoS、Viterbi笔记"><span class="leancloud-visitors-count"></span> Views</span>
     
 </div>
     </section>
 
     
-<section id="ga-content_pager">
-
-    <div class="next">
-        <a class="ga-highlight" href="/archives/%E6%88%91%E7%9A%84%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/">我的知识图谱入门笔记</a>
-        <p class="yue">Knowledge Graph</p>
-    </div>
-
-
-    <div class="prev">
-        <a class="ga-highlight" href="/archives/Mac%E8%BF%9C%E7%A8%8BWindows-10%E9%87%8C%E7%94%A8Anaconda%E8%A3%85%E7%9A%84Jupyter-lab/">Mac远程Windows-10里用Anaconda装的Jupyter-lab</a>
-        <p class="yue">家里台式机配置比笔记本好多了，但又习惯了苹果本，怎么在小本本上直接跑windows上的jupyter呢？首先，给Windows 10 装上OpenSSH如果你不是用的Anaconda等虚拟环境而是把python和jupyter lab装在了本机以及写在了path里，理论上你用ssh连上windows后在shell里直接jupyter lab就好了，可是我是用了Anaconda的，ssh进去以及windows自身的命令行环境里都是执行不了conda和jupyter的</p>
-    </div>
-
+<section id="prism__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+    <ul>
+        
+        <li class="next">
+            <a class="no-link" href="/archives/%E6%88%91%E7%9A%84%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/" target="_self" title="我的知识图谱入门笔记"><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</a>
+        </li>
+        
+        
+        <li class="prev">
+            <a class="no-link" href="/archives/Mac%E8%BF%9C%E7%A8%8BWindows-10%E9%87%8C%E7%94%A8Anaconda%E8%A3%85%E7%9A%84Jupyter-lab/" target="_self" title="Mac远程Windows-10里用Anaconda装的Jupyter-lab">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </li>
+        
+    </ul>
 </section>
 
 
     
-        <script>
-            var initValine = function () {
-                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
-            }
-        </script>
-        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
-        <div id="vcomments"></div>
+    <script>
+        var initValine = function() {
+            new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+        }
+
+    </script>
+    <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+    <div class="prism-comment-section container" id="prism__comment">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div id="vcomments"></div>
+            </div>
+        </div>
+    </div>
     
 
 </main>
 
-                <footer class="ga-mono" id="ga-footer">
-                    <section>
-                        <span id="ga-uptime"></span>
-                        <span class="brand">walker's code blog</span>
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
                     </section>
-                    <section>
-                        <p class="copyright">
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
                             <span>Copyright © 2022 AlanDecode</span>
-                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
                         </p>
-                        <div class="copyright">
-                            <span class="footer-addon">
-                                
-                            </span>
-                            <nav class="social-links">
-                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
-                            </nav>
-                        </div>
-                    </section>
-                    <script>
-                        var site_build_date = "2019-12-06T12:00+08:00"
-                    </script>
-                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
-                </footer>
-            </div>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+            </footer>
         </div>
     </div>
-
-    <!--katex-->
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
-    <script>
-    mathOpts = {
-        delimiters: [
-            {left: "$$", right: "$$", display: true},
-            {left: "\\[", right: "\\]", display: true},
-            {left: "$", right: "$", display: false},
-            {left: "\\(", right: "\\)", display: false}
-        ]
-    };
-    </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
     
-    </body>
+</body>
+
 </html>

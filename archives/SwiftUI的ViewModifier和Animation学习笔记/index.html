@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="english">
-    <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="renderer" content="webkit">
@@ -8,19 +9,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
     <meta name="generator" content="Maverick 1.2.1" />
-    <meta name="template" content="Galileo" />
+    <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/2c80736c6795903d11b9000926ef666b.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/285ab69ade0ed03d76402217cdc4c128.json"
         }
+
     </script>
     
 <title>SwiftUI的ViewModifier和Animation学习笔记 - walker's code blog</title>
@@ -40,49 +41,29 @@
 
 
     
-    </head>
-    
-    <body>
-        
-        <div class="container">
-            <header id="ga-header">
-                <div first>
-                    <aside id="ga-brand">
-                        <h1 class="brand"><a class="no-style" href="/">walker's code blog</a></h1>
-                        <p>coder, reader</p>
-                    </aside>
-                </div>
-                <div second id="ga-nav">
-                    <nav class="navs">
-                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
-                    </nav>
-                </div>
-            </header>
-            <div class="wrapper">
-                
-<main>    
-    <section class="ga-section ga-content">
-        <article class="yue">
-            <h1 class="ga-post_title">SwiftUI的ViewModifier和Animation学习笔记</h1>
-            <span class="ga-post_meta ga-mono">
-                <span>walker</span>
-                <time>
-                    2020-10-17
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
+<main>
+    <section class="prism-section row" id="prism__content">
+        <article class="yue col-md-8 offset-md-2">
+            <h1 class="prism-post-title">SwiftUI的ViewModifier和Animation学习笔记</h1>
+            <div class="prism-post-time">
+                <time class="text-uppercase">
+                    October 17 2020
                 </time>
-                
-                in <a no-style class="category" href="/category/posts/">
-                    posts
-                </a>
-                
-                
-                <span class="leancloud_visitors" 
-                    id="/archives/SwiftUI%E7%9A%84ViewModifier%E5%92%8CAnimation%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" 
-                    data-flag-title="SwiftUI的ViewModifier和Animation学习笔记"> · <i class="leancloud-visitors-count"></i> Views</span>
-                
-            </span>
-            <div class="ga-content_body">
+            </div>
+            <div class="prism-content-body">
                 <p>我们通过这篇文章练习如下几个知识点，借用的是斯坦福CS193p的课程里的demo，但是代码是我写的，也就是对着最终的效果写出我的实现的意思</p><h2>ViewModifier</h2>
-<figure style="flex: 33.333333333333336" ><img loading="lazy" width="212" height="318" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d841a907770d839bdbd57e0119a8651e.png" /></figure><p>首先，我们的卡片分为正面和背面，背面是纯色很简单，正面有一个圆环，和一张图片（实际是<code>emoji</code>，也就是<code>String</code>)，我们用<code>ZStack</code>布局好后即可：</p><div class="highlight"><pre><span></span><span class="n">ZStack</span> <span class="p">{</span>
+<figure class="vertical-figure" style="flex: 33.333333333333336" ><img width="212" height="318" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d841a907770d839bdbd57e0119a8651e.png" alt=""/></figure><p>首先，我们的卡片分为正面和背面，背面是纯色很简单，正面有一个圆环，和一张图片（实际是<code>emoji</code>，也就是<code>String</code>)，我们用<code>ZStack</code>布局好后即可：</p><div class="highlight"><pre><span></span><span class="n">ZStack</span> <span class="p">{</span>
             <span class="n">Group</span> <span class="p">{</span>
                 <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">).</span><span class="n">fill</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">white</span><span class="p">)</span>
                 <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">).</span><span class="n">stroke</span><span class="p">(</span><span class="n">lineWidth</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">)</span>
@@ -123,7 +104,7 @@
             <span class="p">)</span>
 </pre></div>
 <p>实际效果如下：
-<figure style="flex: 35.714285714285715" ><img loading="lazy" width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" /></figure></p><p>动画加长了，我们能看清卡片虽然有了翻面的动面，但是在开始动画的一瞬间，卡片的正面就显示出来了，我们来解决这个问题，所以我这里并不是系统讲解动画，而是在对解决问题的思路做个笔记。</p><blockquote>
+<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><p>动画加长了，我们能看清卡片虽然有了翻面的动面，但是在开始动画的一瞬间，卡片的正面就显示出来了，我们来解决这个问题，所以我这里并不是系统讲解动画，而是在对解决问题的思路做个笔记。</p><blockquote>
 <p>题外话，我觉得<code>SwiftUI</code>和<code>Flutter</code>诞生时代相同，很多理念也驱同，在动画方面，也是放弃了以前要么从头画起，要么用封装得很好的有限几个动画的思路，基本上让你能用自绘+插值的方式来自己控制动画（有点类似关键帧，但关键帧的帧与帧之间也是自动的），而现在你可以完全对一个过程进行Linear interpolation，来控制动画过程（Flutter中的<code>lerp</code>函数就是干这个的，本节也有SwiftUI的类似实现）。</p></blockquote>
 <p>比如这个翻转，<code>Objective-C</code>里直接就给你实现好了，在SwiftUI里，给的是一个最基本的几何变换，至于这上面的效果，就要你自己实现了。我认为这是对的。</p><p>按课程里的思路，卡片要么正面，要么反面，是由<code>isFaceUp</code>决定的，加入动画后，那需要这个属性在进行了50%（也就是90˚）的时候才改值</p><p>而这个属性是卡片的属性，与动画无关，所以<strong>第一个决策</strong>，就是把动画函数写到<code>ViewModifier</code>里面去，传进去的是卡片的属性，但是在<code>modifier</code>里，我们把它适当转化成应该转的角度（0˚或90˚）,这样在<code>modifier</code>里面不管做什么变化，都不影响外部调用者自己的语义了（方法和参数都没变）：</p><div class="highlight"><pre><span></span><span class="kd">init</span><span class="p">(</span><span class="n">isFaceUp</span><span class="p">:</span> <span class="nb">Bool</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// step1 这里接的是布尔值，但是我们需要把它转成对应的翻转角度</span>
@@ -171,7 +152,7 @@
 <span class="p">}</span>
 </pre></div>
 <p>效果如下，其实就是解决了如何捕捉动画进度的问题，也就是<code>animatableData</code>
-<figure style="flex: 35.714285714285715" ><img loading="lazy" width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" /></figure></p><h2>Animation2</h2>
+<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><h2>Animation2</h2>
 <p>多一个例子，课程里每张卡片翻开就会倒计时，原本是一个大饼，我根据我的喜好改成了圆环（其实是我学教程的习惯，尽可能不去做跟教程一样的事，避免思维惰性）</p><p>那么怎么让进度条动起来呢？终于讲到了怎么手动计算<strong>插值</strong>，并把这组值推给动画库让它动起来的过程了。</p><p>有了上一个例子，我查看了一个<code>Shape</code>的定义，原生就conform to protocol <code>Animatable</code>的，所以我们直接添加一个<code>AnimatedData</code>试试。</p><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nv">animatableData</span><span class="p">:</span> <span class="nb">Double</span>   <span class="c1">// degrees</span>
 </pre></div>
 <blockquote>
@@ -227,101 +208,146 @@
 <blockquote>
 <p>需要注意的是<code>withAnimation</code>过程中对值的更改我们并不能显式捕捉，至少我试图把它显示在UI上观察它的变化是失败的，直接显示了最终值，而在接这个变化的插值的底层函数里，我能在<code>animatableData</code>的<code>set</code>方法里看到确实设置了无数的插值，暂时没有理解<code>withAnimation</code>真的有有没有直接对两个数字直接生成一系列中间值</p></blockquote>
 <p>效果如下：
-<figure style="flex: 35.714285714285715" ><img loading="lazy" width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" /></figure></p><h2>后记</h2>
+<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><h2>后记</h2>
 <p>动画我之前写过一篇：<a href="https://www.jianshu.com/p/0e4c8f0e1c23">用CALayer绘图,添加动画和渐变</a>，很明显可以看到，以前的写法仍然是黑匣子，即告诉动画库，请给我动画，动画的要求是blablabla，而现在都走了插值的路线，即把一系列值告诉你，你按照每个值直接绘图就是了，绘成啥样我自己负责。这就是我这篇文章反复强调的思路的变化，我喜欢这种思路。</p>
             </div>
         </article>
-        <div id="ga-tags">
+        <div class="prism-post-meta col-md-8 offset-md-2">
+    <span>walker</span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/swiftui/">#swiftui</a>
+    <span>/</span>
+    <span>
+        <a class="category no-link" href="/category/posts/" target="_self">
+        posts
+        </a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/viewmodifier/">#viewmodifier</a>
+    
+    <span>/</span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/swiftui/" target="_self">#swiftui</a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/animation/">#animation</a>
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/viewmodifier/" target="_self">#viewmodifier</a>
     </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/animation/" target="_self">#animation</a>
+    </span>
+    
+    
+    
+    <span>/</span>
+    <span class="leancloud_visitors" id="/archives/SwiftUI%E7%9A%84ViewModifier%E5%92%8CAnimation%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" data-flag-title="SwiftUI的ViewModifier和Animation学习笔记"><span class="leancloud-visitors-count"></span> Views</span>
     
 </div>
     </section>
 
     
-<section id="ga-content_pager">
-
-    <div class="next">
-        <a class="ga-highlight" href="/archives/ES6%E4%B8%ADgenerator%E4%BC%A0%E5%8F%82%E4%B8%8E%E8%BF%94%E5%9B%9E%E5%80%BC/">ES6中generator传参与返回值</a>
-        <p class="yue">先看两个例子,1,</p>
-    </div>
-
-
-    <div class="prev">
-        <a class="ga-highlight" href="/archives/%E4%BB%8E%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6%E5%B9%B6%E7%A7%BB%E5%8A%A8%E7%9A%84shell%E5%91%BD%E4%BB%A4%E8%AF%B4%E5%BC%80%E5%8E%BB/">从查找文件并移动的shell命令说开去</a>
-        <p class="yue">一个不能更常见的需求: 从一大堆下载目录(或别的目录)里, 查找指定的文件, 并移动/复制到指定的文件夹, 如果用鼠标点开一个个的文件夹, 还有文件夹里的文件夹, 估计要累死, 当然, 即使自己不会, 也很容易查到两个shell命令:</p>
-    </div>
-
+<section id="prism__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+    <ul>
+        
+        <li class="next">
+            <a class="no-link" href="/archives/ES6%E4%B8%ADgenerator%E4%BC%A0%E5%8F%82%E4%B8%8E%E8%BF%94%E5%9B%9E%E5%80%BC/" target="_self" title="ES6中generator传参与返回值"><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</a>
+        </li>
+        
+        
+        <li class="prev">
+            <a class="no-link" href="/archives/%E4%BB%8E%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6%E5%B9%B6%E7%A7%BB%E5%8A%A8%E7%9A%84shell%E5%91%BD%E4%BB%A4%E8%AF%B4%E5%BC%80%E5%8E%BB/" target="_self" title="从查找文件并移动的shell命令说开去">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </li>
+        
+    </ul>
 </section>
 
 
     
-        <script>
-            var initValine = function () {
-                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
-            }
-        </script>
-        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
-        <div id="vcomments"></div>
+    <script>
+        var initValine = function() {
+            new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+        }
+
+    </script>
+    <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+    <div class="prism-comment-section container" id="prism__comment">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div id="vcomments"></div>
+            </div>
+        </div>
+    </div>
     
 
 </main>
 
-                <footer class="ga-mono" id="ga-footer">
-                    <section>
-                        <span id="ga-uptime"></span>
-                        <span class="brand">walker's code blog</span>
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
                     </section>
-                    <section>
-                        <p class="copyright">
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
                             <span>Copyright © 2022 AlanDecode</span>
-                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
                         </p>
-                        <div class="copyright">
-                            <span class="footer-addon">
-                                
-                            </span>
-                            <nav class="social-links">
-                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
-                            </nav>
-                        </div>
-                    </section>
-                    <script>
-                        var site_build_date = "2019-12-06T12:00+08:00"
-                    </script>
-                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
-                </footer>
-            </div>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+            </footer>
         </div>
     </div>
-
-    <!--katex-->
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
-    <script>
-    mathOpts = {
-        delimiters: [
-            {left: "$$", right: "$$", display: true},
-            {left: "\\[", right: "\\]", display: true},
-            {left: "$", right: "$", display: false},
-            {left: "\\(", right: "\\)", display: false}
-        ]
-    };
-    </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
     
-    </body>
+</body>
+
 </html>

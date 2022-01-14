@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="english">
-    <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="renderer" content="webkit">
@@ -8,19 +9,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
     <meta name="generator" content="Maverick 1.2.1" />
-    <meta name="template" content="Galileo" />
+    <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/2c80736c6795903d11b9000926ef666b.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/285ab69ade0ed03d76402217cdc4c128.json"
         }
+
     </script>
     
 <title>《Deep-Learning-with-Python》笔记 - walker's code blog</title>
@@ -40,47 +41,27 @@
 
 
     
-    </head>
-    
-    <body>
-        
-        <div class="container">
-            <header id="ga-header">
-                <div first>
-                    <aside id="ga-brand">
-                        <h1 class="brand"><a class="no-style" href="/">walker's code blog</a></h1>
-                        <p>coder, reader</p>
-                    </aside>
-                </div>
-                <div second id="ga-nav">
-                    <nav class="navs">
-                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
-                    </nav>
-                </div>
-            </header>
-            <div class="wrapper">
-                
-<main>    
-    <section class="ga-section ga-content">
-        <article class="yue">
-            <h1 class="ga-post_title">《Deep-Learning-with-Python》笔记</h1>
-            <span class="ga-post_meta ga-mono">
-                <span>walker</span>
-                <time>
-                    2021-09-12
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
+<main>
+    <section class="prism-section row" id="prism__content">
+        <article class="yue col-md-8 offset-md-2">
+            <h1 class="prism-post-title">《Deep-Learning-with-Python》笔记</h1>
+            <div class="prism-post-time">
+                <time class="text-uppercase">
+                    September 12 2021
                 </time>
-                
-                in <a no-style class="category" href="/category/posts/">
-                    posts
-                </a>
-                
-                
-                <span class="leancloud_visitors" 
-                    id="/archives/%E3%80%8ADeep-Learning-with-Python%E3%80%8B%E7%AC%94%E8%AE%B0/" 
-                    data-flag-title="《Deep-Learning-with-Python》笔记"> · <i class="leancloud-visitors-count"></i> Views</span>
-                
-            </span>
-            <div class="ga-content_body">
+            </div>
+            <div class="prism-content-body">
                 <p>本来是打算趁这个时间好好看看花书的，前几章看下来确实觉得获益匪浅，但看下去就发现跟不上了，特别是抱着急功近利的心态的话，目前也沉不下去真的一节节吃透地往下看。这类书终归不是入门教材，是需要你有过一定的积累后再回过头来看的。</p><p>于是想到了《Deep Learning with Python》，忘记这本书怎么来的了，但是在别的地方看到了有人推荐，说是Keras的作者写的非常好的一本入门书，翻了前面几十页后发现居然跟进去了，不该讲的地方没讲比如数学细节，而且思路也极其统一，从头贯穿到尾（比如representations, latent space,  hypothesis space），我觉得很受用。</p><p>三百多页全英文，居然也没查几个单词就这么看完了，以前看文档最多十来页，也算一个突破了，可见其实还是一个耐心的问题。</p><p>看完后书上做了很多笔记，于是顺着笔记读了第二遍，顺便就把笔记给电子化了。不是教程，不是导读。</p><h1>Fundamentals of deep learning</h1>
 <p><strong>核心思想</strong>：
 learng useful <code>representations</code> of input data</p><blockquote>
@@ -534,7 +515,7 @@ learng useful <code>representations</code> of input data</p><blockquote>
 <blockquote>
 <p>而如果你是一个固定的数据集，比如几万条，那么你把所有的数据跑一遍把这个结果当成数据集（全放在内存里），那也不是不可以在这一步用数据增广。</p></blockquote>
 <h3>Fine-tuning</h3>
-<p>Fine-tuning consists of unfreezing a few of the top layers of a frozen model base used for feature extraction, and jointly training both the newly added part of the model (in this case, the fully connected classifier) and these top layers. This is called fine-tuning because it slightly adjusts the more abstract representations of the model being reused, in order to make them more relevant for the problem at hand.</p><p>前面的feature extraction方式，会把预训练的模型你选中的layers给freeze掉，即不计算梯度。这里之所以叫fine-tuning，意思就是会把最后几层(top-layers)给<code>unfreezing</code>掉，这样的好处是保留低级特征，重新训练高级特征，还保留了原来大型模型的结构，不需要自行构建。</p><figure style="flex: 15.321375186846039" ><img loading="lazy" width="410" height="1338" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/705011af7667b591af29afe03230ecc5.png" /></figure><blockquote>
+<p>Fine-tuning consists of unfreezing a few of the top layers of a frozen model base used for feature extraction, and jointly training both the newly added part of the model (in this case, the fully connected classifier) and these top layers. This is called fine-tuning because it slightly adjusts the more abstract representations of the model being reused, in order to make them more relevant for the problem at hand.</p><p>前面的feature extraction方式，会把预训练的模型你选中的layers给freeze掉，即不计算梯度。这里之所以叫fine-tuning，意思就是会把最后几层(top-layers)给<code>unfreezing</code>掉，这样的好处是保留低级特征，重新训练高级特征，还保留了原来大型模型的结构，不需要自行构建。</p><figure class="vertical-figure" style="flex: 15.321375186846039" ><img width="410" height="1338" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/705011af7667b591af29afe03230ecc5.png" alt=""/></figure><blockquote>
 <p>但是： it’s only possible to fine-tune the top layers of the convolutional base once the classifier on <code>top has already been trained</code>. 预训练模型没有frezze住的话loss将会很大，所以变成了先train一个大体差不多的classifier，再联合起来train一遍高级特征和classifier:</p></blockquote>
 <ol>
 <li>Add your custom network on top of an already-trained base network.</li>
@@ -559,7 +540,7 @@ learng useful <code>representations</code> of input data</p><blockquote>
 
 <span class="c1"># 注意使用的是matshow而不是show</span>
 </pre></div>
-<figure style="flex: 101.9047619047619" ><img loading="lazy" width="856" height="420" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e5088f559521b7cc9c7b0cb129d275fe.png" /></figure><p>以上代码是利用了keras的Model特性，将所有layers的输出<strong>摊平</strong>（就是做了一个多头的模型），然后再顺便取了第4和第7个feature map画出来，可以看到，图一感兴趣的是<code>对角线</code>，图二提取的是<code>蓝色的亮点</code>。</p><p>结构化这些输出，可以确信初始layer确实提取的是简单特征，越往后越高级（抽象）。</p><p>A deep neural network effectively acts as an <code>information distillation</code>(信息蒸馏) pipeline, with raw data going in (in this case, RGB pictures) and being repeatedly transformed so that irrelevant information is filtered out (for example, the specific visual appearance of the image), and useful information is <code>magnified and refined</code> (for example, the class of the image).</p><blockquote>
+<figure  style="flex: 101.9047619047619" ><img width="856" height="420" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e5088f559521b7cc9c7b0cb129d275fe.png" alt=""/></figure><p>以上代码是利用了keras的Model特性，将所有layers的输出<strong>摊平</strong>（就是做了一个多头的模型），然后再顺便取了第4和第7个feature map画出来，可以看到，图一感兴趣的是<code>对角线</code>，图二提取的是<code>蓝色的亮点</code>。</p><p>结构化这些输出，可以确信初始layer确实提取的是简单特征，越往后越高级（抽象）。</p><p>A deep neural network effectively acts as an <code>information distillation</code>(信息蒸馏) pipeline, with raw data going in (in this case, RGB pictures) and being repeatedly transformed so that irrelevant information is filtered out (for example, the specific visual appearance of the image), and useful information is <code>magnified and refined</code> (for example, the class of the image).</p><blockquote>
 <p>关键词：有用的信息被不断<strong>放大和强化</strong></p></blockquote>
 <p>书里举了个有趣的例子，要你画一辆自行车。你画出来的并不是一辆充满细节的单车，而往往是你抽象出来的单车，你会用基本的线条勾勒出你对单车特征的理解，比如龙头，轮子等关键部件，以及相对位置。画家为什么能画得又真实又好看？那就是他们真的仔细观察了单车，他们绘画的时候用的并不是特征，而是一切细节，然而对于没有受过训练的普通人来说，往往只能用简单几笔勾勒出脑海中的单车的样子（其实并不是样子，而是特征的组合）</p><h4>Visualizing convnet filters</h4>
 <p>通过强化filter对输出的反应并绘制出来，这是从数学方法上直接观察filter，看什么最能“刺激”一个filter，用”梯度上升“最能体现这种思路：</p><p>把output当成loss，用梯度上升（每次修改input_image）训练出来的output就是这个filter的极端情况，可以认为这个filter其实是在提取什么（responsive to）：</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras.applications</span> <span class="kn">import</span> <span class="n">VGG16</span>
@@ -584,7 +565,7 @@ learng useful <code>representations</code> of input data</p><blockquote>
     <span class="n">loss_value</span><span class="p">,</span> <span class="n">grads_value</span> <span class="o">=</span> <span class="n">iterate</span><span class="p">([</span><span class="n">input_img_data</span><span class="p">])</span>
     <span class="n">input_img_data</span> <span class="o">+=</span> <span class="n">grads_value</span> <span class="o">*</span> <span class="n">step</span>  <span class="c1"># 梯度上升</span>
 </pre></div>
-<p>按上述代码的思路结构化输出并绘图：</p><figure style="flex: 47.148288973384034" ><img loading="lazy" width="1240" height="1315" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d3df8099cd6c93450e84a4cd01b67d19.png" /></figure><p>从线条到纹理到物件（眼睛，毛皮，叶子）</p><blockquote>
+<p>按上述代码的思路结构化输出并绘图：</p><figure class="vertical-figure" style="flex: 47.148288973384034" ><img width="1240" height="1315" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d3df8099cd6c93450e84a4cd01b67d19.png" alt=""/></figure><p>从线条到纹理到物件（眼睛，毛皮，叶子）</p><blockquote>
 <p>each layer in a convnet learns a collection of filters such that their inputs can be expressed as a <code>combination of the filters</code>.</p></blockquote>
 <blockquote>
 <p>This is similar to how the Fourier transform decomposes signals onto a bank of cosine functions.</p></blockquote>
@@ -613,7 +594,7 @@ learng useful <code>representations</code> of input data</p><blockquote>
     <span class="n">conv_layer_output_value</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">pooled_grads_value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 <span class="n">heatmap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">conv_layer_output_value</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
-<figure style="flex: 77.77777777777777" ><img loading="lazy" width="1036" height="666" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9020d228898abcf96e2855b7e028374b.png" /></figure><p>叠加到原图上去（用cv2融合两张图片，即相同维度的数组以不同权重逐像素相加）：</p><figure style="flex: 75.97402597402598" ><img loading="lazy" width="702" height="462" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9261ae2a67e61c26e078db210f218d11.png" /></figure><h1>Deep learning for text and sequences</h1>
+<figure  style="flex: 77.77777777777777" ><img width="1036" height="666" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9020d228898abcf96e2855b7e028374b.png" alt=""/></figure><p>叠加到原图上去（用cv2融合两张图片，即相同维度的数组以不同权重逐像素相加）：</p><figure  style="flex: 75.97402597402598" ><img width="702" height="462" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9261ae2a67e61c26e078db210f218d11.png" alt=""/></figure><h1>Deep learning for text and sequences</h1>
 <p>空间上的序列，时间上的序列组成的数据，比如文本，视频，天气数据等，一般用<code>recurrent neural network</code>(RNN)和<code>1D convnets</code></p><blockquote>
 <p>其实很多名词，包括convnets，我并没有在别的地方看到过，好像就是作者自己发明的，但这些不重要，知道它描述的是什么就可以了，不一定要公认术语。</p></blockquote>
 <p>通用场景：</p><ul>
@@ -732,7 +713,7 @@ learng useful <code>representations</code> of input data</p><blockquote>
 <li>但仍然理解为filter在全句里提取局部特征</li>
 </ol>
 <p>归桕结底，图片的最小单元是一个像素（一个数字），而序列（我们这里说文本）的最小单元是token，而token又被我们定义为vector（一组数字）了，那么卷积核就限制在至少要达到最小单元(vector)的维度了。</p><h3>Combining CNNs and RNNs to process long sequences</h3>
-<p>卷积能通过加深网络获取更大的感受野，但仍然是“位置无关”的，因为每个filter本就是在整个序列里搜索相同的特征。</p><p>但是它确实提取出了特征，是否可把位置关系等上下文的作业交给下游任务RNN做呢？</p><figure style="flex: 50.750750750750754" ><img loading="lazy" width="676" height="666" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/bc69a05bd9def95c42c6ce450a5cf164.png" /></figure><p>不但实现，而且堆叠两种网络，还可以把数据集做得更大（CNN是矩阵运算，还能用GPU加速）。</p><h1>Advanced deep-learning best practices</h1>
+<p>卷积能通过加深网络获取更大的感受野，但仍然是“位置无关”的，因为每个filter本就是在整个序列里搜索相同的特征。</p><p>但是它确实提取出了特征，是否可把位置关系等上下文的作业交给下游任务RNN做呢？</p><figure  style="flex: 50.750750750750754" ><img width="676" height="666" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/bc69a05bd9def95c42c6ce450a5cf164.png" alt=""/></figure><p>不但实现，而且堆叠两种网络，还可以把数据集做得更大（CNN是矩阵运算，还能用GPU加速）。</p><h1>Advanced deep-learning best practices</h1>
 <p>这一章是介绍了更多的网络（从keras的封装特性出发）结构和模块，以及batch normalization, model ensembling等知识。</p><h2>beyond Sequential model</h2>
 <p>前面介绍的都是Sequential模型，就是一个接一个地layer前后堆叠，现实中有很多场景并不是一进一出的：</p><ol>
 <li>multi-input model</li>
@@ -1060,133 +1041,178 @@ $
 <p>因为鉴别器和生成器是一起训练的，因此前几轮生成的肯定是噪音，但前几轮鉴别器也是瞎鉴别的。</p>
             </div>
         </article>
-        <div id="ga-tags">
+        <div class="prism-post-meta col-md-8 offset-md-2">
+    <span>walker</span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/deep%20learning/">#deep learning</a>
+    <span>/</span>
+    <span>
+        <a class="category no-link" href="/category/posts/" target="_self">
+        posts
+        </a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
+    
+    <span>/</span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/deep%20learning/" target="_self">#deep learning</a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/keras/">#keras</a>
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" target="_self">#深度学习</a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/cv/">#cv</a>
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/keras/" target="_self">#keras</a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/nlp/">#nlp</a>
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/cv/" target="_self">#cv</a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/tensorflow/">#tensorflow</a>
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/nlp/" target="_self">#nlp</a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/gan/">#gan</a>
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/tensorflow/" target="_self">#tensorflow</a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/lstm/">#lstm</a>
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/gan/" target="_self">#gan</a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/language%20mode/">#language mode</a>
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/lstm/" target="_self">#lstm</a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/rnn/">#rnn</a>
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/language%20mode/" target="_self">#language mode</a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/heatmap/">#heatmap</a>
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/rnn/" target="_self">#rnn</a>
     </span>
     
-    <span class="ga-tag">
-        <a class="ga-highlight" href="/tag/dropout/">#dropout</a>
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/heatmap/" target="_self">#heatmap</a>
     </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/dropout/" target="_self">#dropout</a>
+    </span>
+    
+    
+    
+    <span>/</span>
+    <span class="leancloud_visitors" id="/archives/%E3%80%8ADeep-Learning-with-Python%E3%80%8B%E7%AC%94%E8%AE%B0/" data-flag-title="《Deep-Learning-with-Python》笔记"><span class="leancloud-visitors-count"></span> Views</span>
     
 </div>
     </section>
 
     
-<section id="ga-content_pager">
-
-    <div class="next">
-        <a class="ga-highlight" href="/archives/%E4%B8%80%E5%BC%A0%E5%9B%BE%E8%AF%B4%E6%B8%85%E5%8C%88%E7%89%99%E5%88%A9%E7%AE%97%E6%B3%95%EF%BC%88Hungarian-Algorithm%EF%BC%89/">一张图说清匈牙利算法（Hungarian-Algorithm）</a>
-        <p class="yue">做多目标跟踪的时候会碰到这个算法，每个人都有自己的说法讲清楚这个算法是干什么的？我的老师就跟我说过是什么给工人分配活干（即理解为指派问题），网上还看到有说红娘尽可能匹配多的情侣等，透过这些感性理解，基本上就能理解大概是最大匹配的问题了。然后加了限制：后来者优先。即后匹配的能抢掉前人已匹配的对象，这个是有数学依据还是只是一种实现思路我就没深究了。我的理解不会比别人更高级，之所以能用一张图说清楚，只不过是我作图的时候发现可以把过程画在一张图里，只需要把图示标清楚就好了，这样就不需要每一步画一张图了，一旦理解了，哪怕忘了，一瞅这张图也能立刻回忆起来。先上数据：import numpy as np</p>
-    </div>
-
-
-    <div class="prev">
-        <a class="ga-highlight" href="/archives/%E5%87%A0%E5%A4%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95python%E5%AE%9E%E7%8E%B0/">几大排序算法python实现</a>
-        <p class="yue">冒泡排序</p>
-    </div>
-
+<section id="prism__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+    <ul>
+        
+        <li class="next">
+            <a class="no-link" href="/archives/%E4%B8%80%E5%BC%A0%E5%9B%BE%E8%AF%B4%E6%B8%85%E5%8C%88%E7%89%99%E5%88%A9%E7%AE%97%E6%B3%95%EF%BC%88Hungarian-Algorithm%EF%BC%89/" target="_self" title="一张图说清匈牙利算法（Hungarian-Algorithm）"><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</a>
+        </li>
+        
+        
+        <li class="prev">
+            <a class="no-link" href="/archives/%E5%87%A0%E5%A4%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95python%E5%AE%9E%E7%8E%B0/" target="_self" title="几大排序算法python实现">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </li>
+        
+    </ul>
 </section>
 
 
     
-        <script>
-            var initValine = function () {
-                new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
-            }
-        </script>
-        <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
-        <div id="vcomments"></div>
+    <script>
+        var initValine = function() {
+            new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+        }
+
+    </script>
+    <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+    <div class="prism-comment-section container" id="prism__comment">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div id="vcomments"></div>
+            </div>
+        </div>
+    </div>
     
 
 </main>
 
-                <footer class="ga-mono" id="ga-footer">
-                    <section>
-                        <span id="ga-uptime"></span>
-                        <span class="brand">walker's code blog</span>
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
                     </section>
-                    <section>
-                        <p class="copyright">
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
                             <span>Copyright © 2022 AlanDecode</span>
-                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
                         </p>
-                        <div class="copyright">
-                            <span class="footer-addon">
-                                
-                            </span>
-                            <nav class="social-links">
-                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
-                            </nav>
-                        </div>
-                    </section>
-                    <script>
-                        var site_build_date = "2019-12-06T12:00+08:00"
-                    </script>
-                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
-                </footer>
-            </div>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+            </footer>
         </div>
     </div>
-
-    <!--katex-->
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
-    <script>
-    mathOpts = {
-        delimiters: [
-            {left: "$$", right: "$$", display: true},
-            {left: "\\[", right: "\\]", display: true},
-            {left: "$", right: "$", display: false},
-            {left: "\\(", right: "\\)", display: false}
-        ]
-    };
-    </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
     
-    </body>
+</body>
+
 </html>

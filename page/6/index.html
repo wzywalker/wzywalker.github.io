@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="english">
-    <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="renderer" content="webkit">
@@ -8,19 +9,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
     <meta name="generator" content="Maverick 1.2.1" />
-    <meta name="template" content="Galileo" />
+    <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/2c80736c6795903d11b9000926ef666b.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/285ab69ade0ed03d76402217cdc4c128.json"
         }
+
     </script>
     
 <title>walker's code blog</title>
@@ -39,257 +40,630 @@
 
 
     
-    </head>
-    
-    <body>
-        
-        <div class="container">
-            <header id="ga-header">
-                <div first>
-                    <aside id="ga-brand">
-                        <h1 class="brand"><a class="no-style" href="/">walker's code blog</a></h1>
-                        <p>coder, reader</p>
-                    </aside>
-                </div>
-                <div second id="ga-nav">
-                    <nav class="navs">
-                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
-                    </nav>
-                </div>
-            </header>
-            <div class="wrapper">
-                
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
 <main>    
     
 
-<section id="ga-post_list" class="ga-section" data-title="Posts">
-    <ul>
+<section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/apple-store%E9%93%BE%E6%8E%A5%E6%A0%BC%E5%BC%8F%E6%96%87%E6%A1%A3/" target="_self">apple-store链接格式文档</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/apple-store%E9%93%BE%E6%8E%A5%E6%A0%BC%E5%BC%8F%E6%96%87%E6%A1%A3/" target="_self">
+                <time class="text-uppercase">
+                    March 12 2020
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>The app on Appstore has specific URL format <code>http://itunes.apple.com/[country-code]/app/[app-name]/id+[id_value]?mt=[1...12]</code>
+country-code can be <em>us</em> for <em>united states</em>, <em>in</em> for <em>india</em> etc
+<em>mt stands for Media Type</em>
+<em>Value for mt can be anything from 1 to 12 and each assigned to specific category</em>
+i. <strong>8 for iOS apps</strong>
+ii. <strong>12 for Mac apps</strong></p><p>来源: <a href="http://stackoverflow.com/questions/1781427/what-is-mt-8-in-itunes-links-for-the-appstore">stackoverflow</a></p></div>
         
-        <li>
-            <article class="yue">
-                <h1>apple-store链接格式文档</h1>
-                
-                    <blockquote>The app on Appstore has specific URL format http://itunes.apple.com/[country-code]/app/[app-name]/id+[id_value]?mt=[1...12]</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/apple-store%E9%93%BE%E6%8E%A5%E6%A0%BC%E5%BC%8F%E6%96%87%E6%A1%A3/">Read More</a></span>
-                    <time class="ga-mono">
-                        2020-03-12
-                    </time>
-                </footer>
-            </article>
-        </li>
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/apple-store%E9%93%BE%E6%8E%A5%E6%A0%BC%E5%BC%8F%E6%96%87%E6%A1%A3/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
         
-        <li>
-            <article class="yue">
-                <h1>Fixing-Chrome-58+-[missing_subjectAltName]-with-openssl-when-using-sel</h1>
-                
-                    <blockquote>原文链接说在前面</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/Fixing-Chrome-58%2B-%5Bmissing_subjectAltName%5D-with-openssl-when-using-sel/">Read More</a></span>
-                    <time class="ga-mono">
-                        2020-01-01
-                    </time>
-                </footer>
-            </article>
-        </li>
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/Fixing-Chrome-58%2B-%5Bmissing_subjectAltName%5D-with-openssl-when-using-sel/" target="_self">Fixing-Chrome-58+-[missing_subjectAltName]-with-openssl-when-using-sel</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/Fixing-Chrome-58%2B-%5Bmissing_subjectAltName%5D-with-openssl-when-using-sel/" target="_self">
+                <time class="text-uppercase">
+                    January 01 2020
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p><a href="https://alexanderzeitler.com/articles/Fixing-Chrome-missing_subjectAltName-selfsigned-cert-openssl/">原文链接</a></p><h1>说在前面</h1>
+<blockquote>
+<ol>
+<li><code>createselfsignedcertificate.sh</code>文件里的sudo删掉了</li>
+</ol>
+</blockquote>
+<ol start="2">
+<li><code>server.csr.cnf</code>里<code>dn</code>里面的内容请改成自己的</li>
+<li><code>v3.ext</code>里面的DNS.1也更改为自己的server</li>
+<li>本来我只想绑一个固定的 IP, 基本通过, 但是在mac的chrome58下, 仍然过不了, 最终还是通过域名解决</li>
+</ol>
+<p>上一个在 chrome58下终于变绿的图片
+<figure  style="flex: 397.72727272727275" ><img width="700" height="88" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b09b9db95e4ba72877937a236a42b9ef.png" alt=""/></figure></p><h1>原文转载</h1>
+<p>Since version 58, Chrome requires SSL certificates to use SAN (Subject Alternative Name) instead of the popular Common Name (CN), thus <a href="https://groups.google.com/a/chromium.org/forum/#%21msg/security-dev/IGT2fLJrAeo/csf_1Rh1AwAJ">CN support has been removed</a>.If you're using self signed certificates (but not only!) having only CN defined, you get an error like this when calling a website using the self signed certificate:
+<figure  style="flex: 100.89887640449439" ><img width="898" height="445" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/df44dd6d5d409cc33b66c052ab9e7b81.png" alt=""/></figure>
+Here's how to create a self signed certificate with SAN using openssl</p><p>First, lets create a root CA cert using <code>createRootCA.sh</code>:</p><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+mkdir ~/ssl/openssl genrsa -des3 -out ~/ssl/rootCA.key <span class="m">2048</span>
+openssl req -x509 -new -nodes -key ~/ssl/rootCA.key -sha256 -days <span class="m">1024</span> -out ~/ssl/rootCA.pem
+</pre></div>
+<p>Next, create a file <code>createselfsignedcertificate.sh</code>:</p><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+openssl req -new -sha256 -nodes -out server.csr -newkey rsa:2048 -keyout server.key -config &lt;<span class="o">(</span> cat server.csr.cnf <span class="o">)</span>
+openssl x509 -req -in server.csr -CA ~/ssl/rootCA.pem -CAkey ~/ssl/rootCA.key -CAcreateserial -out server.crt -days <span class="m">500</span> -sha256 -extfile v3.ext
+</pre></div>
+<p>Then, create the openssl configuration file <code>server.csr.cnf</code>
+ referenced in the openssl command above:</p>
+<pre><code>[req]
+default_bits = 2048
+prompt = no
+default_md = sha256
+distinguished_name = dn
+
+[dn]
+C=US
+ST=New York
+L=Rochester
+O=End Point
+OU=Testing Domain
+emailAddress=you@example.com
+CN = localhost
+</code></pre>
+<p>Now we need to create the <code>v3.ext</code> file in order to create a X509 v3 certificate instead of a v1 which is the default when not specifying a extension file:</p>
+<pre><code>authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = localhost
+</code></pre>
+<p>In order to create your cert, first run <code>createRootCA.sh</code> which we created first. Next, run <code>createselfsignedcertificate.sh</code> to create the self signed cert using localhost as the SAN and CN.
+After adding <code>the rootCA.pem</code> to the list of your trusted root CAs, you can use the <code>server.key</code> and <code>server.crt</code> in your web server and browse <a href="https://localhost%C2%A0using">https://localhost%C2%A0using</a> Chrome 58 or later:
+<figure class="vertical-figure" style="flex: 41.278195488721806" ><img width="549" height="665" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b18d58c0b394b4a435202d5bf5858e47.jpg" alt=""/></figure>
+You can also verify your certificate to contain the SAN by calling</p>
+<pre><code>openssl x509 -text -in server.crt -noout
+</code></pre>
+<p>Watch for this line <code>Version: 3 (0x2)</code> as well as <code>X509v3 Subject Alternative Name:</code> (and below).
+Happy self signing!</p></div>
         
-        <li>
-            <article class="yue">
-                <h1>将共享文件夹用作Time-Machine并加密</h1>
-                
-                    <blockquote>怎么在局域网创建一个共享文件夹不在此文讨论范围内, 比如windows文件夹简单右键共享一下, 就能走完本教程. 以下是在macOS上设置Time Machine的操作.#Step 1: 各种命名</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E5%B0%86%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9%E7%94%A8%E4%BD%9CTime-Machine%E5%B9%B6%E5%8A%A0%E5%AF%86/">Read More</a></span>
-                    <time class="ga-mono">
-                        2019-11-21
-                    </time>
-                </footer>
-            </article>
-        </li>
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Fixing-Chrome-58%2B-%5Bmissing_subjectAltName%5D-with-openssl-when-using-sel/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
         
-        <li>
-            <article class="yue">
-                <h1>用CALayer绘图,添加动画和渐变</h1>
-                
-                    <blockquote>如果CALayer只有一个简单的 path, 那么直接给 path 赋值是最简单的:</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E7%94%A8CALayer%E7%BB%98%E5%9B%BE%2C%E6%B7%BB%E5%8A%A0%E5%8A%A8%E7%94%BB%E5%92%8C%E6%B8%90%E5%8F%98/">Read More</a></span>
-                    <time class="ga-mono">
-                        2019-10-17
-                    </time>
-                </footer>
-            </article>
-        </li>
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%B0%86%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9%E7%94%A8%E4%BD%9CTime-Machine%E5%B9%B6%E5%8A%A0%E5%AF%86/" target="_self">将共享文件夹用作Time-Machine并加密</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E5%B0%86%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9%E7%94%A8%E4%BD%9CTime-Machine%E5%B9%B6%E5%8A%A0%E5%AF%86/" target="_self">
+                <time class="text-uppercase">
+                    November 21 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>怎么在局域网创建一个共享文件夹不在此文讨论范围内, 比如windows文件夹简单右键共享一下, 就能走完本教程. 以下是在macOS上设置Time Machine的操作.</p><p>#Step 1: 各种命名
+没什么用的第一步, 如果你有多台电脑, 那就最好用名字和MAC地址来作备份的名字, 送佛送到西:</p>
+<pre><code>MAC_ADDRESS=`ifconfig en0 | grep ether | awk '{print $2}' | sed 's/://g'`
+SHARE_NAME=`scutil --get ComputerName`
+IMG_NAME=${SHARE_NAME}_${MAC_ADDRESS}.sparsebundle
+echo $IMG_NAME
+</code></pre>
+<p>#Step 2: 创建并加密一个镜像
+复制粘贴前记得更改一下'MAXSIZE', 设为自己想要的大小. 为了怕人不看文字直接复制, 我设定了一个合理的350G</p>
+<pre><code>MAXSIZE=350g
+hdiutil create -size $MAXSIZE -type SPARSEBUNDLE -nospotlight -volname &quot;Backup of $SHARE_NAME&quot; -fs &quot;Case-sensitive Journaled HFS+&quot; -verbose unencrypted_$IMG_NAME
+hdiutil convert -format UDSB -o &quot;$IMG_NAME&quot; -encryption AES-128 &quot;unencrypted_$IMG_NAME&quot;
+rm -Rf &quot;unencrypted_$IMG_NAME&quot;
+</code></pre>
+<p>注意两点:</p><ol>
+<li>该脚本先创建了一个未加密的image(其实是一个文件夹), 随后加密, 过程中会询问密码, 最后删除未加密的image</li>
+<li>文件会创建在用户主目录, 如果空间不够, 可以读一下<code>hdiutil</code>的文档, 自行设定到远程共享文件夹去. 如果按本脚本, 那么请自行移动到共享目录</li>
+</ol>
+<p>#Step 3: 设置Time Machine
+双击共享文件夹里的镜像, 输入上一步设置的密码, 此时会mount到本地, 菜单栏上的Time Machine的选择备份文件夹功能里应该能看到这个盘, 但是你不能用它, 我们用命令来关联:</p>
+<pre><code>defaults write com.apple.systempreferences TMShowUnsupportedNetworkVolumes 1
+sudo tmutil setdestination &quot;/Volumes/Backup of $SHARE_NAME&quot;
+</code></pre>
+<p>此时再打开时光机器, 就可以看到已经自动关联上了(你无需去选择备份硬盘).
+有一个小问题, 就是即使我这么操作下来, 即使mount的时候需要输入密码, 备份的时候还是提示往一个没有加密的盘里备份. 也就是说, 我们以为encrypt了, 只是对image而言, 备份还是不加密的. 可见我们还是没有找到像一些NAS系统里那样能被自动发现, 正常加密的方案</p><blockquote>
+<p>参考:</p></blockquote>
+<p><a href="https://chester.me/archives/2013/04/a-step-by-step-guide-to-configure-encrypted-time-machine-backups-over-a-non-time-capsule-network-share.html/">source</a><br />
+<a href="http://www.levelofindirection.com/journal/2009/10/10/using-a-networked-drive-for-time-machine-backups-on-a-mac.html">create an sparse image</a><br />
+<a href="http://www.cognizo.com/2012/04/encrypted-network-backups-with-os-x-time-machine/">encrypt it</a><br />
+<a href="http://basilsalad.com/how-to/create-time-machine-backup-network-drive-lion/">convince Time Machine to use it</a></p><blockquote>
+<p>备注: 请活学活用, 比如我就没用那些名字变量, 直接写死了镜像路径和文件名</p></blockquote>
+</div>
         
-        <li>
-            <article class="yue">
-                <h1>iOS签名相关命令</h1>
-                
-                    <blockquote>用openssl查看CSR文件内容</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/iOS%E7%AD%BE%E5%90%8D%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/">Read More</a></span>
-                    <time class="ga-mono">
-                        2019-10-09
-                    </time>
-                </footer>
-            </article>
-        </li>
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%B0%86%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9%E7%94%A8%E4%BD%9CTime-Machine%E5%B9%B6%E5%8A%A0%E5%AF%86/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
         
-        <li>
-            <article class="yue">
-                <h1>关于@synthesize</h1>
-                
-                    <blockquote>首先, @synthesize myLocalVar = _myLocalVar; 这句话是显式帮你省掉了一个 getter 方法和一个 setter 方法. 两个方法长什么样不赘述.其次, 从某个版本的 Xcode 开始, 你连 @synthesize 这句话也不需要写了, 但是请注意, 这只是一个 IDE 的特性. 你不需要手动合成, 不代表 @synthesize 不作用了, 仅仅是让你能少写这一句话, 而 Xcode 帮你补全了.再次, @synthesize 仅仅是一个 clang 的 Objective-C 语言扩展 (autosynthesis of properties), 然后clang恰好是 Xcode 的默认编译器. 也就是说, 如果你换成了 gcc, 那么这个特性也就不复存在了.基于上述, 如果你使用了自己的文本编辑器, 然后用自己用 clang 从命令行编译, @synthesize 这一句话是需要自己写的.最后, 有如下例外</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E5%85%B3%E4%BA%8E%40synthesize/">Read More</a></span>
-                    <time class="ga-mono">
-                        2019-08-16
-                    </time>
-                </footer>
-            </article>
-        </li>
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E7%94%A8CALayer%E7%BB%98%E5%9B%BE%2C%E6%B7%BB%E5%8A%A0%E5%8A%A8%E7%94%BB%E5%92%8C%E6%B8%90%E5%8F%98/" target="_self">用CALayer绘图,添加动画和渐变</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E7%94%A8CALayer%E7%BB%98%E5%9B%BE%2C%E6%B7%BB%E5%8A%A0%E5%8A%A8%E7%94%BB%E5%92%8C%E6%B8%90%E5%8F%98/" target="_self">
+                <time class="text-uppercase">
+                    October 17 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>如果CALayer只有一个简单的 path, 那么直接给 path 赋值是最简单的:</p>
+<pre><code>shapeLayer = [CAShapeLayer layer];
+shapeLayer.bounds = self.bounds;
+shapeLayer.anchorPoint = CGPointMake(0, 0);
+
+CGFloat endAngle = (1+_percentage)*M_PI;
+shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:center
+                                                 radius:radius
+                                             startAngle:startAngle
+                                               endAngle:endAngle
+                                              clockwise:YES].CGPath;
+shapeLayer.strokeColor = _highlightColor.CGColor;
+shapeLayer.fillColor = [UIColor clearColor].CGColor;
+shapeLayer.lineWidth = arcWidth;
+shapeLayer.lineCap = kCALineCapRound;
+[self.layer addSublayer:shapeLayer];         
+</code></pre>
+<p>对 线条类的 path 可以应用<code>strokeEnd</code>属性来绘制动画:</p>
+<pre><code>CASpringAnimation *pathAnimation = [CASpringAnimation animationWithKeyPath:@&quot;strokeEnd&quot;];
+pathAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
+pathAnimation.toValue = [NSNumber numberWithFloat:1.0f];
+pathAnimation.mass = 4.0f;              // 物体质量 1
+pathAnimation.stiffness = 200;          // 弹簧刚性 100
+pathAnimation.damping = 20;             // 弹簧阻尼 10
+pathAnimation.initialVelocity = 1.0f;  // 初始速度 0
+pathAnimation.duration = pathAnimation.settlingDuration;
+pathAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+[shapeLayer addAnimation:pathAnimation forKey:@&quot;strokeEndAnimation&quot;];
+</code></pre>
+<p>再加点渐变吧</p>
+<pre><code>// 增加渐变图层
+CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+gradientLayer.frame = self.bounds;
+gradientLayer.colors = gradientColorSet;
+gradientLayer.startPoint = CGPointMake(1,0);
+gradientLayer.endPoint = CGPointMake(0, _percentage);
+
+[self.layer addSublayer:gradientLayer];
+// [self.layer addSublayer:shapeLayer]; // 移除之前的图层
+gradientLayer.mask = shapeLayer; // 当作渐变图层的 mask
+</code></pre>
+<p>组合效果如下:
+<figure  style="flex: 82.6086956521739" ><img width="380" height="230" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/43ff55cd36a9fdcc4a548f9b35395d54.gif" alt=""/></figure></p><p>要绘制弧形, 对照这个图就很简单了:
+<figure  style="flex: 50.0" ><img width="400" height="400" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/99b3f00e6554f019df9d19d398777341.png" alt=""/></figure></p><p>补充知识:</p><p>1, <code>CALayer</code>的动画用不了<code>animateWithDuration:animations:completion:</code>怎么办?</p><blockquote>
+<p>因为这是<code>UIView</code>的方法, 你要把它加到一个<code>CATransaction</code>里面去</p></blockquote>
+<p>2, 即使加到<code>CATransaction</code>里面了, 怎么我对<code>frame</code>做的动画还是没有生效?</p><blockquote>
+<p>因为<code>frame</code>是一个复合属性, 它由<code>position</code>, <code>bounds</code>等属性决定, 所以你只是用错了属性.</p></blockquote>
+<p>示例:</p>
+<pre><code>    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        // 完成回调
+    }];
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@&quot;bounds.size.width&quot;];
+    animation.duration = self.defaultLayoutTransitionDuration;
+    animation.fromValue = @(0.0f); 
+    animation.toValue = @(finalFrame.size.width); 
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+    [line.layer addAnimation:animation forKey:@&quot;lineLayerAnimation&quot;];
+    line.bounds = finalFrame;
+    [CATransaction commit];
+</code></pre>
+<p>其它有关 CALayer 的不同<strong>生命周期</strong>里绘制的解说请参考<a href="http://blog.csdn.net/kyfxbl/article/details/50640978">这篇文章</a>, 全文转载如下</p><p>在iOS中绘图，可以使用<code>UIView</code>，也可以使用<code>CALayer</code>。实际上，UIView也是由底层的CALayer完成绘制的工作</p><p>#UIView和CALayer的关系</p><p>每个UIView内部都有一个CALayer对象，由它来完成绘制的工作。和view一样，layer也是一个树形的结构</p><p>当不需要自定义组件的时候，用UIView的API就足以胜任，把需要的子view通过addSubview()方法放到view的层次里即可；但是如果需要自己绘制一些图形，就需要在UIView的drawRect()方法或是CALayer的相关方法中，调用CoreGraphics的API来画图</p><p>跟几个朋友也讨论过这个问题，我认为用layer来画是更好的办法，因为相对于view，layer是更轻量级的组件，可以节省系统资源。同时layer是动画的基本单元，加动画特效也更容易。并且view负责响应手势等，把绘制的代码都放在layer里，逻辑上也更加清晰</p><p>但是需要注意，layer不能直接响应触摸事件，所以手势识别还是需要通过view来完成
+在UIView中绘图</p><p>在UIView中绘图非常简单，当调用</p>
+<pre><code>self.setNeedsDisplay()
+</code></pre>
+<p>iOS系统会自动调用view上的<code>drawRect()</code>方法，可以在<code>drawRect()</code>方法中绘制图形
+在CALayer中绘图</p><p>在layer中绘图，生命周期比view复杂一些</p><p>首先也是调用layer上的<code>setNeedsDisplay()</code>触发的</p><p>#display</p><p>首先会进入layer的<code>display()</code>方法，在这里可以把CGImage赋给layer的contents，那么会直接把该CGImage作为此layer的样式，不会进入后续的方法</p>
+<pre><code>// 绘图方法
+override func display() {
+
+    if let img = getFrameImage(wheelStyle) {
+        contents = img.CGImage
+    }        
+}
+</code></pre>
+<p>#displayLayer</p><p>如果没有实现display()方法，或者调用了super.display()，并且设置了layer的<code>delegate</code>，那么iOS系统会调用delegate的<code>displayLayer()</code>方法</p>
+<pre><code>let myLayer : MyLayer = MyLayer()
+myLayer.delegate = self;
+myLayer.frame = bounds;
+
+override func displayLayer(layer: CALayer) {
+
+    if let img = getFrameImage(wheelStyle) {
+        contents = img.CGImage
+    }
+}
+</code></pre>
+<p>#drawInContext</p><p>如果没有设置delegate，或者delegate没有实现<code>displayLayer()</code>方法，那么接下来会调用layer的<code>drawInContext</code>方法</p>
+<pre><code>override func drawInContext(ctx: CGContext) {
+
+    CGContextSetLineWidth(ctx, 1);
+    CGContextMoveToPoint(ctx, 80, 40);
+    CGContextAddLineToPoint(ctx, 80, 140);
+    CGContextStrokePath(ctx);
+}
+</code></pre>
+<p>#drawLayerInContext</p><p>如果layer没有实现<code>drawInContext</code>方法，那么接下来就会调用delegate的<code>drawLayerInContext</code>方法</p>
+<pre><code>override func drawLayer(layer: CALayer, inContext ctx: CGContext) {
+    CGContextSetLineWidth(ctx, 1);
+    CGContextMoveToPoint(ctx, 80, 40);
+    CGContextAddLineToPoint(ctx, 80, 140);
+    CGContextStrokePath(ctx);
+}
+</code></pre>
+<p>#总结</p><p>所以，一般来说，可以在layer的<code>display()</code>或者<code>drawInContext()</code>方法中来绘制</p><p>在display()中绘制的话，可以直接给contents属性赋值一个CGImage，在<code>drawInContext()</code>里就是各种调用CoreGraphics的API</p><p>假如绘制的逻辑特别复杂，希望能从layer中剥离出来，那么可以给layer设置delegate，把相关的绘制代码写在delegate的<code>displayLayer()</code>和<code>drawLayerInContext()</code>方法。这2个方法与<code>display()</code>和<code>drawInContext()</code>是分别一一对应的</p></div>
         
-        <li>
-            <article class="yue">
-                <h1>重装mac系统后ssh异常</h1>
-                
-                    <blockquote>表现在两个方面: ssh 登录服务器, 和通过ssh 使用 git, 报的错都是Permissino denied (publickey)git异常的解决</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E9%87%8D%E8%A3%85mac%E7%B3%BB%E7%BB%9F%E5%90%8Essh%E5%BC%82%E5%B8%B8/">Read More</a></span>
-                    <time class="ga-mono">
-                        2019-08-03
-                    </time>
-                </footer>
-            </article>
-        </li>
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E7%94%A8CALayer%E7%BB%98%E5%9B%BE%2C%E6%B7%BB%E5%8A%A0%E5%8A%A8%E7%94%BB%E5%92%8C%E6%B8%90%E5%8F%98/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
         
-        <li>
-            <article class="yue">
-                <h1>备份Nginx设置php的方法</h1>
-                
-                    <blockquote>版本nginx/1.12.2</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E5%A4%87%E4%BB%BDNginx%E8%AE%BE%E7%BD%AEphp%E7%9A%84%E6%96%B9%E6%B3%95/">Read More</a></span>
-                    <time class="ga-mono">
-                        2019-07-31
-                    </time>
-                </footer>
-            </article>
-        </li>
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/iOS%E7%AD%BE%E5%90%8D%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" target="_self">iOS签名相关命令</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/iOS%E7%AD%BE%E5%90%8D%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" target="_self">
+                <time class="text-uppercase">
+                    October 09 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>用openssl查看CSR文件内容</p>
+<pre><code>openssl asn1parse -i -in CertificateSigningRequest.certSigningRequest
+</code></pre>
+<p>查看下发的证书的内容:</p>
+<pre><code>openssl x509 -inform der -in ios_development.cer -noout -text
+</code></pre>
+<p>可以使用如下命令查看一个mobileprovision：</p>
+<pre><code>security cms -D -i embedded.mobileprovision
+</code></pre>
+<p>ipa文件是一个zip包，可以使用如下命令解压：</p>
+<pre><code>/usr/bin/unzip -q xxx.ipa -d &lt;destination&gt;
+</code></pre>
+<p>用下面命令，列出系统中可用于签名的有效证书：</p>
+<pre><code>/usr/bin/security find-identity -v -p codesigning
+</code></pre>
+<p>使用如下命令对xxx.app目录签名，codesign程序会自动将其中的文件都签名，（Frameworks不会自动签）：</p>
+<pre><code>/user/bin/codesign -fs &quot;iPhone Developer: Your Cert Name (VDT388662Q)&quot; --no-strict Payload/xxx.app
+</code></pre>
+<p>最后用下面命令校验签名是否合法：</p>
+<pre><code>/usr/bin/codesign -v xxx.app
+</code></pre>
+<p>使用zip命令重新打包成ipa包</p>
+<pre><code>/usr/bin/zip -qry destination source
+</code></pre>
+<p><a href="%5Bhttps://zhuanlan.zhihu.com/p/53006952%5D(https://zhuanlan.zhihu.com/p/53006952)">来源</a></p></div>
         
-        <li>
-            <article class="yue">
-                <h1>让Objective-C也有map功能</h1>
-                
-                    <blockquote>map一个数组是大部分高级语言都有的, OC 没有, 有几个方案让它实现, 我优选出三个:原生实现</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E8%AE%A9Objective-C%E4%B9%9F%E6%9C%89map%E5%8A%9F%E8%83%BD/">Read More</a></span>
-                    <time class="ga-mono">
-                        2019-07-30
-                    </time>
-                </footer>
-            </article>
-        </li>
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/iOS%E7%AD%BE%E5%90%8D%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
         
-        <li>
-            <article class="yue">
-                <h1>让你fork下来的项目与源项目保持同步</h1>
-                
-                    <blockquote>原文在此, 建议阅读, 我把关键步骤抽出来了, 方便概览(也就是add remote upstream, fetch upstream, rebase, 再push)Step 1: Forking a repo</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E8%AE%A9%E4%BD%A0fork%E4%B8%8B%E6%9D%A5%E7%9A%84%E9%A1%B9%E7%9B%AE%E4%B8%8E%E6%BA%90%E9%A1%B9%E7%9B%AE%E4%BF%9D%E6%8C%81%E5%90%8C%E6%AD%A5/">Read More</a></span>
-                    <time class="ga-mono">
-                        2019-03-23
-                    </time>
-                </footer>
-            </article>
-        </li>
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%85%B3%E4%BA%8E%40synthesize/" target="_self">关于@synthesize</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E5%85%B3%E4%BA%8E%40synthesize/" target="_self">
+                <time class="text-uppercase">
+                    August 16 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>首先, <code>@synthesize myLocalVar = _myLocalVar;</code> 这句话是显式帮你省掉了一个 <code>getter</code> 方法和一个 <code>setter</code> 方法. 两个方法长什么样不赘述.</p><p>其次, 从某个版本的 Xcode 开始, 你连 <code>@synthesize</code> 这句话也不需要写了, 但是请注意, 这只是一个 IDE 的特性. 你不需要手动合成, 不代表 <code>@synthesize</code> 不作用了, 仅仅是让<strong>你</strong>能少写这一句话, 而 Xcode 帮你补全了.</p><p>再次, @synthesize 仅仅是一个 <a href="http://clang.llvm.org/docs/LanguageExtensions.html#objective-c-autosynthesis-of-properties">clang 的 Objective-C 语言扩展</a> (<code>autosynthesis of properties</code>), 然后<code>clang</code>恰好是 Xcode 的默认编译器. 也就是说, 如果你换成了 <code>gcc</code>, 那么这个特性也就不复存在了.</p><p>基于上述, 如果你使用了自己的文本编辑器, 然后用自己用 <code>clang</code> 从命令行编译, <code>@synthesize</code> 这一句话是需要自己写的.</p><p>最后, 有如下例外</p><ol>
+<li>对于 <code>readwrite</code> 类型的属性, 你自行实现了 <code>getter</code> 和 <code>setter</code></li>
+<li>对于 <code>readonly</code>  类型的属性, 你自行实现了 <code>getter</code>
+ 以上两种情况, 你一旦自行实现了对应的 <code>getter</code> 或 <code>setter</code>, 对于本文的<code>myLocalVar</code>例子, 你将发现 <code>_myLocalVar</code>没有了, 意味着你需要<code>@synthesize</code>一下.</li>
+<li><code>dynamic</code>与<code>synthesize</code>是互斥的</li>
+<li><code>@protocol</code>中声明的属性</li>
+<li><code>category</code>中声明的属性</li>
+<li>你覆盖(<code>overridden</code>)父类的属性时, 必须手动<code>synthesize</code>.</li>
+</ol>
+<p>参考资料:
+1, <a href="https://stackoverflow.com/questions/19784454/when-should-i-use-synthesize-explicitly?answertab=votes">When should I use @synthesize explicitly?</a>
+2, <a href="http://suree.org/2015/09/01/Dynamic-Synthesize/">@dynamic 与 @synthesize 关键词详解</a></p></div>
         
-    </ul>
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%85%B3%E4%BA%8E%40synthesize/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E9%87%8D%E8%A3%85mac%E7%B3%BB%E7%BB%9F%E5%90%8Essh%E5%BC%82%E5%B8%B8/" target="_self">重装mac系统后ssh异常</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E9%87%8D%E8%A3%85mac%E7%B3%BB%E7%BB%9F%E5%90%8Essh%E5%BC%82%E5%B8%B8/" target="_self">
+                <time class="text-uppercase">
+                    August 03 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>表现在两个方面: <code>ssh 登录服务器</code>, 和<code>通过ssh 使用 git</code>, 报的错都是<code>Permissino denied (publickey)</code></p><h2>git异常的解决</h2>
+<p>根据<a href="https://help.github.com/articles/error-permission-denied-publickey/">github文档</a>, 我可以解决第二个问题, 第一个问题(ssh login)解决后再来更新.</p><p>使用git出现问题, 并不局限于 github, 我连 gitlab 也是一样. 其实根据文档一项项检测,我在<code>ssh-add -l</code>这一句发现了问题, 虽然我生成了密钥, 但是它的输出显示我没有私钥, 照如下解决即可:</p><blockquote>
+<p><strong>Tip</strong>: On most systems the default private keys (~/.ssh/id_rsa</p></blockquote>
+<p>, ~/.ssh/id_dsa and ~/.ssh/identity) are <strong>automatically</strong> added to the SSH authentication agent. You shouldn't need to run <code>ssh-add path/to/key</code>
+ unless you override the file name when you generate a key.</p><p>也就是说, 把你的id_rsa文件手动指定一下<code>ssh_add 文件路径</code>(不知道为什么会出这种鬼问题)</p><h2>SSH自动登录异常的解决</h2>
+<p>这是补充的内容, 刚刚解决.</p><p>首先, 你登不上这是服务端的问题, 没有把你的公钥写到<code>~/.ssh/authorized_keys</code>里面去, 你想办法把它写进去(当你 <code>ssh</code> 不上去的时候, <code>scp</code>当然也不行)</p><p>写进去后, 仍然报错, 我们继续看日志:
+<code>ssh root@mydomain.com -v</code> 或 <code>ssh root@mydomain.com -vvv</code> (更详细的日志)</p><p>通过看日志, 你可以一步步看到问题:</p>
+<pre><code>...
+debug2: service_accept: ssh-userauth
+debug1: SSH2_MSG_SERVICE_ACCEPT received
+debug3: send packet: type 50
+debug3: receive packet: type 51
+debug1: Authentications that can continue: publickey
+debug3: start over, passed a different list publickey
+debug3: preferred publickey,keyboard-interactive,password
+debug3: authmethod_lookup publickey
+debug3: remaining preferred: keyboard-interactive,password
+debug3: authmethod_is_enabled publickey
+debug1: Next authentication method: publickey
+debug1: Trying private key: .ssh/id_rsa
+debug3: no such identity: .ssh/id_rsa: No such file or directory
+debug2: we did not send a packet, disable method
+debug1: No more authentication methods to try.
+Permission denied (publickey).
+</code></pre>
+<p>注意截取的<strong>倒数第4行</strong>:
+首先, 它昨天不是这么提示的, 它提示的是<code>.ssh/id_rsd</code>, 我到配置文件里把它改成了<code>rsa</code>, 因为我生成的是 <code>rsa</code></p><blockquote>
+<p>配置文件的地址是: <code>/etc/ssh/ssh_config</code>, 改的节点名是<code>IdentityFile</code></p></blockquote>
+<p>其次, 顺便看一下<code>RSAAuthentication</code> 和 <code>PubkeyAuthentication</code>这两项是不是 yes(如果是注释状态, 不要动, 默认是 yes)</p><p>这样, 服务端有你的公钥, 本地配置了 <code>IdentityFile</code> 路径, 就可以登录了, 但我一直没成功的原因在于, 我在原配置文件改的, 它是路径是<code>.ssh/id_rsa,.ssh/id_rsd</code>, 我单纯把 rsd 的去掉, 却没发现它的路径是错的, 直到看了日志提示这个文件不存在, 才想起把格式改对.</p><p>我碰到的情况不知道是不是个例, 比如同一个文件</p>
+<pre><code>UserKnownHostsFile ~/.ssh/known_hosts,~/.ssh/known_hosts2
+</code></pre>
+<p>这一行, 路径格式却是正确的, 匪夷所思.</p><p>总之, 你碰到<code>Permission denied (public key)</code>这个问题, 就结合 git 和 server 这两情况, 看是没有 identity, 还是 id_rsa路径配错了. (前提是公钥必须已经写到服务器上去了)</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E9%87%8D%E8%A3%85mac%E7%B3%BB%E7%BB%9F%E5%90%8Essh%E5%BC%82%E5%B8%B8/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%A4%87%E4%BB%BDNginx%E8%AE%BE%E7%BD%AEphp%E7%9A%84%E6%96%B9%E6%B3%95/" target="_self">备份Nginx设置php的方法</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E5%A4%87%E4%BB%BDNginx%E8%AE%BE%E7%BD%AEphp%E7%9A%84%E6%96%B9%E6%B3%95/" target="_self">
+                <time class="text-uppercase">
+                    July 31 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>版本nginx/1.12.2</p>
+<pre><code>  location ~ \.php$ {
+    fastcgi_pass   unix:/run/php/php7.0-fpm.sock;
+    fastcgi_param  SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+    include        fastcgi_params;
+   }
+</code></pre>
+<p>我机器上的fastcgi_param值不对, 改成上图成功, 备份下</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%A4%87%E4%BB%BDNginx%E8%AE%BE%E7%BD%AEphp%E7%9A%84%E6%96%B9%E6%B3%95/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E8%AE%A9Objective-C%E4%B9%9F%E6%9C%89map%E5%8A%9F%E8%83%BD/" target="_self">让Objective-C也有map功能</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E8%AE%A9Objective-C%E4%B9%9F%E6%9C%89map%E5%8A%9F%E8%83%BD/" target="_self">
+                <time class="text-uppercase">
+                    July 30 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>map一个数组是大部分高级语言都有的, OC 没有, 有几个方案让它实现, 我优选出三个:</p><h2>原生实现</h2>
+<p>其实就是<code>valueForKeyPath</code>的活用:</p><div class="highlight"><pre><span></span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">allEmployees</span><span class="w"> </span><span class="n">valueForKeyPath</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;[collect].{daysOff&lt;10}.name&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">albumCovers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">records</span><span class="w"> </span><span class="n">valueForKeyPath</span><span class="o">:</span><span class="s">@&quot;[collect].{artist like &#39;Bon Iver&#39;}.&lt;NSUnarchiveFromDataTransformerName&gt;.albumCoverImageData&quot;</span><span class="p">];</span><span class="w"></span>
+</pre></div>
+<h2>category</h2>
+<p>这个大家肯定早想到过了, 你没有, 我给你扩展出来一个:</p><p>定义:</p><div class="highlight"><pre><span></span><span class="k">@interface</span> <span class="bp">NSArray</span> <span class="nl">(Map)</span><span class="w"></span>
+
+<span class="p">-</span> <span class="p">(</span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nf">mapObjectsUsingBlock:</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">))</span><span class="nv">block</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">@end</span><span class="w"></span>
+
+<span class="k">@implementation</span> <span class="bp">NSArray</span> <span class="nl">(Map)</span><span class="w"></span>
+
+<span class="p">-</span> <span class="p">(</span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nf">mapObjectsUsingBlock:</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">))</span><span class="nv">block</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="n">arrayWithCapacity</span><span class="o">:</span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">count</span><span class="p">]];</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">enumerateObjectsUsingBlock</span><span class="o">:^</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">,</span><span class="w"> </span><span class="kt">BOOL</span><span class="w"> </span><span class="o">*</span><span class="n">stop</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="p">[</span><span class="n">result</span><span class="w"> </span><span class="n">addObject</span><span class="o">:</span><span class="n">block</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">idx</span><span class="p">)];</span><span class="w"></span>
+<span class="w">    </span><span class="p">}];</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span><span class="n">o</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">@end</span><span class="w"></span>
+</pre></div>
+<p>使用:</p><div class="highlight"><pre><span></span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">people</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="l">@[</span><span class="w"></span>
+<span class="w">                     </span><span class="l">@{</span><span class="w"> </span><span class="s">@&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Bob&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">@&quot;city&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Boston&quot;</span><span class="w"> </span><span class="l">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                     </span><span class="l">@{</span><span class="w"> </span><span class="s">@&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Rob&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">@&quot;city&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Cambridge&quot;</span><span class="w"> </span><span class="l">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                     </span><span class="l">@{</span><span class="w"> </span><span class="s">@&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Robert&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">@&quot;city&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Somerville&quot;</span><span class="w"> </span><span class="l">}</span><span class="w"></span>
+<span class="w">                  </span><span class="l">]</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// per the original question</span>
+<span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">people</span><span class="w"> </span><span class="n">mapObjectsUsingBlock</span><span class="o">:^</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">obj</span><span class="p">[</span><span class="s">@&quot;name&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="p">}];</span><span class="w"></span>
+<span class="c1">// (Bob, Rob, Robert)</span>
+
+<span class="c1">// you can do just about anything in a block</span>
+<span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">fancyNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">people</span><span class="w"> </span><span class="n">mapObjectsUsingBlock</span><span class="o">:^</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="bp">NSString</span><span class="w"> </span><span class="n">stringWithFormat</span><span class="o">:</span><span class="s">@&quot;%@ of %@&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">obj</span><span class="p">[</span><span class="s">@&quot;name&quot;</span><span class="p">],</span><span class="w"> </span><span class="n">obj</span><span class="p">[</span><span class="s">@&quot;city&quot;</span><span class="p">]];</span><span class="w"></span>
+<span class="p">}];</span><span class="w"></span>
+<span class="c1">// (Bob of Boston, Rob of Cambridge, Robert of Somerville)</span>
+</pre></div>
+<h2>三方库</h2>
+<p>是的, 一般简单功能能自己实现就自己实现, xcode 项目还是不能像 <code>nodejs</code>项目一样, 哪怕有的包里也只有一句话, 我也要从用第三方的...ddddd</p><p>js 的世界里, <code>underscore</code>用来处理数组可算神器, 自然, 我也挑中了同样名字的 OC 库: <a href="http://underscorem.org/">Underscore</a></p><div class="highlight"><pre><span></span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">tweets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Underscore</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Let&#39;s make sure that we only operate on NSDictionaries, you never</span>
+<span class="w">    </span><span class="c1">// know with these APIs ;-)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Underscore</span><span class="p">.</span><span class="n">isDictionary</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Remove all tweets that are in English</span>
+<span class="w">    </span><span class="p">.</span><span class="n">reject</span><span class="p">(</span><span class="o">^</span><span class="kt">BOOL</span><span class="w"> </span><span class="p">(</span><span class="bp">NSDictionary</span><span class="w"> </span><span class="o">*</span><span class="n">tweet</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="n">tweet</span><span class="p">[</span><span class="s">@&quot;iso_language_code&quot;</span><span class="p">]</span><span class="w"> </span><span class="n">isEqualToString</span><span class="o">:</span><span class="s">@&quot;en&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Create a simple string representation for every tweet</span>
+<span class="w">    </span><span class="p">.</span><span class="n">map</span><span class="p">(</span><span class="o">^</span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="bp">NSDictionary</span><span class="w"> </span><span class="o">*</span><span class="n">tweet</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tweet</span><span class="p">[</span><span class="s">@&quot;from_user_name&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tweet</span><span class="p">[</span><span class="s">@&quot;text&quot;</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="bp">NSString</span><span class="w"> </span><span class="n">stringWithFormat</span><span class="o">:</span><span class="s">@&quot;%@: %@&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">unwrap</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+<blockquote>
+<p>当然, 所有方案来源于<a href="http://stackoverflow.com/questions/6127638/nsarray-equivalent-of-map">StackOverflow</a> 上的答案, 一些其它方案, 其它库(如<a href="http://cocoadocs.org/docsets/BlocksKit/2.2.3/Categories/NSArray+BlocksKit.html#//api/name/bk_map:">BlocksKit</a>), 都可以试试, 也挺简洁的</p></blockquote>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E8%AE%A9Objective-C%E4%B9%9F%E6%9C%89map%E5%8A%9F%E8%83%BD/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E8%AE%A9%E4%BD%A0fork%E4%B8%8B%E6%9D%A5%E7%9A%84%E9%A1%B9%E7%9B%AE%E4%B8%8E%E6%BA%90%E9%A1%B9%E7%9B%AE%E4%BF%9D%E6%8C%81%E5%90%8C%E6%AD%A5/" target="_self">让你fork下来的项目与源项目保持同步</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E8%AE%A9%E4%BD%A0fork%E4%B8%8B%E6%9D%A5%E7%9A%84%E9%A1%B9%E7%9B%AE%E4%B8%8E%E6%BA%90%E9%A1%B9%E7%9B%AE%E4%BF%9D%E6%8C%81%E5%90%8C%E6%AD%A5/" target="_self">
+                <time class="text-uppercase">
+                    March 23 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>原文<a href="https://2buntu.com/articles/1459/keeping-your-forked-repo-synced-with-the-upstream-source/">在此</a>, 建议阅读, 我把关键步骤抽出来了, 方便概览</p><p>(也就是add remote upstream, fetch upstream, rebase, 再push)</p><p>Step 1: Forking a repo</p>
+<pre><code>git clone https://github.com/nitin-test/blog-example-fork.git
+git remote add upstream https://github.com/nitstorm/blog-example.git
+git remote
+git remote show origin
+git remote show upstream
+</code></pre>
+<p>Step 2: Making changes and submitting Pull Requests</p>
+<pre><code>git checkout -b word-addition
+git commit -am &quot;Adds the word memory&quot;
+git push origin word-addition
+# 网页端发起merge到master
+</code></pre>
+<p>Step 3: Keeping the forked repo synced with the main repo</p>
+<pre><code># 确保你是在master分支
+git checkout master
+git fetch upstream
+git rebase upstream/master
+git push origin master
+</code></pre>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E8%AE%A9%E4%BD%A0fork%E4%B8%8B%E6%9D%A5%E7%9A%84%E9%A1%B9%E7%9B%AE%E4%B8%8E%E6%BA%90%E9%A1%B9%E7%9B%AE%E4%BF%9D%E6%8C%81%E5%90%8C%E6%AD%A5/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
 </section>
 
-<section class="ga-section ga-mono" id="ga-pager">
-    
-        <a prev class="ga-highlight" href="/page/5/">Prev</a>
-    
-    <span>Page 6 of 8</span>
-    
-        <a next class="ga-highlight" href="/page/7/">Next</a>
-    
-</section>
-
-<section id="ga-external_links" class="ga-section" data-title="Links">
-    <ul>
-        
-        <li>
-            <a class="ga-highlight" target="_blank" href="https://github.com/AlanDecode/Maverick">Maverick</a>：🏄‍ Go My Own Way.
-        </li>
-        
-        <li>
-            <a class="ga-highlight" target="_blank" href="https://www.imalan.cn">Triple NULL</a>：Home page for AlanDecode.
-        </li>
-        
-    </ul>
-</section>
+<div class="container">
+    <section id="prism__page__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+        <ul>
+            
+            <li class="next">
+                <a class="no-link" href="/page/5/" target="_self"><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</a>
+            </li>
+            
+            
+            <li class="prev">
+                <a class="no-link" href="/page/7/" target="_self">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+            </li>
+            
+        </ul>
+    </section>
+</div>
 
 
 </main>
 
-                <footer class="ga-mono" id="ga-footer">
-                    <section>
-                        <span id="ga-uptime"></span>
-                        <span class="brand">walker's code blog</span>
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
                     </section>
-                    <section>
-                        <p class="copyright">
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
                             <span>Copyright © 2022 AlanDecode</span>
-                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
                         </p>
-                        <div class="copyright">
-                            <span class="footer-addon">
-                                
-                            </span>
-                            <nav class="social-links">
-                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
-                            </nav>
-                        </div>
-                    </section>
-                    <script>
-                        var site_build_date = "2019-12-06T12:00+08:00"
-                    </script>
-                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
-                </footer>
-            </div>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+            </footer>
         </div>
     </div>
-
-    <!--katex-->
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
-    <script>
-    mathOpts = {
-        delimiters: [
-            {left: "$$", right: "$$", display: true},
-            {left: "\\[", right: "\\]", display: true},
-            {left: "$", right: "$", display: false},
-            {left: "\\(", right: "\\)", display: false}
-        ]
-    };
-    </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
     
-    </body>
+</body>
+
 </html>

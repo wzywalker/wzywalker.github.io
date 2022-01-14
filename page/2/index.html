@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="english">
-    <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="renderer" content="webkit">
@@ -8,19 +9,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
     <meta name="generator" content="Maverick 1.2.1" />
-    <meta name="template" content="Galileo" />
+    <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/2c80736c6795903d11b9000926ef666b.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/285ab69ade0ed03d76402217cdc4c128.json"
         }
+
     </script>
     
 <title>walker's code blog</title>
@@ -39,257 +40,2017 @@
 
 
     
-    </head>
-    
-    <body>
-        
-        <div class="container">
-            <header id="ga-header">
-                <div first>
-                    <aside id="ga-brand">
-                        <h1 class="brand"><a class="no-style" href="/">walker's code blog</a></h1>
-                        <p>coder, reader</p>
-                    </aside>
-                </div>
-                <div second id="ga-nav">
-                    <nav class="navs">
-                        <ul><li><a class="ga-highlight" href="/" target="_self">Home</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/archives/" target="_self">Archives</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/about/" target="_self">About</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">Search</a></li></ul>
-                    </nav>
-                </div>
-            </header>
-            <div class="wrapper">
-                
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
 <main>    
     
 
-<section id="ga-post_list" class="ga-section" data-title="Posts">
-    <ul>
+<section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%9B%9B%EF%BC%9ABinary-Trees-and-Binary-Search-Trees-%28BST%29/" target="_self">数据结构篇四：Binary-Trees-and-Binary-Search-Trees-(BST)</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%9B%9B%EF%BC%9ABinary-Trees-and-Binary-Search-Trees-%28BST%29/" target="_self">
+                <time class="text-uppercase">
+                    November 12 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><hr />
+<p>Tree: 满足以下定义的<code>undirected graph</code>(无向图)</p><ul>
+<li>An acyclic(非循环的) connected graph</li>
+<li>N nodes and N-1 edges</li>
+<li>有且只有一条路径连接<em>任意</em>两个顶点</li>
+</ul>
+<blockquote>
+<p>任意一个节点都可以被理解为root</p></blockquote>
+<p><strong>Binary Tree</strong>
+拥有最多两个节点的Tree</p><p><strong>Binary Search Tree</strong>
+服从以下特性的<code>binary tree</code></p><ul>
+<li>左子树的元素小于右子树</li>
+</ul>
+<p>拥有重复元素是允许的，但多数情况下我们只研究不重复的元素</p><p>这是一个有效的BST吗？
+<figure  style="flex: 57.83582089552239" ><img width="1240" height="1072" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d9ca27993e1a1228a3ffcadf9ed86aba.png" alt=""/></figure></p><p>是的（对于单链下来的，几乎会直接就满足右边比左边大）</p><p><strong>Usage</strong></p><ul>
+<li>BSTs<ul>
+<li>implementation of some map and set ADTs</li>
+<li>red black trees</li>
+<li>AVL trees</li>
+<li>splay trees</li>
+<li>...</li>
+</ul>
+</li>
+<li>binary heaps</li>
+<li>syntax trees (by compiler and calculators)</li>
+<li>Treap - a probabilistic DS (uses a randomized BST)</li>
+</ul>
+<p><strong>Complexity</strong>
+增删查平均为O(log n)，但最差情况下都为O(n)，即线性时间</p><h2>Adding elements to a BST</h2>
+<ul>
+<li>第一个为root</li>
+<li>每一个新数，比顶点大，放右边，比顶点小，放左边，顺序下行<ul>
+<li>不是从左到右摆满再做subtree</li>
+<li>比如3,6,9, 会得一棵全部数字摆在右边的数，而不是顶3左6右9的三角形</li>
+<li>这也是为什么极端情况下，时间复杂度是<code>O(n)</code>，因为就是一条线到底</li>
+<li>这也是<code>balanced binary search trees</code>被引入的原因</li>
+</ul>
+</li>
+</ul>
+<h2>Removing elements from a BST</h2>
+<ul>
+<li>find<ul>
+<li>从root开始，小的走左右，大的走右边</li>
+</ul>
+</li>
+<li>replace (to maintain the BST invariant)</li>
+</ul>
+<p>找继任者的时候，如果删除元素没有子节点，只有左或右子节点，都很好办，但如果它有两个子节点，那么应该用哪个来接续呢？</p><p>原则仍然是要服从左边的比右边的小，所以你其实有两种选择：</p><ul>
+<li>把左边最大的数选出来 或</li>
+<li>把右边最小的数选出来</li>
+</ul>
+<p>因为它们的“来源”，肯定是能保证bst invariant的
+    * 这个数是要替换这个节点的，所以要比这个节点左边的数都大，及比右边所有的数都小，显然就是左边的最大数，或右边的最小数了。
+    * 只是把找到的元素复制过去后，多了的那个怎么办呢？</p><ul>
+<li>递归</li>
+</ul>
+<p>新找到的元素当然要从原来的位置删除，这时又根据它是否叶节点，单子节点还是全节点，来反复进行前面的操作，最终总是可以退出的
+<figure  style="flex: 57.83582089552239" ><img width="1240" height="1072" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/511db0d1a3889dca35b02ce18318c787.png" alt=""/></figure></p><figure  style="flex: 68.69266055045871" ><img width="1198" height="872" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/85b0081fb572f97bd8fb1a93c9ca3d90.png" alt=""/></figure><h2>Tree Traversals</h2>
+<p>(Preorder, Inorder, Postorder &amp; Level order)
+<figure  style="flex: 92.67563527653213" ><img width="1240" height="669" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/731be06981a3a58193e3d1ea54d7fd22.png" alt=""/></figure></p><ul>
+<li>preorder，在遍历左侧元素的时候，每次已经先取到元素了（最顶层）</li>
+<li>inorder里，遍历元素的时候，直到所有的left走完了，才取到第一个元素（最底层的）</li>
+<li>postorder里，也是遍历到最底层，但是下一步就是取兄弟节点了</li>
+</ul>
+<figure  style="flex: 99.51845906902086" ><img width="1240" height="623" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/47fe26cb82c30df966d2cbb9f8bd3ee8.png" alt=""/></figure><p>inorder一个重要特征：它是从小到大排好序的！
+<figure  style="flex: 97.79179810725552" ><img width="1240" height="634" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/730f8d00e817c006cb9c33171da53386.png" alt=""/></figure>
+preorder 和 postorder没什么特征，举一个post的例子观察下</p><p>而levelorder则是一<code>层</code>一层地取的：</p><figure  style="flex: 91.58050221565732" ><img width="1240" height="677" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/483fae0876dbf6b3d954f86b6341ecf5.png" alt=""/></figure>
+这就是广度优先了（<code>Breadth First Searth</code>)BFS<p>实现BFS</p><ol>
+<li>每处理一个parent的时候，把parent加到结果数组里</li>
+<li>parent的子节点加到队列里</li>
+<li>每次从队列里取出一个值加到结果数组里（步骤1）</li>
+<li>该值的child加到队列里（步骤2）</li>
+</ol>
+<p>其实就是步骤1，2的重复，比如：
+<figure  style="flex: 70.7516339869281" ><img width="866" height="612" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/80ff2df354c0700753943e83fd5cd17a.png" alt=""/></figure></p>
+<pre><code>[11], [6, 15] 处理第1个数11， 队列里多了两个元素6， 15
+[11, 6], [15, 3, 8] 从队列里取出6， 加入结果，它的子元素(3, 8)加入队列
+[11, 6, 15], [3, 8, 13, 17]
+[11, 6, 15, 3], [8, 13, 17, 1, 5]
+[11, 6, 15, 3, 8], [13, 17, 1, 5] 这一步，8没有子节点了，队列变短了
+[11, 6, 15, 3, 8, 13], [17, 1, 5, 12, 14]
+[11, 6, 15, 3, 8, 13, 17], [1, 5, 12, 14, 19] 17只有一个child
+[11, 6, 15, 3, 8, 13, 17, 1, 5, 12, 14, 19] 剩下的都没child了，全部拼进去
+</code></pre>
+</div>
         
-        <li>
-            <article class="yue">
-                <h1>数据结构篇四：Binary-Trees-and-Binary-Search-Trees-(BST)</h1>
-                
-                    <blockquote>这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%9B%9B%EF%BC%9ABinary-Trees-and-Binary-Search-Trees-%28BST%29/">Read More</a></span>
-                    <time class="ga-mono">
-                        2021-11-12
-                    </time>
-                </footer>
-            </article>
-        </li>
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%9B%9B%EF%BC%9ABinary-Trees-and-Binary-Search-Trees-%28BST%29/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
         
-        <li>
-            <article class="yue">
-                <h1>数据结构篇三：Union-Find</h1>
-                
-                    <blockquote>这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%89%EF%BC%9AUnion-Find/">Read More</a></span>
-                    <time class="ga-mono">
-                        2021-11-12
-                    </time>
-                </footer>
-            </article>
-        </li>
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%89%EF%BC%9AUnion-Find/" target="_self">数据结构篇三：Union-Find</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%89%EF%BC%9AUnion-Find/" target="_self">
+                <time class="text-uppercase">
+                    November 12 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><hr />
+<h1>Union Find</h1>
+<ul>
+<li>keep track of elements in different sets</li>
+<li>primary operations: <code>find</code> and <code>union</code></li>
+</ul>
+<p><strong>Usage</strong></p><ul>
+<li>Kruskal's <code>minimum spanning tree</code> algorithm</li>
+<li>Grid percolation</li>
+<li>Network connectivity</li>
+<li>Least common ancestor in trees</li>
+<li>Image processing</li>
+</ul>
+<p><strong>Complexity</strong></p><ul>
+<li>construction: O(n)</li>
+<li>union/join/size/check connected/: $\alpha$(n) :接近常量时间</li>
+<li>count: O(1)</li>
+</ul>
+<p>给定一个无向图，如果它任意两个顶点都联通并且是一棵树，那么我们就称之为生成树(<code>Spanning Tree</code>)。如果是带权值的无向图，那么权值之和最小的生成树，我们就称之为最小生成树(MST, <code>Minimum Spanning Tree</code>)。
+-&gt; 用最少的边连接所有的顶点</p><ul>
+<li>sort edges by ascending edge weight</li>
+<li>walk through edges<ul>
+<li>检查顶点，如果两个顶点都已经unified，就忽略<ul>
+<li>其实就是这两个点分别被别的边连过了</li>
+</ul>
+</li>
+<li>否则就添加edge，并且unify顶点</li>
+</ul>
+</li>
+</ul>
+<p>看到这里，首先想知道什么是unified，看实现，也就是在一个集合里(component)
+<figure class="vertical-figure" style="flex: 42.622950819672134" ><img width="1040" height="1220" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/475d857d18dc3fe4749139b896e6f68a.png" alt=""/></figure></p><ul>
+<li>观察C_J，因为C和J已经在一个组里了，这条边就不需要了</li>
+<li>观察D_E，一旦连上后，紫色和绿色其实就是一个组了</li>
+</ul>
+<figure class="vertical-figure" style="flex: 36.810730253353206" ><img width="988" height="1342" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a3a52e1b62a1b105bc18f817ba801011.png" alt=""/></figure><ul>
+<li>观察D_H，一旦连上后，紫色和红色也成为了一个组</li>
+<li>连接B_C，所有顶点就全部连上了，并且只有一条紫线</li>
+</ul>
+<p>Find: 找元素在哪个component里，然后找到它的root
+Union: 找两个元素分别在哪个component里，然后找到它们的root，如果不是同一个root，就让其中一个成为另一个的parent</p><ul>
+<li>component的个数与root的个数一致</li>
+<li>root的个数只减不增（因为通常只合并而不拆分）</li>
+</ul>
+<p>union find里</p><ul>
+<li>为每个元素分配一个索引，每个元素指向自己（即初始是n个root，n个component)</li>
+<li>描述两两之间的关系，以任一元素为parent （谁来描述？）</li>
+<li>有一个元素已经属于别的component里的，就将它也加到那个component里去<ul>
+<li>如果这个元素也是别的component里的顶点，就把整个组指向另一个组的root</li>
+</ul>
+</li>
+</ul>
+<h2>Path Compression Union Find</h2>
+<figure class="vertical-figure" style="flex: 36.48111332007952" ><img width="734" height="1006" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5bac1a63885746047c532e2362b8ead9.png" alt=""/></figure><p>由一层层找到root改为所有顶点直接指向顶点（星形结构），实现路径压缩</p><p>这段代码演示的是，查找p的root节点，在查找的过程中，顺便进行了路径压缩
+<figure  style="flex: 102.99003322259136" ><img width="1240" height="602" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/6de31545897b5731ee7c6916033393a1.png" alt=""/></figure></p><p>合并的逻辑就是比较谁的元素多就把谁当作root，另一个component的root的parent设为元素多的组的root<br />
+合并完成后组数就少了1
+<figure  style="flex: 71.1825487944891" ><img width="1240" height="871" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1b52c2255e8963040253701946bae7d8.png" alt=""/></figure></p><p>看代码，这一步里面并没有路径压缩，也就是小组里面的元素并没有<strong>进一步</strong>再星状地指向新的parent，仍然指向的是老的组的root。</p></div>
         
-        <li>
-            <article class="yue">
-                <h1>数据结构篇二：Priority-Queues-(PQs)-with-an-interlude-on-Heaps</h1>
-                
-                    <blockquote>这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记优先队列和堆的插曲，在优先队列里引入了heap只是个插曲而不算正式介绍，但其实讲得差不多了。</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%8C%EF%BC%9APriority-Queues-%28PQs%29-with-an-interlude-on-Heaps/">Read More</a></span>
-                    <time class="ga-mono">
-                        2021-11-12
-                    </time>
-                </footer>
-            </article>
-        </li>
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%89%EF%BC%9AUnion-Find/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
         
-        <li>
-            <article class="yue">
-                <h1>数据结构篇一：Array,-Linked-List,-Stack,-Queues</h1>
-                
-                    <blockquote>这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记前几个比较基础,只记录了些关键字和提纲Static and Dynamic Arrays</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%80%EF%BC%9AArray%2C-Linked-List%2C-Stack%2C-Queues/">Read More</a></span>
-                    <time class="ga-mono">
-                        2021-11-12
-                    </time>
-                </footer>
-            </article>
-        </li>
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%8C%EF%BC%9APriority-Queues-%28PQs%29-with-an-interlude-on-Heaps/" target="_self">数据结构篇二：Priority-Queues-(PQs)-with-an-interlude-on-Heaps</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%8C%EF%BC%9APriority-Queues-%28PQs%29-with-an-interlude-on-Heaps/" target="_self">
+                <time class="text-uppercase">
+                    November 12 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><p>优先队列和堆的插曲，在优先队列里引入了heap只是个插曲而不算正式介绍，但其实讲得差不多了。</p><hr />
+<h1>Priority Queues (PQs) with an interlude on heaps</h1>
+<ul>
+<li>A priority queue is an <code>Abstract Data Type</code> (ADT)</li>
+<li>except each element has a certain priority<ul>
+<li>determine the order (removed from the PQ)</li>
+</ul>
+</li>
+<li>need <code>comparable data</code></li>
+</ul>
+<p>每次取出最小（或最大）的-&gt;pool，添加到PQ，如何得知极值呢？-&gt; heap</p><h2>Heap</h2>
+<ul>
+<li>a tree based data structure</li>
+<li>statisfies the <code>heap invariant</code>(heap property):<ul>
+<li>if A is a parent node of B then A is <code>ordered with respect ot B</code> for all nodes A, B in the heap</li>
+<li>说人话，A是B的父节点，如果A比B大，那么比B的所有子节点都大，vice versa</li>
+</ul>
+</li>
+</ul>
+<p>Priority Queue有时候也被叫做Heap，因为它只是一个ADT，当然它也可以用别的数据结构实现。</p><p>以下四个，都是heap
+<figure class="vertical-figure" style="flex: 45.29616724738676" ><img width="1040" height="1148" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/ca1ec5da989f79cdabb15eaf7cc6c092.png" alt=""/></figure></p><p>这些就不是
+<figure  style="flex: 141.57608695652175" ><img width="1042" height="368" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a2a4acdc3e610752ca81c063f3b7b01f.png" alt=""/></figure></p><p><strong>Usage</strong></p><ul>
+<li>certain implementations of <code>Dijkstra's Shortest Path algorithm</code></li>
+<li>anytime you need the <em>dynamically</em> fetch the <strong>next</strong> <code>best</code> or <code>worst</code> element</li>
+<li><code>Huffman coding</code> -&gt; lossless data compression</li>
+<li>BFS，PQs <code>continuously grab the next</code> most promising node</li>
+<li><code>Minimum Spaning Tree</code> (MST) algorithm</li>
+</ul>
+<p>可见是很多算法的基础</p><p><strong>Complexity</strong></p><ul>
+<li>Binary Heap construction: O(n)</li>
+<li>Polling: O(log n)</li>
+<li>Peeking: O(1)</li>
+<li>Adding: O(log n)</li>
+<li>原生删除：O(n)<ul>
+<li>with hash table: O(log n)</li>
+</ul>
+</li>
+<li>原生contains: O(n)<ul>
+<li>with hash table: O(1)</li>
+</ul>
+</li>
+</ul>
+<p><strong>Turning Min PQ into Max PQ</strong></p><p>大多数编程语言标准库只提供了min PQ。</p><ol>
+<li>在构建min pq的时候，把比较标准从<code>x&gt;=y</code>变成<code>x&lt;=y</code>（operator重载）</li>
+<li>在构建min pq的时候，把x变成<code>-x</code>，取出的时候再取反一次</li>
+</ol>
+<p>原则都是取巧，而且，第二种方法，存在pq里的，并不是你要使用（和本想存储）的对象，所以取出的时候需要处理。</p><h2>Priority Queue with Binary Heap</h2>
+<p>实现了<code>heap invariant</code>的binary tree.</p><p>除了Binary Heap，还有很多</p><ul>
+<li>Fibonacci Heap</li>
+<li>Binomial Heap</li>
+<li>Paring Heap</li>
+<li>...</li>
+</ul>
+<p>都能实现一个PQ</p><p><strong>Adding Elements to Binary Heap</strong></p><ul>
+<li>从尾部(last leaf)添加</li>
+<li>如果违反了heap invairant(即比parent大)，则交换</li>
+<li>向上冒泡</li>
+</ul>
+<p><strong>Removing Elements From a  Binary Heap</strong></p><ol>
+<li>Poll()</li>
+</ol>
+<ul>
+<li>因为root总是优先级最高的元素，<code>poll</code>移掉的就是root</li>
+<li>root当然不能直接移，所以先跟最后一个元素swap</li>
+<li>swap后原root就没有children了，直接移除</li>
+<li>最低优先级的元素到了top，所以要向下冒泡<ul>
+<li>先左后右，先低再高</li>
+<li>即如果两个子级优先级一样，那么直接与左边交换</li>
+<li>否则哪个优先级最低就与哪个子级交换</li>
+<li>子级优先级都比它低，就完成了pool()</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li>Remove(m) 即删除一个特定元素</li>
+</ol>
+<ul>
+<li>linear scan，找到元素位置</li>
+<li>与last node交换，然后移除</li>
+<li>last node用先上向下的原则冒泡<ul>
+<li>即先看能不能往上冒泡，不能的话再看往下冒泡</li>
+</ul>
+</li>
+</ul>
+<p><strong>Complexity</strong>
+Pool(): O(log n)
+Remove(): O(n) (最坏情况下，可能要删的元素在最后一个)</p><p>用hashtable优化remove</p><ul>
+<li>hashtable为lookup和update提供constant time</li>
+<li>因为为Index和value建立了映射，这样不需要通过遍历，直接通过映射就能找到元素<ul>
+<li>如果两个node拥有同样的value呢？</li>
+<li>直接把每个value对应的n个索引全部存起来(set)</li>
+<li>但我应该remove哪一个呢？<ul>
+<li>随便，只要最终satisfy the heap variant</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
         
-        <li>
-            <article class="yue">
-                <h1>全排列，递归与分治</h1>
-                
-                    <blockquote>能够用递归和分治解决的，特征都是下一级做的事跟上一级一样（抽象），最后一层做真正的业务。比如n个数字的全排列，抽象出来就是每n-1个数字的全排列它的难点就在于抽象，因为等于什么都没描述（我要5个数字的全排列，你就说，那好，你告诉我这4个数字的全排列，我就能告诉你5个数字的全排列）。也就是说，尝试用n和n-1的思维（有点像归纳法，动态规划）去描述问题，而不去看能不能解决。具体到这里，以ABCD为例，我们的请求过程应该是这样的</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%8C%E9%80%92%E5%BD%92%E4%B8%8E%E5%88%86%E6%B2%BB/">Read More</a></span>
-                    <time class="ga-mono">
-                        2021-11-04
-                    </time>
-                </footer>
-            </article>
-        </li>
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%8C%EF%BC%9APriority-Queues-%28PQs%29-with-an-interlude-on-Heaps/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
         
-        <li>
-            <article class="yue">
-                <h1>Drawing</h1>
-                
-                    <blockquote>《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第2章</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/Drawing/">Read More</a></span>
-                    <time class="ga-mono">
-                        2021-11-03
-                    </time>
-                </footer>
-            </article>
-        </li>
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%80%EF%BC%9AArray%2C-Linked-List%2C-Stack%2C-Queues/" target="_self">数据结构篇一：Array,-Linked-List,-Stack,-Queues</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%80%EF%BC%9AArray%2C-Linked-List%2C-Stack%2C-Queues/" target="_self">
+                <time class="text-uppercase">
+                    November 12 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><p>前几个比较基础,只记录了些关键字和提纲</p><h1>Static and Dynamic Arrays</h1>
+<p><strong>static array</strong></p><ul>
+<li>fixed length</li>
+<li>indexable</li>
+</ul>
+<p>usage:</p><ul>
+<li>sequential data</li>
+<li>IO routines as buffers</li>
+<li>lookup tables and inverse lookup tables</li>
+<li>return multiple values</li>
+</ul>
+<p>operation complexity:
+access: O(1)
+search: <code>O(n)</code>
+insert: <code>O(n)</code>
+append: O(1)
+delet: <code>O(n)</code>
+需要遍历的操作就是O(n)</p><p>Q: How to implement a dynamic array?
+A:</p><ol>
+<li>static array with an initial capacity</li>
+<li>add new elements, keep tracking the size</li>
+<li>if exceed capacity, create a new static array with <code>twice the capacity</code><ul>
+<li>and copy the original elements into it</li>
+</ul>
+</li>
+</ol>
+<h2>Singly and Doubly Linked Lists</h2>
+<p>单向/双向链表</p><p>sequential list of nodes that hold data which point to other nodes also containing data.</p><ul>
+<li>节点序列，</li>
+<li>节点拥有指向别的节点的数据（指针）</li>
+<li>别的节点也拥有这种指针</li>
+</ul>
+<p>usage:</p><ul>
+<li>many <code>List, Queue &amp; Stack</code> implementations</li>
+<li>circular lists</li>
+<li>model real world objects such as <code>trains</code></li>
+<li>implementation of adjancy list for graphs</li>
+<li>separate chaining -&gt; ?<ul>
+<li>deal with hashing collisions -&gt; ?</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>上述两上问号后续在<code>Hash Table</code>一节里自然就解惑了</p></blockquote>
+<p><strong>Terminology</strong>
+Head / Tail / Pointer / Node</p><p>Singly vs Doubly</p><ul>
+<li>Doubly holds a <code>next</code> and <code>prev</code> reference, which Singly has no <code>prev</code><ul>
+<li>插入删除的时候需要更新所有引用</li>
+</ul>
+</li>
+<li>both maintain a reference of <code>head</code> and <code>tail</code> for quick additions / removals</li>
+</ul>
+<p><strong>insertion</strong></p><ul>
+<li>create a traverser and move by sepcific steps</li>
+<li>create new node</li>
+<li>singly:<ul>
+<li>原node的next指向新node</li>
+<li>新node的next指向原next的node</li>
+</ul>
+</li>
+<li>doubly:<ul>
+<li>新node的next和prev分别指向原node和下一个node</li>
+<li>两个node分别用next和prev指向新node</li>
+</ul>
+</li>
+</ul>
+<p><strong>removal</strong></p><p>singly需要两个游标:</p><ul>
+<li>pt1指向head, pt2指向head-&gt;next</li>
+<li>pt1, pt2一起移动，直到pt2找到目标</li>
+<li>pt2再向前移动一步</li>
+<li>pt1位置的node用next指向pt2位置</li>
+<li>now can sefely remoing the element between pt1 and pt2</li>
+</ul>
+<p>doubly却只需要一个：</p><ul>
+<li>pointer找到目标元素</li>
+<li>用prev和next找到上一个和下一个</li>
+<li>下一个和下一个node分别互相指向</li>
+</ul>
+<p><strong>Complexity</strong>
+searth: <code>O(n)</code>
+insert at head/tail: O(1)
+remove at head: O(1)
+remove at tail: <code>O(n)</code> (singly) / O(1) (doubly)
+因为即使我们知道tail在哪，在单向链表中，我们也找不到它的前一个去设置为新的tail
+remove in middle: <code>O(n)</code></p><h1>Stack</h1>
+<ul>
+<li>one-ended linear data structure (LIFO)</li>
+<li>two operation: <code>push</code> and <code>pop</code></li>
+</ul>
+<p><strong>Usage</strong></p><ul>
+<li>undo mechanisms</li>
+<li>compiler syntax checking for matching brackets and braces<ul>
+<li>开括号压入栈内，每碰到一个闭括号，与栈顶的比较，匹配就出栈，不匹配就报错</li>
+</ul>
+</li>
+<li>model a pile of books or plates<ul>
+<li>汉诺塔(tower of hanoi)</li>
+</ul>
+</li>
+<li>tracking previous function calls</li>
+<li>DFS on a graph</li>
+</ul>
+<p><strong>Complexity</strong>
+push/pop/peek/size: O(1)
+search: <code>O(n)</code></p><p>双向链表实现一个Stack，基本上就是操作tail</p><h1>Queues</h1>
+<ul>
+<li>a linear data structure, model real world queues (FIFO)</li>
+<li>two primary operations: <code>enqueue</code>, <code>dequeue</code></li>
+</ul>
+<p><strong>Usage</strong></p><ul>
+<li>any waiting line models a queue</li>
+<li>keep track of the x most recently added elements -&gt; ?</li>
+<li>web server request management where you want first come first serve</li>
+<li>BFS graph traversal</li>
+</ul>
+<p><strong>Complexity</strong></p><p>只有<code>contains, revomval</code>需要遍历，其它操作（出入列等）都是O(1)</p><p>实现一个BFS：</p><p>基本就是动态往 queue 里添加子节点,当前级别元素访问完后, 再 dequeue 出来的就是所有的下一级子节点
+<figure  style="flex: 92.55319148936171" ><img width="1044" height="564" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/910285ef71036aa37402e819d06f56fc.png" alt=""/></figure></p><p>双向列表实现Queue，入列用tail，出列用head，即添加的总在尾巴，永远从头部取出。</p></div>
         
-        <li>
-            <article class="yue">
-                <h1>cs193p_2021_笔记_[完结]_pdf下载</h1>
-                
-                    <blockquote>cs193p_2021_笔记_1</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0_%5B%E5%AE%8C%E7%BB%93%5D_pdf%E4%B8%8B%E8%BD%BD/">Read More</a></span>
-                    <time class="ga-mono">
-                        2021-10-24
-                    </time>
-                </footer>
-            </article>
-        </li>
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%80%EF%BC%9AArray%2C-Linked-List%2C-Stack%2C-Queues/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
         
-        <li>
-            <article class="yue">
-                <h1>cs193p_2021笔记[7]_Document-Architecture</h1>
-                
-                    <blockquote>cs193p_2021_笔记_1</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B7%5D_Document-Architecture/">Read More</a></span>
-                    <time class="ga-mono">
-                        2021-10-24
-                    </time>
-                </footer>
-            </article>
-        </li>
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%8C%E9%80%92%E5%BD%92%E4%B8%8E%E5%88%86%E6%B2%BB/" target="_self">全排列，递归与分治</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%8C%E9%80%92%E5%BD%92%E4%B8%8E%E5%88%86%E6%B2%BB/" target="_self">
+                <time class="text-uppercase">
+                    November 04 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>能够用递归和分治解决的，特征都是下一级做的事跟上一级一样（抽象），最后一层做真正的业务。比如n个数字的全排列，抽象出来就是每n-1个数字的全排列</p><p>它的难点就在于抽象，因为等于什么都没描述（我要5个数字的全排列，你就说，那好，你告诉我这4个数字的全排列，我就能告诉你5个数字的全排列）。</p><p>也就是说，尝试用n和n-1的思维（有点像归纳法，动态规划）去描述问题，而不去看能不能解决。</p><p>具体到这里，以ABCD为例，我们的请求过程应该是这样的</p><ul>
+<li>A打头的话，BCD的全排列 swap(0, 0)</li>
+<li>B打头的话，ACD的全排列 swap(0, 1)</li>
+<li>...swap(0,2)</li>
+<li>...swap(0,3)</li>
+</ul>
+<p>自己是可以数出来的：</p><div class="highlight"><pre><span></span>A固定，BCD的所有排列 swap<span class="o">(</span><span class="m">0</span>,0<span class="o">)</span>
+  B固定，CD的所有排列 swap<span class="o">(</span><span class="m">1</span>,1<span class="o">)</span>
+      C固定，D的所有排列 swap<span class="o">(</span><span class="m">1</span>,2<span class="o">)</span>（1）
+      D固定，C的所有排列 swap<span class="o">(</span><span class="m">1</span>,3<span class="o">)</span>（1）
+  C固定，同B（2）
+  D固定，同B（2）
+  计6种
+B固定，同A，<span class="o">(</span><span class="m">6</span><span class="o">)</span> swap<span class="o">(</span><span class="m">0</span>,1<span class="o">)</span>
+C固定，同A，<span class="o">(</span><span class="m">6</span><span class="o">)</span> swap<span class="o">(</span><span class="m">0</span>,2<span class="o">)</span>
+D固定，同A，<span class="o">(</span><span class="m">6</span><span class="o">)</span> swap<span class="o">(</span><span class="m">0</span>,3<span class="o">)</span>
+结果应该是24
+</pre></div>
+<p>所有缩进部分都是递归，所以真正的业务代码就是一句话，交换每次比较的数组的第一个和剩下的几个的位置，然后递归下去</p><div class="highlight"><pre><span></span><span class="n">ctr</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">def</span> <span class="nf">perm</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">ctr</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">end</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">start</span> <span class="o">==</span> <span class="n">end</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+        <span class="n">ctr</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+            <span class="c1"># 思路是，我每次只动一个数字，然后固定住这个数字，看剩下的数字有多少种排列</span>
+            <span class="c1"># 代码里每次把固定的数字挪到开头</span>
+            <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">start</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">perm</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">start</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+            <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">start</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">perm</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">ctr</span><span class="p">)</span>
+</pre></div>
+<p>output: 24</p><p>可能是我理解能力的问题，所有人都没有解释为什么有swap，可能是太直观吧，毕竟swap才是真正在”排列“的业务代码。我还是自己写一遍才想明白，记录一下吧。</p></div>
         
-        <li>
-            <article class="yue">
-                <h1>cs193p_2021笔记[6]_Persistence</h1>
-                
-                    <blockquote>cs193p_2021_笔记_1</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B6%5D_Persistence/">Read More</a></span>
-                    <time class="ga-mono">
-                        2021-10-24
-                    </time>
-                </footer>
-            </article>
-        </li>
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%8C%E9%80%92%E5%BD%92%E4%B8%8E%E5%88%86%E6%B2%BB/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
         
-        <li>
-            <article class="yue">
-                <h1>cs193p_2021笔记[5]_Property-Wrapper</h1>
-                
-                    <blockquote>cs193p_2021_笔记_1</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B5%5D_Property-Wrapper/">Read More</a></span>
-                    <time class="ga-mono">
-                        2021-10-24
-                    </time>
-                </footer>
-            </article>
-        </li>
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/Drawing/" target="_self">Drawing</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/Drawing/" target="_self">
+                <time class="text-uppercase">
+                    November 03 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第2章</p><hr />
+<h1>Drawing</h1>
+<p>Many UIView subclasses, such as a UIButton or a UILabel, know how to draw themselves.</p><p>A <em>pure UIView</em> is all about drawing, and it leaves that drawing largely up to you.</p><h2>Images and Image Views</h2>
+<p>图片可以来自文件，代码，或网络。</p><h3>Image Files</h3>
+<ul>
+<li><code>init(named:)</code>，会从<code>Asset catalog</code>和<code>App bundle</code>的顶层去查找<ul>
+<li>返回的是一个Optional，因为不能确定这个路径对应一张图片，或能解码成功</li>
+<li>它会将图片缓存<ul>
+<li><code>init(contentsOfFile:)</code>则不会缓存，但不从asset catalog加载而是相对于<code>Bundle.main</code>来做路径</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>从bundle里找时不加扩展名会默认为<em>png</em></li>
+<li>直接将图片拖到代码生成的不是Optional的image，调用的是<code>init(imageLiteralResourceName:)</code>方法</li>
+<li>文件名里的@表示<code>High-resolution variants</code>，即不同分辨率下采用的图片，比如<code>@2x</code></li>
+<li>文件名里的~表示<code>Device type variants</code>，即不同设备类型下采用的图片，比如<code>~ipad</code></li>
+</ul>
+<blockquote>
+<p>尽量把图片放到asset catalog里，对不同的处理器，更宽的色域，等等
+不光影响运行时，在Apple Store对你的app对特定设备进行<em>thinning</em>都会用到
+不同size class, dark mode, ipad等等trait collection都可以设置对应的图片</p></blockquote>
+<p><strong>Vector images</strong></p><ul>
+<li>An image file in the asset catalog can be a vector-based PDF or (new in Xcode 12) an SVG.</li>
+<li><code>init(systemName:)</code> -&gt; <a href="https://developer.apple.com/sf-symbols/">SF Symbols</a><ul>
+<li><code>.withConfiguration(_:) or .applyingSymbolConfiguration(_:)</code> 进行自定义，参数是一个<em>UIImage.SymbolConfiguration</em></li>
+<li>Configurations can involve one of nine <code>weights</code>, one of three <code>scales</code>, a font or text <code>style</code>, and a <code>point size</code>, in various combinations</li>
+</ul>
+</li>
+</ul>
+<p><strong>Asset catalogs and trait collections</strong></p><p>指定trait collection初始化图片：<code>init(named:in:compatibleWith:)</code></p><ul>
+<li>A built-in interface object that displays an image, such as a UIImageView, is <code>automatically trait collection–aware</code>;</li>
+<li>it receives the <code>traitCollectionDidChange(_:)</code> message and responds accordingly.</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">tcreg</span> <span class="p">=</span> <span class="bp">UITraitCollection</span><span class="p">(</span><span class="n">verticalSizeClass</span><span class="p">:</span> <span class="p">.</span><span class="n">regular</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">tccom</span> <span class="p">=</span> <span class="bp">UITraitCollection</span><span class="p">(</span><span class="n">verticalSizeClass</span><span class="p">:</span> <span class="p">.</span><span class="n">compact</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">moods</span> <span class="p">=</span> <span class="bp">UIImageAsset</span><span class="p">()</span>
+<span class="kd">let</span> <span class="nv">frowney</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">named</span><span class="p">:</span><span class="s">&quot;frowney&quot;</span><span class="p">)</span><span class="o">!</span>
+<span class="kd">let</span> <span class="nv">smiley</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">named</span><span class="p">:</span><span class="s">&quot;smiley&quot;</span><span class="p">)</span><span class="o">!</span>
+<span class="n">moods</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="n">frowney</span><span class="p">,</span> <span class="n">with</span><span class="p">:</span> <span class="n">tcreg</span><span class="p">)</span>
+<span class="n">moods</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="n">smiley</span><span class="p">,</span> <span class="n">with</span><span class="p">:</span> <span class="n">tccom</span><span class="p">)</span>
+</pre></div>
+<p>由此也可见，你操作的是“一张图片”，其实它是一<strong>组</strong>带了条件的图片。</p><blockquote>
+<p>UIColor也是相同的机制，你用<code>resolvedColor(with:)</code>传入trait collection把对应的颜色取出来使用。</p></blockquote>
+<p><strong>Namespacing image files</strong></p><ul>
+<li>物理文件夹，虚拟文件夹内的图片访问时，都需要加上文件夹名（namespaing)</li>
+<li><code>init(named:)</code>的完全形态其实是<code>init(named:in:)</code>，第二个参数是bundle，比如来自某个framework.</li>
+</ul>
+<h3>Image Views</h3>
+<p>A UIImageView can actually have two images, one assigned to its <code>image</code> property and the other assigned to its <code>highlightedImage</code> property
+A UIImageView without an image and without a background color is <em>invisible</em></p><p><strong>Resizable Images</strong></p><p>用inset来设置<strong>不</strong>拉伸的区域，比如一般我们碰到的多为左右随便拉伸的胶囊按钮，需要设计师做的就是左右两个半圆（不拉伸）和中间1像素的可拉伸部分</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">marsTiled</span> <span class="p">=</span> <span class="n">mars</span><span class="p">.</span><span class="n">resizableImage</span><span class="p">(</span><span class="n">withCapInsets</span><span class="p">:</span>
+<span class="n">UIEdgeInsets</span><span class="p">(</span>
+    <span class="n">top</span><span class="p">:</span> <span class="n">mars</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="kr">left</span><span class="p">:</span> <span class="n">mars</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">bottom</span><span class="p">:</span> <span class="n">mars</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="kr">right</span><span class="p">:</span> <span class="n">mars</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="p">),</span> <span class="n">resizingMode</span><span class="p">:</span> <span class="p">.</span><span class="n">stretch</span><span class="p">)</span>
+</pre></div>
+<p>所以如果只是横向拉伸，上面的代码中，top, bottom都可以设为0，或都设为图片高度（而不去除2什么的），只需要保证把UI控件的高度保持跟图片一致即可。</p><p>那么，如果不小心高度大于图片高度了呢？分两种情况，如果设了0，表示没有保留区域，直接竖向拉伸，而如果设成了图片高度，那么表示整个Y方向没有可供拉伸的像素，必然造成拉伸失败：</p><figure  style="flex: 123.51598173515981" ><img width="1082" height="438" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/be32f2993735b82ac7da004327cf4bad.png" alt=""/></figure><p><strong>Transparency Masks</strong></p><p>The image shown on the screen is formed by combining the image’s <code>transparency</code> values with a single <code>tint color</code>.</p><p>忽略图片各像素上颜色的数值，只保留透明度，就成了一个mask. (renderingMode: <code>alwaysTemplate</code>)</p><ul>
+<li>iOS gives every UIView a <code>tintColor</code>, which will be used to <code>tint any template images</code>。所以我们经常用的tintColor其实就是给模板图片染色的意思。</li>
+<li>tintColor是向下继承的</li>
+<li>The symbol images are always template images</li>
+<li>iOS 13起，可以对UIImage直接应用tint color</li>
+</ul>
+<p><strong>Reversible Images</strong></p><ul>
+<li>用<code>imageFlippedForRightToLeftLayoutDirection</code>来创建一个在从右向左的书写系统里会自动翻转的图片。<ul>
+<li>但你又可以设置<code>semanticContentAttribute</code>来阻止这个镜像行为</li>
+</ul>
+</li>
+<li>如果不考虑书写系统，可以用<code>withHorizontallyFlippedOrientation</code>强行镜像</li>
+</ul>
+<h2>Graphics Contexts</h2>
+<p>Graphics Contexts是绘图的起点，你能从如下方式得到Graphics Contexts：</p><ol>
+<li>进入UIView的 <code>draw(_:)</code>方法时，系统会给你提供一个Graphics Contexts</li>
+<li>CALayer的<code>draw(in:)</code>,或其代理的<code>draw(_:in:)</code>方法，<em>in</em>参数就是Graphics Contexts<ul>
+<li>但它不是<code>currnet context</code></li>
+</ul>
+</li>
+<li>手动创建一个</li>
+</ol>
+<p>UIKit 和 Core Graphics是两套绘制工具。</p><ul>
+<li>UIKit是大多数情况下你的选择，大部分Cocoa class知道如何绘制自己</li>
+<li>只能在current context上绘制</li>
+<li>Core Graphics is the full drawing API， often referred to as <code>Quartz (2D)</code></li>
+<li>UIKit drawing is built on top of it.</li>
+</ul>
+<p>两套体系，三种context来源，共计6种殊途同归的方式。</p><h3>Drawing on Demand</h3>
+<p>直接上代码：</p><div class="highlight"><pre><span></span><span class="c1">// UIView</span>
+
+<span class="c1">// UIKit</span>
+<span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">rect</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 直接绘制</span>
+    <span class="kd">let</span> <span class="nv">p</span> <span class="p">=</span> <span class="bp">UIBezierPath</span><span class="p">(</span><span class="n">ovalIn</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
+    <span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">setFill</span><span class="p">()</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">fill</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="c1">// CG</span>
+<span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">rect</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 取到context</span>
+    <span class="kd">let</span> <span class="nv">con</span> <span class="p">=</span> <span class="n">UIGraphicsGetCurrentContext</span><span class="p">()</span><span class="o">!</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">addEllipse</span><span class="p">(</span><span class="k">in</span><span class="p">:</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">fillPath</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="c1">// CALayer</span>
+
+<span class="c1">// UIKit</span>
+ <span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">layer</span><span class="p">:</span> <span class="bp">CALayer</span><span class="p">,</span> <span class="k">in</span> <span class="n">con</span><span class="p">:</span> <span class="n">CGContext</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">UIGraphicsPushContext</span><span class="p">(</span><span class="n">con</span><span class="p">)</span>
+    <span class="kd">let</span> <span class="nv">p</span> <span class="p">=</span> <span class="bp">UIBezierPath</span><span class="p">(</span><span class="n">ovalIn</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
+    <span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">setFill</span><span class="p">()</span>
+<span class="n">p</span><span class="p">.</span><span class="n">fill</span><span class="p">()</span>
+    <span class="n">UIGraphicsPopContext</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="c1">// CG</span>
+<span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">layer</span><span class="p">:</span> <span class="bp">CALayer</span><span class="p">,</span> <span class="k">in</span> <span class="n">con</span><span class="p">:</span> <span class="n">CGContext</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">addEllipse</span><span class="p">(</span><span class="k">in</span><span class="p">:</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">fillPath</span><span class="p">()</span>
+<span class="p">}</span>
+</pre></div>
+<h3>Drawing a UIImage</h3>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">r</span> <span class="p">=</span> <span class="bp">UIGraphicsImageRenderer</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="n">CGSize</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
+<span class="kd">let</span> <span class="nv">im</span> <span class="p">=</span> <span class="n">r</span><span class="p">.</span><span class="n">image</span> <span class="p">{</span> <span class="kc">_</span> <span class="k">in</span>
+    <span class="kd">let</span> <span class="nv">p</span> <span class="p">=</span> <span class="bp">UIBezierPath</span><span class="p">(</span><span class="n">ovalIn</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
+    <span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">setFill</span><span class="p">()</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">fill</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="c1">// im is the blue circle image, do something with it here ...</span>
+<span class="n">And</span> <span class="n">here</span><span class="err">’</span><span class="n">s</span> <span class="n">the</span> <span class="n">same</span> <span class="n">thing</span> <span class="n">using</span> <span class="n">Core</span> <span class="n">Graphics</span><span class="p">:</span>
+<span class="kd">let</span> <span class="nv">r</span> <span class="p">=</span> <span class="bp">UIGraphicsImageRenderer</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="n">CGSize</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
+<span class="kd">let</span> <span class="nv">im</span> <span class="p">=</span> <span class="n">r</span><span class="p">.</span><span class="n">image</span> <span class="p">{</span> <span class="kc">_</span> <span class="k">in</span>
+    <span class="kd">let</span> <span class="nv">con</span> <span class="p">=</span> <span class="n">UIGraphicsGetCurrentContext</span><span class="p">()</span><span class="o">!</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">addEllipse</span><span class="p">(</span><span class="k">in</span><span class="p">:</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">fillPath</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="c1">// im is the blue circle image, do something with it here ...</span>
+</pre></div>
+<h2>UIImage Drawing</h2>
+<p>用已有的图像进行绘制：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">mars</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">named</span><span class="p">:</span><span class="s">&quot;Mars&quot;</span><span class="p">)</span><span class="o">!</span>
+<span class="kd">let</span> <span class="nv">sz</span> <span class="p">=</span> <span class="n">mars</span><span class="p">.</span><span class="n">size</span>
+<span class="kd">let</span> <span class="nv">r</span> <span class="p">=</span> <span class="bp">UIGraphicsImageRenderer</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="n">CGSize</span><span class="p">(</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">sz</span><span class="p">.</span><span class="n">height</span><span class="p">),</span>
+    <span class="n">format</span><span class="p">:</span><span class="n">mars</span><span class="p">.</span><span class="n">imageRendererFormat</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">im</span> <span class="p">=</span> <span class="n">r</span><span class="p">.</span><span class="n">image</span> <span class="p">{</span> <span class="kc">_</span> <span class="k">in</span>
+    <span class="n">mars</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">at</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">mars</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">at</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+<p>这里，绘制了两个火星，注意<code>imageRendererFormat</code>的使用</p><h2>CGImage Drawing</h2>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">mars</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">named</span><span class="p">:</span><span class="s">&quot;Mars&quot;</span><span class="p">)</span><span class="o">!</span>
+<span class="c1">// extract each half as CGImage</span>
+<span class="kd">let</span> <span class="nv">marsCG</span> <span class="p">=</span> <span class="n">mars</span><span class="p">.</span><span class="n">cgImage</span><span class="p">!</span>
+<span class="kd">let</span> <span class="nv">sz</span> <span class="p">=</span> <span class="n">mars</span><span class="p">.</span><span class="n">size</span>
+<span class="kd">let</span> <span class="nv">marsLeft</span> <span class="p">=</span> <span class="n">marsCG</span><span class="p">.</span><span class="n">cropping</span><span class="p">(</span><span class="n">to</span><span class="p">:</span>
+    <span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">height</span><span class="p">))</span><span class="o">!</span>
+<span class="kd">let</span> <span class="nv">marsRight</span> <span class="p">=</span> <span class="n">marsCG</span><span class="p">.</span><span class="n">cropping</span><span class="p">(</span><span class="n">to</span><span class="p">:</span>
+    <span class="n">CGRect</span><span class="p">(</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">height</span><span class="p">))</span><span class="o">!</span>
+<span class="kd">let</span> <span class="nv">r</span> <span class="p">=</span> <span class="bp">UIGraphicsImageRenderer</span><span class="p">(</span><span class="n">size</span><span class="p">:</span> <span class="n">CGSize</span><span class="p">(</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="o">*</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">sz</span><span class="p">.</span><span class="n">height</span><span class="p">),</span>
+    <span class="n">format</span><span class="p">:</span><span class="n">mars</span><span class="p">.</span><span class="n">imageRendererFormat</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">im</span> <span class="p">=</span> <span class="n">r</span><span class="p">.</span><span class="n">image</span> <span class="p">{</span> <span class="n">ctx</span> <span class="k">in</span>
+    <span class="kd">let</span> <span class="nv">con</span> <span class="p">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">cgContext</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">marsLeft</span><span class="p">,</span> <span class="k">in</span><span class="p">:</span>
+        <span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">height</span><span class="p">))</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">marsRight</span><span class="p">,</span> <span class="k">in</span><span class="p">:</span>
+        <span class="n">CGRect</span><span class="p">(</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">height</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+<p>当然, <code>con.draw</code>可以由UIImage来完成：</p><div class="highlight"><pre><span></span><span class="bp">UIImage</span><span class="p">(</span><span class="n">cgImage</span><span class="p">:</span> <span class="n">marsLeft</span><span class="p">!,</span>
+<span class="n">scale</span><span class="p">:</span> <span class="n">mars</span><span class="p">.</span><span class="n">scale</span><span class="p">,</span>
+<span class="n">orientation</span><span class="p">:</span> <span class="n">mars</span><span class="p">.</span><span class="n">imageOrientation</span><span class="p">).</span><span class="n">draw</span><span class="p">(</span><span class="n">at</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+</pre></div>
+<h2>Snapshots</h2>
+<ul>
+<li><code>drawHierarchy(in:afterScreenUpdates:)</code>将整个视图存成一张图片。</li>
+<li>更快，语义更好的方法：<code>.snapshotView(afterScreenUpdates:)</code> -&gt; 输出是UIView，不是UIImage</li>
+<li><code>resizableSnapshotView(from:after- ScreenUpdates:withCapInsets:)</code>生成可缩放的</li>
+</ul>
+<h2>Core Image</h2>
+<p>The “CI” in <code>CIFilter</code> and <code>CIImage</code> stands for <code>Core Image</code>, a technology for transforming images through <em>mathematical</em> filters. (iOS 5起，从macOS引入)</p><p>用途：</p><ul>
+<li>patterns and gradients (可以被别的filter一起使用)</li>
+<li>compositing (使用composting blend modes)</li>
+<li>color (颜色调整，亮度锐度色温等等)</li>
+<li>geometric (几何相关的就是用来变形)</li>
+<li>transformation (distort, blur, stylize an image)</li>
+<li>transition (一般用于动画，通过设置frame序列)</li>
+</ul>
+<p>There are more than 200 available <code>CIFilters</code>， A CIFilter is a set of <strong>instructions</strong> for <code>generating</code> a CIImage</p><ul>
+<li>基本上，处理的都是<code>CIImage</code>(input)</li>
+<li>输出也是<code>CIImage</code>，或者另一个<code>filter</code> -&gt; 链式调用<ul>
+<li>最后一层链可以自行转换为bitmap: cg或ui image(by <code>rendering</code>方法)</li>
+<li>rendering的时候，所有的数学计算才开始发生</li>
+<li>因为只是<strong>instructions</strong></li>
+</ul>
+</li>
+<li><strong>关键词</strong>：filter是用来描述怎么<strong>生成</strong>CIImage的</li>
+<li><code>CGImage</code>和<code>UIImage</code>都能得到CIImage</li>
+</ul>
+<blockquote>
+<p>UIImage只有在已经wraps了一个<code>CIImage</code>的情况下<code>.ciImage</code>才有值，而大多数情况下是没有的。</p></blockquote>
+<p><a href="https://developer.apple.com/library/archive/documentation/GraphicsImaging/Reference/CoreImageFilterReference/index.html">Core Image Filter Reference</a>里有所有的filter的名字，用来初始化一个filter</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">filter</span> <span class="p">=</span> <span class="bp">CIFilter</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="s">&quot;CICheckerboardGenerator&quot;</span><span class="p">)</span><span class="o">!</span>
+<span class="c1">// or:</span>
+<span class="kd">let</span> <span class="nv">filter</span> <span class="p">=</span> <span class="bp">CIFilter</span><span class="p">.</span><span class="n">checkerboardGenerator</span><span class="p">()</span>
+
+<span class="c1">// 用key-value来决定行为：</span>
+<span class="bp">filter</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">forKey</span><span class="p">:</span> <span class="s">&quot;inputWidth&quot;</span><span class="p">)</span>
+<span class="c1">// or:</span>
+<span class="bp">filter</span><span class="p">.</span><span class="n">width</span> <span class="p">=</span> <span class="mi">30</span>
+<span class="c1">// or init with params</span>
+<span class="kd">init</span><span class="p">(</span><span class="n">name</span><span class="p">:</span><span class="n">parameters</span><span class="p">:)</span>
+
+<span class="c1">// apply filter on CIImage(if exists one)</span>
+<span class="n">ciimage</span><span class="p">.</span><span class="n">applyingFilter</span><span class="p">(</span><span class="kc">_</span><span class="p">:</span><span class="n">parameters</span><span class="p">:)</span>
+<span class="c1">// or output a ciimage</span>
+<span class="bp">filter</span><span class="p">.</span><span class="n">outputImage</span>
+</pre></div>
+<p><strong>Render a CIImage</strong>
+CIImage 不是一个<code>displayaable image</code></p><ul>
+<li><code>CIContext</code>.init(options:).createCGImage(_:from)<ul>
+<li>参数1是CIImage，</li>
+<li>参数2是绘制区域（所以没有frame/bounds)，叫<code>extent</code></li>
+<li>这是很昂贵的操作，建议在全app生命周期保留这个context复用</li>
+</ul>
+</li>
+<li><code>UIImage</code>.init(ciImage:)</li>
+<li>把上一次的uiimage设置成<code>UIImageView</code>的image，也能造成CIImage的渲染。</li>
+</ul>
+<p>以上说的都是&quot;render&quot; CIImage的时机，所以传入的</p><blockquote>
+<p><code>Metal</code>能快速渲染CIImage</p></blockquote>
+<p>串起一个demo:</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">moi</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">named</span><span class="p">:</span><span class="s">&quot;Moi&quot;</span><span class="p">)</span><span class="o">!</span>
+<span class="kd">let</span> <span class="nv">moici</span> <span class="p">=</span> <span class="bp">CIImage</span><span class="p">(</span><span class="n">image</span><span class="p">:</span><span class="n">moi</span><span class="p">)</span><span class="o">!</span>
+<span class="kd">let</span> <span class="nv">moiextent</span> <span class="p">=</span> <span class="n">moici</span><span class="p">.</span><span class="n">extent</span>
+<span class="kd">let</span> <span class="nv">smaller</span> <span class="p">=</span> <span class="bp">min</span><span class="p">(</span><span class="n">moiextent</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="n">moiextent</span><span class="p">.</span><span class="n">height</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">larger</span> <span class="p">=</span> <span class="bp">max</span><span class="p">(</span><span class="n">moiextent</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="n">moiextent</span><span class="p">.</span><span class="n">height</span><span class="p">)</span>
+<span class="c1">// first filter</span>
+<span class="kd">let</span> <span class="nv">grad</span> <span class="p">=</span> <span class="bp">CIFilter</span><span class="p">.</span><span class="n">radialGradient</span><span class="p">()</span>
+<span class="n">grad</span><span class="p">.</span><span class="n">center</span> <span class="p">=</span> <span class="n">moiextent</span><span class="p">.</span><span class="n">center</span>
+<span class="n">grad</span><span class="p">.</span><span class="n">radius0</span> <span class="p">=</span> <span class="nb">Float</span><span class="p">(</span><span class="n">smaller</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span> <span class="o">*</span> <span class="mf">0.7</span>
+<span class="n">grad</span><span class="p">.</span><span class="n">radius1</span> <span class="p">=</span> <span class="nb">Float</span><span class="p">(</span><span class="n">larger</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span>
+<span class="kd">let</span> <span class="nv">gradimage</span> <span class="p">=</span> <span class="n">grad</span><span class="p">.</span><span class="n">outputImage</span><span class="p">!</span>
+<span class="c1">// 到此步为止，并没有moi这个图片参与，等于是一个纯filter</span>
+
+<span class="c1">// second filter</span>
+<span class="kd">let</span> <span class="nv">blend</span> <span class="p">=</span> <span class="bp">CIFilter</span><span class="p">.</span><span class="n">blendWithMask</span><span class="p">()</span>
+<span class="n">blend</span><span class="p">.</span><span class="n">inputImage</span> <span class="p">=</span> <span class="n">moici</span>  <span class="c1">// 设置了image</span>
+<span class="n">blend</span><span class="p">.</span><span class="n">maskImage</span> <span class="p">=</span> <span class="n">gradimage</span> <span class="c1">// 这里演示的是mask filter，按我理解并不是链式的，而且语法上也不是链式的，而是赋值给了maskImage，但书里直接说是链式的</span>
+<span class="kd">let</span> <span class="nv">blendimage</span> <span class="p">=</span> <span class="n">blend</span><span class="p">.</span><span class="n">outputImage</span><span class="p">!</span>
+
+<span class="c1">// 两种render方法</span>
+<span class="c1">// content</span>
+<span class="kd">let</span> <span class="nv">moicg</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">context</span><span class="p">.</span><span class="n">createCGImage</span><span class="p">(</span><span class="n">blendimage</span><span class="p">,</span> <span class="n">from</span><span class="p">:</span> <span class="n">moiextent</span><span class="p">)</span><span class="o">!</span> <span class="c1">// *</span>
+<span class="kc">self</span><span class="p">.</span><span class="n">iv</span><span class="p">.</span><span class="n">image</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">cgImage</span><span class="p">:</span> <span class="n">moicg</span><span class="p">)</span>
+
+<span class="c1">// UIImage</span>
+<span class="kd">let</span> <span class="nv">r</span> <span class="p">=</span> <span class="bp">UIGraphicsImageRenderer</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="n">moiextent</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+<span class="kc">self</span><span class="p">.</span><span class="n">iv</span><span class="p">.</span><span class="n">image</span> <span class="p">=</span> <span class="n">r</span><span class="p">.</span><span class="n">image</span> <span class="p">{</span> <span class="kc">_</span> <span class="k">in</span>
+    <span class="bp">UIImage</span><span class="p">(</span><span class="n">ciImage</span><span class="p">:</span> <span class="n">blendimage</span><span class="p">).</span><span class="n">draw</span><span class="p">(</span><span class="k">in</span><span class="p">:</span><span class="n">moiextent</span><span class="p">)</span> <span class="c1">// *</span>
+<span class="p">}</span>
+</pre></div>
+<blockquote>
+<p>关于上述代码里我的疑惑，第一个filter并不是chain到第二个filter里的，但书里说是<code>obtain the final CIImage in the chain (blendimage)，看来所谓的chain，并不是fitler的chain，而是</code>outputImage`的chain?
+问题是，这是唯一且标准的filter嵌套用法么？-&gt; mask</p></blockquote>
+<p>不是的</p><ol>
+<li>对filter的outputImage继续应用<code>aplyingFilter(_:parameters)</code>来链式应用一个新的filter<ul>
+<li>返回值是CIImage，不再是filter</li>
+<li>所以如果继续chain，直接用返回值调apply...方法即可</li>
+</ul>
+</li>
+<li>把上一个filter的outputImage设为下一个filter的inputImage:</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="bp">CIFilter</span><span class="w"> </span><span class="o">*</span><span class="n">gloom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">CIFilter</span><span class="w"> </span><span class="n">filterWithName</span><span class="o">:</span><span class="s">@&quot;CIGloom&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="p">[</span><span class="n">gloom</span><span class="w"> </span><span class="n">setDefaults</span><span class="p">];</span><span class="w">                                        </span>
+<span class="p">[</span><span class="n">gloom</span><span class="w"> </span><span class="n">setValue</span><span class="o">:</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="n">forKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIInputImageKey</span><span class="p">];</span><span class="w"></span>
+<span class="p">[</span><span class="n">gloom</span><span class="w"> </span><span class="n">setValue</span><span class="o">:</span><span class="w"> </span><span class="mf">@25.0f</span><span class="w"> </span><span class="n">forKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIInputRadiusKey</span><span class="p">];</span><span class="w">         </span>
+<span class="p">[</span><span class="n">gloom</span><span class="w"> </span><span class="n">setValue</span><span class="o">:</span><span class="w"> </span><span class="mf">@0.75f</span><span class="w"> </span><span class="n">forKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIInputIntensityKey</span><span class="p">];</span><span class="w">      </span>
+<span class="c1">// 即outputImage</span>
+<span class="bp">CIImage</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">gloom</span><span class="w"> </span><span class="n">valueForKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIOutputImageKey</span><span class="p">];</span><span class="w">   </span>
+
+<span class="bp">CIFilter</span><span class="w"> </span><span class="o">*</span><span class="n">bumpDistortion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">CIFilter</span><span class="w"> </span><span class="n">filterWithName</span><span class="o">:</span><span class="s">@&quot;CIBumpDistortion&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="p">[</span><span class="n">bumpDistortion</span><span class="w"> </span><span class="n">setDefaults</span><span class="p">];</span><span class="w">                                              </span>
+<span class="c1">// 设置inputImage (with first filter&#39;s output image) </span>
+<span class="p">[</span><span class="n">bumpDistortion</span><span class="w"> </span><span class="n">setValue</span><span class="o">:</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="n">forKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIInputImageKey</span><span class="p">];</span><span class="w"></span>
+<span class="p">[</span><span class="n">bumpDistortion</span><span class="w"> </span><span class="n">setValue</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="bp">CIVector</span><span class="w"> </span><span class="n">vectorWithX</span><span class="o">:</span><span class="mi">200</span><span class="w"> </span><span class="n">Y</span><span class="o">:</span><span class="mi">150</span><span class="p">]</span><span class="w"></span>
+<span class="w">                </span><span class="nl">forKey</span><span class="p">:</span><span class="w"> </span><span class="n">kCIInputCenterKey</span><span class="p">];</span><span class="w">                              </span>
+<span class="p">[</span><span class="n">bumpDistortion</span><span class="w"> </span><span class="n">setValue</span><span class="o">:</span><span class="w"> </span><span class="mf">@100.0f</span><span class="w"> </span><span class="n">forKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIInputRadiusKey</span><span class="p">];</span><span class="w">                </span>
+<span class="p">[</span><span class="n">bumpDistortion</span><span class="w"> </span><span class="n">setValue</span><span class="o">:</span><span class="w"> </span><span class="mf">@3.0f</span><span class="w"> </span><span class="n">forKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIInputScaleKey</span><span class="p">];</span><span class="w">                   </span>
+<span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">bumpDistortion</span><span class="w"> </span><span class="n">valueForKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIOutputImageKey</span><span class="p">];</span><span class="w"></span>
+</pre></div>
+<blockquote>
+<p>CIImage能认出EXIF里关于旋转方向的参数，并以正确的方向展示</p></blockquote>
+<h2>Blur and Vibrancy Views</h2>
+<p>毛玻璃效果，用<code>UIVisualEffectView</code>，这是个抽像类，实际用这两个：<code>UIVisualEffectView</code>和<code>UIVibrancyEffect</code>。</p><p>什么是<code>UIVibrancyEffect</code>?</p><blockquote>
+<p>An object that amplifies and adjusts the color of the content layered <code>behind</code> a visual effect view.</p></blockquote>
+<p>关键词是<code>behind</code>，即它是配合别的视效一起用的（比如毛玻璃）。文字被毛玻璃覆盖后的效果，并不是由毛玻璃层来确定的，而是由vibrancy effect自定义的。</p><p>总的来说</p><ul>
+<li>用effect初始化effect view, effect就是五种<code>material</code></li>
+<li>这个view可以当成常规view来定位，布局，添加到subview里，等等</li>
+<li>用上一个effect初始化一个vibrancy effect（with style)</li>
+<li>用vibrance effect初始化一个view</li>
+<li>创建UI控件</li>
+<li>让vibView的bounds等于内容的bounds（等于只对内容所有的范围内应用特效），并定位</li>
+<li>vibView添加到effectView的contentView的subView里去</li>
+<li>需要被vibrancy的内容（比如一个label)，则添加到vibView.contentView.addSubview(label)</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">blurEffect</span> <span class="p">=</span> <span class="bp">UIBlurEffect</span><span class="p">(</span><span class="n">style</span><span class="p">:</span> <span class="p">.</span><span class="n">systemThinMaterial</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">blurView</span> <span class="p">=</span> <span class="bp">UIVisualEffectView</span><span class="p">(</span><span class="n">effect</span><span class="p">:</span> <span class="n">blurEffect</span><span class="p">)</span>
+<span class="n">blurView</span><span class="p">.</span><span class="n">frame</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span>
+<span class="n">blurView</span><span class="p">.</span><span class="n">autoresizingMask</span> <span class="p">=</span> <span class="p">[.</span><span class="n">flexibleWidth</span><span class="p">,</span> <span class="p">.</span><span class="n">flexibleHeight</span><span class="p">]</span>
+<span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">blurView</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">vibEffect</span> <span class="p">=</span> <span class="bp">UIVibrancyEffect</span><span class="p">(</span>
+    <span class="n">blurEffect</span><span class="p">:</span> <span class="n">blurEffect</span><span class="p">,</span> <span class="n">style</span><span class="p">:</span> <span class="p">.</span><span class="n">label</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">vibView</span> <span class="p">=</span> <span class="bp">UIVisualEffectView</span><span class="p">(</span><span class="n">effect</span><span class="p">:</span><span class="n">vibEffect</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">lab</span> <span class="p">=</span> <span class="bp">UILabel</span><span class="p">()</span>
+<span class="n">lab</span><span class="p">.</span><span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Hello, world&quot;</span>
+<span class="n">lab</span><span class="p">.</span><span class="n">sizeToFit</span><span class="p">()</span>
+<span class="n">vibView</span><span class="p">.</span><span class="n">bounds</span> <span class="p">=</span> <span class="n">lab</span><span class="p">.</span><span class="n">bounds</span>
+<span class="n">vibView</span><span class="p">.</span><span class="n">center</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span>
+<span class="n">vibView</span><span class="p">.</span><span class="n">autoresizingMask</span> <span class="p">=</span>
+    <span class="p">[.</span><span class="n">flexibleTopMargin</span><span class="p">,</span> <span class="p">.</span><span class="n">flexibleBottomMargin</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">flexibleLeftMargin</span><span class="p">,</span> <span class="p">.</span><span class="n">flexibleRightMargin</span><span class="p">]</span>
+<span class="n">blurView</span><span class="p">.</span><span class="n">contentView</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">vibView</span><span class="p">)</span>
+<span class="n">vibView</span><span class="p">.</span><span class="n">contentView</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span>
+</pre></div>
+<h2>Drawing a UIView</h2>
+<p>UIView本身就提供了一个<code>graphics context</code>，在这个context里进行的绘制会直接显示在view里。</p><ul>
+<li>subclass UIView's <code>.draw(_:)</code>method<ul>
+<li>直到需要时才会被调用</li>
+<li>或<code>setNeedsDisplay</code>会调用</li>
+<li>一量被draw，就缓存起来了 (<code>bitmap backing store</code>)</li>
+</ul>
+</li>
+<li>实时绘制会吓到一些初学者，绘制是<code>time-comsuming operation</code></li>
+</ul>
+<p>推荐在<code>draw</code>方法里实时绘制</p><blockquote>
+<p>In fact, moving code to draw(_: ) is commonly a way to increase efficiency. This is because it is more efficient for the drawing engine to <em>render directly onto the screen</em> than for it to <em>render offscreen</em> and then copy those pixels onto the screen.</p></blockquote>
+<p>几个注意点：</p><ol>
+<li>不要手动调用draw方法，<code>setNeedsDisplay</code>会让系统决定下一个合适的时机来draw</li>
+<li>不要重载draw方法，比如你无法合并UIImageView的drawing</li>
+<li>不要在draw里做任何与绘制无关的事，配置（如背景色，添加子view/layer）项应该在别的地方做，比如<code>layoutSubviews</code></li>
+<li>第二个参数是一个rect，默认是view的bounds<ul>
+<li>如果你用<code>setNeesDisplay(_:)</code>送入了自定义的CGRect，draw里面的rect也就成了这个，如果你不在这个rect里画（而是在整个view的rect里），超出部分会被clip掉</li>
+<li>这也是为了效率，显示提供绘制的区域</li>
+</ul>
+</li>
+<li>手写draw绘制出来的view会有黑色的底色，如果你没有设计背景色，以及<code>isOpaque == true</code>时（<code>UIView.init(frame:)</code>出来的view恰好满足这两个条件， nib里拖出来的则是nil的背景，反而没这问题）<ul>
+<li>解决：实现<code>init(frame:)</code>，去设置*isOpaque`为false</li>
+</ul>
+</li>
+</ol>
+<h2>Graphics Context Commands</h2>
+<blockquote>
+<p>Under the hood, Core Graphics commands to a <code>graphics context</code> are global C functions with names like CGContextSetFillColor，但是swift的封装让调用更简单（语法糖）</p></blockquote>
+<p>当你在graphics context里绘制时，取的就是当前的设置，因此在任何绘制前，第一步都是先配置context's setting，比如你要画一根红线，再画一根蓝线</p><ol>
+<li>设置context line color red, then draw a line</li>
+<li>设置context line color blue, then draw a line</li>
+</ol>
+<p>直觉认为红和蓝只是两条线各自的属性，其实是你绘制<strong>当时</strong>，整个graphics context的设置</p><ul>
+<li>这些配置通通存成一个state</li>
+<li>这些state又会stack起来<ul>
+<li>saveGState将当前state推到栈顶</li>
+<li>restoreGstate则将state从栈顶取出，覆盖当前设置</li>
+</ul>
+</li>
+<li>只要先后配置没有冲突的项，就没必要频繁save-restore</li>
+</ul>
+<h3>Paths and Shapes</h3>
+<ul>
+<li><p>通过一系列的描述去移动一去想象中的笔，就是构建<code>path</code>的过程。（注意，不是构建<code>CGPath</code>这个封装的过程）</p><ul>
+<li>即只要你在context内，就可以用笔画东西了</li>
+</ul>
+</li>
+<li><p>只要你正确地使用<code>move(to:)</code>方法，就不需要像apple文档里动不动就用<code>beginPath</code>来设置新的path的起点</p></li>
+<li><p><code>fillPath</code>会自动<code>closePaht</code></p></li>
+<li><p>先提供path，再draw，draw的意思要么是stroke，要么是fill，要么是both（<code>drawPath</code>方法），但不能一步步来，因为draw完你的path就空了</p><ul>
+<li>衔接第一条，如果你想复用这个path，才需要用<code>CGPath</code>封装起来</li>
+</ul>
+</li>
+<li><p>如果是使用UIKit封装的语法，那么起点就是一个path <code>let path = UIBezierPath()</code></p></li>
+<li><p>那么每次draw完，要在别的位置“落笔”的话，要先清一下靠前的path: <code>path.removeAllPoints()</code></p></li>
+</ul>
+<h3>Clipping</h3>
+<ul>
+<li>clipping掉的区域就不能被绘制了</li>
+<li>通常你无法得知一个graphics context的大小，但是通过<code>boundingBoxOfClipPath</code>却能拿到整个bounding</li>
+</ul>
+<p>这一节做了几个实验，单独写到了<a href="https://www.jianshu.com/p/ade133568ac0">另一篇博文</a></p><blockquote>
+<p>前面说过，没有背景色+isOpaque会导致背景变黑，在draw里面，默认的颜色也是黑色，所以你不带任何设置的绘制你是看不到任何东西的（就是黑笔在黑纸上画）</p></blockquote>
+<h3>Gradients</h3>
+<p>gradient不能用作path的fill，但可以反过来让gradient沿着path分布，以及被clip等。</p><p>在上面应用clip绘制箭尾的例子里，我们把箭柄变成从左到右是灰-黑-灰的渐变，只需要在<code>addLine</code>并设置了line的宽度后(不要设颜色了），不是去<code>strokePath()</code>，而是：</p><div class="highlight"><pre><span></span><span class="n">con</span><span class="p">.</span><span class="n">replacePathWithStrokedPath</span><span class="p">()</span>  <span class="c1">// 不再strokePath</span>
+<span class="n">con</span><span class="p">.</span><span class="n">clip</span><span class="p">()</span>                        <span class="c1">// 再clip一次，奇偶反转</span>
+<span class="c1">// draw the gradient</span>
+<span class="kd">let</span> <span class="nv">locs</span> <span class="p">:</span> <span class="p">[</span><span class="n">CGFloat</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span> <span class="p">]</span>
+<span class="kd">let</span> <span class="nv">colors</span> <span class="p">:</span> <span class="p">[</span><span class="n">CGFloat</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span>
+        <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="c1">// starting color, transparent light gray</span>
+        <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="c1">// intermediate color, darker less transparent gray</span>
+        <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="c1">// ending color, transparent light gray</span>
+    <span class="p">]</span>
+<span class="kd">let</span> <span class="nv">sp</span> <span class="p">=</span> <span class="n">CGColorSpaceCreateDeviceGray</span><span class="p">()</span>
+<span class="kd">let</span> <span class="nv">grad</span> <span class="p">=</span> <span class="n">CGGradient</span><span class="p">(</span>
+    <span class="n">colorSpace</span><span class="p">:</span><span class="n">sp</span><span class="p">,</span> <span class="n">colorComponents</span><span class="p">:</span> <span class="n">colors</span><span class="p">,</span> <span class="n">locations</span><span class="p">:</span> <span class="n">locs</span><span class="p">,</span> <span class="bp">count</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span><span class="o">!</span>
+<span class="n">con</span><span class="p">.</span><span class="n">drawLinearGradient</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span>
+    <span class="n">start</span><span class="p">:</span> <span class="n">CGPoint</span><span class="p">(</span><span class="mi">89</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">end</span><span class="p">:</span> <span class="n">CGPoint</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">options</span><span class="p">:[])</span>
+<span class="n">con</span><span class="p">.</span><span class="n">resetClip</span><span class="p">()</span> <span class="c1">// done clipping</span>
+</pre></div>
+<p>小技巧就是用<code>replacePathWithStrokedPath</code>假装进行了描边（所以只需要线宽并不需要线的颜色），返回了一个新的path，一条粗线变成了一个矩形框。<br />
+而一旦添加了这个框，前面的奇偶关系就全反过来了，于是我们再<code>clip</code>一次，这就是头两行代码里做的事。</p><h3>Colors and Patterns</h3>
+<p>当你的suer interface sytle changes(比如黑暗模式切换), <code>draw(_:)</code>方法会被立刻调用，被设置<code>UITraitCollection.current</code>，任何支持动态颜色的<code>UIColor</code>能变成相应的颜色，但是<code>CGColor</code>不能，你需要手动触发重绘。</p><p>UIKit使用pattern非常简单，把纹理绘制到图片上，然后从纹理图片提取出颜色信息，就能像别的颜色一样<code>setFill</code>了：</p><div class="highlight"><pre><span></span><span class="c1">// create the pattern image tile</span>
+<span class="kd">let</span> <span class="nv">r</span> <span class="p">=</span> <span class="bp">UIGraphicsImageRenderer</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="n">CGSize</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="kd">let</span> <span class="nv">stripes</span> <span class="p">=</span> <span class="n">r</span><span class="p">.</span><span class="n">image</span> <span class="p">{</span> <span class="n">ctx</span> <span class="k">in</span>
+    <span class="kd">let</span> <span class="nv">imcon</span> <span class="p">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">cgContext</span>
+    <span class="n">imcon</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">red</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
+    <span class="n">imcon</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+    <span class="n">imcon</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
+    <span class="n">imcon</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="c1">// paint the point of the arrow with it</span>
+<span class="kd">let</span> <span class="nv">stripesPattern</span> <span class="p">=</span> <span class="bp">UIColor</span><span class="p">(</span><span class="n">patternImage</span><span class="p">:</span><span class="n">stripes</span><span class="p">)</span>
+<span class="n">stripesPattern</span><span class="p">.</span><span class="n">setFill</span><span class="p">()</span>
+<span class="kd">let</span> <span class="nv">p</span> <span class="p">=</span> <span class="bp">UIBezierPath</span><span class="p">()</span>
+<span class="n">p</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
+<span class="n">p</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">p</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
+<span class="n">p</span><span class="p">.</span><span class="n">fill</span><span class="p">()</span>
+</pre></div>
+<p>而Core Graphics则要复杂（也更底层）得多，结合注释看代码：</p><div class="highlight"><pre><span></span><span class="n">con</span><span class="p">.</span><span class="n">saveGState</span><span class="p">()</span>
+<span class="c1">// 非常重要，设置颜色空间</span>
+<span class="kd">let</span> <span class="nv">sp2</span> <span class="p">=</span> <span class="n">CGColorSpace</span><span class="p">(</span><span class="n">patternBaseSpace</span><span class="p">:</span><span class="kc">nil</span><span class="p">)</span><span class="o">!</span>
+<span class="n">con</span><span class="p">.</span><span class="n">setFillColorSpace</span><span class="p">(</span><span class="n">sp2</span><span class="p">)</span>
+<span class="c1">// 纹理绘制真正发生的地方</span>
+<span class="kd">let</span> <span class="nv">drawStripes</span> <span class="p">:</span> <span class="n">CGPatternDrawPatternCallback</span> <span class="p">=</span> <span class="p">{</span> <span class="kc">_</span><span class="p">,</span> <span class="n">con</span> <span class="k">in</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">red</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="c1">// 包装成一个callback给CGPattern使用</span>
+<span class="kd">var</span> <span class="nv">callbacks</span> <span class="p">=</span> <span class="bp">CGPatternCallbacks</span><span class="p">(</span>
+    <span class="n">version</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">drawPattern</span><span class="p">:</span> <span class="n">drawStripes</span><span class="p">,</span> <span class="n">releaseInfo</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span> <span class="c1">// 一个struct</span>
+
+<span class="c1">// 核心就是构造这个CGPattern</span>
+<span class="kd">let</span> <span class="nv">patt</span> <span class="p">=</span> <span class="n">CGPattern</span><span class="p">(</span><span class="n">info</span><span class="p">:</span><span class="kc">nil</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>  <span class="c1">// cell大小</span>
+    <span class="n">matrix</span><span class="p">:</span> <span class="p">.</span><span class="n">identity</span><span class="p">,</span>    <span class="c1">// cell变换，这里没有，就用.identity</span>
+    <span class="n">xStep</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="n">yStep</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>   <span class="c1">// 横向纵向复制cell时的步长</span>
+    <span class="n">tiling</span><span class="p">:</span> <span class="p">.</span><span class="n">constantSpacingMinimalDistortion</span><span class="p">,</span>  <span class="c1">// 排列方式</span>
+    <span class="n">isColored</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>      <span class="c1">// 是颜色还是画笔模式，选颜色true</span>
+    <span class="n">callbacks</span><span class="p">:</span> <span class="p">&amp;</span><span class="n">callbacks</span><span class="p">)</span><span class="o">!</span>  <span class="c1">// 纹理绘制的方法包在callback里面，传指针</span>
+<span class="kd">var</span> <span class="nv">alph</span> <span class="p">:</span> <span class="n">CGFloat</span> <span class="p">=</span> <span class="mf">1.0</span>
+<span class="n">con</span><span class="p">.</span><span class="n">setFillPattern</span><span class="p">(</span><span class="n">patt</span><span class="p">,</span> <span class="n">colorComponents</span><span class="p">:</span> <span class="p">&amp;</span><span class="n">alph</span><span class="p">)</span>
+<span class="n">con</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
+<span class="n">con</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">con</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
+<span class="n">con</span><span class="p">.</span><span class="n">fillPath</span><span class="p">()</span>
+<span class="n">con</span><span class="p">.</span><span class="n">restoreGState</span><span class="p">()</span>
+</pre></div>
+<h3>Graphics Context Transforms</h3>
+<p>跟前面的知识点一样，应用<em>Graphics Context Transforms</em>后，也不会影响当前已经绘制的东西。 =&gt; <code>CTM</code>即（<code>current transform matrix</code>)。</p><p>旋转的中心点是原点，大多数情况下不是你想要的，记得先translate一下。</p><div class="highlight"><pre><span></span><span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">rect</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nv">con</span> <span class="p">=</span> <span class="n">UIGraphicsGetCurrentContext</span><span class="p">()</span><span class="o">!</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">setShadow</span><span class="p">(</span><span class="n">offset</span><span class="p">:</span> <span class="n">CGSize</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">blur</span><span class="p">:</span> <span class="mi">12</span><span class="p">)</span> <span class="c1">// 顺便演示下sahdow</span>
+    <span class="n">con</span><span class="p">.</span><span class="n">beginTransparencyLayer</span><span class="p">(</span><span class="n">auxiliaryInfo</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>  <span class="c1">// 这样重叠的阴影不会叠成黑色</span>
+    <span class="kc">self</span><span class="p">.</span><span class="n">arrow</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">at</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+    <span class="k">for</span> <span class="kc">_</span> <span class="k">in</span> <span class="mf">0.</span><span class="p">.&lt;</span><span class="mi">3</span> <span class="p">{</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">translateBy</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">by</span><span class="p">:</span> <span class="mi">30</span> <span class="o">*</span> <span class="p">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.0</span><span class="p">)</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">translateBy</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="o">-</span><span class="mi">100</span><span class="p">)</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">arrow</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">at</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span> <span class="c1">// 注意这里是用前面方法生成的箭头图片来draw到指定位置</span>
+    <span class="p">}</span> 
+<span class="p">}</span>
+</pre></div>
+<figure  style="flex: 77.47747747747748" ><img width="688" height="444" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/0059ea4156dffb9df15e77df8a87f971.png" alt=""/></figure><p>注意，语法虽然是先处理context，再绘制，其实只是告知坐标系的变化，绘制的时候自动应用这些变换。</p><h3>Erasing</h3>
+<p><code>clear(_:)</code>擦除行为取决于context是透明还是实心的（透明擦成透明，实心擦成黑色），只要不是opaque，通通理解为透明，比如background color是nil, 或0.9999的透明度。</p><h2>Points and Pixels</h2>
+<p><code>con.fill(CGRect(100,0,1.0/self.contentScaleFactor,100))</code>应用contentScaleFactor画一条在任何屏幕上都锐利的1像素直线。</p><h2>Content Mode</h2>
+<p>the drawing system will <code>avoid</code> asking a view to <code>redraw</code> itself from scratch if possible; instead, it will use the <code>cached</code> result of the previous drawing operation (the <strong>bitmap backing store</strong>).</p><p>If the view is resized, the system may simply stretch or shrink or reposition the cached drawing, if your contentMode setting instructs it to do so.</p><p><code>draw(_:)</code>从原点开始绘制，所以你的<code>contentMode</code>也要相应设置为<code>topLeft</code>。而如果设置为<code>.redraw</code>，则不会使用cached content，每当view被resize的时候，就会调用<code>setNeedsDisplay</code>方法，最终触发<code>draw(_:)</code>进行重绘。</p></div>
         
-    </ul>
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Drawing/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0_%5B%E5%AE%8C%E7%BB%93%5D_pdf%E4%B8%8B%E8%BD%BD/" target="_self">cs193p_2021_笔记_[完结]_pdf下载</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0_%5B%E5%AE%8C%E7%BB%93%5D_pdf%E4%B8%8B%E8%BD%BD/" target="_self">
+                <time class="text-uppercase">
+                    October 24 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p><a href="https://www.jianshu.com/p/998b0ef4a2cd">cs193p_2021_笔记_1</a>
+<a href="https://www.jianshu.com/p/af0ad1bead34">cs193p_2021_笔记_2</a>
+<a href="https://www.jianshu.com/p/d103f8d12052">cs193p_2021_笔记_3_Animation_Transition</a>
+<a href="https://www.jianshu.com/p/41e7309c7f55">cs193p_2021_笔记_4_Color_Image_Gesture</a>
+<a href="https://www.jianshu.com/p/e3c2ee1628c6">cs193p_2021_笔记_5_Property Wrapper</a>
+<a href="https://www.jianshu.com/p/a315274a4fd2">cs193p_2021_笔记_6_Persistence</a>
+<a href="https://www.jianshu.com/p/f4ae879eef9c">cs193p_2021_笔记_7_Document Architecture</a></p><p>所有笔记已导出成一篇pdf文档，已上传百度：
+链接: <a href="https://pan.baidu.com/s/1hgnzfxbE9l4zlcYBDsa-1g">https://pan.baidu.com/s/1hgnzfxbE9l4zlcYBDsa-1g</a> 提取码: 7w1f</p><hr />
+<p>本文内容：与UIKit的集成，以及学习过程中的一些tips，skills，与章节无章的notes</p><hr />
+<h1>MVVM</h1>
+<figure  style="flex: 89.08045977011494" ><img width="1240" height="696" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/da570de12fc64177b4e88c6429ae285b.png" alt=""/></figure><ul>
+<li>viewmodel要起到gete keeper的作用，它就要把model给private起来<ul>
+<li>或者private (set), 这样保护了写，但是能读</li>
+<li>或者用一个计算属性把需要的model 暴露出去</li>
+</ul>
+</li>
+<li>一个viewmodel通常要conform <code>ObservableObject</code><ul>
+<li>就隐含了一个<code>var objectWillChange: ObservableObjectPublisher</code></li>
+<li>model要改动前：<code>objectWillChange.send()</code></li>
+<li>或者，把model改为<code>@Publisher var model</code>，会自动广播</li>
+</ul>
+</li>
+<li>订阅者（通常就是View）就要把这个viewmodel打个可订阅的标识：<ul>
+<li><code>@ObservedObject var viewModel: MyViewModel</code></li>
+<li>只能是<code>var</code>，因为很明显是会变的</li>
+<li>View监听到是会自动invalicate view的，就会重绘</li>
+</ul>
+</li>
+</ul>
+<h1>UIKit Integration</h1>
+<p>UIKit并不是纯View的世界，大多数时候是跟ViewController一起出现的，还严重依赖<code>Delegate</code>这种机制进行跨View的事件传递（回调）。</p><h2>Representbles</h2>
+<p><code>UIViewRepresentable</code>，<code>UIViewContorllerRepresentable</code>都是SwiftUI的View了，包含几个组件：</p><ol>
+<li><code>makeUIView{Controller}(context: Context) -&gt; view/controller</code></li>
+<li><code>updateUIView{Controller}(view/controller, context: Context) -&gt;</code></li>
+<li><code>makeCoordiinator() -&gt; Coordinator</code> // handle delegate<ul>
+<li>调用该方法后, <code>context.coordinator</code>就有值了</li>
+</ul>
+</li>
+<li>a <code>Context</code> containn the coordinator, swiftui's env, animation transaction</li>
+<li><code>dismantleUIView{Controller}(view/controller, coordinator: Coordinator)</code> // clean up when disappears</li>
+</ol>
+<h1>Tips &amp; Skills</h1>
+<p>学习过程随笔记下来的一些技巧和知识点:</p><h2>basic</h2>
+<ul>
+<li>[0...6]是0到6，[0..&lt;6]是0到5</li>
+<li>var s = struct_a; s[&quot;a&quot;] = 3, 不会改变struct_a, 因为struct永远是复制</li>
+<li><code>arr.firstIndex(where: { item in item.id == myID})</code>，因为where需要的函数传递的是本身（类似map, filter)，所以可以简化为：<ul>
+<li><code>arr.firstIndex(where: { $0.id == myID})</code></li>
+</ul>
+</li>
+<li><code>typealias Card = MemoryGame&lt;String&gt;.Card</code> 别名</li>
+<li><code>var a_int_array = [Int]()</code> 一种初始化方式</li>
+<li>extension中的属性可以直接用，（当然也可以用<code>self.</code>）</li>
+<li><code>arr.filter { isGood($0)}</code> 因为参数就是自己，还可以继续简化： `arr.filter(isGood)``<ul>
+<li>同理：<code>[1...100].reduce(0, +)</code>，因为默认参数是两个，所以会自动填到+号两边，展开就是<code>{ $0 + $1 }</code></li>
+</ul>
+</li>
+<li><code>Collection</code> protocol is for <em>immutable</em> collections<ul>
+<li>mutalbe Collection protocol is <code>RangeReplaceableCollection</code></li>
+<li>所以要写一个扩展，在改变集合的元素，先选对正确的protocol</li>
+</ul>
+</li>
+<li>用<code>try</code>还是<code>try?</code>调用一个声明了<code>throw</code>的函数，取决于你是要忽略它还是处理它<ul>
+<li><code>try</code>就是不处理，结果就是包含了这段代码的函数也要标上<code>throw</code></li>
+<li><code>try?</code>就是忽略掉，承认<code>nil</code></li>
+</ul>
+</li>
+<li><code>String(describing: obj)</code>: 对象的字符串表示，或字符串描述</li>
+<li><code>#function</code> 程序名</li>
+<li><code>@ScaleMetric var fontSize: CGFloat = 40.0</code> 固定大小的字体，用<code>@ScaleMetric</code>也能按比例缩放</li>
+<li>剪贴板：<code>UIPasteboard.general.image?.jpegData(...)</code></li>
+<li>safe area: <code>UIAplication.shared.windows.first?.safeAreaInsets</code></li>
+<li><code>views.map{ UIHostingController(rootView: $0)}</code> 把一组View转为ViewController</li>
+<li><code>timer = Timer.publish(erery: 3, on: .current, in: .common).autoconnect()</code><ul>
+<li>view<code>.onReceive(timer, perform: {})</code></li>
+</ul>
+</li>
+<li><code>Texxt(Image(systemName: &quot;video.circle&quot;)) + Text(&quot;视频&quot;)</code>: 两个知识点<ul>
+<li>Text view重载了<code>+</code>操作符，省去了用<code>HStack</code></li>
+<li>Image也可以作为Text的内容</li>
+</ul>
+</li>
+<li><code>Circle + trim + stroke + rotation</code> 可以组合出一段任意角度的弧形</li>
+<li>一个<code>PreferenceKey</code>用来广播属性变化的例子：</li>
+</ul>
+<figure class="vertical-figure" style="flex: 38.9937106918239" ><img width="1240" height="1590" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e660e659aadcd624c62b1b9102d015d5.png" alt=""/></figure>
+<pre><code>* see more [https://swiftwithmajid.com/2020/01/15/the-magic-of-view-preferences-in-swiftui/](https://swiftwithmajid.com/2020/01/15/the-magic-of-view-preferences-in-swiftui/)
+</code></pre>
+<p>看一个简化的实例：
+<figure class="vertical-figure" style="flex: 43.13868613138686" ><img width="1182" height="1370" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/01b4f14b413613c6bd36ad5b2288df9d.png" alt=""/></figure>
+可以看到，其实化简化可读性更强，用for循环，再在里面做逻辑，会把直白的初衷绕进去：</p><ul>
+<li><p>返回唯一一个面朝上的卡片</p></li>
+<li><p>设置选定索引的卡片面朝上</p></li>
+<li><p>同样， <code>Button</code>的声明是：<code>(_ title: StringProtocol, action: () -&gt; Void)</code>,</p><ul>
+<li>简化后也更加直观了：<code>Button(&quot;text&quot;){ actions }</code></li>
+</ul>
+</li>
+<li><p>给class/struct添加和使用默认的<code>description</code>有点绕，等于原生并不支持，还理解成了<code>String</code>的方法</p></li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">abc</span><span class="p">:</span> <span class="n">CustomStringConvertible</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">a</span><span class="p">:</span><span class="nb">Int</span>
+    <span class="kd">var</span> <span class="nv">b</span><span class="p">:</span><span class="nb">Int</span>
+    <span class="kd">func</span> <span class="nf">de</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="nb">String</span><span class="p">{</span>
+        <span class="c1">// #function, file, filePaht, fileID, line, column</span>
+        <span class="s">&quot;</span><span class="si">\(</span><span class="nb">String</span><span class="si">(</span><span class="n">describing</span><span class="p">:</span> <span class="kc">self</span><span class="si">))</span><span class="se">\n</span><span class="si">\(</span><span class="kc">#function</span><span class="si">)</span><span class="se">\n</span><span class="si">\(</span><span class="p">#</span><span class="n">filePath</span><span class="si">)</span><span class="s">&quot;</span>
+
+        <span class="c1">// String(describing: obj)</span>
+        <span class="c1">// 理解为用obj对象的description属性来构造字符串</span>
+        <span class="c1">// 而一般人的设计思路会是：给obj对象增加一个description属性，这个属性是个string</span>
+        <span class="c1">// 并且这个对象要服务 CustomStringConvertible 协议</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nv">description</span><span class="p">:</span> <span class="nb">String</span> <span class="p">{</span>
+        <span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">a</span><span class="se">\&quot;</span><span class="s">:</span><span class="si">\(</span><span class="n">a</span><span class="si">)</span><span class="s">, </span><span class="se">\&quot;</span><span class="s">b</span><span class="se">\&quot;</span><span class="s">:</span><span class="si">\(</span><span class="n">b</span><span class="si">)</span><span class="s">}&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">abc</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="mi">77</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mi">88</span><span class="p">).</span><span class="n">de</span><span class="p">()</span> <span class="c1">// 输出： {&quot;a&quot;: 77, &quot;b&quot;: 88} \n de() \n myfile_path</span>
+</pre></div>
+<h2>view</h2>
+<ul>
+<li><code>var body : some View {...}</code> 意思是你自己不需要实现View，但你要返回some实现了View的（别的）对象<ul>
+<li>它是一个computed var，所以跟的{}就是一个function</li>
+<li>所以{}里隐含了一个return</li>
+</ul>
+</li>
+<li><code>Text(&quot;hello&quot;).padding()</code>返回的不再是Text</li>
+<li><code>ZStack(alignment: .center, content: {...})</code><ul>
+<li>简化为：<code>ZStack(alignment: .center) {...}</code>，提取了方法体</li>
+<li>如果<code>alignment</code>为空： <code>ZStack {...}</code></li>
+<li>所以它里面也可以有局部变量</li>
+</ul>
+</li>
+<li>多个函数参数也可以简化：<ul>
+<li><code>Button(action: {...}, label: {...})</code></li>
+<li><code>Button {...} label: {...}</code>省掉了第一个参数名，省掉了逗号</li>
+</ul>
+</li>
+<li><code>Button.contextMenu{ some View}</code> 上下文菜单，内容就是some View</li>
+<li><code>Menu{ some View} label: { Label }</code> 呈现为一个button，点击后会自动呈现some View组成的菜单<ul>
+<li>也就是说它自己帮你封装了UI和行为（点击弹出菜单），不需要写什么<code>onTap</code>事件</li>
+</ul>
+</li>
+<li><code>myView.sheet(isPresented: $flag) { some View}</code> 通过<code>$flag</code>就能根据<code>myView</code>的位置在合适的位置打开sheet，内容由@viewBuilder的closure提供</li>
+<li><code>popover</code>也同理，还有一种popover时把对象传进去的用法：<ul>
+<li><code>popover</code>与<code>sheet</code>的区别是<code>popover</code>在计算自身大小的时候是“尽可能小”，所以在包的对象里对好自己size一下</li>
+</ul>
+</li>
+<li>alert有点不同：<code>.alert(item: $flag) { alertToShow in return Alert}</code>， 就是要返回一个<code>Alert</code>对象</li>
+<li><code>myView.popover(item: $obj) {obj in ...}</code> 这一类传item做flag的用法也有广泛的使用场景</li>
+<li>弹出的页面查看自己的状态，用<code>presentationMode</code>环境变量<ul>
+<li><code>presentationMode.wrappedValue.isPresented</code></li>
+</ul>
+</li>
+<li><code>NavigationView</code>里的<code>NavigationLink</code>也是一样封装了UI和行为（点击跳转）</li>
+<li>toolbaritem的placement除了leading, trailing等直观表示，还有一些语义对应的(类似alert中有红色的销毁按钮），如<code>destructiveAction, cancellationAction, confirmationAction</code>等，甚至<code>automaic</code></li>
+<li>工具条放到底部：ToolbarItemGroup(placement: .bottmbar){}`</li>
+<li><code>.StackNavigationViewStyle</code>, 让大屏幕iPhone横屏时不去尝试左右分屏，直接铺满</li>
+<li><code>UIDevice.current.userInterfaceIdiom == .pad</code></li>
+<li>环境变量：<code>horizontalSizeClass</code>, <code>verticalSizeClass</code>等，根据是否compact来判断布局，而不是写死的大小，以实现跨机型适配</li>
+</ul>
+<h2>layout</h2>
+<ul>
+<li><code>lazyVGrid(columns: [GridItem(.fixed(200)), GridItem(.flexable()), GridItem())])</code><ul>
+<li>其实就是一个flex的排版</li>
+<li>横向利用所有空间，竖向尽可能小</li>
+<li>竖排，没定义，看效果是top</li>
+<li>横排，由每一个GridItem来定义</li>
+<li><code>Lazy</code>的意思是只有出现在屏幕上时，才会渲染<code>body</code></li>
+<li>如果横向元素也自由排列呢？比如横屏15个，竖屏6个<ul>
+<li><code>lazyVGrid(columns: GridItem(.adaptive(minimum: 80)))</code> 只要一个item, 然后指定一个最小宽度即可</li>
+</ul>
+</li>
+<li>同理应该有lazyHGrid</li>
+</ul>
+</li>
+</ul>
+<h2>static</h2>
+<ul>
+<li>.largeTitle, .white, 其实就是静态变量: <code>Font.largeTitle</code>, <code>Color.white</code>，所以不要觉得代码里用<code>static let xxx = xxx</code>很low<ul>
+<li>静态方法同理，只要不需要是实例变量的，都可以staic起来，跳出初始化流程</li>
+</ul>
+</li>
+</ul>
+<h2>XCode</h2>
+<ul>
+<li>设置 &gt; Behaviors &gt; Generates output 可以设置模拟器有output时的行为，比如拉出控制台看输出</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1">// 设置预览的设备</span>
+    <span class="p">.</span><span class="n">previewDevice</span><span class="p">(</span><span class="n">PreviewDevice</span><span class="p">(</span><span class="n">rawValue</span><span class="p">:</span> <span class="s">&quot;iPhone 12&quot;</span><span class="p">))</span>
+    <span class="p">.</span><span class="n">previewDisplayName</span><span class="p">(</span><span class="s">&quot;iPhone 12&quot;</span><span class="p">)</span>
+</pre></div>
+<ul>
+<li>preview里面你做两个<code>.preferredColorScheme(.dark/.light)</code>就可以同时预览两种颜色模式下的效果了</li>
+<li>其实以上在右侧面板设置会更简单，一样会在Preview里生成相应（跟手写一模一样）的代码</li>
+</ul>
+<p>...</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0_%5B%E5%AE%8C%E7%BB%93%5D_pdf%E4%B8%8B%E8%BD%BD/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B7%5D_Document-Architecture/" target="_self">cs193p_2021笔记[7]_Document-Architecture</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B7%5D_Document-Architecture/" target="_self">
+                <time class="text-uppercase">
+                    October 24 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p><a href="https://www.jianshu.com/p/998b0ef4a2cd">cs193p_2021_笔记_1</a>
+<a href="https://www.jianshu.com/p/af0ad1bead34">cs193p_2021_笔记_2</a>
+<a href="https://www.jianshu.com/p/d103f8d12052">cs193p_2021_笔记_3_Animation_Transition</a>
+<a href="https://www.jianshu.com/p/41e7309c7f55">cs193p_2021_笔记_4_Color_Image_Gesture</a>
+<a href="https://www.jianshu.com/p/e3c2ee1628c6">cs193p_2021_笔记_5_Property Wrapper</a>
+<a href="https://www.jianshu.com/p/a315274a4fd2">cs193p_2021_笔记_6_Persistence</a>
+cs193p_2021_笔记_7_Document Architecture
+<a href="https://www.jianshu.com/p/2136bdc2c6f6">cs193p_2021_笔记_8</a></p><h1>Document Architecture</h1>
+<p>所谓的Dopcument Architecture，其实就是支持把用app产生的作品保存起来，比如你创作的一幅图片，可以保存为<code>.jpg</code>，你用photoshop做的文件是<code>.psd</code>，下次用自己的app加载这个文件，能认出所有组件和模型，比如我们想为document取个名字叫<code>.emojiart</code>。</p><h2>App Architecture</h2>
+<h3>App protocol</h3>
+<ul>
+<li>一个app里只能有一个struct服从<code>App Protocol</code></li>
+<li>mark it with <code>@main</code></li>
+<li>it's <code>var body</code> is <code>some Scene</code></li>
+</ul>
+<h3>Scene protocol</h3>
+<ul>
+<li>A <code>Scene</code> is a container fo a <code>top-lever</code> View that you want to show in your UI</li>
+<li><code>@Environment(\.scenePhase)</code></li>
+<li>three main types of Scenes:</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">WindowGroup</span> <span class="p">{</span><span class="k">return</span> <span class="n">aTopLevelView</span><span class="p">}</span>
+<span class="n">DocumentGroup</span><span class="p">(</span><span class="n">newDocument</span><span class="p">:)</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span> <span class="p">...</span> <span class="k">return</span> <span class="n">aTopLevelView</span><span class="p">}</span>
+<span class="n">DocumentGroup</span><span class="p">(</span><span class="n">viewing</span><span class="p">:</span> <span class="n">viewer</span><span class="p">:)</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span> <span class="p">...</span> <span class="k">return</span> <span class="n">aTopLevelView</span><span class="p">}</span>  <span class="c1">// 只读</span>
+</pre></div>
+<ul>
+<li>后两个类似view里面的<code>ForEach</code>但不完全相同：<ul>
+<li>而是：&quot;<strong>new window</strong>&quot; on Mac, &quot;<strong>splitting the screen</strong>&quot; on iPad -&gt; for create new Scene</li>
+</ul>
+</li>
+<li><code>content</code>参数是一个返回some View的方法<ul>
+<li>返回的是top-level view</li>
+<li>每当新建一个窗口或窗口被分割时都会被调用</li>
+</ul>
+</li>
+</ul>
+<p>当你在iPad上分屏，且两个打开同一应用，就是<code>WindowGroup</code>在管理，为每一个windows生成一个Scene(share the same parameter e.g. view model, 因为代码是同一份，除非额外为每个scene设置自己的viewmodel之类的).</p><p><code>config</code>里保存了document(即viewModel)，也保存了文件位置。</p><h3>SceneStorage</h3>
+<ul>
+<li>能持久化数据</li>
+<li>以窗口/分屏为单位 -&gt; per-Scene basis</li>
+<li>也会invalidate view</li>
+<li>数据类型有严格限制，最通用的是<code>RawRepresentable</code></li>
+</ul>
+<p>[图片上传失败...(image-66d359-1636448439942)]</p><p>一个View里的<code>@State</code>改为<code>@SceneStorage(uniq_id)</code>后，app退出或crash了，仍然能找回原来的值。</p><p>这个时候每个Scene里的值就已经不一样了。</p><h3>AppStorage</h3>
+<ul>
+<li>application-wide basis</li>
+<li>存在UserDefaults里</li>
+<li>服从<code>@SceneStorage</code>的数据才能被存储</li>
+<li>invalidate view</li>
+</ul>
+<h2>DocumentGroup</h2>
+<p><code>DocumentGroup</code> is the document-oriented Scene-building Scene.</p><div class="highlight"><pre><span></span><span class="p">@</span><span class="n">main</span>
+<span class="kd">struct</span> <span class="nc">MyDemoApp</span><span class="p">:</span> <span class="n">App</span> <span class="p">{</span>
+    <span class="p">@</span><span class="n">StateObject</span> <span class="kd">var</span> <span class="nv">paletteStore</span> <span class="p">=</span> <span class="n">PaletteStore</span><span class="p">(</span><span class="n">named</span><span class="p">:</span> <span class="s">&quot;Default&quot;</span><span class="p">)</span>
+    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">Scene</span> <span class="p">{</span>
+        <span class="n">WindowGroup</span> <span class="p">{</span>
+            <span class="n">MyDemoView</span><span class="p">()</span>
+            <span class="p">.</span><span class="n">environmentObject</span><span class="p">(</span><span class="n">paletteStore</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// V.S.</span>
+
+<span class="kd">struct</span> <span class="nc">MyDemoApp</span><span class="p">:</span> <span class="n">App</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">Scene</span> <span class="p">{</span>
+        <span class="n">DocumentGroup</span><span class="p">(</span><span class="n">newDocument</span><span class="p">:</span> <span class="p">{</span><span class="n">myDocument</span><span class="p">()})</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span>
+            <span class="n">MyDemoView</span><span class="p">(</span><span class="n">document</span><span class="p">:</span> <span class="n">config</span><span class="p">.</span><span class="n">document</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<ul>
+<li>不再用<code>@StateObject</code>传递ViewModel，每新建一个Document都会有一个独立的ViewModel<ul>
+<li>必须要服从<code>ReferenceFileDocument</code>(这样能存到文件系统以及从文件系统读取了)</li>
+<li><code>config</code>参数包含了这个ViewModel（就是document)，以及document的url</li>
+<li>很好理解，每一个document肯定有自己的数据（想象一个“最近打开”的功能，每一个文档都是独立的）</li>
+</ul>
+</li>
+<li><code>newDocument</code>里自行提供一个新建document的方法</li>
+<li>封装了关联的（选择document的）UI和行为</li>
+<li>you <strong>MUST</strong> implement <code>Undo</code> in your application</li>
+</ul>
+<p>如果不去实现<code>Undo</code>，也可以直接把model存到document文件里：</p><ol>
+<li>你的ViewModel要能init itself from a <code>Binding&lt;Type&gt;</code><ul>
+<li>如<code>config.$document</code></li>
+</ul>
+</li>
+<li>ViewModel由一个<code>ObservedObject</code>变成一个<code>StateObject</code><ul>
+<li>这次必须服从<code>FileDocument</code></li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">MyDemoApp</span><span class="p">:</span> <span class="n">App</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">Scene</span> <span class="p">{</span>
+        <span class="n">DocumentGroup</span><span class="p">(</span><span class="n">newDocument</span><span class="p">:</span> <span class="p">{</span><span class="n">myDocument</span><span class="p">()})</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span>
+            <span class="c1">// MyDemoView(document: config.document) // 之前的</span>
+            <span class="n">MyDemoView</span><span class="p">(</span><span class="n">document</span><span class="p">:</span> <span class="n">viewModel</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">config</span><span class="p">.</span><span class="err">$</span><span class="n">document</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>把<code>newDocument: {myDocument()}</code>改为<code>viewer: myDocument.self</code>，就成了一个只读的model，（你甚至不需要传入实例），如果你要开发的是一个查看别人文档的应用，这个特性就比较有用了。</p><h3>FileDocument protocol</h3>
+<p>This protocol gets/puts the contents of a document from/to a file. 即提供你的document读到文件系统的能力。</p><div class="highlight"><pre><span></span><span class="c1">// create from a file</span>
+<span class="kd">init</span><span class="p">(</span><span class="n">configuration</span><span class="p">:</span> <span class="n">ReadConfiguration</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="kd">let</span> <span class="nv">data</span> <span class="p">=</span> <span class="n">configuration</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">regularFileContents</span> <span class="p">{</span>
+        <span class="c1">// init yourself from data</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="n">CocoaError</span><span class="p">(.</span><span class="n">fileReadCorruptFile</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// write</span>
+<span class="kd">func</span> <span class="nf">fileWrapper</span><span class="p">(</span><span class="n">configuration</span><span class="p">:</span> <span class="n">WriteConfiguration</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="n">FileWrapper</span> <span class="p">{</span>
+    <span class="n">FileWrapper</span><span class="p">(</span><span class="n">regularFileWithContents</span><span class="p">:</span> <span class="cm">/*my data*/</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<h3>ReferenceFileDocument</h3>
+<ul>
+<li>几乎和<code>FileDocument</code>一致</li>
+<li>继承自<code>ObservableObject</code> -&gt; ViewModel only</li>
+<li>唯一的区别是通过后台线程的一个<code>snapshot</code>来写入</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1">// 先snapshot</span>
+<span class="kd">func</span> <span class="nf">snapshot</span><span class="p">(</span><span class="n">contentType</span><span class="p">:</span> <span class="bp">UTType</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="n">Snapshot</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="c1">// my data or something</span>
+<span class="p">}</span>
+<span class="c1">// then write</span>
+<span class="kd">func</span> <span class="nf">fileWrapper</span><span class="p">(</span><span class="n">snapshot</span><span class="p">:</span> <span class="n">Snapshot</span><span class="p">,</span> <span class="n">configuration</span><span class="p">:</span> <span class="n">WriteConfiguration</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="n">FileWrapper</span> <span class="p">{</span>
+    <span class="n">FileWrapper</span><span class="p">(</span><span class="n">regularFileWithContents</span><span class="p">:</span> <span class="cm">/* snapshpt converted to a Data */</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<p>流程大概是，你的model有变化之后，会先找<code>snapshot</code>方法创建一份镜像，然后再要求你给出一个<code>fileWrapper</code>来写文件。</p><h3>自定义文件类型</h3>
+<p>声明能打开什么类型的文件，通过：UTType(<code>Uniform Type Identifier</code>)</p><p>可以理解为怎么定义并注册（关联）自己的扩展名，就像photoshop关联.psd一样。</p><ol>
+<li>声明(Info tab)，设置<code>Exported/Imported Type Identifier</code>，所以表面上的扩展名，内里还对应了一个唯一的标识符，一般用反域名的格式</li>
+</ol>
+<figure  style="flex: 322.98850574712645" ><img width="1124" height="174" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/6b64ff3f0d28f9e054f79ae65e4eada0.png" alt=""/></figure><ol start="2">
+<li>声明拥有权，用的就是上一步标识符，而不是扩展名</li>
+</ol>
+<figure  style="flex: 400.0" ><img width="1136" height="142" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/86264dc076782270e53b2ea22b2eb60f.png" alt=""/></figure><ol start="3">
+<li>告知系统能在<code>Files</code> app里打开这种文档<ul>
+<li>info.plist &gt; Supports Document Browser &gt; YES</li>
+</ul>
+</li>
+<li>代码里添加枚举：</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="kd">extension</span> <span class="bp">UTType</span> <span class="p">{</span>
+    <span class="kd">static</span> <span class="kd">let</span> <span class="nv">emojiart</span> <span class="p">=</span> <span class="bp">UTType</span><span class="p">(</span><span class="n">exportedAs</span><span class="p">:</span> <span class="s">&quot;edu.bla.bla.emojimart&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">static</span> <span class="kd">let</span> <span class="nv">readableContentTypes</span> <span class="p">=</span> <span class="p">[</span><span class="bp">UTType</span><span class="p">.</span><span class="n">emojiart</span><span class="p">]</span>
+</pre></div>
+<h2>Undo</h2>
+<ul>
+<li>use <code>ReferenceFileDocument</code> must implement Undo</li>
+<li>这也是SwiftUI能自动保存的时间节点</li>
+<li>by <code>UndoManager</code> -&gt; <code>@Environment(\.undoManager) var undoManager</code></li>
+<li>and by register an <code>Undo</code> for it: <code>func registerUndo(withTarget: self, howToUndo: (target) -&gt; Void)</code></li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nf">undoablePerform</span><span class="p">(</span><span class="n">operation</span><span class="p">:</span> <span class="nb">String</span><span class="p">,</span> <span class="n">with</span> <span class="n">undoManager</span><span class="p">:</span> <span class="n">UndoManager</span><span class="p">?,</span> <span class="n">doit</span><span class="p">:</span> <span class="p">()</span> <span class="p">-&gt;</span> <span class="nb">Void</span><span class="p">){</span>
+    <span class="kd">let</span> <span class="nv">oldModel</span> <span class="p">=</span> <span class="n">model</span>
+    <span class="n">doit</span><span class="p">()</span>
+    <span class="n">undoManager</span><span class="p">?.</span><span class="n">registerUndo</span><span class="p">(</span><span class="n">withTarget</span><span class="p">:</span> <span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">myself</span> <span class="k">in</span>
+        <span class="n">myself</span><span class="p">.</span><span class="n">model</span> <span class="p">=</span> <span class="n">model</span>
+    <span class="p">}</span>
+    <span class="n">undoManager</span><span class="p">?.</span><span class="n">setActionName</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span> <span class="c1">// 给操作一个名字，如&quot;undo paste&quot;， 非必需</span>
+<span class="p">}</span>
+</pre></div>
+<p>用`undoablyPerform(with:){} 包住的任何改变model的操作就都支持了undo</p><h2>Review</h2>
+<p>回顾一下，我们把应用改造为<code>Document Architechture</code>的步骤：</p><ol>
+<li>应用入口，将<code>WindowGroup</code>改为了<code>DocumentGroup</code>，并修改了相应的传递document的方式</li>
+<li>实现document(即view model) comform to <code>ReferenceFileDocument</code><ul>
+<li>实现snapshot, write to file (<code>FileWrapper</code>), and read from file</li>
+</ul>
+</li>
+<li>自定义一个文件类别（扩展名，标识符，声明拥有者等）</li>
+<li>此时启动应用，入口UI已经是文档选择界面了，所以我说它封装了UI和行为<ul>
+<li>但此时不具备保存的功能，需要进一步实现<code>Undo</code>'</li>
+</ul>
+</li>
+<li>通过<code>undoManager</code>把改动model的行为都包进去实现undo/redo<ul>
+<li>此时document已能自动保存</li>
+</ul>
+</li>
+<li>增加toolbar, 实现手动undo/redo</li>
+<li>顺便注册文档类型，以便在Files应用内能用本app打开<ul>
+<li><code>Info.plist</code> &gt; <code>Supports Document Browser</code> &gt; YES</li>
+</ul>
+</li>
+</ol>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B7%5D_Document-Architecture/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B6%5D_Persistence/" target="_self">cs193p_2021笔记[6]_Persistence</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B6%5D_Persistence/" target="_self">
+                <time class="text-uppercase">
+                    October 24 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p><a href="https://www.jianshu.com/p/998b0ef4a2cd">cs193p_2021_笔记_1</a>
+<a href="https://www.jianshu.com/p/af0ad1bead34">cs193p_2021_笔记_2</a>
+<a href="https://www.jianshu.com/p/d103f8d12052">cs193p_2021_笔记_3_Animation_Transition</a>
+<a href="https://www.jianshu.com/p/41e7309c7f55">cs193p_2021_笔记_4_Color_Image_Gesture</a>
+<a href="https://www.jianshu.com/p/e3c2ee1628c6">cs193p_2021_笔记_5_Property Wrapper</a>
+cs193p_2021_笔记_6_Persistence
+<a href="https://www.jianshu.com/p/f4ae879eef9c">cs193p_2021_笔记_7_Document Architecture</a>
+<a href="https://www.jianshu.com/p/2136bdc2c6f6">cs193p_2021_笔记_8</a></p><p>--</p><h1>Persistence</h1>
+<p>持久化数据的方式有</p><ul>
+<li>File system（FileManager）</li>
+<li>Sqlite/CoreData</li>
+<li>iCloud: 根据上面两种格式存储</li>
+<li>CloutKit: a database in the cloud (network)</li>
+<li>UserDefaults</li>
+<li>Codable/JSON</li>
+<li>UIDocument (UIKit feature)(与Files App集成)</li>
+<li>3rd-party</li>
+</ul>
+<h2>UserDefaults</h2>
+<ul>
+<li>只能存储<code>Property List</code></li>
+<li><code>Property List</code>支持String, Int, Bool, floating point, Date, Data, Array or Dictionary<ul>
+<li>任何其它类型需要转成<code>Property List</code></li>
+<li><code>Codable</code> converts structs into <code>Data</code> objects (and <code>Data</code> is a <code>Property List</code>).</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">defaults</span> <span class="p">=</span> <span class="n">UserDefaults</span><span class="p">.</span><span class="n">standard</span>
+<span class="n">defaults</span><span class="p">.</span><span class="kr">set</span><span class="p">(</span><span class="n">object</span><span class="p">,</span> <span class="n">forKey</span><span class="p">:</span> <span class="err">“</span><span class="n">SomeKey</span><span class="err">”</span><span class="p">)</span> <span class="c1">// object must be a Property List</span>
+<span class="n">defaults</span><span class="p">.</span><span class="n">setDouble</span><span class="p">(</span><span class="mf">37.5</span><span class="p">,</span> <span class="n">forKey</span><span class="p">:</span> <span class="err">“</span><span class="n">MyDouble</span><span class="err">”</span><span class="p">)</span>
+
+<span class="c1">// retrive</span>
+
+<span class="kd">let</span> <span class="nv">i</span><span class="p">:</span> <span class="nb">Int</span> <span class="p">=</span> <span class="n">defaults</span><span class="p">.</span><span class="n">integer</span><span class="p">(</span><span class="n">forKey</span><span class="p">:</span> <span class="err">“</span><span class="n">MyInteger</span><span class="err">”</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">b</span><span class="p">:</span> <span class="n">Data</span> <span class="p">=</span> <span class="n">defaults</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">forKey</span><span class="p">:</span> <span class="err">“</span><span class="n">MyData</span><span class="err">”</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">u</span><span class="p">:</span> <span class="n">URL</span> <span class="p">=</span> <span class="n">defaults</span><span class="p">.</span><span class="n">url</span><span class="p">(</span><span class="n">forKey</span><span class="p">:</span> <span class="err">“</span><span class="n">MyURL</span><span class="err">”</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">strings</span><span class="p">:</span> <span class="p">[</span><span class="nb">String</span><span class="p">]</span> <span class="p">=</span> <span class="n">defaults</span><span class="p">.</span><span class="n">stringArray</span><span class="p">(</span><span class="n">forKey</span><span class="p">:</span> <span class="err">“</span><span class="n">MyString</span><span class="err">”</span><span class="p">)</span> 
+<span class="c1">// etc.</span>
+<span class="c1">// Retrieving Arrays of anything but String is more complicated ...</span>
+<span class="kd">let</span> <span class="nv">a</span> <span class="p">=</span> <span class="n">defaults</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">forKey</span><span class="p">:</span> <span class="err">“</span><span class="n">MyArray</span><span class="err">”</span><span class="p">)</span> <span class="c1">// will return Array&lt;Any&gt;</span>
+<span class="c1">// 最好用Codable的data(forKey:)替代</span>
+</pre></div>
+<h2>Core Data</h2>
+<p>SwiftUI进行的集成:</p><ul>
+<li>创建的对象是<code>ObservableObjects</code></li>
+<li>一个property wrapper <code>@FetchRequest</code></li>
+<li>管理对象(context)是<code>NSManagedObjectContext</code></li>
+<li>context通过<code>@Environment</code>传入</li>
+</ul>
+<p>demo:</p><div class="highlight"><pre><span></span><span class="p">@</span><span class="n">Environnment</span><span class="p">(</span><span class="err">\</span><span class="p">.</span><span class="n">managedObjectContext</span><span class="p">)</span> <span class="kd">var</span> <span class="nv">context</span>
+<span class="kd">let</span> <span class="nv">flight</span> <span class="p">=</span> <span class="n">Flight</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">context</span><span class="p">)</span>
+<span class="n">flight</span><span class="p">.</span><span class="n">aircraft</span> <span class="p">=</span> <span class="err">“</span><span class="n">B737</span><span class="err">”</span> <span class="c1">// etc.</span>
+
+<span class="kd">let</span> <span class="nv">ksjc</span> <span class="p">=</span> <span class="n">Airport</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">context</span><span class="p">)</span>
+<span class="n">ksjc</span><span class="p">.</span><span class="n">icao</span> <span class="p">=</span> <span class="err">“</span><span class="n">KSJC</span><span class="err">”</span> <span class="c1">// etc.</span>
+
+<span class="n">flight</span><span class="p">.</span><span class="n">origin</span> <span class="p">=</span> <span class="n">ksjc</span> <span class="c1">// this would add flight to ksjc.flightsFrom too try? context.save()</span>
+
+<span class="kd">let</span> <span class="nv">request</span> <span class="p">=</span> <span class="bp">NSFetchRequest</span><span class="p">&lt;</span><span class="n">Flight</span><span class="p">&gt;(</span><span class="n">entityName</span><span class="p">:</span> <span class="err">“</span><span class="n">Flight</span><span class="err">”</span><span class="p">)</span> <span class="n">request</span><span class="p">.</span><span class="n">predicate</span> <span class="p">=</span>
+<span class="bp">NSPredicate</span><span class="p">(</span><span class="n">format</span><span class="p">:</span> <span class="err">“</span><span class="n">arrival</span> <span class="o">&lt;</span> <span class="o">%</span><span class="p">@</span> <span class="n">and</span> <span class="n">origin</span> <span class="p">=</span> <span class="o">%</span><span class="p">@</span><span class="err">“</span><span class="p">,</span> <span class="n">Date</span><span class="p">(),</span> <span class="n">ksjc</span><span class="p">)</span> 
+<span class="n">request</span><span class="p">.</span><span class="n">sortDescriptors</span> <span class="p">=</span> <span class="p">[</span><span class="bp">NSSortDescriptor</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="err">“</span><span class="n">ident</span><span class="err">”</span><span class="p">,</span> <span class="n">ascending</span><span class="p">:</span> <span class="kc">true</span><span class="p">)]</span> 
+
+<span class="kd">let</span> <span class="nv">flights</span> <span class="p">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">context</span><span class="p">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> <span class="c1">// past KSJC flights sorted by ident</span>
+<span class="c1">// flights is nil if fetch failed, [] if no such flights, otherwise [Flight]</span>
+</pre></div>
+<p>以上是core data部分，还是浓浓的OC的痕迹，看看Swift UI的版本。</p><p>首先，上述的<code>Flights, Airports</code>都是ViewModel。它自然拥有它的<code>Property Wrapper</code>:</p><div class="highlight"><pre><span></span><span class="p">@</span><span class="n">FetchRequest</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span><span class="n">sortDescriptors</span><span class="p">:</span><span class="n">predicate</span><span class="p">:)</span> <span class="kd">var</span> <span class="nv">flights</span><span class="p">:</span> <span class="n">FetchedResults</span><span class="p">&lt;</span><span class="n">Flight</span><span class="p">&gt;</span>
+<span class="p">@</span><span class="n">FetchRequest</span><span class="p">(</span><span class="n">fetchRequest</span><span class="p">:)</span> <span class="kd">var</span> <span class="nv">airports</span><span class="p">:</span> <span class="n">FetchedResults</span><span class="p">&lt;</span><span class="n">Airport</span><span class="p">&gt;</span>
+
+<span class="c1">// flights and airports will continuously update as the database changes. </span>
+<span class="n">ForEach</span><span class="p">(</span><span class="n">flights</span><span class="p">)</span> <span class="p">{</span> <span class="n">flight</span> <span class="k">in</span>
+    <span class="c1">// UI for a flight built using flight </span>
+<span class="p">}</span>
+
+<span class="c1">// bi-binding</span>
+<span class="n">_flights</span> <span class="p">=</span> <span class="n">FetchRequest</span><span class="p">(...)</span>
+</pre></div>
+<h2>Cloud Kit</h2>
+<p>上个demo吧</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">db</span> <span class="p">=</span> <span class="bp">CKContainer</span><span class="p">.</span><span class="k">default</span><span class="p">.</span><span class="kd">public</span><span class="o">/</span><span class="n">shared</span><span class="o">/</span><span class="n">privateCloudDatabase</span> 
+<span class="c1">// Record理解为Table</span>
+<span class="kd">let</span> <span class="nv">tweet</span> <span class="p">=</span> <span class="bp">CKRecord</span><span class="p">(</span><span class="err">“</span><span class="n">Tweet</span><span class="err">”</span><span class="p">)</span>
+<span class="c1">// 索引理解为Field</span>
+<span class="n">tweet</span><span class="p">[</span><span class="err">“</span><span class="n">text</span><span class="err">”</span><span class="p">]</span> <span class="p">=</span> <span class="err">“</span><span class="mi">140</span> <span class="n">characters</span> <span class="n">of</span> <span class="n">pure</span> <span class="n">joy</span><span class="err">”</span>
+<span class="kd">let</span> <span class="nv">tweeter</span> <span class="p">=</span> <span class="bp">CKRecord</span><span class="p">(</span><span class="err">“</span><span class="n">TwitterUser</span><span class="err">”</span><span class="p">)</span>
+<span class="n">tweet</span><span class="p">[</span><span class="err">“</span><span class="n">tweeter</span><span class="err">”</span><span class="p">]</span> <span class="p">=</span> <span class="bp">CKReference</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="n">tweeter</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="p">.</span><span class="n">deleteSelf</span><span class="p">)</span>
+<span class="n">db</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="n">tweet</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">savedRecord</span><span class="p">:</span> <span class="bp">CKRecord</span><span class="p">?,</span> <span class="n">error</span><span class="p">:</span> <span class="bp">NSError</span><span class="p">?)</span> <span class="p">-&gt;</span> <span class="nb">Void</span> <span class="k">in</span>
+    <span class="k">if</span> <span class="n">error</span> <span class="p">==</span> <span class="kc">nil</span> <span class="p">{</span>
+    <span class="c1">// hooray!</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">error</span><span class="p">?.</span><span class="n">errorCode</span> <span class="p">==</span> <span class="n">CKErrorCode</span><span class="p">.</span> <span class="n">NotAuthenticated</span><span class="p">.</span><span class="n">rawValue</span> <span class="p">{</span>
+        <span class="c1">// tell user he or she has to be logged in to iCloud for this to work!</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// report other errors (there are 29 different CKErrorCodes!) </span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Query</span>
+<span class="c1">// 类似core data, 构造predict, request(就是query)即可</span>
+
+<span class="kd">let</span> <span class="nv">predicate</span> <span class="p">=</span> <span class="bp">NSPredicate</span><span class="p">(</span><span class="n">format</span><span class="p">:</span> <span class="err">“</span><span class="n">text</span> <span class="bp">contains</span> <span class="o">%</span><span class="p">@</span><span class="err">“</span><span class="p">,</span> <span class="n">searchString</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">query</span> <span class="p">=</span> <span class="bp">CKQuery</span><span class="p">(</span><span class="n">recordType</span><span class="p">:</span> <span class="err">“</span><span class="n">Tweet</span><span class="err">”</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">predicate</span><span class="p">)</span>
+<span class="n">db</span><span class="p">.</span><span class="n">perform</span><span class="p">(</span><span class="n">query</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">records</span><span class="p">:</span> <span class="p">[</span><span class="bp">CKRecord</span><span class="p">]?,</span> <span class="n">error</span><span class="p">:</span> <span class="bp">NSError</span><span class="p">?)</span> <span class="k">in</span>
+    <span class="k">if</span> <span class="n">error</span> <span class="p">==</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="c1">// records will be an array of matching CKRecords</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="n">error</span><span class="p">?.</span><span class="n">errorCode</span> <span class="p">==</span> <span class="n">CKErrorCode</span><span class="p">.</span><span class="n">NotAuthenticated</span><span class="p">.</span><span class="n">rawValue</span> <span class="p">{</span>
+        <span class="c1">// tell user he or she has to be logged in to iCloud for this to work!</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// report other errors (there are 29 different CKErrorCodes!) </span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>One of the coolest features of Cloud Kit is its ability to <code>send push notifications</code> on changes. All you do is register an <code>NSPredicate</code> and whenever the database changes to match it,</p><h2>File System</h2>
+<p>Sandbox包含：</p><ul>
+<li>Application directory — Your executable, .jpgs, etc.; not writeable.</li>
+<li>Documents directory — Permanent storage created by and always visible to the user.</li>
+<li>Application Support directory — Permanent storage not seen directly by the user.</li>
+<li>Caches directory — Store temporary files here (this is not backed up).</li>
+<li>Other directories (see documentation)</li>
+<li>...</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">url</span><span class="p">:</span> <span class="n">URL</span> <span class="p">=</span> <span class="n">FileManager</span><span class="p">.</span><span class="k">default</span><span class="p">.</span><span class="n">url</span><span class="p">(</span>
+    <span class="k">for</span> <span class="n">directory</span><span class="p">:</span> <span class="n">FileManager</span><span class="p">.</span><span class="n">SearchPathDirectory</span><span class="p">.</span><span class="n">documentDirectory</span><span class="p">,</span> <span class="c1">// for example </span>
+    <span class="k">in</span> <span class="n">domainMask</span><span class="p">:</span> <span class="p">.</span><span class="n">userDomainMask</span> <span class="c1">// always .userDomainMask on iOS</span>
+    <span class="n">appropriateFor</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="c1">// only meaningful for “replace” file operations</span>
+    <span class="n">create</span><span class="p">:</span> <span class="kc">true</span> <span class="c1">// whether to create the system directory if it doesn’t already exist</span>
+ <span class="p">)</span>
+</pre></div>
+<p>Examples of SearchPathDirectory values :</p><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">documentDirectory</span><span class="p">,</span> 
+<span class="p">.</span><span class="n">applicationSupportDirectory</span><span class="p">,</span> 
+<span class="p">.</span><span class="n">cachesDirectory</span><span class="p">,</span> 
+<span class="n">etc</span><span class="p">.</span>
+</pre></div>
+<p>再列些常用api：</p><div class="highlight"><pre><span></span><span class="c1">// URL</span>
+
+<span class="kd">func</span> <span class="nf">appendingPathComponent</span><span class="p">(</span><span class="nb">String</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">URL</span>
+<span class="kd">func</span> <span class="nf">appendingPathExtension</span><span class="p">(</span><span class="nb">String</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">URL</span> <span class="c1">// e.g. “jpg”</span>
+<span class="kd">var</span> <span class="nv">isFileURL</span><span class="p">:</span> <span class="nb">Bool</span> <span class="c1">// is this a file URL (whether file exists or not) or something else? </span>
+<span class="kd">func</span> <span class="nf">resourceValues</span><span class="p">(</span><span class="k">for</span> <span class="n">keys</span><span class="p">:</span> <span class="p">[</span><span class="n">URLResourceKey</span><span class="p">])</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="p">[</span><span class="n">URLResourceKey</span><span class="p">:</span><span class="nb">Any</span><span class="p">]?</span> 
+<span class="c1">// Example keys: .creationDateKey, .isDirectoryKey, .fileSizeKey</span>
+
+<span class="c1">// Data</span>
+
+<span class="c1">// retrive binary data</span>
+<span class="c1">// option almost always []</span>
+<span class="kd">init</span><span class="p">(</span><span class="n">contentsOf</span><span class="p">:</span> <span class="n">URL</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">Data</span><span class="p">.</span><span class="n">ReadingOptions</span><span class="p">)</span> <span class="kr">throws</span> 
+<span class="c1">// write</span>
+<span class="c1">// The options can be things like .atomic (write to tmp file, then swap) or .withoutOverwriting.</span>
+<span class="kd">func</span> <span class="nf">write</span><span class="p">(</span><span class="n">to</span> <span class="n">url</span><span class="p">:</span> <span class="n">URL</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">Data</span><span class="p">.</span><span class="n">WritingOptions</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="nb">Bool</span>
+
+<span class="c1">// FileManager</span>
+<span class="n">fileExists</span><span class="p">(</span><span class="n">atPath</span><span class="p">:</span> <span class="nb">String</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="nb">Bool</span>
+<span class="c1">// Can also create and enumerate directories; move, copy, delete files; etc.</span>
+</pre></div>
+<h2>Codable</h2>
+<ul>
+<li>保留一个对象所有的var（变量）的机制</li>
+<li>如果一个Struct它的成员变是Codable的，那么Swift会帮你把这个Struct实现Codable，比如没有associated data的Enum。</li>
+<li>帮你实现不代表不要显式声明</li>
+<li>基础类型基本上都实现了Codable</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">object</span><span class="p">:</span> <span class="n">MyType</span> <span class="p">=</span> <span class="p">...</span>
+<span class="c1">// encode</span>
+<span class="kd">let</span> <span class="nv">jsonData</span><span class="p">:</span> <span class="n">Data</span><span class="p">?</span> <span class="p">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">JSONEncoder</span><span class="p">().</span><span class="n">encode</span><span class="p">(</span><span class="n">object</span><span class="p">)</span>
+
+<span class="c1">// write file</span>
+<span class="k">try</span> <span class="n">jsonData</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">to</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span>
+
+<span class="c1">// deocde as string</span>
+<span class="kd">let</span> <span class="nv">jsonString</span> <span class="p">=</span> <span class="nb">String</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">jsonData</span><span class="p">!,</span> <span class="n">encoding</span><span class="p">:</span> <span class="p">.</span><span class="n">utf8</span><span class="p">)</span>
+
+<span class="c1">// decode as object</span>
+<span class="kd">let</span> <span class="nv">myObject</span><span class="p">:</span> <span class="n">MyType</span> <span class="p">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">JSONDecoder</span><span class="p">().</span><span class="n">decode</span><span class="p">(</span><span class="n">MyType</span><span class="p">.</span><span class="kc">self</span><span class="p">,</span> <span class="n">from</span><span class="p">:</span> <span class="n">jsonData</span><span class="p">!)</span>
+<span class="c1">// 从字符串到对象没有一步到位的办法，只能先string-&gt;Data</span>
+<span class="kd">let</span> <span class="nv">data</span> <span class="p">=</span> <span class="n">jsstring</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">using</span><span class="p">:</span> <span class="p">.</span><span class="n">utf8</span><span class="p">)</span> <span class="c1">// 再把data传到上术方法里</span>
+</pre></div>
+<p>encode, decode是会throw的，注意try_catch相应的Error，比如<code>.keyNotFound, .dataCorrupted...</code></p><h3>CodingKeys</h3>
+<p>json与对象相互进行转化有一个通用的需求，就是键的映射，这更常用在外部API与本地类的映射中，比如userId，别人叫guestId，等等，Swift中，用一个叫<code>CodingKeys</code>的枚举来实现这个映射：</p><div class="highlight"><pre><span></span><span class="kd">private</span> <span class="kd">enum</span> <span class="nc">CodingKeys</span><span class="p">:</span> <span class="nb">String</span><span class="p">,</span> <span class="n">CodingKey</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="n">uid</span> <span class="p">=</span> <span class="s">&quot;user_id&quot;</span>
+    <span class="k">case</span> <span class="n">someDate</span> <span class="p">=</span> <span class="s">&quot;some_date&quot;</span>
+    <span class="k">case</span> <span class="n">pname</span> <span class="p">=</span> <span class="s">&quot;panme&quot;</span> <span class="c1">// 表示在JSON中也叫这个名字 </span>
+    <span class="k">case</span> <span class="n">sku</span> <span class="c1">// 如果名字一样的话，可以这么简写 </span>
+    <span class="c1">// 但是不写的话，序列化的时候就不会序列这个字段了</span>
+    <span class="c1">// 解码时会有 KeyNotFound 类的错误</span>
+<span class="p">}</span>
+
+<span class="c1">// 结合起来，用在init中</span>
+<span class="kd">init</span><span class="p">(</span><span class="n">from</span> <span class="n">decoder</span><span class="p">:</span> <span class="n">Decoder</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">{</span>
+    <span class="c1">// container是切入点，要弄清楚</span>
+    <span class="c1">// 如果没有手写键的映射表，那么keydBy就是自己</span>
+    <span class="kd">let</span> <span class="nv">container</span> <span class="p">=</span> <span class="k">try</span> <span class="n">decoder</span><span class="p">.</span><span class="n">container</span><span class="p">(</span><span class="n">keyedBy</span><span class="p">:</span> <span class="n">CodingKeys</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span>
+    <span class="n">someDate</span> <span class="p">=</span> <span class="k">try</span> <span class="n">container</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="n">Date</span><span class="p">.</span><span class="kc">self</span><span class="p">,</span> <span class="n">forKey</span><span class="p">:</span> <span class="p">.</span><span class="n">someDate</span><span class="p">)</span> 
+    <span class="c1">// 从json中加载.someDate对应的键的值，尝试解码成Date</span>
+    <span class="c1">// other vars (每种case必须全部都有)</span>
+<span class="p">}</span>
+</pre></div>
+<h3>Enum</h3>
+<p>序列化枚举有点复杂：</p><ol>
+<li>简单枚举应该怎么序列化？ 其实是序列化成case对应的名字和表示空JSON的<code>{}</code>组成的键值对，比如<code>{&quot;math&quot;:{}}</code></li>
+<li>有关联数据的枚举呢？ 那就得自己提供<code>encoder</code>:<ul>
+<li><code>case url: try container.encode(url, forKey: .url)</code> 即对相应的枚举值进行相应的encode</li>
+</ul>
+</li>
+<li>并且自行decode，但是与struct（为每一个key填值）不同，因为枚举变量只是一个值，所以是依次尝试，解码成功就认定是那一个枚举值</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="kd">let</span> <span class="nv">url</span> <span class="p">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">container</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="n">URL</span><span class="p">.</span><span class="kc">self</span><span class="p">,</span> <span class="n">forKey</span><span class="p">:</span> <span class="p">.</span><span class="n">url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kc">self</span> <span class="p">=</span> <span class="p">.</span><span class="n">url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">...</span> <span class="c1">// 别的尝试</span>
+
+<span class="c1">// 此句的作用是根据.url对应的键名，取出值，反射成URL对象，如果成功，那么这个枚举值是.url无疑</span>
+<span class="c1">// 而且关联数据就是反射的结果</span>
+<span class="c1">// 如果失败，继续换一个键名，将对应的值转成对应的类型，依次类推</span>
+</pre></div>
+<ol start="4">
+<li>那么如何手动decode一个原始的枚举呢？<ul>
+<li>我们知道上述实践是为了反射出关联数据，并且根据能够成功反射关联数据来判断枚举类型</li>
+<li>原始枚举需要encode哪个值呢？-&gt; 目前我只能做一个空<code>struct</code>来实现序列化成<code>{}</code>的目的 -&gt; 为了跟默认形态保持一致<ul>
+<li>事实上你是可以encode成任意值的（比如100，&quot;hello&quot;，因为我们只关心有没有这个键，有的话，就是这个枚举类型，只是<code>{}</code>拥有可读性</li>
+<li>你encode成什么值，decode的时候对对应的键尝试去反射回这个值就行了</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>最后，思考题：</p><blockquote>
+<p>上面说了，原生枚举序列化成： <code>{&quot;math&quot;:{}}</code>，也说了，如果，键对应的值对原生枚举序列化是没意义的，可以是任何值，那么对于<code>{&quot;math&quot;:100}</code>，能否顺序序列化回其枚举形态<code>.math</code>呢？</p></blockquote>
+<p>答案：</p><ol>
+<li>值为100报错了</li>
+<li>于是我改为&quot;&quot;或&quot;other“等字符串或空字符串，解码的结果是<code>nil</code></li>
+</ol>
+<p>也就是说，默认的decode只认<code>{}</code></p><figure  style="flex: 82.77310924369748" ><img width="1182" height="714" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c3a4240a7582937166f9300c35b4e868.png" alt=""/></figure><p>而前面我们知道了，如果是自己手写，它可以是任何值，它的意义仅仅是个标识，并不会取它的值。验证：</p><div class="highlight"><pre><span></span><span class="kd">enum</span> <span class="nc">NormEnum</span><span class="p">:</span> <span class="n">Codable</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="n">history</span><span class="p">,</span> <span class="n">math</span><span class="p">,</span> <span class="n">geometry</span>
+
+    <span class="kd">private</span> <span class="kd">enum</span> <span class="nc">keyMap</span><span class="p">:</span> <span class="nb">String</span><span class="p">,</span> <span class="n">CodingKey</span><span class="p">{</span>
+        <span class="k">case</span> <span class="n">history</span>  <span class="p">=</span> <span class="s">&quot;HIST&quot;</span>
+        <span class="k">case</span> <span class="n">math</span>     <span class="p">=</span> <span class="s">&quot;MATH&quot;</span>
+        <span class="k">case</span> <span class="n">geometry</span> <span class="p">=</span> <span class="s">&quot;GEOM&quot;</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">encode</span><span class="p">(</span><span class="n">to</span> <span class="n">encoder</span><span class="p">:</span> <span class="n">Encoder</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nv">container</span> <span class="p">=</span> <span class="k">try</span> <span class="n">encoder</span><span class="p">.</span><span class="n">container</span><span class="p">(</span><span class="n">keyedBy</span><span class="p">:</span> <span class="n">keyMap</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span>
+        <span class="k">switch</span> <span class="kc">self</span><span class="p">{</span>
+        <span class="k">case</span> <span class="p">.</span><span class="n">history</span><span class="p">:</span> <span class="k">try</span> <span class="n">container</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">forKey</span><span class="p">:</span> <span class="p">.</span><span class="n">history</span><span class="p">)</span>
+        <span class="k">case</span> <span class="p">.</span><span class="n">math</span><span class="p">:</span> <span class="k">try</span> <span class="n">container</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">forKey</span><span class="p">:</span> <span class="p">.</span><span class="n">math</span><span class="p">)</span>
+        <span class="k">case</span> <span class="p">.</span><span class="n">geometry</span><span class="p">:</span> <span class="k">try</span> <span class="n">container</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">forKey</span><span class="p">:</span> <span class="p">.</span><span class="n">geometry</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">init</span><span class="p">(</span><span class="n">from</span> <span class="n">decoder</span><span class="p">:</span> <span class="n">Decoder</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nv">container</span> <span class="p">=</span> <span class="k">try</span> <span class="n">decoder</span><span class="p">.</span><span class="n">container</span><span class="p">(</span><span class="n">keyedBy</span><span class="p">:</span> <span class="n">keyMap</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="kd">let</span> <span class="nv">s</span> <span class="p">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">container</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="kc">self</span><span class="p">,</span> <span class="n">forKey</span><span class="p">:</span> <span class="p">.</span><span class="n">history</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kc">self</span> <span class="p">=</span> <span class="p">.</span><span class="n">history</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="kd">let</span> <span class="nv">s</span> <span class="p">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">container</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="kc">self</span><span class="p">,</span> <span class="n">forKey</span><span class="p">:</span> <span class="p">.</span><span class="n">math</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kc">self</span> <span class="p">=</span> <span class="p">.</span><span class="n">math</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="kc">self</span> <span class="p">=</span> <span class="p">.</span><span class="n">geometry</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>上面的代码中，我将三个字段全部用空字符串编码，并且给了三个不同的键名，现在，我真入任意值，比如<code>&quot;HAHA&quot;</code>，解码看看：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">js2</span> <span class="p">=</span> <span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">MATH</span><span class="se">\&quot;</span><span class="s">:</span><span class="se">\&quot;</span><span class="s">HAHA</span><span class="se">\&quot;</span><span class="s">}&quot;</span>
+<span class="kd">let</span> <span class="nv">js2d</span> <span class="p">=</span> <span class="n">js2</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">using</span><span class="p">:</span> <span class="p">.</span><span class="n">utf8</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">myobj2</span> <span class="p">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">JSONDecoder</span><span class="p">().</span><span class="n">decode</span><span class="p">(</span><span class="n">NormEnum</span><span class="p">.</span><span class="kc">self</span><span class="p">,</span> <span class="n">from</span><span class="p">:</span> <span class="n">js2d</span><span class="p">!)</span>
+</pre></div>
+<p>结果成功认出myobj2是一个<code>.math</code>。原理当然是我的代码里在尝试转成一个字符串，而没有限定是什么字符串。</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B6%5D_Persistence/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B5%5D_Property-Wrapper/" target="_self">cs193p_2021笔记[5]_Property-Wrapper</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B5%5D_Property-Wrapper/" target="_self">
+                <time class="text-uppercase">
+                    October 24 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p><a href="https://www.jianshu.com/p/998b0ef4a2cd">cs193p_2021_笔记_1</a>
+<a href="https://www.jianshu.com/p/af0ad1bead34">cs193p_2021_笔记_2</a>
+<a href="https://www.jianshu.com/p/d103f8d12052">cs193p_2021_笔记_3_Animation_Transition</a>
+<a href="https://www.jianshu.com/p/41e7309c7f55">cs193p_2021_笔记_4_Color_Image_Gesture</a>
+cs193p_2021_笔记_5_Property Wrapper
+<a href="https://www.jianshu.com/p/a315274a4fd2">cs193p_2021_笔记_6_Persistence</a>
+<a href="https://www.jianshu.com/p/f4ae879eef9c">cs193p_2021_笔记_7_Document Architecture</a>
+<a href="https://www.jianshu.com/p/2136bdc2c6f6">cs193p_2021_笔记_8</a></p><hr />
+<h1>Property Wrappers</h1>
+<p>C#中的<code>Attributes</code>，python中的<code>Decorators</code>, Java的<code>Annonations</code>，类似的设计模式。</p><ul>
+<li>A property wrapper is actually a <code>struct</code>.</li>
+<li>这个特殊的<code>struct</code>封装了一些模板行为应用到它们wrap的vars上：<ol>
+<li>Making a var live in the heap (<code>@State</code>)</li>
+<li>Making a var publish its changes (<code>@Published</code>)</li>
+<li>Causing a View to redraw when a published change is detected (<code>@ObservedObject</code>)</li>
+</ol>
+</li>
+</ul>
+<p>即能够分配到堆上，能够通知状态变化和能重绘等，可以理解为<code>语法糖</code>。</p><div class="highlight"><pre><span></span><span class="p">@</span><span class="n">Published</span> <span class="kd">var</span> <span class="nv">emojiArt</span><span class="p">:</span> <span class="n">EmojiArt</span> <span class="p">=</span> <span class="n">EmojiArt</span><span class="p">()</span>
+
+<span class="c1">// ... is really just this struct ...</span>
+<span class="kd">struct</span> <span class="nc">Published</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">wrappedValue</span><span class="p">:</span> <span class="n">EmojiArt</span>
+    <span class="kd">var</span> <span class="nv">projectedValue</span><span class="p">:</span> <span class="n">Publisher</span><span class="p">&lt;</span><span class="n">EmojiArt</span><span class="p">,</span> <span class="n">Never</span><span class="p">&gt;</span>  <span class="c1">// i.e. $</span>
+<span class="p">}</span>
+
+<span class="c1">// `projected value`的类型取决于wrapper自己，比如本例就是一个`Publisher`</span>
+
+<span class="c1">// 我理解为一个属性和一个广播器</span>
+
+<span class="c1">// ... and Swift (approximately) makes these vars available to you ...</span>
+<span class="kd">var</span> <span class="nv">_emojiArt</span><span class="p">:</span> <span class="n">Published</span> <span class="p">=</span> <span class="n">Published</span><span class="p">(</span><span class="n">wrappedValue</span><span class="p">:</span> <span class="n">EmojiArt</span><span class="p">())</span> 
+<span class="kd">var</span> <span class="nv">emojiArt</span><span class="p">:</span> <span class="n">EmojiArt</span> <span class="p">{</span>
+     <span class="kr">get</span> <span class="p">{</span> <span class="n">_emojiArt</span><span class="p">.</span><span class="n">wrappedValue</span> <span class="p">}</span>
+     <span class="kr">set</span> <span class="p">{</span> <span class="n">_emojiArt</span><span class="p">.</span><span class="n">wrappedValue</span> <span class="p">=</span> <span class="n">newValue</span> <span class="p">}</span>
+ <span class="p">}</span>
+</pre></div>
+<p>把get,set直接通过<code>$emojiArt</code>(即projectedValue)来使用</p><p>当一个<code>Published</code>值发生变化：</p><ul>
+<li>It publishes the change through its <em>projectedValue</em> (<code>$emojiArt</code>) which is a <code>Publisher</code>.</li>
+<li>It also invokes <code>objectWillChange.send()</code> in its enclosing <code>ObservableObject</code>.</li>
+</ul>
+<p>下面列的几种<code>Property wrapper</code>，我们主要关心最核心的两个概念，<code>wrappedValue</code>和<code>projectedValue</code>是什么就行了:</p><h2>@State</h2>
+<p>这是第二次提到了，在<code>Property Observers</code>一节里预告过，基本上点<code>@</code>的，大都为<code>Property Wrapper</code>的内容。</p><ul>
+<li>The wrappedValue is: <code>anything</code> (but almost certainly a value type).</li>
+<li>What it does:<ul>
+<li>stores the wrappedValue in the heap;</li>
+<li>when it changes, <code>invalidates</code> the <code>View</code>.</li>
+</ul>
+</li>
+<li>Projected value (i.e. $): a <code>Binding</code> (to that <em>value in the heap</em>).</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">foo</span><span class="p">:</span> <span class="nb">Int</span>
+<span class="kd">init</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">_foo</span> <span class="p">=</span> <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">initiaValue</span><span class="p">:</span> <span class="mi">5</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<p>注意<code>_</code>和<code>$</code>的区别。</p><h2>@StateObject &amp; @ObservedObject</h2>
+<ul>
+<li>The wrappedValue is: <code>anything</code> that implements the <code>ObservableObject</code> protocol (ViewModels).</li>
+<li>What it does:<ul>
+<li><code>invalidates</code> the <code>View</code> when wrappedValue does <em>objectWillChange.send()</em>.</li>
+</ul>
+</li>
+<li>Projected value (i.e. $): a <code>Binding</code> (to the vars of the wrappedValue (a <em>ViewModel</em>)).</li>
+</ul>
+<blockquote>
+<p><strong>@StateObject V.S. @State</strong></p></blockquote>
+<ul>
+<li>一个类型是<code>ObservableObject</code>s， 一个是value type</li>
+</ul>
+<blockquote>
+<p><strong>@StateObject V.S. @ObservedObject</strong></p></blockquote>
+<ul>
+<li>@StateObject is a &quot;source of truth&quot;，也就是说可以直接赋值：<code>@StateObject var foo = SomeObservableObject()</code></li>
+<li>能用在<em>View, APP, Scene</em>等场景</li>
+<li>如果用在View里，生命周期与View一致</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="p">@</span><span class="n">main</span>
+<span class="kd">struct</span> <span class="nc">EmojiArtApp</span><span class="p">:</span> <span class="n">App</span> <span class="p">{</span>
+    <span class="c1">// stateObject, source of truth</span>
+    <span class="c1">// defined in the app</span>
+    <span class="p">@</span><span class="n">StateObject</span> <span class="kd">var</span> <span class="nv">paletteStore</span> <span class="p">=</span> <span class="n">PaletteStore</span><span class="p">(</span><span class="n">named</span><span class="p">:</span> <span class="s">&quot;default&quot;</span><span class="p">)</span>
+
+    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">Scene</span> <span class="p">{</span>
+    <span class="n">DocumentGroup</span><span class="p">(</span><span class="n">newDocument</span><span class="p">:</span> <span class="p">{</span> <span class="n">EmojiArtDocument</span><span class="p">()</span> <span class="p">})</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span>
+        <span class="n">EmojiArtDocumentView</span><span class="p">(</span><span class="n">document</span><span class="p">:</span> <span class="n">config</span><span class="p">.</span><span class="n">document</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">environmentObject</span><span class="p">(</span><span class="n">paletteStore</span><span class="p">)</span>  <span class="c1">// passed by environment</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<h2>@Binding</h2>
+<ul>
+<li>The wrappedValue is: <code>a value</code> that is bound to something else.</li>
+<li>What it does:<ul>
+<li>gets/sets the value of the wrappedValue from <code>some other source</code>.</li>
+<li>when the bound-to value changes, it <code>invalidates</code> the <code>View</code>.</li>
+<li>Form表单典型应用场景，有UI变化的控件</li>
+<li>手势过程中的State, 或drag时是否targted</li>
+<li>模态窗口的状态</li>
+<li>分割view后共享状态</li>
+<li>总之，数据源只有一个(source of the truth)的场景，就不需要用两个@State而用@Binding,</li>
+</ul>
+</li>
+<li>Projected value (i.e. $): a Binding (self; i.e. the Binding itself)</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">MyView</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+      <span class="p">@</span><span class="n">State</span> <span class="kd">var</span> <span class="nv">myString</span> <span class="p">=</span> <span class="err">“</span><span class="n">Hello</span><span class="err">”</span>               <span class="c1">// 1</span>
+      <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+          <span class="n">OtherView</span><span class="p">(</span><span class="n">sharedText</span><span class="p">:</span> <span class="err">$</span><span class="n">myString</span><span class="p">)</span>        <span class="c1">// 2</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="kd">struct</span> <span class="nc">OtherView</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+      <span class="p">@</span><span class="n">Binding</span> <span class="kd">var</span> <span class="nv">sharedText</span><span class="p">:</span> <span class="n">string</span>             <span class="c1">// 3</span>
+      <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+          <span class="n">Text</span><span class="p">(</span><span class="n">sharedText</span><span class="p">)</span>                        <span class="c1">// 4</span>
+          <span class="n">TextField</span><span class="p">(</span><span class="s">&quot;shared&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="err">$</span><span class="n">sharedText</span><span class="p">)</span>  <span class="c1">// 5 _myString.projectValue.projectValue</span>
+      <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<ol>
+<li><code>_myString</code>是实际变量，包含一个<code>wrappedValue</code>，一个<code>projectedValue</code></li>
+<li><code>myString</code>就是<code>_myString.wrappedValue</code></li>
+<li><code>$myString</code>是<code>_myString.projectedValue</code>，<ul>
+<li>是一个<code>Binding&lt;String&gt;</code>，传值和接值用的就是它</li>
+<li>所以传<code>$myString</code>的地方也可以用<code>_myString.projectedValue</code>代替，学习阶段的话</li>
+</ul>
+</li>
+<li>要把<code>projectedValue</code>层层传递下去，并不是用同一个<code>projectedValue</code>，而是设计成了<code>Binding&lt;T&gt;</code><ul>
+<li>参考上面代码块的第5条</li>
+</ul>
+</li>
+</ol>
+<p>其它</p><ul>
+<li>也可以绑定一个常量：<code>OtherView(sharedText: .constant(“Howdy”))</code></li>
+<li>computed binding: <code>Binding(get:, set:).</code></li>
+</ul>
+<p>比如你的view是一个小组件，里面有一个<code>Binding var user: User</code>，那么在preview里面怎么传入这个User呢？用常量：</p><div class="highlight"><pre><span></span><span class="kd">static</span> <span class="kd">var</span> <span class="nv">preview</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+    <span class="n">myView</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="p">.</span><span class="n">constant</span><span class="p">(</span><span class="n">User</span><span class="p">(...)))</span>
+<span class="p">}</span>
+</pre></div>
+<h2>@EnvironmenetObject</h2>
+<ul>
+<li>The wrappedValue is: <code>ObservableObject</code> obtained via .environmentObject() sent to the View.</li>
+<li>What it does: <code>invalidates</code> the View when wrappedValue does objectWillChange.send().</li>
+<li>Projected value (i.e. $): a <code>Binding</code> (to the vars of the wrappedValue (a ViewModel)).</li>
+</ul>
+<p>与<code>@ObservedObject</code>用法稍有点不同，有单独的赋值接口：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">myView</span> <span class="p">=</span> <span class="n">MyView</span><span class="p">().</span><span class="n">environmentObject</span><span class="p">(</span><span class="n">theViewModel</span><span class="p">)</span>
+<span class="c1">// 而@ObservedObject是一个普通的属性</span>
+<span class="kd">let</span> <span class="nv">myView</span> <span class="p">=</span> <span class="n">MyView</span><span class="p">(</span><span class="n">viewModel</span><span class="p">:</span> <span class="n">theViewModel</span><span class="p">)</span>
+
+<span class="c1">// Inside the View ...</span>
+<span class="p">@</span><span class="n">EnvironmentObject</span> <span class="kd">var</span> <span class="nv">viewModel</span><span class="p">:</span> <span class="n">ViewModelClass</span> 
+<span class="c1">// ... vs ...</span>
+<span class="p">@</span><span class="n">ObservedObject</span> <span class="kd">var</span> <span class="nv">viewModel</span><span class="p">:</span> <span class="n">ViewModelClass</span>
+</pre></div>
+<ul>
+<li>visible to all views in your body (except modallay presented ones)</li>
+<li>多用于多个view共享ViewModel的时候</li>
+</ul>
+<h2>@Environment</h2>
+<ul>
+<li>与<code>@EnvironmentObject</code>完全不是同一个东西</li>
+<li>这是<code>Property Wrapper</code>不只有两个变量（warped..., projected...）的的一个应用</li>
+<li>通过<code>keyPath</code>来使用：<code>@Environment(\.colorScheme) var colorScheme</code></li>
+<li>wrappedValue的类型是通过<code>keyPath</code>声明时设置的</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">view</span><span class="p">.</span><span class="n">environment</span><span class="p">(</span><span class="err">\</span><span class="p">.</span><span class="n">colorScheme</span><span class="p">,</span> <span class="p">.</span><span class="n">dark</span><span class="p">)</span>
+</pre></div>
+<p>so:</p><ul>
+<li>The wrappedValue is: the value of some var in <code>EnvironmentValues</code>.</li>
+<li>What it does: gets/sets a value of some var in <code>EnvironmentValues</code>.</li>
+<li>Projected value (i.e. $): none.</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1">// someView pop 一个 modal 的 myView,传递 environment</span>
+<span class="n">someView</span><span class="p">.</span><span class="n">sheet</span><span class="p">(</span><span class="n">isPresented</span><span class="p">:</span> <span class="n">myCondition</span><span class="p">){</span>
+    <span class="n">myView</span><span class="p">(...</span><span class="kd">init</span><span class="p">...)</span>
+    <span class="p">.</span><span class="n">enviroment</span><span class="p">(</span><span class="err">\</span><span class="p">.</span><span class="n">colorScheme</span><span class="p">,</span> <span class="n">colorScheme</span><span class="p">)</span> 
+<span class="p">}</span>
+</pre></div>
+<p>除了深色模式，还有一个典型的应用场景就是编辑模式<code>\.editMode</code>，比如点了编辑按钮后。</p><blockquote>
+<p><code>EditButton</code>是一个封装了UI和行为的控件，它只做一件事，就是更改<code>\.editmode</code>这个环境变量(的<code>isEditing</code>)</p></blockquote>
+<h2>@Publisher</h2>
+<p>It is an object that <code>emits values</code> and possibly a <code>failure object</code> if it fails while doing so.</p><div class="highlight"><pre><span></span><span class="n">Publisher</span><span class="p">&lt;</span><span class="n">Output</span><span class="p">,</span> <span class="n">Failure</span><span class="p">&gt;</span>
+</pre></div>
+<ul>
+<li>Failure需要实现<code>Error</code>，如果没有，可以传<code>Never</code></li>
+</ul>
+<h3>订阅</h3>
+<p>一种简单用法，<code>sink</code>:</p><div class="highlight"><pre><span></span><span class="n">cancellable</span> <span class="p">=</span> <span class="n">myPublisher</span><span class="p">.</span><span class="n">sink</span><span class="p">(</span>
+    <span class="n">receiveCompletion</span><span class="p">:{</span><span class="n">resultin</span><span class="p">...},</span> <span class="c1">//result is a Completion&lt;Failure&gt; enum</span>
+        <span class="n">receiveValue</span><span class="p">:</span> <span class="p">{</span> <span class="n">thingThePublisherPublishes</span> <span class="k">in</span> <span class="p">.</span> <span class="p">.</span> <span class="p">.</span> <span class="p">}</span>
+  <span class="p">)</span>
+</pre></div>
+<p>返回一个<code>Cancellable</code>，可以随时<code>.cancel()</code>，只要你持有这个<code>cancellable</code>，就能随时用这个sink</p><p>View有自己的订阅方式：</p><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">onReceive</span><span class="p">(</span><span class="n">publisher</span><span class="p">)</span> <span class="p">{</span> <span class="n">thingThePublisherPublishes</span> <span class="k">in</span>
+    <span class="c1">// do whatever you want with thingThePublisherPublishes </span>
+<span class="p">}</span>
+</pre></div>
+<ol>
+<li><code>.onReceive</code> will automatically <code>invalidate</code> your View (causing a redraw).</li>
+<li>既然参数是publisher，所以是一个binding的变量，即带<code>$</code>使用：</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="p">.</span><span class="n">onReceive</span><span class="p">(</span><span class="err">$</span><span class="n">aBindData</span><span class="p">)</span> <span class="p">{</span> <span class="n">bind_data</span> <span class="k">in</span> 
+    <span class="c1">// my code</span>
+<span class="p">}</span>
+</pre></div>
+<p>publisher来源：</p><ol>
+<li><code>$</code> in front of vars marked <code>@Published</code><ul>
+<li>还记得$就是取的projectedValue吗？</li>
+<li>一般的projectedValue是一个<em>Binding</em>，Published的是是个<em>Publisher</em></li>
+</ul>
+</li>
+<li>URLSession’s <code>dataTaskPublisher</code> (publishes the Data obtained from a URL)</li>
+<li><code>Timer</code>’s publish(every:) (periodically publishes the current date and time as a Date)</li>
+<li><code>NotificationCenter</code>’s publisher(for:) (publishes notifications when system events happen)</li>
+</ol>
+<blockquote>
+<p>如果你有一个<code>ObservedObject</code>(Document)，它里面有一个<code>@Publisher</code>(background)，那么注意以下两者的区别：</p></blockquote>
+<ul>
+<li>document.<code>$</code>background: 是一个publisher</li>
+<li><code>$</code>document.background: 是一个binding</li>
+</ul>
+<blockquote>
+<p><code>.onReceive</code>只能接收<code>Publisher</code>的推送，而事实上，<code>onChange</code>（一般用于接收ObservedObject或State)同样也能接收Publisher。</p></blockquote>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B5%5D_Property-Wrapper/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
 </section>
 
-<section class="ga-section ga-mono" id="ga-pager">
-    
-        <a prev class="ga-highlight" href="/">Prev</a>
-    
-    <span>Page 2 of 8</span>
-    
-        <a next class="ga-highlight" href="/page/3/">Next</a>
-    
-</section>
-
-<section id="ga-external_links" class="ga-section" data-title="Links">
-    <ul>
-        
-        <li>
-            <a class="ga-highlight" target="_blank" href="https://github.com/AlanDecode/Maverick">Maverick</a>：🏄‍ Go My Own Way.
-        </li>
-        
-        <li>
-            <a class="ga-highlight" target="_blank" href="https://www.imalan.cn">Triple NULL</a>：Home page for AlanDecode.
-        </li>
-        
-    </ul>
-</section>
+<div class="container">
+    <section id="prism__page__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+        <ul>
+            
+            <li class="next">
+                <a class="no-link" href="/" target="_self"><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</a>
+            </li>
+            
+            
+            <li class="prev">
+                <a class="no-link" href="/page/3/" target="_self">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+            </li>
+            
+        </ul>
+    </section>
+</div>
 
 
 </main>
 
-                <footer class="ga-mono" id="ga-footer">
-                    <section>
-                        <span id="ga-uptime"></span>
-                        <span class="brand">walker's code blog</span>
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
                     </section>
-                    <section>
-                        <p class="copyright">
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
                             <span>Copyright © 2022 AlanDecode</span>
-                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
                         </p>
-                        <div class="copyright">
-                            <span class="footer-addon">
-                                
-                            </span>
-                            <nav class="social-links">
-                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/walkerwzy" target="_blank"><i class="gi gi-github"></i>GitHub</a></li><span class="separator">·</span><li><a class="no-style" title="Weibo" href="https://weibo.com/1071696872" target="_blank"><i class="gi gi-weibo"></i>Weibo</a></li></ul>
-                            </nav>
-                        </div>
-                    </section>
-                    <script>
-                        var site_build_date = "2019-12-06T12:00+08:00"
-                    </script>
-                    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-7c8cea54ab.js"></script>
-                </footer>
-            </div>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+            </footer>
         </div>
     </div>
-
-    <!--katex-->
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
-    <script>
-    mathOpts = {
-        delimiters: [
-            {left: "$$", right: "$$", display: true},
-            {left: "\\[", right: "\\]", display: true},
-            {left: "$", right: "$", display: false},
-            {left: "\\(", right: "\\)", display: false}
-        ]
-    };
-    </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
     
-    </body>
+</body>
+
 </html>
