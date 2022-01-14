@@ -2,11 +2,14 @@
 layout: post
 title: 几大排序算法python实现
 slug: 几大排序算法python实现
-date: 2022-01-14 00:00
+date: 2021-08-23 00:00
 status: publish
 author: walker
 categories: 
   - AI
+tags:
+  - 排序
+  - 算法
 ---
 
 ## 冒泡排序

@@ -2,11 +2,15 @@
 layout: post
 title: RNN梯度消失与梯度爆炸推导
 slug: RNN梯度消失与梯度爆炸推导
-date: 2022-01-14 00:00
+date: 2021-05-09 00:00
 status: publish
 author: walker
 categories: 
   - AI
+tags:
+  - RNN
+  - 梯度消失
+  - 梯度爆炸
 ---
 
 ![](../assets/1859625-1a8b2a5bad603588.png)

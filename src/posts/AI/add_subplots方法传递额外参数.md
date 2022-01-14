@@ -2,11 +2,13 @@
 layout: post
 title: add_subplots方法传递额外参数
 slug: add_subplots方法传递额外参数
-date: 2022-01-14 00:00
+date: 2021-01-14 00:00
 status: publish
 author: walker
 categories: 
   - AI
+tags:
+  - matplotlib
 ---
 
 用matplotlib绘制3D图，最快的用法

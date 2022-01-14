@@ -2,11 +2,13 @@
 layout: post
 title: RNN中bidirectional和num_layer对output和hidden形状的影响
 slug: RNN中bidirectional和num_layer对output和hidden形状的影响
-date: 2022-01-14 00:00
+date: 2021-04-13 00:00
 status: publish
 author: walker
 categories: 
   - AI
+tags:
+  - RNN
 ---
 
 ## Batch first

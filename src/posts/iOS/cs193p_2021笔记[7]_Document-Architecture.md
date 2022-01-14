@@ -106,7 +106,7 @@ struct MyDemoApp: App {
 * you **MUST** implement `Undo` in your application
 
 如果不去实现`Undo`，也可以直接把model存到document文件里：
-1. 你的ViewModel要能init itself from a `Binding<Type>`
+1. 你的ViewModel要能init itself from a `Binding<Type>`
     * 如`config.$document`
 2. ViewModel由一个`ObservedObject`变成一个`StateObject`
     * 这次必须服从`FileDocument`

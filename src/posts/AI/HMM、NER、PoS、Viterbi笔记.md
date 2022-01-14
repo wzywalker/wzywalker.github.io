@@ -2,11 +2,16 @@
 layout: post
 title: HMM、NER、PoS、Viterbi笔记
 slug: HMM、NER、PoS、Viterbi笔记
-date: 2022-01-14 00:00
+date: 2022-06-14 00:00
 status: publish
 author: walker
 categories: 
   - AI
+tags:
+  - HMM
+  - NER
+  - PoS
+  - Viterbi
 ---
 
 开局一句话，隐马尔可夫，就是在“溯源”，即产生你这个现象的源头在哪。
@@ -79,7 +84,7 @@ HMM是一个序列模型(`sequence model`)。序列模型或序列分类器是�
 
 比如结果是：1 6 3 5 2 7 3 5 2 4, 求最可能的骰子序列 
 
-### Viterbi algorithm 
+### Viterbi algorithm
 
 1. 掷出1的最大概率是4面体： P1(D4) = P(1|D4) * P(D4) = 1/4 * 1/3
 2. 掷出6的最大概率是 P2(D6) = P(6|D6) * P(D6) = 1/6 * 1/3 
@@ -317,6 +322,6 @@ reverse best path
 1. 显然这里已经知道edge不知道是一个词，而且是一个词的首尾边界
 2. 也知道存到best_edges里面的其实就是词的位置索引
 3. 反向的时候，从最后一个索引找到得分最低的词，再从这个单词向前找，一直找到
-    * 所以next_edge[0]其实就是当前单词词首，[1]就是词尾
+    * 所以next_edge[0]其实就是当前单词词首，[1]就是词尾
     * 所以把当前单词存进去后，向前搜索就要以next_edge[0]为字典，找对应的best_edge
     * 再从best_edge里面解析出最合适的单词的首尾索引，存到结果数组里

@@ -2,11 +2,14 @@
 layout: post
 title: 几种教材里求解Ax=0笔记
 slug: 几种教材里求解Ax=0笔记
-date: 2022-01-14 00:00
+date: 2021-03-05 00:00
 status: publish
 author: walker
 categories: 
   - AI
+tags:
+  - math
+  - 线性代数
 ---
 
 如果一个矩阵化简为

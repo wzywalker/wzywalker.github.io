@@ -2,11 +2,14 @@
 layout: post
 title: 李宏毅MACHINE-LEARNING-2021-SPRING笔记
 slug: 李宏毅MACHINE-LEARNING-2021-SPRING笔记
-date: 2022-01-14 00:00
+date: 2021-10-03 00:00
 status: publish
 author: walker
 categories: 
   - AI
+tags:
+  - 李宏毅
+  - 机器学习
 ---
 
 > 纯听课时一些思路和笔记，没有教程作用。
@@ -615,10 +618,10 @@ detail: https://youtu.be/jvyKmU4OM3c (Non-Autoregressive Sequence Generation)
 
 训练时候应用了`Teaching force`，用了全部或部分真值当作预测结果来训练（或防止一错到底），而eval的时候确实就是一错到底的模式了。
 
-# Self-supervised Learning
+# Self-supervised Learning
 
-* 芝麻街家庭：elmo, bert, erine...
-* bert就是transformer的encoder
+* 芝麻街家庭：elmo, bert, erine...
+* bert就是transformer的encoder
 
 ## Bert
 
@@ -630,7 +633,7 @@ GLUE: General Language Understanding Evaluation
 
 ![](../assets/1859625-0895ab4b9a46e931.png)
 
-训练：
+训练：
 1. 预测mask掉的词(masked token prediction)
     * 为训练数据集添加部分掩码，预测可能的输出
     * 类似word2vec的C-Bow
@@ -784,7 +787,7 @@ https://youtu.be/DOG1L9lvsDY
 
 给你一张猫的图片，里面加入少许噪音，以保证肉眼看不出来有噪音的存在：
 1. 期望分类器认为它不是猫
-2. 期望分类器认为它是一条鱼，一个键盘...
+2. 期望分类器认为它是一条鱼，一个键盘...
 
 比如你想要欺骗垃圾邮件过滤器
 
@@ -793,7 +796,7 @@ https://youtu.be/DOG1L9lvsDY
 * 真值为$\hat y$
 * $L(x) = -e(y, \hat y)$
 * $x^* = arg\underset{d(x^0, x) \leq \epsilon}{\rm min}\ L(x)$ 即要找到令损失最大的x
-    1. 这里L(x)我们取了反
+    1. 这里L(x)我们取了反
     2. $\epsilon$越小越好，指的是$x^0$要与x越接近越好（欺骗人眼）
 * 如果还期望它认成是$y^{target}$，那就再加上与其的的损失
 * $L(x) = -e(y, \hat y) + e(y, y^{target})$

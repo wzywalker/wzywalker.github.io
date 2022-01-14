@@ -2,11 +2,14 @@
 layout: post
 title: 一张图说清匈牙利算法（Hungarian-Algorithm）
 slug: 一张图说清匈牙利算法（Hungarian-Algorithm）
-date: 2022-01-14 00:00
+date: 2021-09-23 00:00
 status: publish
 author: walker
 categories: 
   - AI
+tags:
+  - 匈牙利算法
+  - 多目标跟踪
 ---
 
 做多目标跟踪的时候会碰到这个算法，每个人都有自己的说法讲清楚这个算法是干什么的？我的老师就跟我说过是什么给工人分配活干（即理解为`指派问题`），网上还看到有说红娘尽可能匹配多的情侣等，透过这些感性理解，基本上就能理解大概是最大匹配的问题了。

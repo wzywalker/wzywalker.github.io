@@ -399,8 +399,8 @@ A pretrained network is a saved network that was previously trained **on a large
 Feature extraction consists of using the representations learned by a previous network to extract interesting features from new samples. These features are then run through a *new classifier*, which is trained from scratch. 
 
 1. 即只使用别的大型模型提取的representations（特征），来构建自己的分类器。
-2. 原本模型的分类器不但是为特定任务写的，而且基本上丧失了位置和空间信息，只保留了对该任务上的presence probability.
-3. 最初的层一般只能提取到线，边缘，颜色等低级特征，再往后会聚合出一些纹理，更高的层就可能会叠加出一些眼，耳等抽象的特征，所以你的识别对象与pretrained数据源差别很大的时候，就需要考虑把最尾巴的几层layer也舍弃掉。（e.g. VGG16最后一层提取了512个feature map）
+2. 原本模型的分类器不但是为特定任务写的，而且基本上丧失了位置和空间信息，只保留了对该任务上的presence probability.
+3. 最初的层一般只能提取到线，边缘，颜色等低级特征，再往后会聚合出一些纹理，更高的层就可能会叠加出一些眼，耳等抽象的特征，所以你的识别对象与pretrained数据源差别很大的时候，就需要考虑把最尾巴的几层layer也舍弃掉。（e.g. VGG16最后一层提取了512个feature map）
 4. 两种用法：
     * 跑一次预训练模型你选中的部分，把参数存起来（$\leftarrow$错），把输出当作dataset作为自己构建的分类器的input。
         * 快，省资源，但是需要把数据集固定住，等于没法做data augmentation
@@ -420,7 +420,7 @@ Feature extraction consists of using the representations learned by a previous n
 
 Fine-tuning consists of unfreezing a few of the top layers of a frozen model base used for feature extraction, and jointly training both the newly added part of the model (in this case, the fully connected classifier) and these top layers. This is called fine-tuning because it slightly adjusts the more abstract representations of the model being reused, in order to make them more relevant for the problem at hand.
 
-前面的feature extraction方式，会把预训练的模型你选中的layers给freeze掉，即不计算梯度。这里之所以叫fine-tuning，意思就是会把最后几层(top-layers)给`unfreezing`掉，这样的好处是保留低级特征，重新训练高级特征，还保留了原来大型模型的结构，不需要自行构建。
+前面的feature extraction方式，会把预训练的模型你选中的layers给freeze掉，即不计算梯度。这里之所以叫fine-tuning，意思就是会把最后几层(top-layers)给`unfreezing`掉，这样的好处是保留低级特征，重新训练高级特征，还保留了原来大型模型的结构，不需要自行构建。
 
 ![](../assets/1859625-78ecf7b5f847c9ef.png)
 
@@ -561,7 +561,7 @@ heatmap = np.mean(conv_layer_output_value, axis=-1)
 
 通用场景：
 
-* [分类: 文本分类] Document classification and timeseries classification, such as identifying the topic of an article or the author of a book
+* [分类: 文本分类] Document classification and timeseries classification, such as identifying the topic of an article or the author of a book
 * [分类: 文本比较] Timeseries comparisons, such as estimating how closely related two documents or two stock tickers are
 * [分类: 生成] Sequence-to-sequence learning, such as decoding an English sentence into French
 * [分类: 情感分析]Sentiment analysis, such as classifying the sentiment of tweets or movie reviews as positive or negative

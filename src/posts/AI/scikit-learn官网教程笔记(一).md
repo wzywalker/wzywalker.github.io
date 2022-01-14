@@ -2,11 +2,13 @@
 layout: post
 title: scikit-learn官网教程笔记(一)
 slug: scikit-learn官网教程笔记(一)
-date: 2022-01-14 00:00
+date: 2021-03-02 00:00
 status: publish
 author: walker
 categories: 
   - AI
+tags:
+  - scikit-learn
 ---
 
 当初翻scikit learn文档的时候，越翻越多，干脆把它的教程拿出来看了看，只有前面的部分，主要想看看scikit learn角度整理的知识体系，果然，一开始就是从监督和非监督讲起：
@@ -808,6 +810,6 @@ array([[5.006     , 3.428     , 1.462     , 0.246     ],
        [5.9016129 , 2.7483871 , 4.39354839, 1.43387097],
        [6.85      , 3.07368421, 5.74210526, 2.07105263]])
 ```
-###  未完结
+### 未完结
 
 https://scikit-learn.org/stable/tutorial/statistical_inference/unsupervised_learning.html

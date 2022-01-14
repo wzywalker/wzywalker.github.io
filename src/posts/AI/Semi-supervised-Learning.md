@@ -2,11 +2,14 @@
 layout: post
 title: Semi-supervised-Learning
 slug: Semi-supervised-Learning
-date: 2022-01-14 00:00
+date: 2021-06-07 00:00
 status: publish
 author: walker
 categories: 
   - AI
+tags:
+  - semi supervised learning
+  - 半监督学习
 ---
 
 李宏毅机器学习2021spring的家庭作业里面有一个`Semi-supervised Learning`的任务。
