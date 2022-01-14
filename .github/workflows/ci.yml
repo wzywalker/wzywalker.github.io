@@ -34,19 +34,19 @@ jobs:
     #     ref: 'cache'
     #     path: './build_cache'
 
-    # - name: Build site
-    #   run: |
-    #     # 复用图片解析缓存
-    #     mkdir ./Maverick/cached_imgs
-    #     cp ./build_cache/sizeinfo.json ./Maverick/cached_imgs
-    #     rm -rf ./build_cache/.git
+    - name: Build site
+      run: |
+        # 复用图片解析缓存
+        # mkdir ./Maverick/cached_imgs
+        # cp ./build_cache/sizeinfo.json ./Maverick/cached_imgs
+        # rm -rf ./build_cache/.git
 
-    #     cd ./Maverick
-    #     python ./build.py -c "../conf.py"
+        cd ./Maverick
+        python ./mvrk.py -c "../conf.py"
 
-    #     # 保存图片缓存
-    #     cd ..
-    #     cp ./Maverick/cached_imgs/sizeinfo.json ./build_cache
+        # 保存图片缓存
+        # cd ..
+        # cp ./Maverick/cached_imgs/sizeinfo.json ./build_cache
 
     - name: Deploy to GitHub Pages
       uses: docker://peaceiris/gh-pages:v2
