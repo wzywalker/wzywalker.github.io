@@ -24,13 +24,13 @@ locale = "Asia/Shanghai"
 category_by_folder = True
 
 # For site
-site_name = "Maverick"
+site_name = "walker's code blog"
 site_logo = "${static_prefix}android-chrome-512x512.png"
 site_build_date = "2019-12-06T12:00+08:00"
 author = "AlanDecode"
 email = "hi@imalan.cn"
 author_homepage = "https://wzy.one"
-description = "This is Maverick, Theme Galileo."
+description = "coder, reader"
 key_words = ["Maverick", "AlanDecode", "Galileo", "blog"]
 language = 'english'
 external_links = [

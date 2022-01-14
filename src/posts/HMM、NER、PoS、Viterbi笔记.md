@@ -2,7 +2,7 @@
 layout: post
 title: HMM、NER、PoS、Viterbi笔记
 slug: HMM、NER、PoS、Viterbi笔记
-date: 2022-06-14 00:00
+date: 2021-06-14 00:00
 status: publish
 author: walker
 categories: 
