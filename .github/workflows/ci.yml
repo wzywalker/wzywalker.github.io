@@ -36,17 +36,7 @@ jobs:
 
     - name: Build site
       run: |
-        # 复用图片解析缓存
-        # mkdir ./Maverick/cached_imgs
-        # cp ./build_cache/sizeinfo.json ./Maverick/cached_imgs
-        # rm -rf ./build_cache/.git
-
-        # cd ./Maverick
-        python ./Maverick/mvrk.py --config "../config.py"
-
-        # 保存图片缓存
-        # cd ..
-        # cp ./Maverick/cached_imgs/sizeinfo.json ./build_cache
+        python ./Maverick/mvrk.py --config ./config.py
 
     - name: Deploy to GitHub Pages
       uses: docker://peaceiris/gh-pages:v2
