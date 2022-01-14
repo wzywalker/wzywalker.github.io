@@ -8,7 +8,8 @@ author: walker
 categories: 
   - iOS
 tags:
-  - 
+  - 签名
+  - sign
 ---
 
 原文转载: [https://wereadteam.github.io/2017/03/13/Signature/](https://wereadteam.github.io/2017/03/13/Signature/)

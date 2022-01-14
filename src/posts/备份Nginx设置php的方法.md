@@ -2,11 +2,14 @@
 layout: post
 title: 备份Nginx设置php的方法
 slug: 备份Nginx设置php的方法
-date: 2022-01-14 00:00
+date: 2019-07-31 00:00
 status: publish
 author: walker
 categories: 
   - Skill
+tags:
+  - nginx
+  - php
 ---
 
 版本nginx/1.12.2
