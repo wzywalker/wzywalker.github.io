@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2022-01-14
                 </time>
                 
-                in <a no-style class="category" href="/category/iOS/">
-                    iOS
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -82,7 +82,7 @@
             </span>
             <div class="ga-content_body">
                 <p>先来看一个例子
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-3e7b6d49d93084a7.png" /></figure>
+<figure style="flex: 38.76146788990825" ><img loading="lazy" width="338" height="436" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d5fdc49bd6037d399e4685d3cf9d72bf.png" /></figure>
 画一个箭头，其中箭尾有分叉，一般来说，是画一个三角，画一个矩形（实心矩形一般也直接用很粗的线条），最后再叠一个三角（with <code>CGBlendModel.clear</code>)，这里就不多介绍了：</p><div class="highlight"><pre><span></span><span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">rect</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">{</span>       
     <span class="kd">let</span> <span class="nv">p</span> <span class="p">=</span> <span class="bp">UIBezierPath</span><span class="p">()</span>
     <span class="c1">// shaft</span>
@@ -167,14 +167,14 @@
 <li>知道了新rect的位置，把clip加回来，发现箭尾有了，箭头却没了（图四）</li>
 <li>rect与clip的关系已经出来了，尝试把红三角的y通通加50，移到了蓝矩形范围内，得到证明（图五）</li>
 </ol>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-9f8872c1aeb16bd1.png" /></figure><p>那么clipping到底能对哪些起作用呢？是上面的rect吗？<strong>当然不是</strong>！</p><p>在clip方法被调用的时候，画布里有多少封闭元素，就会被应用clip。由于我们选择的是<code>evenOdd</code>模式，那么就会简单计数，某像素覆盖奇数次显示，偶数次则不显示。</p><p>上例中，<code>con.clip(using:)</code>方法调用时，画布里有两个封闭元素，一个三角，一个矩形，三角包在矩形里，那么计数为2，就不予显示了。</p><blockquote>
+<figure style="flex: 58.108108108108105" ><img loading="lazy" width="774" height="666" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/83a72f77f3c1af59c2e83c0616699ca5.png" /></figure><p>那么clipping到底能对哪些起作用呢？是上面的rect吗？<strong>当然不是</strong>！</p><p>在clip方法被调用的时候，画布里有多少封闭元素，就会被应用clip。由于我们选择的是<code>evenOdd</code>模式，那么就会简单计数，某像素覆盖奇数次显示，偶数次则不显示。</p><p>上例中，<code>con.clip(using:)</code>方法调用时，画布里有两个封闭元素，一个三角，一个矩形，三角包在矩形里，那么计数为2，就不予显示了。</p><blockquote>
 <p>事实上，判定奇偶的依据是该点向外做无限长的射线，判定有几条边与射线相交。同时，同样的设定可以用来解释<code>.winding</code>模式，即不但与相交的边有交，还与相交时，那条边是顺时针方向绘制的（+1）还是逆时针方向绘制的（-1）,总结果为0则不填充。<a href="https://www.jianshu.com/p/5cf8048b083b">参考</a></p></blockquote>
 <p>那就玩一玩验证下吧</p><ol>
 <li>把矩形改成了圆圈，线宽也改小一点，得到（图一）<em>绿色三角形是我后加的，因为被黄实线盖住了</em></li>
 <li>再在里面添加了一个小圆，得到（图二）</li>
 <li>这时候按照奇偶原则，小圆里的像素是偶数，而小圆里的三角则是奇数了，那么应该就只有大圆减掉小圆的部分，和小圆内的三角会被渲染了（图三），与预期一致</li>
 </ol>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-f7d438f54a215645.png" /></figure><p>现在再来回顾书上先套一个画布大小的矩形，再画一个三角形，你大概应该知道目的了（凑奇偶），我们矩形区域过小时绘制不了红色三角，纯粹也是因为奇数，往下移到矩形区域内，立马变偶数了。(当然，要在原位置渲染我们可以先中止clip:<code>con.resetClip()</code>再绘图）</p>
+<figure style="flex: 137.00564971751413" ><img loading="lazy" width="970" height="354" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/84aa194f6e13d2f92fe6e9929e5c7110.png" /></figure><p>现在再来回顾书上先套一个画布大小的矩形，再画一个三角形，你大概应该知道目的了（凑奇偶），我们矩形区域过小时绘制不了红色三角，纯粹也是因为奇数，往下移到矩形区域内，立马变偶数了。(当然，要在原位置渲染我们可以先中止clip:<code>con.resetClip()</code>再绘图）</p>
             </div>
         </article>
         <div id="ga-tags">

@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2022-01-14
                 </time>
                 
-                in <a no-style class="category" href="/category/CS/">
-                    CS
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -144,14 +144,14 @@
 </ol>
 <p>可见，虽然系数是“动态”的了，但是取值还是（1，N）中的一个而已，hash只是让其动起来的一个原因，而不是参与计算的值。</p><p>我们本来就是在求hash value，结果又要引入另一个hash function，显然这个$H_2$不能像外层这样复杂，一般是针对常见的key类型(string, int...-&gt; fundamental data type)的<code>universal hash functions</code></p><blockquote>
 <p>因为N要是一个素数，所以在double size的时候，还要继续往上找直到找到一个素数为止，比如N=7, double后，N=14，那么最终，N=17</p></blockquote>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-8818bf0d1d733dc7.png" /></figure><h3>Issues with removing</h3>
+<figure style="flex: 67.68558951965065" ><img loading="lazy" width="1240" height="916" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/cbae1de97a3f72ae84ea59804293ec56.png" /></figure><h3>Issues with removing</h3>
 <p>因为冲突的hash value需要probing，probing的依据是从序列里依次取出下一个位置，检查这个位置<strong>有没有被占用</strong>，那么问题就来了，如果一个本被占用的位置，因为元素需要删除，反而变成没有占用了，这有点类似删除树节点，不但要考虑删除，还要考虑这个位置怎么接续。</p><p><strong>lazy deletion</strong>
 但HT机制比树要复杂，为了避免反复应用probing函数重新摆放后续所有节点，干脆就在删除的位置放置一个预设的标识，我们称为墓碑(<code>tombstone</code>)，而不是直接置空，然后所有的查找和添加加上这一条规则，就能快速删除又无需重新排序。</p><p>大量删除会造成空间浪费，但无需立即处理：</p><ol>
 <li>添加元素允许添加到墓碑位置</li>
 <li>到达阈值容量需要倍增的时候有一次重排，这个时候就可以移除所有的墓碑</li>
 </ol>
 <p>如果查找一个hash value，连续3个都是墓碑，第4个才是它，这是不是有点浪费时间？
-确实，所以还可以优化，当你查找过一次之后，就可以把它移到第一个墓碑的位置，这样，<strong>下次</strong>查询的时候速度就会快很多了。</p><p>整个机制，叫<code>lazy deletion</code></p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-c6d9f3a99c26345f.png" /></figure>
+确实，所以还可以优化，当你查找过一次之后，就可以把它移到第一个墓碑的位置，这样，<strong>下次</strong>查询的时候速度就会快很多了。</p><p>整个机制，叫<code>lazy deletion</code></p><figure style="flex: 29.61816305469556" ><img loading="lazy" width="1148" height="1938" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a935a20b4bc9641962766872aace8306.png" /></figure>
             </div>
         </article>
         <div id="ga-tags">
@@ -169,8 +169,8 @@
 
 
     <div class="prev">
-        <a class="ga-highlight" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%80%EF%BC%9AArray%2C-Linked-List%2C-Stack%2C-Queues/">数据结构篇一：Array,-Linked-List,-Stack,-Queues</a>
-        <p class="yue">这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记前几个比较基础,只记录了些关键字和提纲Static and Dynamic Arrays</p>
+        <a class="ga-highlight" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B4%5D_Color_Image_Gesture/">cs193p_2021笔记[4]_Color_Image_Gesture</a>
+        <p class="yue">cs193p_2021_笔记_1</p>
     </div>
 
 </section>

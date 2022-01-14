@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2022-01-14
                 </time>
                 
-                in <a no-style class="category" href="/category/iOS/">
-                    iOS
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -123,8 +123,8 @@ gradientLayer.endPoint = CGPointMake(0, _percentage);
 gradientLayer.mask = shapeLayer; // 当作渐变图层的 mask
 </code></pre>
 <p>组合效果如下:
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-86b02253763d02a7.gif" /></figure></p><p>要绘制弧形, 对照这个图就很简单了:
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-cde25599cbf959f6.png" /></figure></p><p>补充知识:</p><p>1, <code>CALayer</code>的动画用不了<code>animateWithDuration:animations:completion:</code>怎么办?</p><blockquote>
+<figure style="flex: 82.6086956521739" ><img loading="lazy" width="380" height="230" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/43ff55cd36a9fdcc4a548f9b35395d54.gif" /></figure></p><p>要绘制弧形, 对照这个图就很简单了:
+<figure style="flex: 50.0" ><img loading="lazy" width="400" height="400" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/99b3f00e6554f019df9d19d398777341.png" /></figure></p><p>补充知识:</p><p>1, <code>CALayer</code>的动画用不了<code>animateWithDuration:animations:completion:</code>怎么办?</p><blockquote>
 <p>因为这是<code>UIView</code>的方法, 你要把它加到一个<code>CATransaction</code>里面去</p></blockquote>
 <p>2, 即使加到<code>CATransaction</code>里面了, 怎么我对<code>frame</code>做的动画还是没有生效?</p><blockquote>
 <p>因为<code>frame</code>是一个复合属性, 它由<code>position</code>, <code>bounds</code>等属性决定, 所以你只是用错了属性.</p></blockquote>
@@ -197,8 +197,8 @@ override func displayLayer(layer: CALayer) {
 <section id="ga-content_pager">
 
     <div class="next">
-        <a class="ga-highlight" href="/archives/apple-store%E9%93%BE%E6%8E%A5%E6%A0%BC%E5%BC%8F%E6%96%87%E6%A1%A3/">apple-store链接格式文档</a>
-        <p class="yue">The app on Appstore has specific URL format http://itunes.apple.com/[country-code]/app/[app-name]/id+[id_value]?mt=[1...12]</p>
+        <a class="ga-highlight" href="/archives/shell%E5%91%BD%E4%BB%A4%E7%94%A8%E6%AD%A3%E5%88%99%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/">shell命令用正则批量重命名文件</a>
+        <p class="yue">又是用shell来操作文件的问题.我下了老友记的全集, 结果在NAS里死活匹配不出3季以后的剧集信息, 因为打包来源相同, 一直没深究, 只当是刮削工具做得不好, 今天才发现从第4季开始, 所有的文件名格式都错了, 如:Friends.s10.06.2003.BDRip.1080p.Ukr.Eng.AC3.Hurtom.TNU.Tenax555.mkv</p>
     </div>
 
 

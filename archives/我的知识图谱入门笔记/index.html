@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2021-06-17
                 </time>
                 
-                in <a no-style class="category" href="/category/AI/">
-                    AI
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -99,7 +99,7 @@
 <li>&quot;<code>www.kg.com/person/1</code>&quot;是一个IRI，用来唯一的表示“罗纳尔多”这个实体。&quot;kg:chineseName&quot;也是一个IRI，用来表示“中文名”这样一个属性。&quot;kg:&quot;是RDF文件中所定义的prefix，如下所示。</li>
 <li>@<code>prefix kg</code>: <a href="http://www.kg.com/ontology/">http://www.kg.com/ontology/</a> 即，kg:chineseName其实就是&quot;http:// www.kg.com/ontology/chineseName&quot;的缩写。</li>
 </ul>
-<p>这样知识图谱的正确表示其实是：</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-eac5ca44177cdaa3.png" /></figure><p>而不是网传的简单的画几个对象连几根线，也就是说，能用URI表示的，尽量都用URI表示。</p><h1>Identifying graph-shaped problems(应用场景)</h1>
+<p>这样知识图谱的正确表示其实是：</p><figure style="flex: 81.6618911174785" ><img loading="lazy" width="1140" height="698" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/055b61a7e0a74762f15ece471ec22ee8.png" /></figure><p>而不是网传的简单的画几个对象连几根线，也就是说，能用URI表示的，尽量都用URI表示。</p><h1>Identifying graph-shaped problems(应用场景)</h1>
 <ul>
 <li><p>does our problem involve understanding <code>relationships</code> between entities?</p><ul>
 <li>Recommendations</li>
@@ -130,7 +130,7 @@
 </li>
 </ul>
 <h1>Neo4j</h1>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-27562d46f783179b.png" /></figure><ol>
+<figure style="flex: 88.44507845934379" ><img loading="lazy" width="1240" height="701" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1da110e1163eb31331ea2c21528a4ae2.png" /></figure><ol>
 <li><code>:person</code>, <code>:Car</code>, <code>:Vehicle</code> are <code>Label</code></li>
 <li>even <code>relationship</code> can also have(own) properties</li>
 </ol>
@@ -139,7 +139,7 @@
 <p><code>(p:Person:Mammal{name:'walker'})</code></p><h3>for Relationships</h3>
 <p><code>- [:HIRED {type: 'fulltime'}] -&gt;</code></p><h2>CRUD</h2>
 <h3>Create</h3>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-3ae17c43c8261651.png" /></figure><h4>Constraints</h4>
+<figure style="flex: 87.94326241134752" ><img loading="lazy" width="1240" height="705" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1664c809c2f78ab7dc14392c1ef00ac9.png" /></figure><h4>Constraints</h4>
 
 <pre><code>CREATE  CONSTRAINT ON (p:Person)
 ASSERT p.name IS UNIQUE

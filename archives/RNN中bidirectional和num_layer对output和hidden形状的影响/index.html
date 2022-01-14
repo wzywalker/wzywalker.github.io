@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2021-04-13
                 </time>
                 
-                in <a no-style class="category" href="/category/AI/">
-                    AI
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -83,7 +83,7 @@
             <div class="ga-content_body">
                 <h2>Batch first</h2>
 <p>首先，我们要习惯接受<code>batch_first=False</code>（就是默认值）的思维，因为NLP中批量处理句子，是每一句取第一个词，第二个词，以此类推。
-按我们习惯的把数据放在同一批（即<code>batch_first=True</code>）的思路虽然可以做到（善用切片即可），但是绕了弯路。但是如果第1批都是第1个字，第2批全是第2个字，这会自然很多（<strong>行优先</strong>）。</p><p>所以至少<code>Pytorch</code>内部，你设了True，内部也是按False来处理的，只是给了你一个语法糖（当然你组织数据就必须按True来组织了。</p><p>看个实例：</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-9aea1f2ec2540d06.png" /></figure><ol>
+按我们习惯的把数据放在同一批（即<code>batch_first=True</code>）的思路虽然可以做到（善用切片即可），但是绕了弯路。但是如果第1批都是第1个字，第2批全是第2个字，这会自然很多（<strong>行优先</strong>）。</p><p>所以至少<code>Pytorch</code>内部，你设了True，内部也是按False来处理的，只是给了你一个语法糖（当然你组织数据就必须按True来组织了。</p><p>看个实例：</p><figure style="flex: 79.69151670951157" ><img loading="lazy" width="1240" height="778" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d6a0d9ea71601f8b89c0e8465751baf4.png" /></figure><ol>
 <li>假定批次是64，句长截为70，在还没有向量化的数据中，那么显然一次的输入应该为(70x64)，批次在第2位</li>
 <li>注意第一行，全是2，这是设定的<code>&lt;bos&gt;</code>，这已经很好地表示了在行优先的系统里（比如<code>Matlab</code>就是列优先），会自然而且把<strong>每句话</strong>的第一个词读出来的设定了。</li>
 </ol>
@@ -289,7 +289,7 @@ tensor([-0.2336,  0.0660,  0.0859,  0.2164,  0.1229])
 <li>反向的输出就是把数据反传的单向rnn</li>
 <li>双向rnn出来的第最后一个hidden（后半截）就是反向完成后的hidden</li>
 </ul>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-5ee75456f3cd94de.png" /></figure><p>由打印出来的数据可知：</p><ul>
+<figure style="flex: 83.6996336996337" ><img loading="lazy" width="914" height="546" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/67bb7c8df3810d83a7f07909fbd601f9.png" /></figure><p>由打印出来的数据可知：</p><ul>
 <li>最后一个hidden，就是反向RNN的最后一个hidden（时间点在开头）</li>
 <li>也是双向RNN里的第一个输出（<strong>的最后一个元素</strong>）</li>
 <li>也是单向RNN（但是数据反传）（或者正向，但逆时序）里的最后一个输出</li>
@@ -303,7 +303,7 @@ tensor([-0.2336,  0.0660,  0.0859,  0.2164,  0.1229])
 <li>output由正反向输出横向拼接（所有）</li>
 <li>hidden由正反向hidden竖向拼接（top layer)</li>
 </ul>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-d12e030fa3d7527e.png" /></figure>
+<figure style="flex: 71.92575406032482" ><img loading="lazy" width="1240" height="862" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/671265db99cdb4c1fcda808d82a08794.png" /></figure>
             </div>
         </article>
         <div id="ga-tags">

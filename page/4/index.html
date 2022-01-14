@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -64,51 +64,6 @@
 
 <section id="ga-post_list" class="ga-section" data-title="Posts">
     <ul>
-        
-        <li>
-            <article class="yue">
-                <h1>关于@synthesize</h1>
-                
-                    <blockquote>首先, @synthesize myLocalVar = _myLocalVar; 这句话是显式帮你省掉了一个 getter 方法和一个 setter 方法. 两个方法长什么样不赘述.其次, 从某个版本的 Xcode 开始, 你连 @synthesize 这句话也不需要写了, 但是请注意, 这只是一个 IDE 的特性. 你不需要手动合成, 不代表 @synthesize 不作用了, 仅仅是让你能少写这一句话, 而 Xcode 帮你补全了.再次, @synthesize 仅仅是一个 clang 的 Objective-C 语言扩展 (autosynthesis of properties), 然后clang恰好是 Xcode 的默认编译器. 也就是说, 如果你换成了 gcc, 那么这个特性也就不复存在了.基于上述, 如果你使用了自己的文本编辑器, 然后用自己用 clang 从命令行编译, @synthesize 这一句话是需要自己写的.最后, 有如下例外</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E5%85%B3%E4%BA%8E%40synthesize/">Read More</a></span>
-                    <time class="ga-mono">
-                        2022-01-14
-                    </time>
-                </footer>
-            </article>
-        </li>
-        
-        <li>
-            <article class="yue">
-                <h1>将共享文件夹用作Time-Machine并加密</h1>
-                
-                    <blockquote>怎么在局域网创建一个共享文件夹不在此文讨论范围内, 比如windows文件夹简单右键共享一下, 就能走完本教程. 以下是在macOS上设置Time Machine的操作.#Step 1: 各种命名</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E5%B0%86%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9%E7%94%A8%E4%BD%9CTime-Machine%E5%B9%B6%E5%8A%A0%E5%AF%86/">Read More</a></span>
-                    <time class="ga-mono">
-                        2022-01-14
-                    </time>
-                </footer>
-            </article>
-        </li>
-        
-        <li>
-            <article class="yue">
-                <h1>cs193p_2021笔记[3]_Animation_Transition</h1>
-                
-                    <blockquote>cs193p_2021_笔记_1</blockquote>
-                
-                <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B3%5D_Animation_Transition/">Read More</a></span>
-                    <time class="ga-mono">
-                        2022-01-14
-                    </time>
-                </footer>
-            </article>
-        </li>
         
         <li>
             <article class="yue">
@@ -172,12 +127,57 @@
         
         <li>
             <article class="yue">
+                <h1>MacOS添加自启动脚本</h1>
+                
+                    <blockquote>MacOS下添加自启动脚本有很多方法, 在一篇知乎文章中了解到Launchd替代了过去的init, rc, init.d, rc.d, SystemStarter, inted/xinetd, watchdogd等, 建议用Launchd.</blockquote>
+                
+                <footer>
+                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/MacOS%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC/">Read More</a></span>
+                    <time class="ga-mono">
+                        2022-01-14
+                    </time>
+                </footer>
+            </article>
+        </li>
+        
+        <li>
+            <article class="yue">
                 <h1>UIImage转NSData有时为nil</h1>
                 
                     <blockquote>一般, 我们会用UIImagePNGRepresentation, UIImagePNGRepresentation来达到目的, 但有时候, 发现它的返回值为nil...不需要怀疑这么简单处理有什么问题, 文档 就是如此:</blockquote>
                 
                 <footer>
                     <span class="ga-read_more"><a class="ga-highlight" href="/archives/UIImage%E8%BD%ACNSData%E6%9C%89%E6%97%B6%E4%B8%BAnil/">Read More</a></span>
+                    <time class="ga-mono">
+                        2022-01-14
+                    </time>
+                </footer>
+            </article>
+        </li>
+        
+        <li>
+            <article class="yue">
+                <h1>数据结构篇七：Suffix-Array,-Longest-Common-Prefix-(LCP)-array</h1>
+                
+                    <blockquote>这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记</blockquote>
+                
+                <footer>
+                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%83%EF%BC%9ASuffix-Array%2C-Longest-Common-Prefix-%28LCP%29-array/">Read More</a></span>
+                    <time class="ga-mono">
+                        2022-01-14
+                    </time>
+                </footer>
+            </article>
+        </li>
+        
+        <li>
+            <article class="yue">
+                <h1>El-Captain设置环境变量</h1>
+                
+                    <blockquote>这里说的不是设置变量给bash/shell来用, 而是给程序使用, 比如, chromium自36版以后, 就不再内置google api keys, 官方文档说明你打包的时候没有添加key的话, 可以在runtime添加, 比如在系统的环境变量里添加进去.</blockquote>
+                
+                <footer>
+                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/El-Captain%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/">Read More</a></span>
                     <time class="ga-mono">
                         2022-01-14
                     </time>
@@ -202,12 +202,12 @@
         
         <li>
             <article class="yue">
-                <h1>备份篇绘制聊天气泡的文章</h1>
+                <h1>翻转二叉树</h1>
                 
-                    <blockquote>记记思路- (void)drawRect:(CGRect)rect</blockquote>
+                    <blockquote>最近在找工作，所以这些算法梗又出现在了我的阅读视野里，比如经典的homebrew作者吐槽的翻转二叉树的问题。</blockquote>
                 
                 <footer>
-                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E5%A4%87%E4%BB%BD%E7%AF%87%E7%BB%98%E5%88%B6%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E7%9A%84%E6%96%87%E7%AB%A0/">Read More</a></span>
+                    <span class="ga-read_more"><a class="ga-highlight" href="/archives/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/">Read More</a></span>
                     <time class="ga-mono">
                         2022-01-14
                     </time>

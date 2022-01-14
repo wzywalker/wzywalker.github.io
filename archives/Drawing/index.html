@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2022-01-14
                 </time>
                 
-                in <a no-style class="category" href="/category/iOS/">
-                    iOS
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -139,7 +139,7 @@ A UIImageView without an image and without a background color is <em>invisible</
     <span class="kr">right</span><span class="p">:</span> <span class="n">mars</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="mi">1</span>
 <span class="p">),</span> <span class="n">resizingMode</span><span class="p">:</span> <span class="p">.</span><span class="n">stretch</span><span class="p">)</span>
 </pre></div>
-<p>所以如果只是横向拉伸，上面的代码中，top, bottom都可以设为0，或都设为图片高度（而不去除2什么的），只需要保证把UI控件的高度保持跟图片一致即可。</p><p>那么，如果不小心高度大于图片高度了呢？分两种情况，如果设了0，表示没有保留区域，直接竖向拉伸，而如果设成了图片高度，那么表示整个Y方向没有可供拉伸的像素，必然造成拉伸失败：</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-bf9eea93ad03183f.png" /></figure><p><strong>Transparency Masks</strong></p><p>The image shown on the screen is formed by combining the image’s <code>transparency</code> values with a single <code>tint color</code>.</p><p>忽略图片各像素上颜色的数值，只保留透明度，就成了一个mask. (renderingMode: <code>alwaysTemplate</code>)</p><ul>
+<p>所以如果只是横向拉伸，上面的代码中，top, bottom都可以设为0，或都设为图片高度（而不去除2什么的），只需要保证把UI控件的高度保持跟图片一致即可。</p><p>那么，如果不小心高度大于图片高度了呢？分两种情况，如果设了0，表示没有保留区域，直接竖向拉伸，而如果设成了图片高度，那么表示整个Y方向没有可供拉伸的像素，必然造成拉伸失败：</p><figure style="flex: 123.51598173515981" ><img loading="lazy" width="1082" height="438" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/be32f2993735b82ac7da004327cf4bad.png" /></figure><p><strong>Transparency Masks</strong></p><p>The image shown on the screen is formed by combining the image’s <code>transparency</code> values with a single <code>tint color</code>.</p><p>忽略图片各像素上颜色的数值，只保留透明度，就成了一个mask. (renderingMode: <code>alwaysTemplate</code>)</p><ul>
 <li>iOS gives every UIView a <code>tintColor</code>, which will be used to <code>tint any template images</code>。所以我们经常用的tintColor其实就是给模板图片染色的意思。</li>
 <li>tintColor是向下继承的</li>
 <li>The symbol images are always template images</li>
@@ -551,7 +551,7 @@ CIImage 不是一个<code>displayaable image</code></p><ul>
     <span class="p">}</span> 
 <span class="p">}</span>
 </pre></div>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-e406c90a2896eeaf.png" /></figure><p>注意，语法虽然是先处理context，再绘制，其实只是告知坐标系的变化，绘制的时候自动应用这些变换。</p><h3>Erasing</h3>
+<figure style="flex: 77.47747747747748" ><img loading="lazy" width="688" height="444" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/0059ea4156dffb9df15e77df8a87f971.png" /></figure><p>注意，语法虽然是先处理context，再绘制，其实只是告知坐标系的变化，绘制的时候自动应用这些变换。</p><h3>Erasing</h3>
 <p><code>clear(_:)</code>擦除行为取决于context是透明还是实心的（透明擦成透明，实心擦成黑色），只要不是opaque，通通理解为透明，比如background color是nil, 或0.9999的透明度。</p><h2>Points and Pixels</h2>
 <p><code>con.fill(CGRect(100,0,1.0/self.contentScaleFactor,100))</code>应用contentScaleFactor画一条在任何屏幕上都锐利的1像素直线。</p><h2>Content Mode</h2>
 <p>the drawing system will <code>avoid</code> asking a view to <code>redraw</code> itself from scratch if possible; instead, it will use the <code>cached</code> result of the previous drawing operation (the <strong>bitmap backing store</strong>).</p><p>If the view is resized, the system may simply stretch or shrink or reposition the cached drawing, if your contentMode setting instructs it to do so.</p><p><code>draw(_:)</code>从原点开始绘制，所以你的<code>contentMode</code>也要相应设置为<code>topLeft</code>。而如果设置为<code>.redraw</code>，则不会使用cached content，每当view被resize的时候，就会调用<code>setNeedsDisplay</code>方法，最终触发<code>draw(_:)</code>进行重绘。</p>
@@ -566,8 +566,8 @@ CIImage 不是一个<code>displayaable image</code></p><ul>
 <section id="ga-content_pager">
 
     <div class="next">
-        <a class="ga-highlight" href="/archives/View/">View</a>
-        <p class="yue">《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第1章</p>
+        <a class="ga-highlight" href="/archives/%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%8C%E9%80%92%E5%BD%92%E4%B8%8E%E5%88%86%E6%B2%BB/">全排列，递归与分治</a>
+        <p class="yue">能够用递归和分治解决的，特征都是下一级做的事跟上一级一样（抽象），最后一层做真正的业务。比如n个数字的全排列，抽象出来就是每n-1个数字的全排列它的难点就在于抽象，因为等于什么都没描述（我要5个数字的全排列，你就说，那好，你告诉我这4个数字的全排列，我就能告诉你5个数字的全排列）。也就是说，尝试用n和n-1的思维（有点像归纳法，动态规划）去描述问题，而不去看能不能解决。具体到这里，以ABCD为例，我们的请求过程应该是这样的</p>
     </div>
 
 

@@ -1,614 +1,774 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Maverick</title><link>/</link><description>This is Maverick, Theme Galileo.</description><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png</url><title>Maverick</title><link>/</link></image><language>english</language><lastBuildDate>Fri, 14 Jan 2022 09:08:46 +0806</lastBuildDate><pubDate>Fri, 14 Jan 2022 09:08:46 +0806</pubDate><item><title>全排列，递归与分治</title><link>/archives/%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%8C%E9%80%92%E5%BD%92%E4%B8%8E%E5%88%86%E6%B2%BB/</link><description>&lt;p&gt;能够用递归和分治解决的，特征都是下一级做的事跟上一级一样（抽象），最后一层做真正的业务。比如n个数字的全排列，抽象出来就是每n-1个数字的全排列&lt;/p&gt;&lt;p&gt;它的难点就在于抽象，因为等于什么都没描述（我要5个数字的全排列，你就说，那好，你告诉我这4个数字的全排列，我就能告诉你5个数字的全排列）。&lt;/p&gt;&lt;p&gt;也就是说，尝试用n和n-1的思维（有点像归纳法，动态规划）去描述问题，而不去看能不能解决。&lt;/p&gt;&lt;p&gt;具体到这里，以ABCD为例，我们的请求过程应该是这样的&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;A打头的话，BCD的全排列 swap(0, 0)&lt;/li&gt;
-&lt;li&gt;B打头的话，ACD的全排列 swap(0, 1)&lt;/li&gt;
-&lt;li&gt;...swap(0,2)&lt;/li&gt;
-&lt;li&gt;...swap(0,3)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;自己是可以数出来的：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;A固定，BCD的所有排列 swap&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;,0&lt;span class="o"&gt;)&lt;/span&gt;
-  B固定，CD的所有排列 swap&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;,1&lt;span class="o"&gt;)&lt;/span&gt;
-      C固定，D的所有排列 swap&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;,2&lt;span class="o"&gt;)&lt;/span&gt;（1）
-      D固定，C的所有排列 swap&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;,3&lt;span class="o"&gt;)&lt;/span&gt;（1）
-  C固定，同B（2）
-  D固定，同B（2）
-  计6种
-B固定，同A，&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;6&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; swap&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;,1&lt;span class="o"&gt;)&lt;/span&gt;
-C固定，同A，&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;6&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; swap&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;,2&lt;span class="o"&gt;)&lt;/span&gt;
-D固定，同A，&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;6&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; swap&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;,3&lt;span class="o"&gt;)&lt;/span&gt;
-结果应该是24
-&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;所有缩进部分都是递归，所以真正的业务代码就是一句话，交换每次比较的数组的第一个和剩下的几个的位置，然后递归下去&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;ctr&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
-&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;perm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;None&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="k"&gt;global&lt;/span&gt; &lt;span class="n"&gt;ctr&lt;/span&gt;
-    &lt;span class="n"&gt;end&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;start&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-        &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-        &lt;span class="n"&gt;ctr&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
-    &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-        &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-            &lt;span class="c1"&gt;# 思路是，我每次只动一个数字，然后固定住这个数字，看剩下的数字有多少种排列&lt;/span&gt;
-            &lt;span class="c1"&gt;# 代码里每次把固定的数字挪到开头&lt;/span&gt;
-            &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-            &lt;span class="n"&gt;perm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-            &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-
-&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="vm"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;__main__&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="n"&gt;arr&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-    &lt;span class="n"&gt;perm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;arr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ctr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;output: 24&lt;/p&gt;&lt;p&gt;可能是我理解能力的问题，所有人都没有解释为什么有swap，可能是太直观吧，毕竟swap才是真正在”排列“的业务代码。我还是自己写一遍才想明白，记录一下吧。&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%8C%E9%80%92%E5%BD%92%E4%B8%8E%E5%88%86%E6%B2%BB/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>数据结构篇一：Array,-Linked-List,-Stack,-Queues</title><link>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%80%EF%BC%9AArray%2C-Linked-List%2C-Stack%2C-Queues/</link><description>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;p&gt;前几个比较基础,只记录了些关键字和提纲&lt;/p&gt;&lt;h1&gt;Static and Dynamic Arrays&lt;/h1&gt;
-&lt;p&gt;&lt;strong&gt;static array&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;fixed length&lt;/li&gt;
-&lt;li&gt;indexable&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;usage:&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;sequential data&lt;/li&gt;
-&lt;li&gt;IO routines as buffers&lt;/li&gt;
-&lt;li&gt;lookup tables and inverse lookup tables&lt;/li&gt;
-&lt;li&gt;return multiple values&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;operation complexity:
-access: O(1)
-search: &lt;code&gt;O(n)&lt;/code&gt;
-insert: &lt;code&gt;O(n)&lt;/code&gt;
-append: O(1)
-delet: &lt;code&gt;O(n)&lt;/code&gt;
-需要遍历的操作就是O(n)&lt;/p&gt;&lt;p&gt;Q: How to implement a dynamic array?
-A:&lt;/p&gt;&lt;ol&gt;
-&lt;li&gt;static array with an initial capacity&lt;/li&gt;
-&lt;li&gt;add new elements, keep tracking the size&lt;/li&gt;
-&lt;li&gt;if exceed capacity, create a new static array with &lt;code&gt;twice the capacity&lt;/code&gt;&lt;ul&gt;
-&lt;li&gt;and copy the original elements into it&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Maverick</title><link>/</link><description>This is Maverick, Theme Galileo.</description><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png</url><title>Maverick</title><link>/</link></image><language>english</language><lastBuildDate>Fri, 14 Jan 2022 09:14:37 +0806</lastBuildDate><pubDate>Fri, 14 Jan 2022 09:14:37 +0806</pubDate><item><title>error--IB-Designables--Failed-to-update-auto-layout-status</title><link>/archives/error--IB-Designables--Failed-to-update-auto-layout-status/</link><description>&lt;p&gt;首先, 了解一下 &lt;a href="http://nshipster.com/ibinspectable-ibdesignable/"&gt;IBInspectable / IBDesignable&lt;/a&gt;
+这是让 Xcode能在设计时就体现你代码对 UI 进行的修改, 以及在设计器里能动态增加你对视图添加的属性的控件的特性(是的, 只是 xcode 的特性, 并不是语言特征)&lt;/p&gt;&lt;p&gt;然后, 用这个的人多半碰到了这类问题:
+&lt;figure style="flex: 200.0" &gt;&lt;img loading="lazy" width="360" height="90" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8dd76778db9d224fac448fc48d7671eb.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;blockquote&gt;
+&lt;p&gt;error: IB Designables: Failed to update auto layout status: Interface Builder Cocoa Touch Tool raised a &amp;quot;NSInternalInconsistencyException&amp;quot; exception: Could not load NIB in bundle: 'NSBundle&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;网上可能有一大堆讨论相关问题的贴子, 解决方法不尽其数, 可能都不适用你, 所以我的这篇也可能不适用你, 最好还是善用搜索, 我谨提供一种思路.&lt;/p&gt;&lt;p&gt;网上有让你修改工程配置的, 寻找崩溃日志的, 解决我这个问题的, 是在Storyboard 界面里选中出问题的 View(你一定要至少知道是给哪个 view 添加上 &lt;code&gt;IB_DESIGNABLE&lt;/code&gt;才导致的问题, 可以通过逐个移除这个声明以测试), 再在菜单里选择: &lt;code&gt;Editor - Debug Selected Views&lt;/code&gt;
+这个时候就会模拟&lt;code&gt;IB_DESIGNABLE&lt;/code&gt;进行 debug, 再加上全局异常断点, 代码就会在崩溃处命中了.&lt;/p&gt;&lt;p&gt;我的问题是我用了两个属性, 然后在 view 的 &lt;code&gt;drawWithRect:&lt;/code&gt;方法中, 这两个属性都为空, 而我的属性是在&lt;code&gt;initWithCoder:&lt;/code&gt;中初始化的. 所以我再添加&lt;code&gt;initWithFrame:&lt;/code&gt;, 在其中解决, 顺利解决.&lt;/p&gt;&lt;p&gt;这说明三个问题:&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;IB_DESIGNABLE&lt;/code&gt;目前的实现还有 bug, 真实启动是跑&lt;code&gt;initWithCoder:&lt;/code&gt;的, 它在设计器里绘图的时候却走了&lt;code&gt;initWithFrame:&lt;/code&gt;, 你可能不得不为了对付这个 bug 而添加一次同样的代码&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;initWithFrame:&lt;/code&gt;的时候 frame 是{0, 0, 0, 0}可别忘了, 有时候这个也是崩溃原因&lt;/li&gt;
+&lt;li&gt;如果我把&lt;code&gt;drawWithRect:&lt;/code&gt;中要用到的属性提前初始化一样可以避免这样的问题, 怎样做? 配合&lt;code&gt;IBInspectable&lt;/code&gt;, 然后在设计器中给属性设初始值&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h2&gt;Singly and Doubly Linked Lists&lt;/h2&gt;
-&lt;p&gt;单向/双向链表&lt;/p&gt;&lt;p&gt;sequential list of nodes that hold data which point to other nodes also containing data.&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;节点序列，&lt;/li&gt;
-&lt;li&gt;节点拥有指向别的节点的数据（指针）&lt;/li&gt;
-&lt;li&gt;别的节点也拥有这种指针&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;usage:&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;many &lt;code&gt;List, Queue &amp;amp; Stack&lt;/code&gt; implementations&lt;/li&gt;
-&lt;li&gt;circular lists&lt;/li&gt;
-&lt;li&gt;model real world objects such as &lt;code&gt;trains&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;implementation of adjancy list for graphs&lt;/li&gt;
-&lt;li&gt;separate chaining -&amp;gt; ?&lt;ul&gt;
-&lt;li&gt;deal with hashing collisions -&amp;gt; ?&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;上述两上问号后续在&lt;code&gt;Hash Table&lt;/code&gt;一节里自然就解惑了&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Terminology&lt;/strong&gt;
-Head / Tail / Pointer / Node&lt;/p&gt;&lt;p&gt;Singly vs Doubly&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;Doubly holds a &lt;code&gt;next&lt;/code&gt; and &lt;code&gt;prev&lt;/code&gt; reference, which Singly has no &lt;code&gt;prev&lt;/code&gt;&lt;ul&gt;
-&lt;li&gt;插入删除的时候需要更新所有引用&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;both maintain a reference of &lt;code&gt;head&lt;/code&gt; and &lt;code&gt;tail&lt;/code&gt; for quick additions / removals&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;insertion&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;create a traverser and move by sepcific steps&lt;/li&gt;
-&lt;li&gt;create new node&lt;/li&gt;
-&lt;li&gt;singly:&lt;ul&gt;
-&lt;li&gt;原node的next指向新node&lt;/li&gt;
-&lt;li&gt;新node的next指向原next的node&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;doubly:&lt;ul&gt;
-&lt;li&gt;新node的next和prev分别指向原node和下一个node&lt;/li&gt;
-&lt;li&gt;两个node分别用next和prev指向新node&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;removal&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;singly需要两个游标:&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;pt1指向head, pt2指向head-&amp;gt;next&lt;/li&gt;
-&lt;li&gt;pt1, pt2一起移动，直到pt2找到目标&lt;/li&gt;
-&lt;li&gt;pt2再向前移动一步&lt;/li&gt;
-&lt;li&gt;pt1位置的node用next指向pt2位置&lt;/li&gt;
-&lt;li&gt;now can sefely remoing the element between pt1 and pt2&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;doubly却只需要一个：&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;pointer找到目标元素&lt;/li&gt;
-&lt;li&gt;用prev和next找到上一个和下一个&lt;/li&gt;
-&lt;li&gt;下一个和下一个node分别互相指向&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Complexity&lt;/strong&gt;
-searth: &lt;code&gt;O(n)&lt;/code&gt;
-insert at head/tail: O(1)
-remove at head: O(1)
-remove at tail: &lt;code&gt;O(n)&lt;/code&gt; (singly) / O(1) (doubly)
-因为即使我们知道tail在哪，在单向链表中，我们也找不到它的前一个去设置为新的tail
-remove in middle: &lt;code&gt;O(n)&lt;/code&gt;&lt;/p&gt;&lt;h1&gt;Stack&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;one-ended linear data structure (LIFO)&lt;/li&gt;
-&lt;li&gt;two operation: &lt;code&gt;push&lt;/code&gt; and &lt;code&gt;pop&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Usage&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;undo mechanisms&lt;/li&gt;
-&lt;li&gt;compiler syntax checking for matching brackets and braces&lt;ul&gt;
-&lt;li&gt;开括号压入栈内，每碰到一个闭括号，与栈顶的比较，匹配就出栈，不匹配就报错&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;model a pile of books or plates&lt;ul&gt;
-&lt;li&gt;汉诺塔(tower of hanoi)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;tracking previous function calls&lt;/li&gt;
-&lt;li&gt;DFS on a graph&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Complexity&lt;/strong&gt;
-push/pop/peek/size: O(1)
-search: &lt;code&gt;O(n)&lt;/code&gt;&lt;/p&gt;&lt;p&gt;双向链表实现一个Stack，基本上就是操作tail&lt;/p&gt;&lt;h1&gt;Queues&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;a linear data structure, model real world queues (FIFO)&lt;/li&gt;
-&lt;li&gt;two primary operations: &lt;code&gt;enqueue&lt;/code&gt;, &lt;code&gt;dequeue&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Usage&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;any waiting line models a queue&lt;/li&gt;
-&lt;li&gt;keep track of the x most recently added elements -&amp;gt; ?&lt;/li&gt;
-&lt;li&gt;web server request management where you want first come first serve&lt;/li&gt;
-&lt;li&gt;BFS graph traversal&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Complexity&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;只有&lt;code&gt;contains, revomval&lt;/code&gt;需要遍历，其它操作（出入列等）都是O(1)&lt;/p&gt;&lt;p&gt;实现一个BFS：&lt;/p&gt;&lt;p&gt;基本就是动态往 queue 里添加子节点,当前级别元素访问完后, 再 dequeue 出来的就是所有的下一级子节点
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-abaa7e896e83cc30.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;双向列表实现Queue，入列用tail，出列用head，即添加的总在尾巴，永远从头部取出。&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%80%EF%BC%9AArray%2C-Linked-List%2C-Stack%2C-Queues/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>数据结构篇五：Hash-Tables</title><link>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%94%EF%BC%9AHash-Tables/</link><description>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
-&lt;h1&gt;Hash Tables&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;key-value pair&lt;/li&gt;
-&lt;li&gt;using &lt;code&gt;Hashing&lt;/code&gt; technique&lt;/li&gt;
-&lt;li&gt;often used tracking item frequencies&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;what's &lt;em&gt;hash function&lt;/em&gt;?&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;maps a key &lt;code&gt;x&lt;/code&gt; to a whole number in a fixed &lt;code&gt;range&lt;/code&gt;.&lt;ul&gt;
-&lt;li&gt;e.g. $H(x) = (x^2 - 6x + 9) % 10$ maps (0, 9)&lt;/li&gt;
-&lt;li&gt;这个方程会为不同的x产生一样的y -&amp;gt; &lt;code&gt;hash collision&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;can hash arbitrary objects like string, list, tuple...&lt;/li&gt;
-&lt;li&gt;must be &lt;code&gt;deterministic&lt;/code&gt;(确定的x产生确定的y)&lt;ul&gt;
-&lt;li&gt;因此key的应该是&lt;code&gt;immutable&lt;/code&gt;的类型&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;关键词是&lt;code&gt;range&lt;/code&gt;，你设计的function总要mod一下，将结果限制在一个范围内。这里你应该暂时能推测出hashtable的key可能就是数字吧？&lt;/p&gt;&lt;p&gt;&lt;strong&gt;hash collision&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;separate chaining&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;用一种数据结构（通常是链表）保留所有冲突的值&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;open addressing&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;为冲突的值选择一个offset（地址/值）保存 -&amp;gt; &lt;code&gt;probing sequence P(x)&lt;/code&gt;&lt;/p&gt;&lt;p&gt;不管是怎么解决冲突，&lt;strong&gt;worst&lt;/strong&gt;的情况下，hash table的操作时间也会由O(1)变成O(n)&lt;/p&gt;&lt;p&gt;怎么用HT来查找呢？不是把hash后的结果拼到原数据上，而是每次查询前，对key进行一次hash function，就能去查询了。&lt;/p&gt;&lt;h2&gt;Open Addressing&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;probing sequences&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;linear probing: P(x) = ax + b&lt;/li&gt;
-&lt;li&gt;quadratic probing: p(x) = $ax^2 + bx + c$&lt;/li&gt;
-&lt;li&gt;double hashing: p(k, x) = $x * H_2(k)$ 双重hash&lt;/li&gt;
-&lt;li&gt;pseudo random number generator: p(k, x) = x * rng(H(k), x) 用H(k)(即hash value)做种的随机数&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;总之就是在这样一个序列里找下一个位置&lt;/p&gt;&lt;p&gt;假设一个table size 为N的HT，使用开放寻址的伪代码：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
-&lt;span class="n"&gt;keyHash&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;H&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;k&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;   &lt;span class="c1"&gt;# 直接计算出来的hash value&lt;/span&gt;
-&lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;keyHash&lt;/span&gt;  &lt;span class="c1"&gt;# 偏移过后存在HT里的index&lt;/span&gt;
-
-&lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="n"&gt;table&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;keyHash&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;P&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;k&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;N&lt;/span&gt;  &lt;span class="c1"&gt;# 加上偏移，考虑size（N）&lt;/span&gt;
-    &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="c1"&gt;# 游标加1&lt;/span&gt;
-
-&lt;span class="c1"&gt;# now can insert (k,v) at table[index]&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;h3&gt;Chaos with cycles&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;Linear Probling (LP)&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;LP中，如果你&lt;em&gt;运气不好&lt;/em&gt;，产生的序列的下一个值永远是occupied的状态（一般是值域小于size），就进入死循环了。&lt;/p&gt;&lt;p&gt;假设p(x) = 3x, H(k) = 4, N = 9
-那么H(k)+P(x) % N 只会产生{4,7,1}，如果这三个位置被占用，那就陷入了永远寻找下一个的无限循环中。&lt;/p&gt;&lt;p&gt;一般是限制probing function能返回刚好N个值。&lt;/p&gt;&lt;blockquote&gt;
-&lt;p&gt;当p(x)=ax的a与size的N互质，即没有公约数，&lt;code&gt;GCD(a, N) = 1&lt;/code&gt;一般能产生刚好N个值。(Greatest Common Denominator)&lt;/p&gt;&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;注意，为了性能和效率的平衡，有&lt;code&gt;load factor&lt;/code&gt;的存在，所以到了阈值，size就要加倍，N的变化，将会使得&lt;code&gt;GCD(a, N) = 1&lt;/code&gt;的a的选择有变化，而且之前对N取模，现在取值也变发生变化，这时候需要重新map&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;重新map不再按元素当初添加的顺序，而是把现有HT里的值按索引顺序重新map一遍。比如第一个是k6, 即第6个添加进来的，但是现在第一个就重新计算它的值，填到新的HT里面去。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Quadratic Probing （QP）&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;QP 同样有chaos with cycles的问题，通用解决办法，三种：&lt;/p&gt;&lt;ol&gt;
-&lt;li&gt;p(x) = $x^2$, size选一个 prime number &amp;gt; 3, and $\alpha \leq \frac{1}{2}$&lt;/li&gt;
-&lt;li&gt;p(x) = $(x^2 + x) / 2$, keep the size a power of 2 （不需要是素数了）&lt;/li&gt;
-&lt;li&gt;p(x)= $(-1^x) \times x^2$, make size prime N $\equiv 3$ mod 4 ???&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;Double Hashing&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Double Hashing: P(x) = $x \times H_2(k)$可见仍然类似一个一次的线性方程，$H_2(k)$就类似于ax中的a，设为$\delta$，相比固定的a, 这里只是变成了动态的，这样不同的key的待选序列就是不一样的（可以理解为系数不同了）&lt;/p&gt;&lt;p&gt;解决chaos:&lt;/p&gt;&lt;ol&gt;
-&lt;li&gt;size N to be a prime number&lt;/li&gt;
-&lt;li&gt;calculate: $\delta = H_2(k)$ mod N&lt;ul&gt;
-&lt;li&gt;$\delta=0$ 时offset就没了，所以需要人为改为1&lt;/li&gt;
-&lt;li&gt;$1 \leq \delta \lt N$ and GCD($\delta$, N) = 1&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;可见，虽然系数是“动态”的了，但是取值还是（1，N）中的一个而已，hash只是让其动起来的一个原因，而不是参与计算的值。&lt;/p&gt;&lt;p&gt;我们本来就是在求hash value，结果又要引入另一个hash function，显然这个$H_2$不能像外层这样复杂，一般是针对常见的key类型(string, int...-&amp;gt; fundamental data type)的&lt;code&gt;universal hash functions&lt;/code&gt;&lt;/p&gt;&lt;blockquote&gt;
-&lt;p&gt;因为N要是一个素数，所以在double size的时候，还要继续往上找直到找到一个素数为止，比如N=7, double后，N=14，那么最终，N=17&lt;/p&gt;&lt;/blockquote&gt;
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-8818bf0d1d733dc7.png" /&gt;&lt;/figure&gt;&lt;h3&gt;Issues with removing&lt;/h3&gt;
-&lt;p&gt;因为冲突的hash value需要probing，probing的依据是从序列里依次取出下一个位置，检查这个位置&lt;strong&gt;有没有被占用&lt;/strong&gt;，那么问题就来了，如果一个本被占用的位置，因为元素需要删除，反而变成没有占用了，这有点类似删除树节点，不但要考虑删除，还要考虑这个位置怎么接续。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;lazy deletion&lt;/strong&gt;
-但HT机制比树要复杂，为了避免反复应用probing函数重新摆放后续所有节点，干脆就在删除的位置放置一个预设的标识，我们称为墓碑(&lt;code&gt;tombstone&lt;/code&gt;)，而不是直接置空，然后所有的查找和添加加上这一条规则，就能快速删除又无需重新排序。&lt;/p&gt;&lt;p&gt;大量删除会造成空间浪费，但无需立即处理：&lt;/p&gt;&lt;ol&gt;
-&lt;li&gt;添加元素允许添加到墓碑位置&lt;/li&gt;
-&lt;li&gt;到达阈值容量需要倍增的时候有一次重排，这个时候就可以移除所有的墓碑&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;如果查找一个hash value，连续3个都是墓碑，第4个才是它，这是不是有点浪费时间？
-确实，所以还可以优化，当你查找过一次之后，就可以把它移到第一个墓碑的位置，这样，&lt;strong&gt;下次&lt;/strong&gt;查询的时候速度就会快很多了。&lt;/p&gt;&lt;p&gt;整个机制，叫&lt;code&gt;lazy deletion&lt;/code&gt;&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-c6d9f3a99c26345f.png" /&gt;&lt;/figure&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%94%EF%BC%9AHash-Tables/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>数据结构篇八：Balanced-Binary-Search-Trees(BBST)</title><link>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AB%EF%BC%9ABalanced-Binary-Search-Trees%28BBST%29/</link><description>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
-&lt;h1&gt;Balanced Binary Search Trees (BBST)&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;满足low (logarithmic) height for fast insertions and deletions&lt;/li&gt;
-&lt;li&gt;clever usage of a &lt;code&gt;tree invairant&lt;/code&gt; and &lt;code&gt;tree rotation&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;AVL Tree&lt;/h2&gt;
-&lt;p&gt;一种BBST，满足O(log n)的插入删除和查找复杂度，也是第一种BBST，后续出现的更多的：2-3 tree, AA tree, scapegoat tree, red-black tree(avl的最主要竞争对手)&lt;/p&gt;&lt;p&gt;能保持平衡的因子：Balance Factor (&lt;code&gt;BF&lt;/code&gt;)&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;BF(node) = H(node.right) - H(node.left)&lt;/li&gt;
-&lt;li&gt;H(x) = height of node = # of edges between (x, furthest leaf)&lt;/li&gt;
-&lt;li&gt;平衡就是左右平均分配，所以要么均分，要么某一边多一个，BF其实就是(-1, 0, 1)里的一个了 &amp;lt;- avl tree invariant&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;一个node需要存：&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;本身的(comparable) value&lt;/li&gt;
-&lt;li&gt;balance factor&lt;/li&gt;
-&lt;li&gt;the &lt;code&gt;height&lt;/code&gt; of this node&lt;/li&gt;
-&lt;li&gt;left/right pointer&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;使树保持左右平衡主要是靠rotation，极简情况下（三个node），我们有两种基本情况（left-left, right-right），有其它情况就旋转一次变成这两种情况之一：
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-80a75204b823272d.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;h2&gt;Insertion&lt;/h2&gt;
-&lt;p&gt;一次插入需要考虑的是，插在哪边，以及插入后对bf, height和balance的破坏
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-fbcb86360e02615e.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;其中修复平衡就是上图中几个基本结构的转换&lt;/p&gt;&lt;h2&gt;Removal&lt;/h2&gt;
-&lt;p&gt;avl树就是一棵BST，删除节点分两步：&lt;/p&gt;&lt;ol&gt;
-&lt;li&gt;按照bst的方法查找节点，即小的在左边找，大的在右边找&lt;/li&gt;
-&lt;li&gt;也按bst的原则删除元素，即找到元素后，把左边的最大值或右边的最小值拿过来补上删除的位置&lt;/li&gt;
-&lt;li&gt;这一步是多出来的，显然是要更新一下节点的bf和height，及重新balance一次了。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;前两部分参考BST一章，流程伪代码：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;remove&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; &lt;span class="o"&gt;...&lt;/span&gt;
-    &lt;span class="c1"&gt;# Code for BST item removal here&lt;/span&gt;
-    &lt;span class="o"&gt;...&lt;/span&gt;
-    &lt;span class="c1"&gt;# Update balance factor&lt;/span&gt;
-    &lt;span class="n"&gt;update&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="c1"&gt;# Rebalance tree&lt;/span&gt;
-    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;balance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AB%EF%BC%9ABalanced-Binary-Search-Trees%28BBST%29/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>翻转二叉树</title><link>/archives/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/</link><description>&lt;p&gt;最近在找工作，所以这些算法梗又出现在了我的阅读视野里，比如经典的homebrew作者吐槽的翻转二叉树的问题。
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-652e430c381052f9.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;我本以为是根和叶节点倒转过来，原来是同层里面的左右翻转。&lt;/p&gt;&lt;p&gt;那么就是把左边换到右边，右边换到左边呗，可以考虑递归。我一直用一个原则理解递归，就是把命令传达下去（比如上面的左右互换，就完了），而不关心细节，只有最末端的那个大头兵才是真正做业务的人，写了一下，递归加业务也就4行代码：&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-0707b335ec49e5e5.png" /&gt;&lt;/figure&gt;&lt;p&gt;具体到这个问题，就是我把left和right互换就是了
-然后left和right你们做好自己的子级的互换，我不管，所以核心代码就一句
-&lt;code&gt;left, right = right, left&lt;/code&gt;，前面是为了稳妥，通过了之后，直接用python这种左右互换的特性，那就真是一句代码了：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;invertTree&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;TreeNode&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;TreeNode&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;
-    &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;right&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;left&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invertTree&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;left&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invertTree&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;right&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>数据结构篇七：Suffix-Array,-Longest-Common-Prefix-(LCP)-array</title><link>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%83%EF%BC%9ASuffix-Array%2C-Longest-Common-Prefix-%28LCP%29-array/</link><description>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
-&lt;h1&gt;Suffix Array&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;字符串的所有子字符串后缀组成数组&lt;/li&gt;
-&lt;li&gt;对子串根据首字母进行排序&lt;/li&gt;
-&lt;li&gt;排序后原有的index就被打乱了&lt;/li&gt;
-&lt;li&gt;这个乱序的indices就是&lt;code&gt;Suffix Array&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;做尾缀子串的时候通常是从单个字母开始越找越多，这就有了一个原生顺序，然后用首字母排序后，这个顺序就被打乱了&lt;/p&gt;&lt;p&gt;提供了一种&lt;code&gt;compressd representation&lt;/code&gt; of sorted suffixes而无需真的把这些子串存起来。&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;A space efficient alternative to a &lt;code&gt;suffix tree&lt;/code&gt;&lt;ul&gt;
-&lt;li&gt;a compressd version of a &lt;code&gt;trie&lt;/code&gt;?&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;能做所有&lt;code&gt;suffix tree&lt;/code&gt;能做的事，并加添加了&lt;code&gt;Longest Common Prefix&lt;/code&gt;(LCP) array&lt;/p&gt;&lt;h1&gt;Longest Common Prefix (LCP) array&lt;/h1&gt;
-&lt;p&gt;继续上面的Suffix Array，字母排序后，我们一个个地用每一个元素同上一个元素比，标记相同前缀的字母个数，这个数字序列就是&lt;code&gt;LCP&lt;/code&gt;&lt;/p&gt;&lt;p&gt;比如adc, adfgadc, 前缀&lt;code&gt;ab&lt;/code&gt;是相同的，那就是2。&lt;/p&gt;&lt;p&gt;第一个元素没有“上一个”去比，所以LCP数组第1位永远是0？（是的，其实是undefined，但一般设0）&lt;/p&gt;&lt;p&gt;衡量的是相邻的suffix array元素的前缀间有多少个字母相同。&lt;/p&gt;&lt;p&gt;当前也可以和下一个元素比（这样最后一个元素的LCP肯定是0了，原理同上）&lt;/p&gt;&lt;h2&gt;Find unique substrings&lt;/h2&gt;
-&lt;p&gt;找到（或计数）一个数组的所有（不重复的）子元素。可以逐个substring遍历，$O(n^2)$，下面看看更快也更省空间的LCP方案。&lt;/p&gt;&lt;p&gt;找“AZAZA”的不重复子串:
-A,AZ,AZA,AZAZ,AZAZA,Z,ZA,ZAZ,ZAZA,&lt;code&gt;A,AZ,AZA,Z,AZ,A&lt;/code&gt;，把重复的标注了出来。
-LCP是这样的：
-LCP|Sorted Suffixes|
--|-
-0|A
-1|AZA
-3|AZAZA
-0|ZA
-2|ZAZA&lt;/p&gt;&lt;p&gt;我们知道第一列指的是“重复个数”，也就是说，如果按我们手写的那样去遍历，至少有这么多重复的子串，重复的既是“个数”，也是“组合方式”。&lt;/p&gt;&lt;p&gt;所以如果我们只需要计数的话，把右边的数出来就知道有会有多少个重复的了，此例为6.&lt;/p&gt;&lt;p&gt;$$\tt unique\ count = \underbrace{\frac{n(n+1)}{2}}_{substr\ count} - \underbrace{\sum_{i=1}^n LCP[i]}_{duplicates}$$&lt;/p&gt;
-&lt;p&gt;这是LCP的应用之一，利用了LCP本身就是在数重复次数的特征。&lt;/p&gt;&lt;h2&gt;K common substring problem&lt;/h2&gt;
-&lt;p&gt;n个字符串，找出一个子串，它至少是k个字符串的子串，求最大子串。$2\leq k \leq n$&lt;/p&gt;&lt;p&gt;即如果有k=2，那么这个子串只需要是其中两个的子串就行了，如果k=n，那么就需要是每一个字符串的子串。&lt;/p&gt;&lt;p&gt;直接上图
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-1bb731fa712f79ec.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;图1演示k=3时，找到了&lt;code&gt;ca&lt;/code&gt;，即3个串里都有的是&lt;code&gt;ca&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;图2演示k=2时，找到了&lt;code&gt;bca&lt;/code&gt;，即&lt;code&gt;bca&lt;/code&gt;存在2个串里&lt;/li&gt;
-&lt;li&gt;图3演示的是用了size=4的滑窗才包含了3个字符串，以及最大匹配是&lt;code&gt;AG&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;步骤：&lt;/p&gt;&lt;ol&gt;
-&lt;li&gt;首先，用几个分隔符把字符串拼接起来&lt;ul&gt;
-&lt;li&gt;分隔符字符串里不会出现&lt;/li&gt;
-&lt;li&gt;分隔符的排序要小于所有字符&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;图中染色的依据是prefix是哪个串里的就染成什么颜色&lt;/li&gt;
-&lt;li&gt;开始滑窗比较&lt;ul&gt;
-&lt;li&gt;滑窗必须要能包含k种颜色&lt;/li&gt;
-&lt;li&gt;所以滑窗大小不是固定的，有时候相邻几个都是来自同一个字符串&lt;/li&gt;
-&lt;li&gt;滑窗里除0外的最小值，就是符合条件的最大共同长度，如图3，最大匹配长度是2&lt;/li&gt;
-&lt;li&gt;课程里动画演示滑窗其实不是用滑的，而是用的爬行&lt;ul&gt;
-&lt;li&gt;即下界往下，包含了所有颜色之后，上界也往下，这样蠕行前进，每一步判断滑窗里的内容&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;额外需要一个hash table来保存切片与颜色的映射关系。&lt;ul&gt;
-&lt;li&gt;如果是例子这么简单，我可以直接检查第一个出现的分隔符，是#就是绿色，出现$就是蓝色，%就是红色&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;核心就是：&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;取子串是从后向前取的&lt;/li&gt;
-&lt;li&gt;但比较是从前向后比的&lt;/li&gt;
-&lt;li&gt;前面的元素可能来自任何一个子串（只要足够长）&lt;/li&gt;
-&lt;li&gt;从前面排序，客观上就把来自不同字符串的相同字母打头的子串给排到一起了&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;这就是为什么在&lt;code&gt;Suffix&lt;/code&gt; Array的内容里面出现Longest Common &lt;code&gt;Prefix&lt;/code&gt;的内容的原因了.&lt;/p&gt;&lt;p&gt;聪明。&lt;/p&gt;&lt;h2&gt;Longest Repeated Substring (LRS)&lt;/h2&gt;
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-47d0018c79e7b2b6.png" /&gt;&lt;/figure&gt;&lt;p&gt;这个比暴力遍历要简单太多，直接找LCP最大值即可&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%83%EF%BC%9ASuffix-Array%2C-Longest-Common-Prefix-%28LCP%29-array/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>数据结构篇四：Binary-Trees-and-Binary-Search-Trees-(BST)</title><link>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%9B%9B%EF%BC%9ABinary-Trees-and-Binary-Search-Trees-%28BST%29/</link><description>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
-&lt;p&gt;Tree: 满足以下定义的&lt;code&gt;undirected graph&lt;/code&gt;(无向图)&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;An acyclic(非循环的) connected graph&lt;/li&gt;
-&lt;li&gt;N nodes and N-1 edges&lt;/li&gt;
-&lt;li&gt;有且只有一条路径连接&lt;em&gt;任意&lt;/em&gt;两个顶点&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;任意一个节点都可以被理解为root&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Binary Tree&lt;/strong&gt;
-拥有最多两个节点的Tree&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Binary Search Tree&lt;/strong&gt;
-服从以下特性的&lt;code&gt;binary tree&lt;/code&gt;&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;左子树的元素小于右子树&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;拥有重复元素是允许的，但多数情况下我们只研究不重复的元素&lt;/p&gt;&lt;p&gt;这是一个有效的BST吗？
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-eb53cdabc9882549.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;是的（对于单链下来的，几乎会直接就满足右边比左边大）&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Usage&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;BSTs&lt;ul&gt;
-&lt;li&gt;implementation of some map and set ADTs&lt;/li&gt;
-&lt;li&gt;red black trees&lt;/li&gt;
-&lt;li&gt;AVL trees&lt;/li&gt;
-&lt;li&gt;splay trees&lt;/li&gt;
-&lt;li&gt;...&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;binary heaps&lt;/li&gt;
-&lt;li&gt;syntax trees (by compiler and calculators)&lt;/li&gt;
-&lt;li&gt;Treap - a probabilistic DS (uses a randomized BST)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Complexity&lt;/strong&gt;
-增删查平均为O(log n)，但最差情况下都为O(n)，即线性时间&lt;/p&gt;&lt;h2&gt;Adding elements to a BST&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;第一个为root&lt;/li&gt;
-&lt;li&gt;每一个新数，比顶点大，放右边，比顶点小，放左边，顺序下行&lt;ul&gt;
-&lt;li&gt;不是从左到右摆满再做subtree&lt;/li&gt;
-&lt;li&gt;比如3,6,9, 会得一棵全部数字摆在右边的数，而不是顶3左6右9的三角形&lt;/li&gt;
-&lt;li&gt;这也是为什么极端情况下，时间复杂度是&lt;code&gt;O(n)&lt;/code&gt;，因为就是一条线到底&lt;/li&gt;
-&lt;li&gt;这也是&lt;code&gt;balanced binary search trees&lt;/code&gt;被引入的原因&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;Removing elements from a BST&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;find&lt;ul&gt;
-&lt;li&gt;从root开始，小的走左右，大的走右边&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;replace (to maintain the BST invariant)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;找继任者的时候，如果删除元素没有子节点，只有左或右子节点，都很好办，但如果它有两个子节点，那么应该用哪个来接续呢？&lt;/p&gt;&lt;p&gt;原则仍然是要服从左边的比右边的小，所以你其实有两种选择：&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;把左边最大的数选出来 或&lt;/li&gt;
-&lt;li&gt;把右边最小的数选出来&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;因为它们的“来源”，肯定是能保证bst invariant的
-    * 这个数是要替换这个节点的，所以要比这个节点左边的数都大，及比右边所有的数都小，显然就是左边的最大数，或右边的最小数了。
-    * 只是把找到的元素复制过去后，多了的那个怎么办呢？&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;递归&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;新找到的元素当然要从原来的位置删除，这时又根据它是否叶节点，单子节点还是全节点，来反复进行前面的操作，最终总是可以退出的
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-fe4933def0919bb4.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-030c4c0da9747aa2.png" /&gt;&lt;/figure&gt;&lt;h2&gt;Tree Traversals&lt;/h2&gt;
-&lt;p&gt;(Preorder, Inorder, Postorder &amp;amp; Level order)
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-65233a21bae1e3f0.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;preorder，在遍历左侧元素的时候，每次已经先取到元素了（最顶层）&lt;/li&gt;
-&lt;li&gt;inorder里，遍历元素的时候，直到所有的left走完了，才取到第一个元素（最底层的）&lt;/li&gt;
-&lt;li&gt;postorder里，也是遍历到最底层，但是下一步就是取兄弟节点了&lt;/li&gt;
-&lt;/ul&gt;
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-25f43a6703718c58.png" /&gt;&lt;/figure&gt;&lt;p&gt;inorder一个重要特征：它是从小到大排好序的！
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-269f5d45ae7e362f.png" /&gt;&lt;/figure&gt;
-preorder 和 postorder没什么特征，举一个post的例子观察下&lt;/p&gt;&lt;p&gt;而levelorder则是一&lt;code&gt;层&lt;/code&gt;一层地取的：&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-351d8f633be89c7e.png" /&gt;&lt;/figure&gt;
-这就是广度优先了（&lt;code&gt;Breadth First Searth&lt;/code&gt;)BFS&lt;p&gt;实现BFS&lt;/p&gt;&lt;ol&gt;
-&lt;li&gt;每处理一个parent的时候，把parent加到结果数组里&lt;/li&gt;
-&lt;li&gt;parent的子节点加到队列里&lt;/li&gt;
-&lt;li&gt;每次从队列里取出一个值加到结果数组里（步骤1）&lt;/li&gt;
-&lt;li&gt;该值的child加到队列里（步骤2）&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;其实就是步骤1，2的重复，比如：
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-3c0e0102be2241f7.png" /&gt;&lt;/figure&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;[11], [6, 15] 处理第1个数11， 队列里多了两个元素6， 15
-[11, 6], [15, 3, 8] 从队列里取出6， 加入结果，它的子元素(3, 8)加入队列
-[11, 6, 15], [3, 8, 13, 17]
-[11, 6, 15, 3], [8, 13, 17, 1, 5]
-[11, 6, 15, 3, 8], [13, 17, 1, 5] 这一步，8没有子节点了，队列变短了
-[11, 6, 15, 3, 8, 13], [17, 1, 5, 12, 14]
-[11, 6, 15, 3, 8, 13, 17], [1, 5, 12, 14, 19] 17只有一个child
-[11, 6, 15, 3, 8, 13, 17, 1, 5, 12, 14, 19] 剩下的都没child了，全部拼进去
+&lt;figure style="flex: 145.88235294117646" &gt;&lt;img loading="lazy" width="1240" height="425" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9224752a673054143b82aadd16747841.png" /&gt;&lt;/figure&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/error--IB-Designables--Failed-to-update-auto-layout-status/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>使用openssl创建自签名证书及部署到IIS教程</title><link>/archives/%E4%BD%BF%E7%94%A8openssl%E5%88%9B%E5%BB%BA%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%8F%8A%E9%83%A8%E7%BD%B2%E5%88%B0IIS%E6%95%99%E7%A8%8B/</link><description>&lt;p&gt;#创建自签名证书
+首先，创建一个私钥文件：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;openssl genrsa -out myselfsigned.key 2048
 &lt;/code&gt;&lt;/pre&gt;
-</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%9B%9B%EF%BC%9ABinary-Trees-and-Binary-Search-Trees-%28BST%29/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>数据结构篇三：Union-Find</title><link>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%89%EF%BC%9AUnion-Find/</link><description>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
-&lt;h1&gt;Union Find&lt;/h1&gt;
+&lt;p&gt;然后利用私钥创建自签名证书：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;openssl req -new -x509 -key myselfsigned.key -out myselfsigned.cer -days 36500
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;执行上面的两个操作之后会提示输入以下几个内容(为了显示正常尽量使用英文)：&lt;/p&gt;&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;Country Name (2 letter code) [AU]:CN //国家简称&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;State or Province Name (full name) [Some-State]:GuangDong //州或省的名字&lt;/li&gt;
+&lt;li&gt;Locality Name (eg, city) []:ShenZhen //区或市县的名称&lt;/li&gt;
+&lt;li&gt;Organization Name (eg, company) [Internet Widgits Pty Ltd]:Comapny //公司或组织名&lt;/li&gt;
+&lt;li&gt;Organizational Unit Name (eg, section) []:Mobile //单位或者是部门名称&lt;/li&gt;
+&lt;li&gt;Common Name (e.g. server FQDN or YOUR name) []:xxxxxx //域名或服务器名或IP&lt;/li&gt;
+&lt;li&gt;Email Address []:xxxxx@gmail.com //Email地址&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;注, 上述可直接在命令中用&lt;code&gt;-subj&lt;/code&gt;跟在语句后面, 如:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;openssl req -new -x509 -key myselfsigned.key -out myselfsigned.cer -days 36500 -subj /CN=域名或服务器名或IP
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;至此, 生成的myselfsigned.cer分别应用到服务器端以及客户端(通过邮件, 链接等方式下发), 即可使用, 配置IIS见下文&lt;/p&gt;&lt;p&gt;#创建自己的证书颁发机构(CA)
+即使是测试目的, 也会出现有多个站点需要自定义证书的情况, 不可能要求用户每个站点装一个 我们何不把自己添加成一个证书颁发机构(CA), 然后把这个证书装给客户端, 那么由这个CA颁发的证书都会被自动信任.&lt;/p&gt;&lt;p&gt;首先, 用同样的语法创建一个证书, 我们把名字取明确一些, 就叫&lt;code&gt;myCA&lt;/code&gt;吧(跟第一步生成普通证书是一样一样的, 只是这次我们把它理解成一个证书颁发机构)&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;openssl genrsa -out myCA.key 2048
+openssl req -new -x509 -key myCA.key -out myCA.cer -days 36500
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;然后, 基于这个证书生成一个证书请求(&lt;code&gt;CSR&lt;/code&gt;), (同样, 先生成一个key, 要用key来请求)&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;openssl genrsa -out server.key 2048
+openssl req -new -out server.req -key server.key -subj /CN=域名
+&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注:&lt;/p&gt;&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;一旦域名配置了, 用不同于这个域名的主机名来请求, 就会校验失败&lt;/li&gt;
+&lt;li&gt;这里用到了上面说的-subj参数&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;最后, 通过服务器证书(我们理解的CA), 对这个签发请求进行签发&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;openssl x509 -req -in server.req -out server.cer -CAkey myCA.key -CA myCA.cer -days 36500 -CAcreateserial -CAserial serial
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;#配置IIS
+我们的使用场景是IIS伺服了一个静态文件服务器(没错, 是用来放iOS企业部署的的plist和ipa文件的), 做到如下几步&lt;/p&gt;&lt;p&gt;##转化证书格式
+IIS导入证书需要转化为pkcs12格式(X509格式?), 中间会询问一次密码, 牢记, 或者与导出的文件一起保存&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;openssl pkcs12 -export -clcerts -in server.cer -inkey server.key -out iis.pfx
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;现在总结一下, 目前为止, 除去&lt;code&gt;key&lt;/code&gt;和&lt;code&gt;car&lt;/code&gt;, 生成了&lt;code&gt;myCA.cer&lt;/code&gt;, &lt;code&gt;server.cer&lt;/code&gt; 和&lt;code&gt;iis.pfx&lt;/code&gt;三个文件&lt;/p&gt;&lt;p&gt;##将myCA.cer添加为”受信任的根证书颁发机构”
+打开IE &amp;gt; 工具 &amp;gt; Internet选项 &amp;gt; 内容 &amp;gt; 证书 &amp;gt; 受信任的根证书颁发机构 &amp;gt; 导入 &amp;gt; 选择iis.pfx &amp;gt; 输入密码 &amp;gt; 导入&lt;/p&gt;&lt;p&gt;##添加服务器证书
+这需要两个步骤&lt;/p&gt;&lt;p&gt;首先, 在IIS管理器(&lt;code&gt;inetmgr&lt;/code&gt;)的根目录上(就是机器名), 选择”服务器证书”, 导入我们刚才用&lt;code&gt;server.cer&lt;/code&gt;生成的&lt;code&gt;iis.pfx&lt;/code&gt;, 即给IIS添加了一个证书(如果有多个, 重复以上步骤)&lt;/p&gt;&lt;p&gt;然后, 找到网站节点, 右键, “编辑绑定”, 添加一个供https访问的端口(默认是443), 此时会要求你选择一个证书, 把刚才通过管理器添加的证书名选出来, 即可.&lt;/p&gt;&lt;p&gt;最后, 把&lt;code&gt;server.cer&lt;/code&gt;通用你们企业自己的方式颁发给需要使用的客户端(邮件, 链接等, 均可), 如果是iPhone, 点击了&lt;code&gt;server.cer&lt;/code&gt;文件后, 会导航到设置里面安装, 安装并信任后, 在设置 &amp;gt; 通用 &amp;gt; Profiles里面可以看到你信任的证书使用openssl创建自签名证书及部署到IIS教程&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E4%BD%BF%E7%94%A8openssl%E5%88%9B%E5%BB%BA%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%8F%8A%E9%83%A8%E7%BD%B2%E5%88%B0IIS%E6%95%99%E7%A8%8B/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>用CALayer绘图,添加动画和渐变</title><link>/archives/%E7%94%A8CALayer%E7%BB%98%E5%9B%BE%2C%E6%B7%BB%E5%8A%A0%E5%8A%A8%E7%94%BB%E5%92%8C%E6%B8%90%E5%8F%98/</link><description>&lt;p&gt;如果CALayer只有一个简单的 path, 那么直接给 path 赋值是最简单的:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;shapeLayer = [CAShapeLayer layer];
+shapeLayer.bounds = self.bounds;
+shapeLayer.anchorPoint = CGPointMake(0, 0);
+
+CGFloat endAngle = (1+_percentage)*M_PI;
+shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:center
+                                                 radius:radius
+                                             startAngle:startAngle
+                                               endAngle:endAngle
+                                              clockwise:YES].CGPath;
+shapeLayer.strokeColor = _highlightColor.CGColor;
+shapeLayer.fillColor = [UIColor clearColor].CGColor;
+shapeLayer.lineWidth = arcWidth;
+shapeLayer.lineCap = kCALineCapRound;
+[self.layer addSublayer:shapeLayer];         
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;对 线条类的 path 可以应用&lt;code&gt;strokeEnd&lt;/code&gt;属性来绘制动画:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;CASpringAnimation *pathAnimation = [CASpringAnimation animationWithKeyPath:@&amp;quot;strokeEnd&amp;quot;];
+pathAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
+pathAnimation.toValue = [NSNumber numberWithFloat:1.0f];
+pathAnimation.mass = 4.0f;              // 物体质量 1
+pathAnimation.stiffness = 200;          // 弹簧刚性 100
+pathAnimation.damping = 20;             // 弹簧阻尼 10
+pathAnimation.initialVelocity = 1.0f;  // 初始速度 0
+pathAnimation.duration = pathAnimation.settlingDuration;
+pathAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+[shapeLayer addAnimation:pathAnimation forKey:@&amp;quot;strokeEndAnimation&amp;quot;];
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;再加点渐变吧&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// 增加渐变图层
+CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+gradientLayer.frame = self.bounds;
+gradientLayer.colors = gradientColorSet;
+gradientLayer.startPoint = CGPointMake(1,0);
+gradientLayer.endPoint = CGPointMake(0, _percentage);
+
+[self.layer addSublayer:gradientLayer];
+// [self.layer addSublayer:shapeLayer]; // 移除之前的图层
+gradientLayer.mask = shapeLayer; // 当作渐变图层的 mask
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;组合效果如下:
+&lt;figure style="flex: 82.6086956521739" &gt;&lt;img loading="lazy" width="380" height="230" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/43ff55cd36a9fdcc4a548f9b35395d54.gif" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;要绘制弧形, 对照这个图就很简单了:
+&lt;figure style="flex: 50.0" &gt;&lt;img loading="lazy" width="400" height="400" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/99b3f00e6554f019df9d19d398777341.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;补充知识:&lt;/p&gt;&lt;p&gt;1, &lt;code&gt;CALayer&lt;/code&gt;的动画用不了&lt;code&gt;animateWithDuration:animations:completion:&lt;/code&gt;怎么办?&lt;/p&gt;&lt;blockquote&gt;
+&lt;p&gt;因为这是&lt;code&gt;UIView&lt;/code&gt;的方法, 你要把它加到一个&lt;code&gt;CATransaction&lt;/code&gt;里面去&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;2, 即使加到&lt;code&gt;CATransaction&lt;/code&gt;里面了, 怎么我对&lt;code&gt;frame&lt;/code&gt;做的动画还是没有生效?&lt;/p&gt;&lt;blockquote&gt;
+&lt;p&gt;因为&lt;code&gt;frame&lt;/code&gt;是一个复合属性, 它由&lt;code&gt;position&lt;/code&gt;, &lt;code&gt;bounds&lt;/code&gt;等属性决定, 所以你只是用错了属性.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;示例:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        // 完成回调
+    }];
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@&amp;quot;bounds.size.width&amp;quot;];
+    animation.duration = self.defaultLayoutTransitionDuration;
+    animation.fromValue = @(0.0f); 
+    animation.toValue = @(finalFrame.size.width); 
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+    [line.layer addAnimation:animation forKey:@&amp;quot;lineLayerAnimation&amp;quot;];
+    line.bounds = finalFrame;
+    [CATransaction commit];
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其它有关 CALayer 的不同&lt;strong&gt;生命周期&lt;/strong&gt;里绘制的解说请参考&lt;a href="http://blog.csdn.net/kyfxbl/article/details/50640978"&gt;这篇文章&lt;/a&gt;, 全文转载如下&lt;/p&gt;&lt;p&gt;在iOS中绘图，可以使用&lt;code&gt;UIView&lt;/code&gt;，也可以使用&lt;code&gt;CALayer&lt;/code&gt;。实际上，UIView也是由底层的CALayer完成绘制的工作&lt;/p&gt;&lt;p&gt;#UIView和CALayer的关系&lt;/p&gt;&lt;p&gt;每个UIView内部都有一个CALayer对象，由它来完成绘制的工作。和view一样，layer也是一个树形的结构&lt;/p&gt;&lt;p&gt;当不需要自定义组件的时候，用UIView的API就足以胜任，把需要的子view通过addSubview()方法放到view的层次里即可；但是如果需要自己绘制一些图形，就需要在UIView的drawRect()方法或是CALayer的相关方法中，调用CoreGraphics的API来画图&lt;/p&gt;&lt;p&gt;跟几个朋友也讨论过这个问题，我认为用layer来画是更好的办法，因为相对于view，layer是更轻量级的组件，可以节省系统资源。同时layer是动画的基本单元，加动画特效也更容易。并且view负责响应手势等，把绘制的代码都放在layer里，逻辑上也更加清晰&lt;/p&gt;&lt;p&gt;但是需要注意，layer不能直接响应触摸事件，所以手势识别还是需要通过view来完成
+在UIView中绘图&lt;/p&gt;&lt;p&gt;在UIView中绘图非常简单，当调用&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;self.setNeedsDisplay()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;iOS系统会自动调用view上的&lt;code&gt;drawRect()&lt;/code&gt;方法，可以在&lt;code&gt;drawRect()&lt;/code&gt;方法中绘制图形
+在CALayer中绘图&lt;/p&gt;&lt;p&gt;在layer中绘图，生命周期比view复杂一些&lt;/p&gt;&lt;p&gt;首先也是调用layer上的&lt;code&gt;setNeedsDisplay()&lt;/code&gt;触发的&lt;/p&gt;&lt;p&gt;#display&lt;/p&gt;&lt;p&gt;首先会进入layer的&lt;code&gt;display()&lt;/code&gt;方法，在这里可以把CGImage赋给layer的contents，那么会直接把该CGImage作为此layer的样式，不会进入后续的方法&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// 绘图方法
+override func display() {
+
+    if let img = getFrameImage(wheelStyle) {
+        contents = img.CGImage
+    }        
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;#displayLayer&lt;/p&gt;&lt;p&gt;如果没有实现display()方法，或者调用了super.display()，并且设置了layer的&lt;code&gt;delegate&lt;/code&gt;，那么iOS系统会调用delegate的&lt;code&gt;displayLayer()&lt;/code&gt;方法&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;let myLayer : MyLayer = MyLayer()
+myLayer.delegate = self;
+myLayer.frame = bounds;
+
+override func displayLayer(layer: CALayer) {
+
+    if let img = getFrameImage(wheelStyle) {
+        contents = img.CGImage
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;#drawInContext&lt;/p&gt;&lt;p&gt;如果没有设置delegate，或者delegate没有实现&lt;code&gt;displayLayer()&lt;/code&gt;方法，那么接下来会调用layer的&lt;code&gt;drawInContext&lt;/code&gt;方法&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;override func drawInContext(ctx: CGContext) {
+
+    CGContextSetLineWidth(ctx, 1);
+    CGContextMoveToPoint(ctx, 80, 40);
+    CGContextAddLineToPoint(ctx, 80, 140);
+    CGContextStrokePath(ctx);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;#drawLayerInContext&lt;/p&gt;&lt;p&gt;如果layer没有实现&lt;code&gt;drawInContext&lt;/code&gt;方法，那么接下来就会调用delegate的&lt;code&gt;drawLayerInContext&lt;/code&gt;方法&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;override func drawLayer(layer: CALayer, inContext ctx: CGContext) {
+    CGContextSetLineWidth(ctx, 1);
+    CGContextMoveToPoint(ctx, 80, 40);
+    CGContextAddLineToPoint(ctx, 80, 140);
+    CGContextStrokePath(ctx);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;#总结&lt;/p&gt;&lt;p&gt;所以，一般来说，可以在layer的&lt;code&gt;display()&lt;/code&gt;或者&lt;code&gt;drawInContext()&lt;/code&gt;方法中来绘制&lt;/p&gt;&lt;p&gt;在display()中绘制的话，可以直接给contents属性赋值一个CGImage，在&lt;code&gt;drawInContext()&lt;/code&gt;里就是各种调用CoreGraphics的API&lt;/p&gt;&lt;p&gt;假如绘制的逻辑特别复杂，希望能从layer中剥离出来，那么可以给layer设置delegate，把相关的绘制代码写在delegate的&lt;code&gt;displayLayer()&lt;/code&gt;和&lt;code&gt;drawLayerInContext()&lt;/code&gt;方法。这2个方法与&lt;code&gt;display()&lt;/code&gt;和&lt;code&gt;drawInContext()&lt;/code&gt;是分别一一对应的&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E7%94%A8CALayer%E7%BB%98%E5%9B%BE%2C%E6%B7%BB%E5%8A%A0%E5%8A%A8%E7%94%BB%E5%92%8C%E6%B8%90%E5%8F%98/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>shell命令用正则批量重命名文件</title><link>/archives/shell%E5%91%BD%E4%BB%A4%E7%94%A8%E6%AD%A3%E5%88%99%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/</link><description>&lt;p&gt;又是用shell来操作文件的问题.&lt;/p&gt;&lt;p&gt;我下了老友记的全集, 结果在NAS里死活匹配不出3季以后的剧集信息, 因为打包来源相同, 一直没深究, 只当是刮削工具做得不好, 今天才发现从第4季开始, 所有的文件名格式都错了, 如:&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Friends&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;s10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="mf"&gt;06.2003&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;BDRip&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;1080&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Ukr&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Eng&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;AC3&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Hurtom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;TNU&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Tenax555&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mkv&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;中的&lt;code&gt;s10.06&lt;/code&gt;应为&lt;code&gt;s10.e06&lt;/code&gt;, 那么改对不就是了么. 又是批量任务啊, 这次的需求从上次的批量移动文件变成了批量修改文件名.&lt;/p&gt;&lt;p&gt;事实上&lt;code&gt;mv&lt;/code&gt;其实也是重命名工具, 奈何这次的规则稍微复杂, 我还是想要用正则来匹配, 一番搜索, 找到了&lt;code&gt;rename&lt;/code&gt;这个工具. 网上的相关文章似乎有点旧, 跟今天我Homebrew下来的的文档有出入, 因此也就没看网上的文档了, 建议自己看一下官方文档, 还自带了&lt;code&gt;tutorial&lt;/code&gt;和&lt;code&gt;cookbook&lt;/code&gt;, 很良心啊, 看完基本自己就会了.&lt;/p&gt;&lt;p&gt;新版的&lt;code&gt;rename&lt;/code&gt;工具把选项分为了&lt;code&gt;switch&lt;/code&gt;和&lt;code&gt;transforms&lt;/code&gt;, 自然文档也就成了:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;rename [switches|transforms] [files]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;既然都推荐你们看文档了, 我了不一一介绍了, 挑几个需要注意的讲, 最后再揭晓我是如何完成这次批量重命名的.&lt;/p&gt;&lt;p&gt;##debug
+&lt;code&gt;-n&lt;/code&gt;这个&lt;code&gt;switch&lt;/code&gt;可以显示本次命令将被如何执行, 而不真正执行, 这非常像上一篇文章里介绍&lt;code&gt;xargs&lt;/code&gt;时的&lt;code&gt;-p&lt;/code&gt;, 在&lt;code&gt;rename&lt;/code&gt;的语境里, 它叫&lt;code&gt;dry-run&lt;/code&gt;. 总之我就是通过这个学习的, 非常有用.&lt;/p&gt;&lt;p&gt;##替换
+新版&lt;code&gt;rename&lt;/code&gt;加了很多像去头啊, 去尾啊, 加前缀啊, 加尾缀啊, 去空白啊, 变大小写啊等等的选项, 这个去读文档, 执行一些简单且明确的任务用这些&lt;code&gt;switch&lt;/code&gt;和&lt;code&gt;transforms&lt;/code&gt;比自己去构建正则要来的简单, 这也是作者把这些小功能全提取出来的目的吧. 由于我的目标是正则, 着重关注&lt;code&gt;-s&lt;/code&gt;这个&lt;code&gt;transform&lt;/code&gt;.&lt;/p&gt;&lt;p&gt;假设有文件&lt;code&gt;abc123.mp3&lt;/code&gt;和&lt;code&gt;abc456.mp3&lt;/code&gt;, 以下命令均加了&lt;code&gt;-n&lt;/code&gt;, 以便直接看输出&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;#替换&lt;/span&gt;
+&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;rename&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="n"&gt;abc&lt;/span&gt; &lt;span class="n"&gt;mmm&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;
+&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;rename&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;s/abc/mmm/&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;
+&lt;span class="c1"&gt;#以上两句只是展示两种写法/格式&lt;/span&gt;
+&lt;span class="c1"&gt;#输出:&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;abc123.mp3&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;would&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;renamed&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;mmm123.mp3&amp;#39;&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;abc456.mp3&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;would&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;renamed&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;mmm456.mp3&amp;#39;&lt;/span&gt;
+
+&lt;span class="c1"&gt;#加前缀&lt;/span&gt;
+&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;rename&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;s/^/album_/&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;*.&lt;/span&gt;&lt;span class="n"&gt;mp3&lt;/span&gt;
+&lt;span class="c1"&gt;#输出:&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;abc123.mp3&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;would&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;renamed&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;album_abc123.mp3&amp;#39;&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;abc456.mp3&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;would&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;renamed&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;album_abc456.mp3&amp;#39;&lt;/span&gt;
+
+&lt;span class="c1"&gt;#演示一次错误的加前缀方式&lt;/span&gt;
+&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;rename&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;s/^/album_^/&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;*.&lt;/span&gt;&lt;span class="n"&gt;mp3&lt;/span&gt;
+&lt;span class="c1"&gt;#输出:&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;abc123.mp3&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;would&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;renamed&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;album_^abc123.mp3&amp;#39;&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;abc456.mp3&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;would&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;renamed&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;album_^abc456.mp3&amp;#39;&lt;/span&gt;
+&lt;span class="c1"&gt;#看到了吧? 直接把^给替换了, 而不是插入&lt;/span&gt;
+
+&lt;span class="c1"&gt;#去后缀&lt;/span&gt;
+&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;rename&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;s/\.mp3//&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;*.&lt;/span&gt;&lt;span class="n"&gt;mp3&lt;/span&gt;
+&lt;span class="c1"&gt;#输出:&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;abc123.mp3&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;would&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;renamed&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;abc123&amp;#39;&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;abc456.mp3&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;would&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;renamed&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;abc456&amp;#39;&lt;/span&gt;
+
+&lt;span class="c1"&gt;#分组&lt;/span&gt;
+&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;touch&lt;/span&gt; &lt;span class="n"&gt;AA&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S01&lt;/span&gt;&lt;span class="mf"&gt;.12&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mkv&lt;/span&gt; &lt;span class="n"&gt;AA&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S01&lt;/span&gt;&lt;span class="mf"&gt;.13&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mkv&lt;/span&gt; &lt;span class="n"&gt;AA&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;S01&lt;/span&gt;&lt;span class="mf"&gt;.14&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mkv&lt;/span&gt;
+&lt;span class="c1"&gt;#这次把文件搞复杂点, 假定有如上三个文件, 我们要把12改为E12, 以此类推&lt;/span&gt;
+&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;rename&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;s/\.(\d&lt;/span&gt;&lt;span class="si"&gt;{2}&lt;/span&gt;&lt;span class="s1"&gt;)\./\.E$1\./&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;*.&lt;/span&gt;&lt;span class="n"&gt;mkv&lt;/span&gt;
+&lt;span class="c1"&gt;#输出:&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;AA.S01.12.mkv&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;would&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;renamed&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;AA.S01.E12.mkv&amp;#39;&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;AA.S01.13.mkv&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;would&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;renamed&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;AA.S01.E13.mkv&amp;#39;&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;AA.S01.14.mkv&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;would&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;renamed&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;AA.S01.E14.mkv&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;看到最后一个例子是不是发现我的目标已经达到了? 我没有深入研究, 只是简单的根据实际情况把前后带点符号, 中间夹了两位数字的提取了出来, 加了字母&lt;code&gt;E&lt;/code&gt;, 可能还有更简便的办法, 但我看到输出, 就急急测试去了, 果然等待数秒后, 文件全部重命名成功.&lt;/p&gt;&lt;p&gt;##递归
+当然没那么简单, 因为4-10季的内容在各自的文件夹里, 如何递归呢? 看过我&lt;a href="https://www.jianshu.com/p/6fab4aedc07e"&gt;上一篇文章&lt;/a&gt;的人可能会想到我又去借管道和&lt;code&gt;xargs&lt;/code&gt;了吧? 这次得益于我提前读了文档, 里面也有介绍, 它还能直接应用&lt;code&gt;find&lt;/code&gt;过来的结果, 还不需要像&lt;code&gt;xargs&lt;/code&gt;一样给个占位, 应该是作者直接做的支持, 所以我的最终命令是这样的:&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="bp"&gt;find&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;*.mkv&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;print0&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="n"&gt;rename&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="err"&gt;\&lt;/span&gt;&lt;span class="p"&gt;.(&lt;/span&gt;&lt;span class="err"&gt;\&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;})&lt;/span&gt;&lt;span class="err"&gt;\&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="err"&gt;\&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="nv"&gt;$1&lt;/span&gt;&lt;span class="err"&gt;\&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;是的, 肯定要先&lt;code&gt;-n&lt;/code&gt;看看有没有操作失误, 文件出问题就麻烦了(建议先复制一份).&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;此外, 因为用的是管道, 所以最后的&lt;code&gt;[files]&lt;/code&gt;参数就不需要了, 我之前就是疏忽了, 复制过来时留着前面做测试的&lt;code&gt;*.mkv&lt;/code&gt;尾巴, 看到出错提示才意识到.&lt;/p&gt;&lt;blockquote&gt;
+&lt;p&gt;2021/4/22
+我又来批量重命名的时候，发现&lt;code&gt;-print0&lt;/code&gt;加上反而不行了，也就是说把带了换行符的&lt;code&gt;find&lt;/code&gt;输出直接送到&lt;code&gt;rename&lt;/code&gt; 里面，反而能成功，拼成一行送进去的不行，不知道上次是怎么成功的。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;so far so good.&lt;/p&gt;&lt;p&gt;##吐槽
+简书的代码块, 预览里很好看, 发布出去千奇百怪, 是什么鬼, 为了给代码着色, 我不得不在代码语言标识上乱写一通(反正写bash是不着色的)&lt;/p&gt;&lt;hr /&gt;
+&lt;h2&gt;Bonus&lt;/h2&gt;
+&lt;p&gt;不小心看到关于&lt;code&gt;mv&lt;/code&gt;的&lt;a href="%5Bhttps://news.ycombinator.com/item?id=22860140"&gt;这个技巧&lt;/a&gt;, 如果改动的只是文件名的一小部分, 比如在&lt;code&gt;10&lt;/code&gt;前面加个&lt;code&gt;e&lt;/code&gt;变成&lt;code&gt;e10&lt;/code&gt;, 这么做就可以了&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;mv&lt;/span&gt; &lt;span class="n"&gt;Friends&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;s06&lt;/span&gt;&lt;span class="p"&gt;.{,&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="mf"&gt;10.1080&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;x265&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mkv&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;而不需要&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;mv&lt;/span&gt; &lt;span class="n"&gt;Friends&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;s06&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="mf"&gt;10.1080&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;x265&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mkv&lt;/span&gt; &lt;span class="n"&gt;Friends&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;s06&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;e10&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;1080&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;x265&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mkv&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;原文里面有两个例子, 一目了然&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;mv&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;foo-bar-&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="err"&gt;baz,quux&lt;/span&gt;&lt;span class="p"&gt;}.&lt;/span&gt;&lt;span class="nc"&gt;txt&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="nt"&gt;mv&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;foo-bar&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="err"&gt;,-baz&lt;/span&gt;&lt;span class="p"&gt;}.&lt;/span&gt;&lt;span class="nc"&gt;txt&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;以上显示的是更改和添加, 显然,你也可以猜到删除的用法, 看起来跟rename用法类似&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;mv&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;foo-bar&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="err"&gt;-baz,&lt;/span&gt;&lt;span class="p"&gt;}.&lt;/span&gt;&lt;span class="nc"&gt;txt&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;当然这个贴子有很大的争论, 感兴趣可以看看.&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/shell%E5%91%BD%E4%BB%A4%E7%94%A8%E6%AD%A3%E5%88%99%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>apple-store链接格式文档</title><link>/archives/apple-store%E9%93%BE%E6%8E%A5%E6%A0%BC%E5%BC%8F%E6%96%87%E6%A1%A3/</link><description>&lt;p&gt;The app on Appstore has specific URL format &lt;code&gt;http://itunes.apple.com/[country-code]/app/[app-name]/id+[id_value]?mt=[1...12]&lt;/code&gt;
+country-code can be &lt;em&gt;us&lt;/em&gt; for &lt;em&gt;united states&lt;/em&gt;, &lt;em&gt;in&lt;/em&gt; for &lt;em&gt;india&lt;/em&gt; etc
+&lt;em&gt;mt stands for Media Type&lt;/em&gt;
+&lt;em&gt;Value for mt can be anything from 1 to 12 and each assigned to specific category&lt;/em&gt;
+i. &lt;strong&gt;8 for iOS apps&lt;/strong&gt;
+ii. &lt;strong&gt;12 for Mac apps&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;来源: &lt;a href="http://stackoverflow.com/questions/1781427/what-is-mt-8-in-itunes-links-for-the-appstore"&gt;stackoverflow&lt;/a&gt;&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/apple-store%E9%93%BE%E6%8E%A5%E6%A0%BC%E5%BC%8F%E6%96%87%E6%A1%A3/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>cs193p_2021笔记[6]_Persistence</title><link>/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B6%5D_Persistence/</link><description>&lt;p&gt;&lt;a href="https://www.jianshu.com/p/998b0ef4a2cd"&gt;cs193p_2021_笔记_1&lt;/a&gt;
+&lt;a href="https://www.jianshu.com/p/af0ad1bead34"&gt;cs193p_2021_笔记_2&lt;/a&gt;
+&lt;a href="https://www.jianshu.com/p/d103f8d12052"&gt;cs193p_2021_笔记_3_Animation_Transition&lt;/a&gt;
+&lt;a href="https://www.jianshu.com/p/41e7309c7f55"&gt;cs193p_2021_笔记_4_Color_Image_Gesture&lt;/a&gt;
+&lt;a href="https://www.jianshu.com/p/e3c2ee1628c6"&gt;cs193p_2021_笔记_5_Property Wrapper&lt;/a&gt;
+cs193p_2021_笔记_6_Persistence
+&lt;a href="https://www.jianshu.com/p/f4ae879eef9c"&gt;cs193p_2021_笔记_7_Document Architecture&lt;/a&gt;
+&lt;a href="https://www.jianshu.com/p/2136bdc2c6f6"&gt;cs193p_2021_笔记_8&lt;/a&gt;&lt;/p&gt;&lt;p&gt;--&lt;/p&gt;&lt;h1&gt;Persistence&lt;/h1&gt;
+&lt;p&gt;持久化数据的方式有&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;File system（FileManager）&lt;/li&gt;
+&lt;li&gt;Sqlite/CoreData&lt;/li&gt;
+&lt;li&gt;iCloud: 根据上面两种格式存储&lt;/li&gt;
+&lt;li&gt;CloutKit: a database in the cloud (network)&lt;/li&gt;
+&lt;li&gt;UserDefaults&lt;/li&gt;
+&lt;li&gt;Codable/JSON&lt;/li&gt;
+&lt;li&gt;UIDocument (UIKit feature)(与Files App集成)&lt;/li&gt;
+&lt;li&gt;3rd-party&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;UserDefaults&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;keep track of elements in different sets&lt;/li&gt;
-&lt;li&gt;primary operations: &lt;code&gt;find&lt;/code&gt; and &lt;code&gt;union&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Usage&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;Kruskal's &lt;code&gt;minimum spanning tree&lt;/code&gt; algorithm&lt;/li&gt;
-&lt;li&gt;Grid percolation&lt;/li&gt;
-&lt;li&gt;Network connectivity&lt;/li&gt;
-&lt;li&gt;Least common ancestor in trees&lt;/li&gt;
-&lt;li&gt;Image processing&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Complexity&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;construction: O(n)&lt;/li&gt;
-&lt;li&gt;union/join/size/check connected/: $\alpha$(n) :接近常量时间&lt;/li&gt;
-&lt;li&gt;count: O(1)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;给定一个无向图，如果它任意两个顶点都联通并且是一棵树，那么我们就称之为生成树(&lt;code&gt;Spanning Tree&lt;/code&gt;)。如果是带权值的无向图，那么权值之和最小的生成树，我们就称之为最小生成树(MST, &lt;code&gt;Minimum Spanning Tree&lt;/code&gt;)。
--&amp;gt; 用最少的边连接所有的顶点&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;sort edges by ascending edge weight&lt;/li&gt;
-&lt;li&gt;walk through edges&lt;ul&gt;
-&lt;li&gt;检查顶点，如果两个顶点都已经unified，就忽略&lt;ul&gt;
-&lt;li&gt;其实就是这两个点分别被别的边连过了&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;否则就添加edge，并且unify顶点&lt;/li&gt;
+&lt;li&gt;只能存储&lt;code&gt;Property List&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Property List&lt;/code&gt;支持String, Int, Bool, floating point, Date, Data, Array or Dictionary&lt;ul&gt;
+&lt;li&gt;任何其它类型需要转成&lt;code&gt;Property List&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Codable&lt;/code&gt; converts structs into &lt;code&gt;Data&lt;/code&gt; objects (and &lt;code&gt;Data&lt;/code&gt; is a &lt;code&gt;Property List&lt;/code&gt;).&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;看到这里，首先想知道什么是unified，看实现，也就是在一个集合里(component)
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-a4f39c808d78f8ee.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;观察C_J，因为C和J已经在一个组里了，这条边就不需要了&lt;/li&gt;
-&lt;li&gt;观察D_E，一旦连上后，紫色和绿色其实就是一个组了&lt;/li&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;defaults&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;UserDefaults&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;standard&lt;/span&gt;
+&lt;span class="n"&gt;defaults&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kr"&gt;set&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;forKey&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;SomeKey&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;// object must be a Property List&lt;/span&gt;
+&lt;span class="n"&gt;defaults&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setDouble&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;37.5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;forKey&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;MyDouble&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;// retrive&lt;/span&gt;
+
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;i&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;Int&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;defaults&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;integer&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;forKey&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;MyInteger&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;b&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Data&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;defaults&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;forKey&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;MyData&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;u&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;URL&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;defaults&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;forKey&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;MyURL&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;strings&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;defaults&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;stringArray&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;forKey&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;MyString&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; 
+&lt;span class="c1"&gt;// etc.&lt;/span&gt;
+&lt;span class="c1"&gt;// Retrieving Arrays of anything but String is more complicated ...&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;a&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;defaults&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;array&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;forKey&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;MyArray&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;// will return Array&amp;lt;Any&amp;gt;&lt;/span&gt;
+&lt;span class="c1"&gt;// 最好用Codable的data(forKey:)替代&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Core Data&lt;/h2&gt;
+&lt;p&gt;SwiftUI进行的集成:&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;创建的对象是&lt;code&gt;ObservableObjects&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;一个property wrapper &lt;code&gt;@FetchRequest&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;管理对象(context)是&lt;code&gt;NSManagedObjectContext&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;context通过&lt;code&gt;@Environment&lt;/code&gt;传入&lt;/li&gt;
 &lt;/ul&gt;
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-9fbda901cd75db13.png" /&gt;&lt;/figure&gt;&lt;ul&gt;
-&lt;li&gt;观察D_H，一旦连上后，紫色和红色也成为了一个组&lt;/li&gt;
-&lt;li&gt;连接B_C，所有顶点就全部连上了，并且只有一条紫线&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Find: 找元素在哪个component里，然后找到它的root
-Union: 找两个元素分别在哪个component里，然后找到它们的root，如果不是同一个root，就让其中一个成为另一个的parent&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;component的个数与root的个数一致&lt;/li&gt;
-&lt;li&gt;root的个数只减不增（因为通常只合并而不拆分）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;union find里&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;为每个元素分配一个索引，每个元素指向自己（即初始是n个root，n个component)&lt;/li&gt;
-&lt;li&gt;描述两两之间的关系，以任一元素为parent （谁来描述？）&lt;/li&gt;
-&lt;li&gt;有一个元素已经属于别的component里的，就将它也加到那个component里去&lt;ul&gt;
-&lt;li&gt;如果这个元素也是别的component里的顶点，就把整个组指向另一个组的root&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;Path Compression Union Find&lt;/h2&gt;
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-3e8c2a735b8429ce.png" /&gt;&lt;/figure&gt;&lt;p&gt;由一层层找到root改为所有顶点直接指向顶点（星形结构），实现路径压缩&lt;/p&gt;&lt;p&gt;这段代码演示的是，查找p的root节点，在查找的过程中，顺便进行了路径压缩
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-0ba57aa842233469.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;合并的逻辑就是比较谁的元素多就把谁当作root，另一个component的root的parent设为元素多的组的root&lt;br /&gt;
-合并完成后组数就少了1
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-9821cff4bb811594.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;看代码，这一步里面并没有路径压缩，也就是小组里面的元素并没有&lt;strong&gt;进一步&lt;/strong&gt;再星状地指向新的parent，仍然指向的是老的组的root。&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%89%EF%BC%9AUnion-Find/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>数据结构篇九：Indexed-Priority-Queue</title><link>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/</link><description>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
-&lt;h1&gt;Indexed Priority Queue&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;a traditional priority queue variant&lt;/li&gt;
-&lt;li&gt;top node supports &lt;code&gt;quick update and deletions of key-value paris&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-e287109fa63ae3be.png" /&gt;&lt;/figure&gt;&lt;p&gt;观察这个图，数据是Anna, Bella...等等，&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;首先，为这一堆数据进行任意排序，得到一堆索引(0,1,...)&lt;/li&gt;
-&lt;li&gt;然后组一个binary heap，这样每个元素又获得一个索引，就是在heap上的序号（&lt;code&gt;Position Map&lt;/code&gt;）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;通过两组索引迅速找到key（就是人名）在堆中的位置，比如：&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;George，ki = 6, pm = 1&lt;/li&gt;
-&lt;li&gt;kelly, ki = 10, pm = 10&lt;/li&gt;
+&lt;p&gt;demo:&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="n"&gt;Environnment&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;\&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;managedObjectContext&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;context&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;flight&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Flight&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;flight&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;aircraft&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;B737&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt; &lt;span class="c1"&gt;// etc.&lt;/span&gt;
+
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;ksjc&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Airport&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;ksjc&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;icao&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;KSJC&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt; &lt;span class="c1"&gt;// etc.&lt;/span&gt;
+
+&lt;span class="n"&gt;flight&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ksjc&lt;/span&gt; &lt;span class="c1"&gt;// this would add flight to ksjc.flightsFrom too try? context.save()&lt;/span&gt;
+
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;request&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;NSFetchRequest&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;Flight&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;(&lt;/span&gt;&lt;span class="n"&gt;entityName&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;Flight&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;predicate&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt;
+&lt;span class="bp"&gt;NSPredicate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;arrival&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="p"&gt;@&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Date&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;ksjc&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; 
+&lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sortDescriptors&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="bp"&gt;NSSortDescriptor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;key&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;ident&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ascending&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt; 
+
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;flights&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;fetch&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;// past KSJC flights sorted by ident&lt;/span&gt;
+&lt;span class="c1"&gt;// flights is nil if fetch failed, [] if no such flights, otherwise [Flight]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;以上是core data部分，还是浓浓的OC的痕迹，看看Swift UI的版本。&lt;/p&gt;&lt;p&gt;首先，上述的&lt;code&gt;Flights, Airports&lt;/code&gt;都是ViewModel。它自然拥有它的&lt;code&gt;Property Wrapper&lt;/code&gt;:&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="n"&gt;FetchRequest&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;entity&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;sortDescriptors&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;predicate&lt;/span&gt;&lt;span class="p"&gt;:)&lt;/span&gt; &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;flights&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;FetchedResults&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;Flight&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="n"&gt;FetchRequest&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fetchRequest&lt;/span&gt;&lt;span class="p"&gt;:)&lt;/span&gt; &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;airports&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;FetchedResults&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;Airport&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span class="c1"&gt;// flights and airports will continuously update as the database changes. &lt;/span&gt;
+&lt;span class="n"&gt;ForEach&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;flights&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;flight&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;
+    &lt;span class="c1"&gt;// UI for a flight built using flight &lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="c1"&gt;// bi-binding&lt;/span&gt;
+&lt;span class="n"&gt;_flights&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;FetchRequest&lt;/span&gt;&lt;span class="p"&gt;(...)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Cloud Kit&lt;/h2&gt;
+&lt;p&gt;上个demo吧&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;db&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;CKContainer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;shared&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;privateCloudDatabase&lt;/span&gt; 
+&lt;span class="c1"&gt;// Record理解为Table&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;tweet&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;CKRecord&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;Tweet&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="c1"&gt;// 索引理解为Field&lt;/span&gt;
+&lt;span class="n"&gt;tweet&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="mi"&gt;140&lt;/span&gt; &lt;span class="n"&gt;characters&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;pure&lt;/span&gt; &lt;span class="n"&gt;joy&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;tweeter&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;CKRecord&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;TwitterUser&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;tweet&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;tweeter&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;CKReference&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;record&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;tweeter&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;action&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;deleteSelf&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;db&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;save&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tweet&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;savedRecord&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;CKRecord&lt;/span&gt;&lt;span class="p"&gt;?,&lt;/span&gt; &lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;NSError&lt;/span&gt;&lt;span class="p"&gt;?)&lt;/span&gt; &lt;span class="p"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="nb"&gt;Void&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;error&lt;/span&gt; &lt;span class="p"&gt;==&lt;/span&gt; &lt;span class="kc"&gt;nil&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;// hooray!&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="p"&gt;?.&lt;/span&gt;&lt;span class="n"&gt;errorCode&lt;/span&gt; &lt;span class="p"&gt;==&lt;/span&gt; &lt;span class="n"&gt;CKErrorCode&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="n"&gt;NotAuthenticated&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rawValue&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="c1"&gt;// tell user he or she has to be logged in to iCloud for this to work!&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="c1"&gt;// report other errors (there are 29 different CKErrorCodes!) &lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="c1"&gt;// Query&lt;/span&gt;
+&lt;span class="c1"&gt;// 类似core data, 构造predict, request(就是query)即可&lt;/span&gt;
+
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;predicate&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;NSPredicate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt; &lt;span class="bp"&gt;contains&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;searchString&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;query&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;CKQuery&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;recordType&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="err"&gt;“&lt;/span&gt;&lt;span class="n"&gt;Tweet&lt;/span&gt;&lt;span class="err"&gt;”&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;predicate&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;predicate&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;db&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;perform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;query&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;records&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="bp"&gt;CKRecord&lt;/span&gt;&lt;span class="p"&gt;]?,&lt;/span&gt; &lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;NSError&lt;/span&gt;&lt;span class="p"&gt;?)&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;error&lt;/span&gt; &lt;span class="p"&gt;==&lt;/span&gt; &lt;span class="kc"&gt;nil&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="c1"&gt;// records will be an array of matching CKRecords&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="p"&gt;?.&lt;/span&gt;&lt;span class="n"&gt;errorCode&lt;/span&gt; &lt;span class="p"&gt;==&lt;/span&gt; &lt;span class="n"&gt;CKErrorCode&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;NotAuthenticated&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rawValue&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="c1"&gt;// tell user he or she has to be logged in to iCloud for this to work!&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="c1"&gt;// report other errors (there are 29 different CKErrorCodes!) &lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;One of the coolest features of Cloud Kit is its ability to &lt;code&gt;send push notifications&lt;/code&gt; on changes. All you do is register an &lt;code&gt;NSPredicate&lt;/code&gt; and whenever the database changes to match it,&lt;/p&gt;&lt;h2&gt;File System&lt;/h2&gt;
+&lt;p&gt;Sandbox包含：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;Application directory — Your executable, .jpgs, etc.; not writeable.&lt;/li&gt;
+&lt;li&gt;Documents directory — Permanent storage created by and always visible to the user.&lt;/li&gt;
+&lt;li&gt;Application Support directory — Permanent storage not seen directly by the user.&lt;/li&gt;
+&lt;li&gt;Caches directory — Store temporary files here (this is not backed up).&lt;/li&gt;
+&lt;li&gt;Other directories (see documentation)&lt;/li&gt;
 &lt;li&gt;...&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;现在能迅速找到数据源在堆上的位置了，那么如果反过来呢？比如堆上索引3是数据源的谁？&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;pm = 3 -&amp;gt; ki = 8 -&amp;gt; Issac &lt;strong&gt;BINGO!!!&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;但神奇的事发生了，有人希望复用ki这个自然数序列（闲的蛋疼？），于是多做了一个数组，把ki定义为heap上的索引，与元素原来的ki进行映射（&lt;code&gt;Inverse Map&lt;/code&gt;）:IM
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-ce50aadafe092a41.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;可以看到，这张图上张个ki到im的映射，与pm到ki的映射其实是一样的，也就是说重定义了一下，并没有引入新的东西。(pm表里找到3，对应的第一行ki表里就是8）&lt;/p&gt;&lt;p&gt;这个时候，我们直接用ki的3就能找到im的8，继而找到数据源的&lt;em&gt;Issac&lt;/em&gt;了。&lt;/p&gt;&lt;h2&gt;Insertion&lt;/h2&gt;
-&lt;p&gt;上面的数组，我们往里面添加第12条数据试试:&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;{ki:12, pm: 12, im:12, value:2}&lt;/li&gt;
-&lt;li&gt;显然违反了binary heap的 invariant，向上冒泡，也就是跟{ki:12, pm:5, im:2, value:4}的节点互换&lt;/li&gt;
-&lt;li&gt;此时，数据源肯定不会变，但是节点变了，pm的值就要交换（5， 12 互换）&lt;/li&gt;
-&lt;li&gt;pm变了，把pm当成ki的映射表im也要变（12， 11互换）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-1470af2b119b338e.png" /&gt;&lt;/figure&gt;&lt;p&gt;仔细观察图片，搞清楚第一行ki在两次互换时的身份就明白了&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;pm的互换是直观的，就是节点的位置&lt;/li&gt;
-&lt;li&gt;知道pm互换的依据后（2，5），在第一行找2，5对应的im值互换，因为在这个映射里，相当于pm与原ki的映射，pm此时是（2，5）了。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;同样逻辑继续冒泡就是了。&lt;/p&gt;&lt;p&gt;pseudo code:&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Inserts a value into the min indexed binary &lt;/span&gt;
-&lt;span class="c1"&gt;# heap. The key index must not already be in &lt;/span&gt;
-&lt;span class="c1"&gt;# the heap and the value must not be null. &lt;/span&gt;
-&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;insert&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;
-    &lt;span class="c1"&gt;# ‘sz’ is the current size of the heap&lt;/span&gt;
-    &lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sz&lt;/span&gt;  &lt;span class="c1"&gt;# 对应上图，意思就第一行索引器是ki&lt;/span&gt;
-    &lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;sz&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ki&lt;/span&gt;  &lt;span class="c1"&gt;# 对应上图，意思就是一行索引器是pm&lt;/span&gt;
-    &lt;span class="n"&gt;swim&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sz&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;     &lt;span class="c1"&gt;# 这里传进去的pm，即heap上节点的索引&lt;/span&gt;
-    &lt;span class="n"&gt;sz&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sz&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;  &lt;span class="c1"&gt;# 添加成功，size加1&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;url&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;URL&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;FileManager&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;directory&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;FileManager&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;SearchPathDirectory&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;documentDirectory&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;// for example &lt;/span&gt;
+    &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="n"&gt;domainMask&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;userDomainMask&lt;/span&gt; &lt;span class="c1"&gt;// always .userDomainMask on iOS&lt;/span&gt;
+    &lt;span class="n"&gt;appropriateFor&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;nil&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;// only meaningful for “replace” file operations&lt;/span&gt;
+    &lt;span class="n"&gt;create&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt; &lt;span class="c1"&gt;// whether to create the system directory if it doesn’t already exist&lt;/span&gt;
+ &lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;理论上，添加元素到最后一个, sz和ki应该是相等的（因为都是尾巴上）&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Swims up node i (zero based) until heap &lt;/span&gt;
-&lt;span class="c1"&gt;# invariant is satisfied.&lt;/span&gt;
-&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;swim&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="c1"&gt;# 比父节点小就冒泡，注意入参i是节点上的索引，即pm&lt;/span&gt;
-    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;less&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="p"&gt;)):&lt;/span&gt; 
-        &lt;span class="n"&gt;swap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;  &lt;span class="c1"&gt;# 所以这里传的也是pm&lt;/span&gt;
-        &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;
-        &lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;
+&lt;p&gt;Examples of SearchPathDirectory values :&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;documentDirectory&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;applicationSupportDirectory&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;cachesDirectory&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;再列些常用api：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;// URL&lt;/span&gt;
 
-&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;swap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; 
-    &lt;span class="c1"&gt;# 我们交换了节点，需要交换pm表里的值，和im表里的值&lt;/span&gt;
-    &lt;span class="c1"&gt;# 交换pm的值需要数据源的索引，即ki，而ki能从im表里用pm算出来&lt;/span&gt;
-    &lt;span class="c1"&gt;# 所以ki = im[pm] 这里i,j是pm，所以im[i]自然就是i对应ki&lt;/span&gt;
-    &lt;span class="c1"&gt;# pm[ki]当然就是pm[im[i]]了：&lt;/span&gt;
-    &lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;]],&lt;/span&gt; &lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;
-    &lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;appendingPathComponent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;URL&lt;/span&gt;
+&lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;appendingPathExtension&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;URL&lt;/span&gt; &lt;span class="c1"&gt;// e.g. “jpg”&lt;/span&gt;
+&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;isFileURL&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;Bool&lt;/span&gt; &lt;span class="c1"&gt;// is this a file URL (whether file exists or not) or something else? &lt;/span&gt;
+&lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;resourceValues&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;keys&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;URLResourceKey&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="kr"&gt;throws&lt;/span&gt; &lt;span class="p"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;URLResourceKey&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;Any&lt;/span&gt;&lt;span class="p"&gt;]?&lt;/span&gt; 
+&lt;span class="c1"&gt;// Example keys: .creationDateKey, .isDirectoryKey, .fileSizeKey&lt;/span&gt;
 
-&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;less&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt;
+&lt;span class="c1"&gt;// Data&lt;/span&gt;
+
+&lt;span class="c1"&gt;// retrive binary data&lt;/span&gt;
+&lt;span class="c1"&gt;// option almost always []&lt;/span&gt;
+&lt;span class="kd"&gt;init&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;contentsOf&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;URL&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Data&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ReadingOptions&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kr"&gt;throws&lt;/span&gt; 
+&lt;span class="c1"&gt;// write&lt;/span&gt;
+&lt;span class="c1"&gt;// The options can be things like .atomic (write to tmp file, then swap) or .withoutOverwriting.&lt;/span&gt;
+&lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;URL&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Data&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;WritingOptions&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kr"&gt;throws&lt;/span&gt; &lt;span class="p"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="nb"&gt;Bool&lt;/span&gt;
+
+&lt;span class="c1"&gt;// FileManager&lt;/span&gt;
+&lt;span class="n"&gt;fileExists&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;atPath&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="nb"&gt;Bool&lt;/span&gt;
+&lt;span class="c1"&gt;// Can also create and enumerate directories; move, copy, delete files; etc.&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;还是那句话，理解清楚那三行映射表里第一行的动态含义，就不会有问题。&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;pm表要key index来索引&lt;/li&gt;
-&lt;li&gt;im表要node index来索引&lt;/li&gt;
+&lt;h2&gt;Codable&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;保留一个对象所有的var（变量）的机制&lt;/li&gt;
+&lt;li&gt;如果一个Struct它的成员变是Codable的，那么Swift会帮你把这个Struct实现Codable，比如没有associated data的Enum。&lt;/li&gt;
+&lt;li&gt;帮你实现不代表不要显式声明&lt;/li&gt;
+&lt;li&gt;基础类型基本上都实现了Codable&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;在操作时，只需要知道传入的是哪种索引，及时转化就行了。&lt;/p&gt;&lt;p&gt;有了索引，lookup的时间复杂度就是常量时间了：O(1)&lt;/p&gt;&lt;h2&gt;Polling and Removals&lt;/h2&gt;
-&lt;p&gt;没有什么特殊的,仍然是找到节点,与最后一个交换,移除最后一个节点,然后再看最后一个在堆里是上升还是下降.
-仍然是记得每一步交换,相应的几个索引值也需要随之交换.(polling 其实就是移除第1个节点,本质上还是 removal)
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-dd5ee538c3b4b8ae.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;pseudo code&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Deletes the node with the key index ki&lt;/span&gt;
-&lt;span class="c1"&gt;# in the heap. The key index ki must exist &lt;/span&gt;
-&lt;span class="c1"&gt;# and be present in the heap.&lt;/span&gt;
-&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;remove&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="c1"&gt;# 注意，这里送进来的是ki，而不是node index(pm)&lt;/span&gt;
-    &lt;span class="c1"&gt;# 说明业务需求一般是操作数据源，而不是操作堆&lt;/span&gt;
-    &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;    &lt;span class="c1"&gt;# 转成节点索引&lt;/span&gt;
-    &lt;span class="n"&gt;sz&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sz&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;   &lt;span class="c1"&gt;# 与最后一个元素交换，用size来做节点索引&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;object&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;MyType&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;...&lt;/span&gt;
+&lt;span class="c1"&gt;// encode&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;jsonData&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Data&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="n"&gt;JSONEncoder&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="n"&gt;encode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
-    &lt;span class="c1"&gt;# 下面三个子函数送入的就是节点索引了&lt;/span&gt;
-    &lt;span class="n"&gt;swap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sz&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; 
-    &lt;span class="n"&gt;sink&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="n"&gt;swim&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="c1"&gt;// write file&lt;/span&gt;
+&lt;span class="k"&gt;try&lt;/span&gt; &lt;span class="n"&gt;jsonData&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;to&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
-    &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;null&lt;/span&gt;  &lt;span class="c1"&gt;# 数据源对应的值置空，所以用ki&lt;/span&gt;
-    &lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;        &lt;span class="c1"&gt;# 数据源对应的节点置空，所以用ki&lt;/span&gt;
-    &lt;span class="n"&gt;im&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;sz&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;        &lt;span class="c1"&gt;# 反查表用节点索引，此处size就是最后一个节点的索引&lt;/span&gt;
+&lt;span class="c1"&gt;// deocde as string&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;jsonString&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;jsonData&lt;/span&gt;&lt;span class="p"&gt;!,&lt;/span&gt; &lt;span class="n"&gt;encoding&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;utf8&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;// decode as object&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;myObject&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;MyType&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="n"&gt;JSONDecoder&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;MyType&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;from&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;jsonData&lt;/span&gt;&lt;span class="p"&gt;!)&lt;/span&gt;
+&lt;span class="c1"&gt;// 从字符串到对象没有一步到位的办法，只能先string-&amp;gt;Data&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;data&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;jsstring&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;using&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;utf8&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;// 再把data传到上术方法里&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;sink pseudo code&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Sinks the node at index i by swapping &lt;/span&gt;
-&lt;span class="c1"&gt;# itself with the smallest of the left &lt;/span&gt;
-&lt;span class="c1"&gt;# or the right child node.&lt;/span&gt;
-&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;sink&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="c1"&gt;# 这是堆操作,传入的索引也是节点索引,没问题&lt;/span&gt;
-    &lt;span class="c1"&gt;# sink是下沉，但不是跟BTS一样找左侧最大右则最小那种直接换&lt;/span&gt;
-    &lt;span class="c1"&gt;# 而是一层层往下换&lt;/span&gt;
-    &lt;span class="c1"&gt;# 即一次while只跟左右子级比大小，确实比子级还小的话，就替换，然后再跟下一层比较&lt;/span&gt;
-    &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="n"&gt;true&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-        &lt;span class="c1"&gt;# 利用二叉树特性算出子节点&lt;/span&gt;
-        &lt;span class="c1"&gt;# 默认左边最小，然后再看右边是不是更小&lt;/span&gt;
-        &lt;span class="n"&gt;left&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
-        &lt;span class="n"&gt;right&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;
-        &lt;span class="n"&gt;smallest&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;left&lt;/span&gt;
-    &lt;span class="c1"&gt;# 右边不越界，且小于左边，就设右边&lt;/span&gt;
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;right&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;sz&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;less&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;right&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;left&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-        &lt;span class="n"&gt;smallest&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;right&lt;/span&gt;
-    &lt;span class="c1"&gt;# 左侧都越界了，或已经比最小值大了，说明不需要下沉了&lt;/span&gt;
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;left&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;=&lt;/span&gt; &lt;span class="n"&gt;sz&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="n"&gt;less&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;smallest&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-        &lt;span class="k"&gt;break&lt;/span&gt;
-    &lt;span class="c1"&gt;# 只要没有break，说明能交换，然后把交换后的作为下一个循环的起点&lt;/span&gt;
-    &lt;span class="n"&gt;swap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;smallest&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;smallest&lt;/span&gt;
+&lt;p&gt;encode, decode是会throw的，注意try_catch相应的Error，比如&lt;code&gt;.keyNotFound, .dataCorrupted...&lt;/code&gt;&lt;/p&gt;&lt;h3&gt;CodingKeys&lt;/h3&gt;
+&lt;p&gt;json与对象相互进行转化有一个通用的需求，就是键的映射，这更常用在外部API与本地类的映射中，比如userId，别人叫guestId，等等，Swift中，用一个叫&lt;code&gt;CodingKeys&lt;/code&gt;的枚举来实现这个映射：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="kd"&gt;enum&lt;/span&gt; &lt;span class="nc"&gt;CodingKeys&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;CodingKey&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="n"&gt;uid&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;user_id&amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="n"&gt;someDate&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;some_date&amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="n"&gt;pname&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;panme&amp;quot;&lt;/span&gt; &lt;span class="c1"&gt;// 表示在JSON中也叫这个名字 &lt;/span&gt;
+    &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="n"&gt;sku&lt;/span&gt; &lt;span class="c1"&gt;// 如果名字一样的话，可以这么简写 &lt;/span&gt;
+    &lt;span class="c1"&gt;// 但是不写的话，序列化的时候就不会序列这个字段了&lt;/span&gt;
+    &lt;span class="c1"&gt;// 解码时会有 KeyNotFound 类的错误&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="c1"&gt;// 结合起来，用在init中&lt;/span&gt;
+&lt;span class="kd"&gt;init&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;from&lt;/span&gt; &lt;span class="n"&gt;decoder&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Decoder&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kr"&gt;throws&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;// container是切入点，要弄清楚&lt;/span&gt;
+    &lt;span class="c1"&gt;// 如果没有手写键的映射表，那么keydBy就是自己&lt;/span&gt;
+    &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;container&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;try&lt;/span&gt; &lt;span class="n"&gt;decoder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;keyedBy&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;CodingKeys&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;someDate&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;try&lt;/span&gt; &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Date&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;forKey&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;someDate&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; 
+    &lt;span class="c1"&gt;// 从json中加载.someDate对应的键的值，尝试解码成Date&lt;/span&gt;
+    &lt;span class="c1"&gt;// other vars (每种case必须全部都有)&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;Updates&lt;/h2&gt;
-&lt;p&gt;更新节点要简单的多:&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;用ki找到value，把值更新&lt;/li&gt;
-&lt;li&gt;然后根据新value实际情况上浮或下沉&lt;/li&gt;
+&lt;h3&gt;Enum&lt;/h3&gt;
+&lt;p&gt;序列化枚举有点复杂：&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;简单枚举应该怎么序列化？ 其实是序列化成case对应的名字和表示空JSON的&lt;code&gt;{}&lt;/code&gt;组成的键值对，比如&lt;code&gt;{&amp;quot;math&amp;quot;:{}}&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;有关联数据的枚举呢？ 那就得自己提供&lt;code&gt;encoder&lt;/code&gt;:&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;case url: try container.encode(url, forKey: .url)&lt;/code&gt; 即对相应的枚举值进行相应的encode&lt;/li&gt;
 &lt;/ul&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Updates the value of a key in the binary &lt;/span&gt;
-&lt;span class="c1"&gt;# heap. The key index must exist and the&lt;/span&gt;
-&lt;span class="c1"&gt;# value must not be null.&lt;/span&gt;
-&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;update&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
-    &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;
-    &lt;span class="n"&gt;sink&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="n"&gt;swim&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;Decrease and Increase key&lt;/h2&gt;
-&lt;p&gt;不好说，先看代码吧：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# For both these functions assume ki and value &lt;/span&gt;
-&lt;span class="c1"&gt;# are valid inputs and we are dealing with a&lt;/span&gt;
-&lt;span class="c1"&gt;# min indexed binary heap.&lt;/span&gt;
-&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;decreaseKey&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;less&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]):&lt;/span&gt; 
-        &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt; 
-        &lt;span class="n"&gt;swim&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/li&gt;
+&lt;li&gt;并且自行decode，但是与struct（为每一个key填值）不同，因为枚举变量只是一个值，所以是依次尝试，解码成功就认定是那一个枚举值&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;url&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;URL&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;forKey&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kc"&gt;self&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;...&lt;/span&gt; &lt;span class="c1"&gt;// 别的尝试&lt;/span&gt;
 
-&lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;increaseKey&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; 
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;less&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-        &lt;span class="n"&gt;values&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt; 
-        &lt;span class="n"&gt;sink&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ki&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;span class="c1"&gt;// 此句的作用是根据.url对应的键名，取出值，反射成URL对象，如果成功，那么这个枚举值是.url无疑&lt;/span&gt;
+&lt;span class="c1"&gt;// 而且关联数据就是反射的结果&lt;/span&gt;
+&lt;span class="c1"&gt;// 如果失败，继续换一个键名，将对应的值转成对应的类型，依次类推&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;代码里是跟一个固定值比较，只要ki对应的值比它大(desreaseKey)或小(increaseKey），就用这个固定值来替换它，并且在value改变后根据实际情况上浮或下沉。&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>HMM、NER、PoS、Viterbi笔记</title><link>/archives/HMM%E3%80%81NER%E3%80%81PoS%E3%80%81Viterbi%E7%AC%94%E8%AE%B0/</link><description>&lt;p&gt;开局一句话，隐马尔可夫，就是在“溯源”，即产生你这个现象的源头在哪。&lt;/p&gt;&lt;ul&gt;
+&lt;ol start="4"&gt;
+&lt;li&gt;那么如何手动decode一个原始的枚举呢？&lt;ul&gt;
+&lt;li&gt;我们知道上述实践是为了反射出关联数据，并且根据能够成功反射关联数据来判断枚举类型&lt;/li&gt;
+&lt;li&gt;原始枚举需要encode哪个值呢？-&amp;gt; 目前我只能做一个空&lt;code&gt;struct&lt;/code&gt;来实现序列化成&lt;code&gt;{}&lt;/code&gt;的目的 -&amp;gt; 为了跟默认形态保持一致&lt;ul&gt;
+&lt;li&gt;事实上你是可以encode成任意值的（比如100，&amp;quot;hello&amp;quot;，因为我们只关心有没有这个键，有的话，就是这个枚举类型，只是&lt;code&gt;{}&lt;/code&gt;拥有可读性&lt;/li&gt;
+&lt;li&gt;你encode成什么值，decode的时候对对应的键尝试去反射回这个值就行了&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;最后，思考题：&lt;/p&gt;&lt;blockquote&gt;
+&lt;p&gt;上面说了，原生枚举序列化成： &lt;code&gt;{&amp;quot;math&amp;quot;:{}}&lt;/code&gt;，也说了，如果，键对应的值对原生枚举序列化是没意义的，可以是任何值，那么对于&lt;code&gt;{&amp;quot;math&amp;quot;:100}&lt;/code&gt;，能否顺序序列化回其枚举形态&lt;code&gt;.math&lt;/code&gt;呢？&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;答案：&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;值为100报错了&lt;/li&gt;
+&lt;li&gt;于是我改为&amp;quot;&amp;quot;或&amp;quot;other“等字符串或空字符串，解码的结果是&lt;code&gt;nil&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;也就是说，默认的decode只认&lt;code&gt;{}&lt;/code&gt;&lt;/p&gt;&lt;figure style="flex: 82.77310924369748" &gt;&lt;img loading="lazy" width="1182" height="714" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c3a4240a7582937166f9300c35b4e868.png" /&gt;&lt;/figure&gt;&lt;p&gt;而前面我们知道了，如果是自己手写，它可以是任何值，它的意义仅仅是个标识，并不会取它的值。验证：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;enum&lt;/span&gt; &lt;span class="nc"&gt;NormEnum&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Codable&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="n"&gt;history&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;geometry&lt;/span&gt;
+
+    &lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="kd"&gt;enum&lt;/span&gt; &lt;span class="nc"&gt;keyMap&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;CodingKey&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="n"&gt;history&lt;/span&gt;  &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;HIST&amp;quot;&lt;/span&gt;
+        &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="n"&gt;math&lt;/span&gt;     &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;MATH&amp;quot;&lt;/span&gt;
+        &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="n"&gt;geometry&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;GEOM&amp;quot;&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+
+    &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;encode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;encoder&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Encoder&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kr"&gt;throws&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;container&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;try&lt;/span&gt; &lt;span class="n"&gt;encoder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;keyedBy&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;keyMap&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;switch&lt;/span&gt; &lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;history&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="k"&gt;try&lt;/span&gt; &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;encode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;forKey&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;history&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="k"&gt;try&lt;/span&gt; &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;encode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;forKey&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;geometry&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="k"&gt;try&lt;/span&gt; &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;encode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;forKey&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;geometry&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+
+    &lt;span class="kd"&gt;init&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;from&lt;/span&gt; &lt;span class="n"&gt;decoder&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Decoder&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kr"&gt;throws&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;container&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;try&lt;/span&gt; &lt;span class="n"&gt;decoder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;keyedBy&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;keyMap&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;s&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;forKey&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;history&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="kc"&gt;self&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;history&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;s&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;forKey&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="kc"&gt;self&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="kc"&gt;self&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;geometry&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;上面的代码中，我将三个字段全部用空字符串编码，并且给了三个不同的键名，现在，我真入任意值，比如&lt;code&gt;&amp;quot;HAHA&amp;quot;&lt;/code&gt;，解码看看：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;js2&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;{&lt;/span&gt;&lt;span class="se"&gt;\&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;MATH&lt;/span&gt;&lt;span class="se"&gt;\&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;:&lt;/span&gt;&lt;span class="se"&gt;\&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;HAHA&lt;/span&gt;&lt;span class="se"&gt;\&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;}&amp;quot;&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;js2d&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;js2&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;using&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;utf8&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;myobj2&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="n"&gt;JSONDecoder&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NormEnum&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;from&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;js2d&lt;/span&gt;&lt;span class="p"&gt;!)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;结果成功认出myobj2是一个&lt;code&gt;.math&lt;/code&gt;。原理当然是我的代码里在尝试转成一个字符串，而没有限定是什么字符串。&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B6%5D_Persistence/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>近期几个iOS面试问到的问题</title><link>/archives/%E8%BF%91%E6%9C%9F%E5%87%A0%E4%B8%AAiOS%E9%9D%A2%E8%AF%95%E9%97%AE%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</link><description>&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;extension&lt;/span&gt; &lt;span class="nc"&gt;Sequence&lt;/span&gt; &lt;span class="k"&gt;where&lt;/span&gt; &lt;span class="n"&gt;Iterator&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Element&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;Hashable&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;unique&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Iterator&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Element&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;seen&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Set&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;Iterator&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Element&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;filter&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;seen&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="bp"&gt;insert&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$0&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="n"&gt;inserted&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;问时间复杂度&lt;/strong&gt;
+我也记不清是问什么了，就理解为时间复杂度吧，我一直对这些绕着走，所以当时就直言说不出来，真去了解一下也不复杂。
+fitler本身就是一个遍历，n
+set因为无序，它的insert直接就是常数1吧
+所以是O(n)吗？&lt;/p&gt;&lt;p&gt;&lt;strong&gt;组件化思路&lt;/strong&gt;
+我也是脑袋短路，一时间没想明白就说不清楚了。
+按我的理解，大体上还是往route/mediator里注册方法来实现解耦吧，从互相依赖，变成多对一的依赖，然后通过接口/协议等继续抽象，从对对象的依赖变成对承诺的依赖，结果就是面向约定和面向运行时编程。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;属性修饰符的含义&lt;/strong&gt;
+atomic: 原子操作，读取相对安全， 相对noatomic（可以保证一次读取操作的完整性，但是只管getter/setter，即读写安全，但不管生命安全，比如被别的线程释放）
+assign: 用于数字，布尔等简单类型，所以不担心对象在别处被释放
+copy: own这个对象，ARC计数不变，自身计数为1
+strong:理解为retrain，这个属性就持有所指向的对象了，ARC计数加1
+weak: 不持有对象，ARC计数不变&lt;/p&gt;&lt;p&gt;&lt;strong&gt;weak指向的对象释放时怎么处理野指针&lt;/strong&gt;
+虽然arc没有加1，但是对象还是能找到哪些持有者用了weak, &lt;code&gt;dealloc&lt;/code&gt;方法就会对它们持有的这个属性设nil&lt;/p&gt;&lt;p&gt;&lt;strong&gt;GCD队列间的关系&lt;/strong&gt;
+我不知道想问的是啥，难道就是说并发和串行的关系？&lt;/p&gt;&lt;p&gt;&lt;strong&gt;设计模式的基本原则&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;单一职责原则，这是个含糊的原则，一个方法/接口尽量只做一件事，什么一个类只能有一个引起其变化的原因，这个是应用最少的吧&lt;/li&gt;
+&lt;li&gt;开放封闭原则，通过抽象保持软件架构稳定（封闭），通过扩展来实现功能的拓展（开放）&lt;/li&gt;
+&lt;li&gt;里氏替换原则，据说是开闭原则的补充，阐述了子类继承父类时，除添加新的方法完成新增功能外，尽量不要重写父类的方法。&lt;/li&gt;
+&lt;li&gt;依赖倒置，这个倒是常用的，针对接口/约束/协议去编程，即依赖于抽象，这些拥有稳定的规范和契约，具体的实现是注入进来的（“依赖注入”）&lt;/li&gt;
+&lt;li&gt;接口隔离原则，感常见跟单一职责差不多，一个接口尽量做一件事，据说这就是跟单一职责最大的区别，它只是针对接口来说的。&lt;/li&gt;
+&lt;li&gt;迪米特原则，感觉组件机制就是应用的这个原则，即不同类之间不直接通信，而通过一个中间类，解耦类之间的互相依赖&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;runtime的理解&lt;/strong&gt;
+Runtime中，对象可以用C语言中的结构体表示，而方法可以用C函数来实现，其它具体的见海量博文吧&lt;/p&gt;&lt;p&gt;项目里可能会用到的&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;关联对象 Associated Objects&lt;/li&gt;
+&lt;li&gt;消息发送 Messaging&lt;/li&gt;
+&lt;li&gt;消息转发 Message Forwarding&lt;/li&gt;
+&lt;li&gt;方法调配 Method Swizzling&lt;/li&gt;
+&lt;li&gt;“类对象” NSProxy Foundation&lt;/li&gt;
+&lt;li&gt;KVC、KVO About Key-Value Coding&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;定时器的几种实现方式，区别&lt;/strong&gt;
+timer和gcd，后来知道了cadisplaylink，会随着屏幕的每次刷新调一次target的selector&lt;/p&gt;&lt;p&gt;&lt;strong&gt;block为什么要copy&lt;/strong&gt;
+block作为一个普通变量存在栈上，会随作用域消失而消失，而block的调用时机却是不定的，copy的话能自己持有一份。
+这个问题一搜还是个经典面试题，想知道更多细节的自己搜吧。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;触摸事件的机制&lt;/strong&gt;
+总的来说，由传递链把事件打包到队列里，通过hittest相关方法从windows到view到顶层subview到底层subview来逐层找第一响应者，找到就退出
+而响应者就往上找能处理该事件的对象（包括自己），找到就退出。目的都是找到第一响应者。&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E8%BF%91%E6%9C%9F%E5%87%A0%E4%B8%AAiOS%E9%9D%A2%E8%AF%95%E9%97%AE%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>iOS-App-签名的原理</title><link>/archives/iOS-App-%E7%AD%BE%E5%90%8D%E7%9A%84%E5%8E%9F%E7%90%86/</link><description>&lt;p&gt;原文转载: &lt;a href="https://wereadteam.github.io/2017/03/13/Signature/"&gt;&lt;a href="https://wereadteam.github.io/2017/03/13/Signature/"&gt;https://wereadteam.github.io/2017/03/13/Signature/&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;iOS 签名机制挺复杂，各种证书，Provisioning Profile，entitlements，CertificateSigningRequest，p12，AppID，概念一堆，也很容易出错，本文尝试从原理出发，一步步推出为什么会有这么多概念，希望能有助于理解 iOS App 签名的原理和流程。
+&lt;a href="https://wereadteam.github.io/2017/03/13/Signature/#%E7%9B%AE%E7%9A%84"&gt;https://wereadteam.github.io/2017/03/13/Signature/#%E7%9B%AE%E7%9A%84&lt;/a&gt;目的
+先来看看苹果的签名机制是为了做什么。在 iOS 出来之前，在主流操作系统(Mac/Windows/Linux)上开发和运行软件是不需要签名的，软件随便从哪里下载都能运行，导致平台对第三方软件难以控制，盗版流行。苹果希望解决这样的问题，在 iOS 平台对第三方 APP 有绝对的控制权，一定要保证每一个安装到 iOS 上的 APP 都是经过苹果官方允许的，怎样保证呢？就是通过签名机制。
+&lt;a href="https://wereadteam.github.io/2017/03/13/Signature/#%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86"&gt;https://wereadteam.github.io/2017/03/13/Signature/#%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86&lt;/a&gt;非对称加密
+通常我们说的签名就是数字签名，它是基于非对称加密算法实现的。对称加密是通过同一份密钥加密和解密数据，而非对称加密则有两份密钥，分别是公钥和私钥，用公钥加密的数据，要用私钥才能解密，用私钥加密的数据，要用公钥才能解密。
+简单说一下常用的非对称加密算法 RSA 的数学原理，理解简单的数学原理，就可以理解非对称加密是怎么做到的，为什么会是安全的：
+选两个质数 p
+ 和 q
+，相乘得出一个大整数n
+，例如 p=61，q=53，n=pq=3233
+选 1-n 间的随便一个质数 e
+，例如 e = 17
+经过一系列数学公式，算出一个数字 d
+，满足：a. 通过 n
+ 和 e
+ 这两个数据一组数据进行数学运算后，可以通过 n 和 d 去反解运算，反过来也可以。b. 如果只知道 n
+ 和 e
+，要推导出 d
+，需要知道 p
+ 和 q
+，也就是要需要把 n 因数分解。&lt;/p&gt;&lt;p&gt;上述的 (n,e)
+ 这两个数据在一起就是公钥，(n,d)
+ 这两个数据就是私钥，满足用公钥加密，私钥解密，或反过来公钥加密，私钥解密，也满足在只暴露公钥（只知道 n
+ 和 e）的情况下，要推导出私钥 (n,d)
+，需要把大整数 n
+ 因数分解。目前因数分解只能靠暴力穷举，而n数字越大，越难以用穷举计算出因数 p
+ 和 q
+，也就越安全，当 n
+ 大到二进制 1024 位或 2048 位时，以目前技术要破解几乎不可能，所以非常安全。
+若对数字 d
+ 是怎样计算出来的感兴趣，可以详读这两篇文章：RSA 算法原理&lt;a href="http://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html"&gt;（一）&lt;/a&gt;&lt;a href="http://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html"&gt;（二）&lt;/a&gt;
+&lt;a href="https://wereadteam.github.io/2017/03/13/Signature/#%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D"&gt;https://wereadteam.github.io/2017/03/13/Signature/#%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D&lt;/a&gt;数字签名
+现在知道了有非对称加密这东西，那数字签名是怎么回事呢？
+数字签名的作用是我对某一份数据打个标记，表示我认可了这份数据（签了个名），然后我发送给其他人，其他人可以知道这份数据是经过我认证的，数据没有被篡改过。
+有了上述非对称加密算法，就可以实现这个需求：
+&lt;a href="https://wereadteam.github.io/img/sign0.png"&gt;&lt;figure style="flex: 64.47963800904978" &gt;&lt;img loading="lazy" width="855" height="663" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/234925bff10aed3dd8bbfcc719a6ed52.png" /&gt;&lt;/figure&gt;&lt;/a&gt;
+首先用一种算法，算出原始数据的摘要。需满足 a.若原始数据有任何变化，计算出来的摘要值都会变化。 b.摘要要够短。这里最常用的算法是MD5。
+生成一份非对称加密的公钥和私钥，私钥我自己拿着，公钥公布出去。
+对一份数据，算出摘要后，用私钥加密这个摘要，得到一份加密后的数据，称为原始数据的签名。把它跟原始数据一起发送给用户。
+用户收到数据和签名后，用公钥解密得到摘要。同时用户用同样的算法计算原始数据的摘要，对比这里计算出来的摘要和用公钥解密签名得到的摘要是否相等，若相等则表示这份数据中途没有被篡改过，因为如果篡改过，摘要会变化。&lt;/p&gt;&lt;p&gt;之所以要有第一步计算摘要，是因为非对称加密的原理限制可加密的内容不能太大（不能大于上述 n 的位数，也就是一般不能大于 1024 位/ 2048 位），于是若要对任意大的数据签名，就需要改成对它的特征值签名，效果是一样的。
+好了，有了非对称加密的基础，知道了数字签名是什么，怎样可以保证一份数据是经过某个地方认证的，来看看怎样通过数字签名的机制保证每一个安装到 iOS 上的 APP 都是经过苹果认证允许的。
+&lt;a href="https://wereadteam.github.io/2017/03/13/Signature/#%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E7%AD%BE%E5%90%8D"&gt;https://wereadteam.github.io/2017/03/13/Signature/#%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E7%AD%BE%E5%90%8D&lt;/a&gt;最简单的签名
+要实现这个需求很简单，最直接的方式，苹果官方生成一对公私钥，在 iOS 里内置一个公钥，私钥由苹果后台保存，我们传 App 上 AppStore 时，苹果后台用私钥对 APP 数据进行签名，iOS 系统下载这个 APP 后，用公钥验证这个签名，若签名正确，这个 APP 肯定是由苹果后台认证的，并且没有被修改过，也就达到了苹果的需求：保证安装的每一个 APP 都是经过苹果官方允许的。
+&lt;a href="https://wereadteam.github.io/img/sign1.png"&gt;&lt;figure style="flex: 98.60406091370558" &gt;&lt;img loading="lazy" width="777" height="394" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b8742d54a8daf092eae0fd59ae4b8b9f.png" /&gt;&lt;/figure&gt;&lt;/a&gt;
+如果我们 iOS 设备安装 APP 只有从 AppStore 下载这一种方式的话，这件事就结束了，没有任何复杂的东西，只有一个数字签名，非常简单地解决问题。
+但实际上因为除了从 AppStore 下载，我们还可以有三种方式安装一个 App：
+开发 App 时可以直接把开发中的应用安装进手机进行调试。
+In-House 企业内部分发，可以直接安装企业证书签名后的 APP。
+AD-Hoc 相当于企业分发的限制版，限制安装设备数量，较少用。&lt;/p&gt;&lt;p&gt;苹果要对用这三种方式安装的 App 进行控制，就有了新的需求，无法像上面这样简单了。
+&lt;a href="https://wereadteam.github.io/2017/03/13/Signature/#%E6%96%B0%E7%9A%84%E9%9C%80%E6%B1%82"&gt;https://wereadteam.github.io/2017/03/13/Signature/#%E6%96%B0%E7%9A%84%E9%9C%80%E6%B1%82&lt;/a&gt;新的需求
+我们先来看第一个，开发时安装APP，它有两个个需求：
+安装包不需要传到苹果服务器，可以直接安装到手机上。如果你编译一个 APP 到手机前要先传到苹果服务器签名，这显然是不能接受的。
+苹果必须对这里的安装有控制权，包括a.经过苹果允许才可以这样安装。b.不能被滥用导致非开发app也能被安装。&lt;/p&gt;&lt;p&gt;为了实现这些需求，iOS 签名的复杂度也就开始增加了。
+苹果这里给出的方案是使用了双层签名，会比较绕，流程大概是这样的：
+&lt;a href="https://wereadteam.github.io/img/sign2.png"&gt;&lt;figure style="flex: 100.48622366288492" &gt;&lt;img loading="lazy" width="1240" height="617" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/55b89ed1e2050a5894ae5c7f1fb704bd.png" /&gt;&lt;/figure&gt;&lt;/a&gt;
+在你的 Mac 开发机器生成一对公私钥，这里称为公钥L，私钥L。L:Local
+苹果自己有固定的一对公私钥，跟上面 AppStore 例子一样，私钥在苹果后台，公钥在每个 iOS 设备上。这里称为公钥A，私钥A。A:Apple
+把公钥 L 传到苹果后台，用苹果后台里的私钥 A 去签名公钥 L。得到一份数据包含了公钥 L 以及其签名，把这份数据称为证书。
+在开发时，编译完一个 APP 后，用本地的私钥 L 对这个 APP 进行签名，同时把第三步得到的证书一起打包进 APP 里，安装到手机上。
+在安装时，iOS 系统取得证书，通过系统内置的公钥 A，去验证证书的数字签名是否正确。
+验证证书后确保了公钥 L 是苹果认证过的，再用公钥 L 去验证 APP 的签名，这里就间接验证了这个 APP 安装行为是否经过苹果官方允许。（这里只验证安装行为，不验证APP 是否被改动，因为开发阶段 APP 内容总是不断变化的，苹果不需要管。）&lt;/p&gt;&lt;p&gt;&lt;a href="https://wereadteam.github.io/2017/03/13/Signature/#%E5%8A%A0%E7%82%B9%E4%B8%9C%E8%A5%BF"&gt;https://wereadteam.github.io/2017/03/13/Signature/#%E5%8A%A0%E7%82%B9%E4%B8%9C%E8%A5%BF&lt;/a&gt;加点东西
+上述流程只解决了上面第一个需求，也就是需要经过苹果允许才可以安装，还未解决第二个避免被滥用的问题。怎么解决呢？苹果再加了两个限制，一是限制在苹果后台注册过的设备才可以安装，二是限制签名只能针对某一个具体的 APP。
+怎么加的？在上述第三步，苹果用私钥 A 签名我们本地公钥 L 时，实际上除了签名公钥 L，还可以加上无限多数据，这些数据都可以保证是经过苹果官方认证的，不会有被篡改的可能。
+&lt;a href="https://wereadteam.github.io/img/sign3.png"&gt;&lt;figure style="flex: 88.69814020028612" &gt;&lt;img loading="lazy" width="1240" height="699" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/244a2c4cc4ff1bf3d4193b222dfe4648.png" /&gt;&lt;/figure&gt;&lt;/a&gt;
+可以想到把 允许安装的设备 ID 列表 和 App对应的 AppID 等数据，都在第三步这里跟公钥L一起组成证书，再用苹果私钥 A 对这个证书签名。在最后第 5 步验证时就可以拿到设备 ID 列表，判断当前设备是否符合要求。根据数字签名的原理，只要数字签名通过验证，第 5 步这里的设备 IDs / AppID / 公钥 L 就都是经过苹果认证的，无法被修改，苹果就可以限制可安装的设备和 APP，避免滥用。
+&lt;a href="https://wereadteam.github.io/2017/03/13/Signature/#%E6%9C%80%E7%BB%88%E6%B5%81%E7%A8%8B"&gt;https://wereadteam.github.io/2017/03/13/Signature/#%E6%9C%80%E7%BB%88%E6%B5%81%E7%A8%8B&lt;/a&gt;最终流程
+到这里这个证书已经变得很复杂了，有很多额外信息，实际上除了 设备 ID / AppID，还有其他信息也需要在这里用苹果签名，像这个 APP 里 iCloud / push / 后台运行 等权限苹果都想控制，苹果把这些权限开关统一称为 Entitlements，它也需要通过签名去授权。
+实际上一个“证书”本来就有规定的格式规范，上面我们把各种额外信息塞入证书里是不合适的，于是苹果另外搞了个东西，叫 Provisioning Profile，一个 Provisioning Profile 里就包含了证书以及上述提到的所有额外信息，以及所有信息的签名。
+所以整个流程稍微变一下，就变成这样了：
+&lt;a href="https://wereadteam.github.io/img/sign4.png"&gt;&lt;figure style="flex: 74.25149700598803" &gt;&lt;img loading="lazy" width="1240" height="835" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/09c33bcd536897bd2ae93cef8900d748.png" /&gt;&lt;/figure&gt;&lt;/a&gt;
+因为步骤有小变动，这里我们不辞啰嗦重新再列一遍整个流程：
+在你的 Mac 开发机器生成一对公私钥，这里称为公钥L，私钥L。L:Local
+苹果自己有固定的一对公私钥，跟上面 AppStore 例子一样，私钥在苹果后台，公钥在每个 iOS 设备上。这里称为公钥A，私钥A。A:Apple
+把公钥 L 传到苹果后台，用苹果后台里的私钥 A 去签名公钥 L。得到一份数据包含了公钥 L 以及其签名，把这份数据称为证书。
+在苹果后台申请 AppID，配置好设备 ID 列表和 APP 可使用的权限，再加上第③步的证书，组成的数据用私钥 A 签名，把数据和签名一起组成一个 Provisioning Profile 文件，下载到本地 Mac 开发机。
+在开发时，编译完一个 APP 后，用本地的私钥 L 对这个 APP 进行签名，同时把第④步得到的 Provisioning Profile 文件打包进 APP 里，文件名为 embedded.mobileprovision
+，把 APP 安装到手机上。
+在安装时，iOS 系统取得证书，通过系统内置的公钥 A，去验证 embedded.mobileprovision
+ 的数字签名是否正确，里面的证书签名也会再验一遍。
+确保了 embedded.mobileprovision
+ 里的数据都是苹果授权以后，就可以取出里面的数据，做各种验证，包括用公钥 L 验证APP签名，验证设备 ID 是否在 ID 列表上，AppID 是否对应得上，权限开关是否跟 APP 里的 Entitlements 对应等。&lt;/p&gt;&lt;p&gt;开发者证书从签名到认证最终苹果采用的流程大致是这样，还有一些细节像证书有效期/证书类型等就不细说了。
+&lt;a href="https://wereadteam.github.io/2017/03/13/Signature/#%E6%A6%82%E5%BF%B5%E5%92%8C%E6%93%8D%E4%BD%9C"&gt;https://wereadteam.github.io/2017/03/13/Signature/#%E6%A6%82%E5%BF%B5%E5%92%8C%E6%93%8D%E4%BD%9C&lt;/a&gt;概念和操作
+上面的步骤对应到我们平常具体的操作和概念是这样的：
+第 1 步对应的是 keychain 里的 “从证书颁发机构请求证书”，这里就本地生成了一堆公私钥，保存的 CertificateSigningRequest
+ 就是公钥，私钥保存在本地电脑里。
+第 2 步苹果处理，不用管。
+第 3 步对应把 CertificateSigningRequest
+ 传到苹果后台生成证书，并下载到本地。这时本地有两个证书，一个是第 1 步生成的，一个是这里下载回来的，keychain 会把这两个证书关联起来，因为他们公私钥是对应的，在XCode选择下载回来的证书时，实际上会找到 keychain 里对应的私钥去签名。这里私钥只有生成它的这台 Mac 有，如果别的 Mac 也要编译签名这个 App 怎么办？答案是把私钥导出给其他 Mac 用，在 keychain 里导出私钥，就会存成 .p12
+ 文件，其他 Mac 打开后就导入了这个私钥。
+第 4 步都是在苹果网站上操作，配置 AppID / 权限 / 设备等，最后下载 Provisioning Profile 文件。
+第 5 步 XCode 会通过第 3 步下载回来的证书（存着公钥），在本地找到对应的私钥（第一步生成的），用本地私钥去签名 App，并把 Provisioning Profile 文件命名为 embedded.mobileprovision
+ 一起打包进去。这里对 App 的签名数据保存分两部分，Mach-O 可执行文件会把签名直接写入这个文件里，其他资源文件则会保存在 _CodeSignature
+ 目录下。&lt;/p&gt;&lt;p&gt;第 6 - 7 步的打包和验证都是 Xcode 和 iOS 系统自动做的事。
+这里再总结一下这些概念：
+&lt;strong&gt;证书&lt;/strong&gt;：内容是公钥或私钥，由其他机构对其签名组成的数据包。
+&lt;strong&gt;Entitlements&lt;/strong&gt;：包含了 App 权限开关列表。
+&lt;strong&gt;CertificateSigningRequest&lt;/strong&gt;：本地公钥。
+&lt;strong&gt;p12&lt;/strong&gt;：本地私钥，可以导入到其他电脑。
+&lt;strong&gt;Provisioning Profile&lt;/strong&gt;：包含了 证书 / Entitlements 等数据，并由苹果后台私钥签名的数据包。&lt;/p&gt;&lt;p&gt;&lt;a href="https://wereadteam.github.io/2017/03/13/Signature/#%E5%85%B6%E4%BB%96%E5%8F%91%E5%B8%83%E6%96%B9%E5%BC%8F"&gt;https://wereadteam.github.io/2017/03/13/Signature/#%E5%85%B6%E4%BB%96%E5%8F%91%E5%B8%83%E6%96%B9%E5%BC%8F&lt;/a&gt;其他发布方式
+前面以开发包为例子说了签名和验证的流程，另外两种方式 In-House 企业签名和 AD-Hoc 流程也是差不多的，只是企业签名不限制安装的设备数，另外需要用户在 iOS 系统设置上手动点击信任这个企业才能通过验证。
+而 AppStore 的签名验证方式有些不一样，前面我们说到最简单的签名方式，苹果在后台直接用私钥签名 App 就可以了，实际上苹果确实是这样做的，如果去下载一个 AppStore 的安装包，会发现它里面是没有 embedded.mobileprovision
+ 文件的，也就是它安装和启动的流程是不依赖这个文件，验证流程也就跟上述几种类型不一样了。
+据猜测，因为上传到 AppStore 的包苹果会重新对内容加密，原来的本地私钥签名就没有用了，需要重新签名，从 AppStore 下载的包苹果也并不打算控制它的有效期，不需要内置一个 embedded.mobileprovision
+ 去做校验，直接在苹果用后台的私钥重新签名，iOS 安装时用本地公钥验证 App 签名就可以了。
+那为什么发布 AppStore 的包还是要跟开发版一样搞各种证书和 Provisioning Profile？猜测因为苹果想做统一管理，Provisioning Profile 里包含一些权限控制，AppID 的检验等，苹果不想在上传 AppStore 包时重新用另一种协议做一遍这些验证，就不如统一把这部分放在 Provisioning Profile 里，上传 AppStore 时只要用同样的流程验证这个 Provisioning Profile 是否合法就可以了。
+所以 App 上传到 AppStore 后，就跟你的 证书 / Provisioning Profile 都没有关系了，无论他们是否过期或被废除，都不会影响 AppStore 上的安装包。
+到这里 iOS 签名机制的原理和主流程大致说完了，希望能对理解苹果签名和排查日常签名问题有所帮助。
+&lt;a href="https://wereadteam.github.io/2017/03/13/Signature/#P-S-%E4%B8%80%E4%BA%9B%E7%96%91%E9%97%AE"&gt;https://wereadteam.github.io/2017/03/13/Signature/#P-S-%E4%B8%80%E4%BA%9B%E7%96%91%E9%97%AE&lt;/a&gt;P.S.一些疑问
+最后这里再提一下我关于签名流程的一些的疑问。
+&lt;a href="https://wereadteam.github.io/2017/03/13/Signature/#%E4%BC%81%E4%B8%9A%E8%AF%81%E4%B9%A6"&gt;https://wereadteam.github.io/2017/03/13/Signature/#%E4%BC%81%E4%B8%9A%E8%AF%81%E4%B9%A6&lt;/a&gt;企业证书
+企业证书签名因为限制少，在国内被广泛用于测试和盗版，fir.im / 蒲公英等测试平台都是通过企业证书分发，国内一些市场像 PP 助手，爱思助手，一部分安装手段也是通过企业证书重签名。通过企业证书签名安装的 App，启动时都会验证证书的有效期，并且不定期请求苹果服务器看证书是否被吊销，若已过期或被吊销，就会无法启动 App。对于这种助手的盗版安装手段，苹果想打击只能一个个吊销企业证书，并没有太好的办法。
+这里我的疑问是，苹果做了那么多签名和验证机制去限制在 iOS 安装 App，为什么又要出这样一个限制很少的方式让盗版钻空子呢？若真的是企业用途不适合上 AppStore，也完全可以在 AppStore 开辟一个小的私密版块，还是通过 AppStore 去安装，就不会有这个问题了。
+&lt;a href="https://wereadteam.github.io/2017/03/13/Signature/#AppStore-%E5%8A%A0%E5%AF%86"&gt;https://wereadteam.github.io/2017/03/13/Signature/#AppStore-%E5%8A%A0%E5%AF%86&lt;/a&gt;AppStore 加密
+另一个问题是我们把 App 传上 AppStore 后，苹果会对 App 进行加密，导致 App 体积增大不少，这个加密实际上是没卵用的，只是让破解的人要多做一个步骤，运行 App 去内存 dump 出可执行文件而已，无论怎样加密，都可以用这种方式拿出加密前的可执行文件。所以为什么要做这样的加密呢？想不到有什么好处。
+&lt;a href="https://wereadteam.github.io/2017/03/13/Signature/#%E6%9C%AC%E5%9C%B0%E7%A7%81%E9%92%A5"&gt;https://wereadteam.github.io/2017/03/13/Signature/#%E6%9C%AC%E5%9C%B0%E7%A7%81%E9%92%A5&lt;/a&gt;本地私钥
+我们看到前面说的签名流程很绕很复杂，经常出现各种问题，像有 Provisioning Profile 文件但证书又不对，本地有公钥证书没对应私钥等情况，不理解原理的情况下会被绕晕，我的疑问是，这里为什么不能简化呢？还是以开发证书为例，为什么一定要用本地 Mac 生成的私钥去签名？苹果要的只是本地签名，私钥不一定是要本地生成的，苹果也可以自己生成一对公私钥给我们，放在 Provisioning Profile 里，我们用里面的私钥去加密就行了，这样就不会有 CertificateSigningRequest
+ 和 p12
+ 的概念，跟本地 keychain 没有关系，不需要关心证书，只要有 Provisioning Profile 就能签名，流程会减少，易用性会提高很多，同时苹果想要的控制一点都不会少，也没有什么安全问题，为什么不这样设计呢？
+能想到的一个原因是 Provisioning Profile 在非 AppStore 安装时会打包进安装包，第三方拿到这个 Provisioning Profile 文件就能直接用起来给他自己的 App 签名了。但这种问题也挺好解决，只需要打包时去掉文件里的私钥就行了，所以仍不明白为什么这样设计。&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/iOS-App-%E7%AD%BE%E5%90%8D%E7%9A%84%E5%8E%9F%E7%90%86/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>从查找文件并移动的shell命令说开去</title><link>/archives/%E4%BB%8E%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6%E5%B9%B6%E7%A7%BB%E5%8A%A8%E7%9A%84shell%E5%91%BD%E4%BB%A4%E8%AF%B4%E5%BC%80%E5%8E%BB/</link><description>&lt;p&gt;一个不能更常见的需求: 从一大堆下载目录(或别的目录)里, 查找指定的文件, 并移动/复制到指定的文件夹, 如果用鼠标点开一个个的文件夹, 还有文件夹里的文件夹, 估计要累死, 当然, 即使自己不会, 也很容易查到两个shell命令:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;find path_A -name &amp;quot;*AAA*&amp;quot; -print0 | xargs -0 -I {} mv {} path_B
+find path_A -maxdepth 1 -name &amp;quot;*AAA*&amp;quot; -exec mv {} path_B \; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;都能达到目的, 第二条命令容易懂很多(&lt;code&gt;-maxdepth&lt;/code&gt;去掉就是recrusive search), 去&lt;code&gt;exec&lt;/code&gt;一个&lt;code&gt;mv&lt;/code&gt;命令, 记得加上表示语句结束的分号就好了, 我的关注点在第一条, 趁机学学&lt;code&gt;xargs&lt;/code&gt;吧.&lt;/p&gt;&lt;p&gt;查到&lt;a href="https://www.cnblogs.com/wangqiguo/p/6464234.html"&gt;这篇文章&lt;/a&gt;说的不错, 先摘几个要点:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;echo 'main' | cat test.cpp
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这条命令并不会把&lt;code&gt;main&lt;/code&gt;输出, 因为管道确实将其作为标准输入给了&lt;code&gt;cat&lt;/code&gt;命令作为标准输入, 但因为有了&lt;code&gt;test.cpp&lt;/code&gt;这个命令行参数, &lt;code&gt;cat&lt;/code&gt;命令就没有去读标准输入的参数了.&lt;br /&gt;
+其实基本上linux的命令中很多的命令的设计是先从命令行参数中获取参数，然后从标准输入中读取，反映在程序上，命令行参数是通过main函数&lt;code&gt;int main(int argc,char*argv[])&lt;/code&gt;的函数参数获得的，而标准输入则是通过标准输入函数例如C语言中的scanf读取到的。他们获取的地方是不一样的。例如：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;echo 'main' | cat
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这条命令中cat会从其标准输入中读取内容并处理，也就是会输出 'main' 字符串。echo命令将其标准输出的内容 'main' 通过管道定向到 cat 的标准输入中。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cat
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果仅仅输入cat并回车，则该程序会等待输入，我们需要从键盘输入要处理的内容给cat，此时cat也是从标准输入中得到要处理的内容的，因为我们的cat命令行中也没有指定要处理的文件名。大多数命令有一个参数&lt;code&gt;-&lt;/code&gt;如果直接在命令的最后指定 &lt;code&gt;-&lt;/code&gt;则表示从标准输入中读取，例如：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;echo 'main' | cat -
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这样也是可行的，会显示 'main' 字符串，同样输入	&lt;code&gt;cat -&lt;/code&gt;直接回车与输入 &lt;code&gt;cat&lt;/code&gt;直接回车的效果也一样，但是如果这样呢：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;echo 'main' | cat test.cpp -
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;同时指定test.cpp 和 - 参数，此时cat程序会先输出test.cpp的内容，然后输出标准输入'main'字符串，如果换一下顺序变成这样：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;echo 'main' | cat - test.cpp
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;则会先输出标准输入'main'字符串，然后输出test.cpp文件的内容。如果去掉这里的&lt;code&gt;-&lt;/code&gt;参数，则cat只会输出test.cpp文件的内容。另外如果同时传递标准输入和文件名，grep也会同时处理这两个输入，例如：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;echo 'main' | grep 'main' test.cpp -
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;此处同上, 如果不加&lt;code&gt;-&lt;/code&gt;, 则只会在test.cpp中搜索&amp;quot;main&amp;quot;, 加了&lt;code&gt;-&lt;/code&gt;, 则会在文件和标准输出中都检查关键字.&lt;/p&gt;&lt;p&gt;另外很多程序是不处理标准输入的，例如&lt;code&gt;kill&lt;/code&gt;,&lt;code&gt;rm&lt;/code&gt;这些程序如果命令行参数中没有指定要处理的内容则不会默认从标准输入中读取。所以：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;echo '516' | kill
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这种命里是不能执行的。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;echo 'test' | rm -f
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这种也是没有效果的。&lt;/p&gt;&lt;p&gt;有时候我们的脚本却需要&lt;code&gt;echo '516' | kill&lt;/code&gt;这样的效果，例如&lt;code&gt;ps -ef | grep 'ddd' | kill&lt;/code&gt;这样的效果，筛选出符合某条件的进程pid然后结束。这种需求对于我们来说是理所当然而且是很常见的，那么应该怎样达到这样的效果呢。有几个解决办法：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;kill `ps -ef | grep 'ddd'`    
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这个时候实际上等同于拼接字符串得到的命令，其效果类似于&lt;code&gt;kill $pid&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;for procid in $(ps -aux | grep &amp;quot;some search&amp;quot; | awk '{print $2}'); do kill -9 $procid; done   
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其实与第一种原理一样，只不过需要多次kill的时候是循环处理的，每次处理一个&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ps -ef | grep 'ddd' | xargs kill  
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;OK，使用了&lt;code&gt;xargs&lt;/code&gt;命令，铺垫了这么久终于铺到了主题上。&lt;code&gt;xargs&lt;/code&gt;命令可以通过管道接受字符串，并将接收到的字符串&lt;strong&gt;通过空格分割成许多参数&lt;/strong&gt;(默认情况下是通过空格分割) 然后将参数传递给其后面的命令，作为后面命令的命令行参数&lt;/p&gt;&lt;p&gt;###xargs与管道的区别&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;echo '--help' | cat
+echo '--help' | xargs cat
+```	
+第一句输出`--help`, 第二句相当于执行了`cat --help`, 所以管道是把前面的输出当成后面的输入, 而`xargs`则是把前面的输出当成了后面的命令行参数.
+
+`xargs`的命令参数可以查我给的引用原文, 说得详细且有实例, 或者看下面的简单介绍:
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;-0，--null：以\0作为分隔符，接受到的特殊字符将当作文本符号处理；&lt;br /&gt;
+-d：指定分段的分隔符，默认分隔字符为空白字符；
+-a，--arg-file=file：指定命令标准输入的来源文件；
+-e'FLAG' 或者-E 'FLAG'：指定一个终止符号，当xargs命令匹配到第一个FLAG后，停止传递，并退出命令；
+-p：每当xargs执行一个分段时，询问一次用户是否执行；
+-t：表示先打印执行的命令再输出；
+-n NUM：表示一个分段包含的参数个数，参数之间以分隔符隔开，默认是将所有的参数当作一个分段输出；
+-i：用于将分段分批传递给其后的{}进行输出，分段会替换{}所在的位置进行输出；
+-I &amp;quot;FLAG&amp;quot;：可指定分段的替换符号，分段会分批替换到符号所在的位置进行输出执行；
+-L：指定每次执行的最大的非空行的行数；&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;我们来说回&amp;quot;查找并移动&amp;quot;这个原始需求.
+
+首先, 前面铺垫的那么多`-`与标准输入的内容其实与`find`命令并无多大关系. 我们看这里面用到的三个参数
+
+### -print0
+用过`find`都知道它的结果是以换行符分隔的, 而加上`-print0`选项则可以把它换成`\0`(其实就是`NUL`)来分隔. 嗯, 不是空格, 但是至少变成了一行, 有点命令行参数的意思了吧?
+
+### -0
+就是`--null`, 以`null`为分隔符, 因为我们在前面设置`find`的输出为`null`, 这里当然要设置相应的分隔符. 如果仔细读了前面的参数表, 会发现其实它就是`-d '\0'`的简化版.
+
+### -I
+这个命令的英文说明看得我云里雾里, 一贯的不说人话风格, 我还是用一个实例来说明它的用法吧
+
+我在一个目录里建了几个文件, 用`find`把它找出来并用`xargs`把它`echo`出来:
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;$find . -name &amp;quot;*.txt&amp;quot; -print0 | xargs -p -0 echo
+echo ./c.txt ./b.txt ./a.txt?...y
+./c.txt ./b.txt ./a.txt&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;    
+注意, 我加了一个`-p`参数, 这是为了在执行命令前先把命令打印出来, 这样一来你有机会检查生成的命令最终是不是你想要的, 另一方面也能检查你的命令是否执行了多次.
+
+根据上面的演示, 我们发现一个问题, 就是如果是执行`mv file path/`这样的命令, 也就是说我们需要在命令**中间**插入管道过来的参数, 是不行的, 似乎应该用占位符.
+
+反向学习, 我们既然已经知道了`-I replstr`是正确答案, 那就尝试一下吧:
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;$find . -name &amp;quot;*.txt&amp;quot; -print0 | xargs -p -0 -I {} echo {} &amp;quot;HELLO&amp;quot;
+echo ./c.txt HELLO?...y
+./c.txt HELLO
+echo ./b.txt HELLO?...y
+./b.txt HELLO
+echo ./a.txt HELLO?...y
+./a.txt HELLO&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+首先, 我们发现, 我们成功地在`echo`和`HELLO`间插入了管道过来的参数, 其次, 它还把参数用分隔符自行拆开了一次执行一个(又有点类似于添加了`-n 1`的选项的意思).
+
+现在我们明白了, 网上查到的那条命令最终就是执行了N次`mv FILE /path`, 这就是`-I {}`.
+
+Furthermore, 我们把标准答案里那高大上的`{}`换一下如何?
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;$ find . -name &amp;quot;*.txt&amp;quot; -print0 | xargs -p -0 -I 'M' echo 'M' &amp;quot;HELLO&amp;quot;
+echo ./c.txt HELLO?...y
+./c.txt HELLO
+echo ./b.txt HELLO?...y
+./b.txt HELLO
+echo ./a.txt HELLO?...y
+./a.txt HELLO&lt;/p&gt;&lt;p&gt;$ find . -name &amp;quot;*.txt&amp;quot; -print0 | xargs -p -0 -I M echo M &amp;quot;HELLO&amp;quot;
+echo ./c.txt HELLO?...y
+./c.txt HELLO
+echo ./b.txt HELLO?...y
+./b.txt HELLO
+echo ./a.txt HELLO?...y
+./a.txt HELLO&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+这里我分别用了`'M'`和`M`, 都不影响其作为占位符的作用, 不要被那故弄玄虚的`{}`给迷惑了. 之所以用`{}`应该还是它更好被辨识和表义, 并不是大括号本身是什么语法.
+&lt;/code&gt;&lt;/pre&gt;
+</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E4%BB%8E%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6%E5%B9%B6%E7%A7%BB%E5%8A%A8%E7%9A%84shell%E5%91%BD%E4%BB%A4%E8%AF%B4%E5%BC%80%E5%8E%BB/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>HMM、NER、PoS、Viterbi笔记</title><link>/archives/HMM%E3%80%81NER%E3%80%81PoS%E3%80%81Viterbi%E7%AC%94%E8%AE%B0/</link><description>&lt;p&gt;开局一句话，隐马尔可夫，就是在“溯源”，即产生你这个现象的源头在哪。&lt;/p&gt;&lt;ul&gt;
 &lt;li&gt;比如你掷出的这个显示为6的骰子，是来自于六面体的还是四面体的，或是来自于普通的还是灌铅了的&lt;/li&gt;
 &lt;li&gt;又比如你一句话里的某一个词，它是处于开始位置还是中间位置，或是它是一个人名还是一个地点或是一个介词&lt;/li&gt;
 &lt;/ul&gt;
@@ -620,7 +780,7 @@ Union: 找两个元素分别在哪个component里，然后找到它们的root，
 &lt;li&gt;The classical example of a sequence model is the &lt;code&gt;Hidden Markov Model&lt;/code&gt; for &lt;strong&gt;part-of-speech tagging&lt;/strong&gt;. (词性标注)&lt;/li&gt;
 &lt;li&gt;Another example is the &lt;code&gt;conditional random field&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;HMM模型的典型应用是词性标注&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-e5cb79cffa5019d4.png" /&gt;&lt;/figure&gt;&lt;p&gt;词性标注语料库是统计标注算法的关键训练(和测试)集。三个主要的标注语料库始终用于训练和测试英语词性标注器。&lt;/p&gt;&lt;ol&gt;
+&lt;p&gt;HMM模型的典型应用是词性标注&lt;/p&gt;&lt;figure style="flex: 94.51219512195122" &gt;&lt;img loading="lazy" width="1240" height="656" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8246ff19ee962171c5d3b15abd234eec.png" /&gt;&lt;/figure&gt;&lt;p&gt;词性标注语料库是统计标注算法的关键训练(和测试)集。三个主要的标注语料库始终用于训练和测试英语词性标注器。&lt;/p&gt;&lt;ol&gt;
 &lt;li&gt;布朗语料库是1961年在美国出版的500篇不同体裁的书面文本的100万单词样本。&lt;/li&gt;
 &lt;li&gt;《华尔街日报》语料库收录了1989年发表在《华尔街日报》上的100万个单词。&lt;/li&gt;
 &lt;li&gt;总机语料库由1990-1991年收集的200万字电话对话组成。语料库的创建是通过在文本上运行一个自动的词性标记，然后由人工注释器手工更正每个标记。&lt;/li&gt;
@@ -642,7 +802,7 @@ Union: 找两个元素分别在哪个component里，然后找到它们的root，
 &lt;li&gt;可见状态之间没有转换概率&lt;/li&gt;
 &lt;li&gt;输出概率（&lt;code&gt;emission probability&lt;/code&gt;）：隐含状态和可见状态之间的概率，比如D4下1的概率为1/4，D6下为1/6 (表现概率，激发概率，多种翻译)&lt;/li&gt;
 &lt;/ol&gt;
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-2fd9773a2d64efcb.png" /&gt;&lt;/figure&gt;&lt;p&gt;应用HMM模型时候，往往是缺失了一部分信息的，&lt;/p&gt;&lt;ul&gt;
+&lt;figure style="flex: 106.16438356164383" &gt;&lt;img loading="lazy" width="1240" height="584" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1c9b14ebecf2d171b7f511296c425412.png" /&gt;&lt;/figure&gt;&lt;p&gt;应用HMM模型时候，往往是缺失了一部分信息的，&lt;/p&gt;&lt;ul&gt;
 &lt;li&gt;有时候你知道骰子有几种，每种骰子是什么，但是不知道掷出来的骰子序列；&lt;/li&gt;
 &lt;li&gt;有时候你只是看到了很多次掷骰子的结果，剩下的什么都不知道。&lt;/li&gt;
 &lt;/ul&gt;
@@ -657,20 +817,20 @@ Union: 找两个元素分别在哪个component里，然后找到它们的root，
 &lt;li&gt;但这个例子忽略了转移概率，即P(D6|D4), P(D4|D6,D4)，或者说默认了转移概率就是1/3，即每次挑中三个骰子的机率均等。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2&gt;Evaluation&lt;/h2&gt;
-&lt;p&gt;根据条件和序列结果求这一序列的概率是多少，比如三种骰子，投出了1，6，3的结果：&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-e2f2a555373b67f9.png" /&gt;&lt;/figure&gt;&lt;ul&gt;
+&lt;p&gt;根据条件和序列结果求这一序列的概率是多少，比如三种骰子，投出了1，6，3的结果：&lt;/p&gt;&lt;figure style="flex: 169.86301369863014" &gt;&lt;img loading="lazy" width="1240" height="365" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/3008ce6fdd893286e56d1b7f9ad1a342.png" /&gt;&lt;/figure&gt;&lt;ul&gt;
 &lt;li&gt;第1列表示第一次投掷得到1的可能性和为0.18&lt;/li&gt;
 &lt;li&gt;第2列为1 6的的可能性和为0.05&lt;/li&gt;
 &lt;li&gt;第3列为1 6 3的可能性和为0.03&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;如果远低于或远高于这个概率，必然有做过手脚的骰子。&lt;/p&gt;&lt;h2&gt;转移概率的矩阵表示&lt;/h2&gt;
-&lt;p&gt;这次假定不同的骰子是用来作弊的，作弊者会根据情况来挑选骰子，这样转移概率就不可能是均等的了：&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-00fdee7b3f2b1889.png" /&gt;&lt;/figure&gt;&lt;p&gt;很幸运，这么复杂的概率转移图，竟然能用矩阵表达：
+&lt;p&gt;这次假定不同的骰子是用来作弊的，作弊者会根据情况来挑选骰子，这样转移概率就不可能是均等的了：&lt;/p&gt;&lt;figure style="flex: 83.33333333333333" &gt;&lt;img loading="lazy" width="500" height="300" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8259518e5781e3ce798778e8da69de85.png" /&gt;&lt;/figure&gt;&lt;p&gt;很幸运，这么复杂的概率转移图，竟然能用矩阵表达：
 $A = 
 \begin{bmatrix}
 0.15 &amp;amp; 0.45 &amp;amp; 0.4 \
 0.25 &amp;amp; 0.35 &amp;amp; 0.4 \
 0.10 &amp;amp; 0.55 &amp;amp; 0.35
 \end{bmatrix}
-$&lt;/p&gt;&lt;p&gt;既然是3行3列，显然$A_{ij}$就是从i切换到j的概率，比如$A_{12}$ 就应该是这个人把骰子从作弊骰子1切换到2的概率。&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-1ccbc3eca7a3c79b.png" /&gt;&lt;/figure&gt;&lt;p&gt;相应地，发射概率（即不同骰子摇出的点数的概率）也能表示为矩阵：
+$&lt;/p&gt;&lt;p&gt;既然是3行3列，显然$A_{ij}$就是从i切换到j的概率，比如$A_{12}$ 就应该是这个人把骰子从作弊骰子1切换到2的概率。&lt;/p&gt;&lt;figure style="flex: 102.04081632653062" &gt;&lt;img loading="lazy" width="500" height="245" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/653c3cb7f8c2f3a541d170421fe489bf.png" /&gt;&lt;/figure&gt;&lt;p&gt;相应地，发射概率（即不同骰子摇出的点数的概率）也能表示为矩阵：
 $B = 
 \begin{bmatrix}
 0.16 &amp;amp; 0.16 &amp;amp; 0.16 &amp;amp; 0.16 &amp;amp; 0.16 &amp;amp; 0.16 \
@@ -793,7 +953,7 @@ $$&lt;/p&gt;
       &lt;span class="n"&gt;best_edge&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;edge&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;example:
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-5696be9edbfe968d.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;figure style="flex: 82.65765765765765" &gt;&lt;img loading="lazy" width="734" height="444" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5aa5426eb70b4c6cd0b8c4b1dacda749.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;ul&gt;
 &lt;li&gt;初始节点打分0，其它节点打分为$\infty$&lt;/li&gt;
 &lt;li&gt;每个节点打分由其(&lt;code&gt;incoming edge&lt;/code&gt;)(即来源箭头)和来源节点的打分构成&lt;/li&gt;
 &lt;li&gt;如果有多个来源，则计算出该来源的得分，与该节点当前的得分做对比，取得分低的那个&lt;/li&gt;
@@ -814,7 +974,7 @@ $$&lt;/p&gt;
 &lt;span class="n"&gt;reverse&lt;/span&gt; &lt;span class="n"&gt;best&lt;/span&gt; &lt;span class="n"&gt;path&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;举例：
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-44847f9d5d3afdad.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;figure style="flex: 102.56410256410257" &gt;&lt;img loading="lazy" width="800" height="390" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c97b27230bd42318efb72375c245c50b.png" /&gt;&lt;/figure&gt;&lt;/p&gt;&lt;ul&gt;
 &lt;li&gt;从图片可知，&lt;code&gt;path&lt;/code&gt;就是&lt;code&gt;edge&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;初始path是空，[]&lt;/li&gt;
 &lt;li&gt;从&lt;code&gt;forward&lt;/code&gt;的结果字典里找到node 3的best_edge，就是e5 [e5]&lt;/li&gt;
@@ -824,12 +984,12 @@ $$&lt;/p&gt;
 &lt;li&gt;0的best_edge是NULL，结束递归&lt;/li&gt;
 &lt;li&gt;reverse: [e2, e5]&lt;/li&gt;
 &lt;/ul&gt;
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-70f72bf0f000be99.png" /&gt;&lt;/figure&gt;&lt;p&gt;这个很好理解&lt;/p&gt;&lt;ol&gt;
+&lt;figure style="flex: 53.25581395348837" &gt;&lt;img loading="lazy" width="458" height="430" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c7650195782b845d9be6e36dac55f277.png" /&gt;&lt;/figure&gt;&lt;p&gt;这个很好理解&lt;/p&gt;&lt;ol&gt;
 &lt;li&gt;0到农，到农产，到农产物的概率，表示为0.0+ -log(p(农/农产/农产物))&lt;/li&gt;
 &lt;li&gt;在农的前提下，就有农到产，和农到产物：best(1) + -log(P(产/产物))&lt;/li&gt;
 &lt;li&gt;在产的前提下，就只有best(2) + -log(P(物))了&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;应用到NLP：&lt;/p&gt;&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-3ae73c172b3b89c1.png" /&gt;&lt;/figure&gt;&lt;p&gt;这里就是把node, egde具体了一下：&lt;/p&gt;&lt;ol&gt;
+&lt;p&gt;应用到NLP：&lt;/p&gt;&lt;figure style="flex: 73.99193548387096" &gt;&lt;img loading="lazy" width="734" height="496" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5e643e29e4fe62ef780ba545dc3a04fb.png" /&gt;&lt;/figure&gt;&lt;p&gt;这里就是把node, egde具体了一下：&lt;/p&gt;&lt;ol&gt;
 &lt;li&gt;多包了一层for-each，意思是前面的代码是处理一行的&lt;/li&gt;
 &lt;li&gt;node对应是单词结尾(word_end)，其实就是一个index，前面说过了&lt;/li&gt;
 &lt;li&gt;edge对应是单词(word)，前面也说过了，即&lt;code&gt;string[5,7]&lt;/code&gt;的意思&lt;/li&gt;
@@ -844,7 +1004,7 @@ $$&lt;/p&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;figure  size-undefined&gt;&lt;img loading="lazy" width="-1" height="-1" src="../assets/1859625-c77fa980960418be.png" /&gt;&lt;/figure&gt;&lt;ol&gt;
+&lt;figure style="flex: 90.2439024390244" &gt;&lt;img loading="lazy" width="592" height="328" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9de76a49c53e036f86c0c2e7a950c8cd.png" /&gt;&lt;/figure&gt;&lt;ol&gt;
 &lt;li&gt;显然这里已经知道edge不知道是一个词，而且是一个词的首尾边界&lt;/li&gt;
 &lt;li&gt;也知道存到best_edges里面的其实就是词的位置索引&lt;/li&gt;
 &lt;li&gt;反向的时候，从最后一个索引找到得分最低的词，再从这个单词向前找，一直找到&lt;ul&gt;

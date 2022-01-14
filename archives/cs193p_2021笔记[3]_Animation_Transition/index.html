@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2022-01-14
                 </time>
                 
-                in <a no-style class="category" href="/category/iOS/">
-                    iOS
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -132,7 +132,7 @@ cs193p_2021_笔记_3_Animation_Transition
 <li>animation的参数就是一个struct： duration, delay, repeat, curve...</li>
 </ul>
 <p>对于不能动画的modifier，看一下这个实例（上为修改前，下为修改后）
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-07ab5fb5d490609e.png" /></figure></p><ol>
+<figure style="flex: 51.452991452991455" ><img loading="lazy" width="1204" height="1170" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/4804373fb223c0a4333d720331093521.png" /></figure></p><ol>
 <li>把font设为常量，把缩放变成一个geometric effect</li>
 <li>同时也说明<code>.animation()</code>不止作用于它前面的</li>
 </ol>
@@ -189,7 +189,7 @@ cs193p_2021_笔记_3_Animation_Transition
 <li>The <code>setting</code> of this var is the animation system telling the Shape/VM which piece to draw.</li>
 <li>The <code>getting</code> of this var is the animation system getting the <code>start/end</code> points of an animation.</li>
 </ul>
-<p><strong>实例一</strong></p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-fba5209a5b350e63.png" /></figure><ul>
+<p><strong>实例一</strong></p><figure style="flex: 73.625" ><img loading="lazy" width="1178" height="800" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/10d0bb779b10383a36d23d581f2fadb9.png" /></figure><ul>
 <li>view modifier里面有一个变量<code>rotation</code>（ZStack, content, rotation3DEffect)</li>
 <li>那么外层在<code>withAnimation{}</code>的时候，我们是期望rotation的值能动起来的<ul>
 <li>内置的viewmodifier当然会自己动，如<code>opacity</code>等</li>
@@ -208,18 +208,18 @@ cs193p_2021_笔记_3_Animation_Transition
 <li>所以解决方法当然可以“延迟”呈现这些卡片</li>
 <li>课程里用了另一种方法，机制当然也是延迟，但不是那么地直白：</li>
 </ol>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-9e94c3c0c3e5037d.png" /></figure><ul>
+<figure style="flex: 82.95774647887323" ><img loading="lazy" width="1178" height="710" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e7e3ef2ac16296fabf73162c1fc678fa.png" /></figure><ul>
 <li>就是利用了<code>.onAppear</code>来阻断容器和卡片的连续生成，而改用容器呈现后，再逐个“添加”的方式，让每一张卡片都有一个单独出现的机会</li>
 <li>同时也必须利用<code>@State</code>, 让每添加一张卡片都会invalidate view一次</li>
 <li>也能看出，animate能animate的就是属性和transition</li>
 </ul>
 <blockquote>
 <p>当然，课程最后改成了“发牌”的机制，手动添加卡片，彻底阻断了卡片和容器一起出现的场景。</p></blockquote>
-<p>这就带我们来到了实例三，同一个view在不同容器间的动画，怎么计算各自尺度下同一个view的位置：<code>matchedGeometryEffect</code></p><p><strong>实例三</strong></p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-020342ac0df98dc9.png" /></figure><ul>
+<p>这就带我们来到了实例三，同一个view在不同容器间的动画，怎么计算各自尺度下同一个view的位置：<code>matchedGeometryEffect</code></p><p><strong>实例三</strong></p><figure style="flex: 73.45679012345678" ><img loading="lazy" width="1190" height="810" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/08935bf9006d072875c203895aff17b7.png" /></figure><ul>
 <li>想要有牌一张张发出去的效果，自然会想到添加延时</li>
 <li>实现成了同时做动画，只不过越到后面的牌，延时越长（动作越慢），而不是我们想象的先后触发</li>
 </ul>
-<p>为了让不同的牌发出去时有立体效果，还以index为依据设置了<code>zIndex</code>，最终效果：</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/strip.jpg" /></figure>
+<p>为了让不同的牌发出去时有立体效果，还以index为依据设置了<code>zIndex</code>，最终效果：</p><figure style="flex: 35.714285714285715" ><img loading="lazy" width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" /></figure>
             </div>
         </article>
         <div id="ga-tags">
@@ -231,8 +231,8 @@ cs193p_2021_笔记_3_Animation_Transition
 <section id="ga-content_pager">
 
     <div class="next">
-        <a class="ga-highlight" href="/archives/%E5%B0%86%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9%E7%94%A8%E4%BD%9CTime-Machine%E5%B9%B6%E5%8A%A0%E5%AF%86/">将共享文件夹用作Time-Machine并加密</a>
-        <p class="yue">怎么在局域网创建一个共享文件夹不在此文讨论范围内, 比如windows文件夹简单右键共享一下, 就能走完本教程. 以下是在macOS上设置Time Machine的操作.#Step 1: 各种命名</p>
+        <a class="ga-highlight" href="/archives/%E8%AE%A9%E4%BD%A0fork%E4%B8%8B%E6%9D%A5%E7%9A%84%E9%A1%B9%E7%9B%AE%E4%B8%8E%E6%BA%90%E9%A1%B9%E7%9B%AE%E4%BF%9D%E6%8C%81%E5%90%8C%E6%AD%A5/">让你fork下来的项目与源项目保持同步</a>
+        <p class="yue">原文在此, 建议阅读, 我把关键步骤抽出来了, 方便概览(也就是add remote upstream, fetch upstream, rebase, 再push)Step 1: Forking a repo</p>
     </div>
 
 

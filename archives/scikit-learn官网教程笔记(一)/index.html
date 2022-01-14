@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2021-03-02
                 </time>
                 
-                in <a no-style class="category" href="/category/AI/">
-                    AI
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -125,7 +125,7 @@
 
 <pre><code>array([8])
 </code></pre>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-0c8e7b09938249d7.png" /></figure><div class="highlight"><pre><span></span><span class="c1"># better practise</span>
+<figure style="flex: 50.81967213114754" ><img loading="lazy" width="496" height="488" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5f41cd44fe4cf94f9dbfee9954b82ec6.png" /></figure><div class="highlight"><pre><span></span><span class="c1"># better practise</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 
 <span class="c1"># flatten the images</span>
@@ -209,7 +209,7 @@ weighted avg       0.97      0.97      0.97       899
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-2f45f77e94ff4d3c.png" /></figure><h2>Conventions</h2>
+<figure style="flex: 54.00696864111498" ><img loading="lazy" width="620" height="574" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2088af7c0ab08ef8b680eab7d06d4bcd.png" /></figure><h2>Conventions</h2>
 <h3>Type Casting</h3>
 <p>Unless otherwise specified, input will be cast to float64:</p><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">random_projection</span>
@@ -348,7 +348,7 @@ print(iris_y_test)
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">regr</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">))</span> 
     <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">this_X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-b98580e5d1f57ae7.png" /></figure><h2>Ridge regression:</h2>
+<figure style="flex: 75.50607287449392" ><img loading="lazy" width="746" height="494" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/22a14395fafb62dcbaabdca600191fd6.png" /></figure><h2>Ridge regression:</h2>
 <p>A solution in high-dimensional statistical learning is to shrink the regression coefficients to zero: any two randomly chosen set of observations are likely to be uncorrelated. This is called Ridge regression.</p><p>This is an example of <code>bias/variance</code> tradeoff:</p><p>the <strong>larger</strong> the ridge <code>alpha</code> parameter,</p><ul>
 <li>the <strong>higher</strong> the <code>bias</code></li>
 <li>the <strong>lower</strong> the <code>variance</code>.</li>
@@ -472,7 +472,7 @@ ElasticNet optimal alpha: 0.001 and L1 ratio: 0.5000
 
 <span class="c1"># 观察图像的不同，其实可以理解为样本过少时的”过拟合“，引入忽略的指标后虽然对训练集的准确率大打折扣，但确实降低了方差</span>
 </pre></div>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-7ffe7513e6a7ed9b.png" /></figure><h4>Diabetes dataset</h4>
+<figure style="flex: 76.02459016393442" ><img loading="lazy" width="742" height="488" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/97bc036cb6f5c3ce99362eb4bbba4c3d.png" /></figure><h4>Diabetes dataset</h4>
 <p>换个数据源，<code>estimator</code>并不需要更换，如果需要换超参，前文也已经讲过了：</p><div class="highlight"><pre><span></span><span class="n">diabetes_X</span><span class="p">,</span> <span class="n">diabetes_y</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_diabetes</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">diabetes_X_train</span> <span class="o">=</span> <span class="n">diabetes_X</span><span class="p">[:</span><span class="o">-</span><span class="mi">20</span><span class="p">]</span>
 <span class="n">diabetes_X_test</span>  <span class="o">=</span> <span class="n">diabetes_X</span><span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">:]</span>
@@ -508,7 +508,7 @@ ElasticNet optimal alpha: 0.001 and L1 ratio: 0.5000
 <h3>Different algorithms for the same problem</h3>
 <p>Different algorithms can be used to solve the same mathematical problem. For instance the <code>Lasso</code> object in scikit-learn solves the lasso regression problem using a <code>coordinate descent</code> method, that is efficient on <strong>large datasets</strong>. However, scikit-learn also provides the <code>LassoLars</code> object using the <code>LARS</code> algorithm, which is very efficient for problems in which the weight vector estimated is very <strong>sparse</strong> (i.e. problems with <strong>very few</strong> observations).</p><h2>Classification</h2>
 <h3>Logistic Regerssion</h3>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-c578b5761e251bfb.png" /></figure><div class="highlight"><pre><span></span><span class="n">log</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1e5</span><span class="p">)</span>
+<figure style="flex: 66.66666666666667" ><img loading="lazy" width="400" height="300" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/386b1a1250985ccfdacd014b942dff98.png" /></figure><div class="highlight"><pre><span></span><span class="n">log</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1e5</span><span class="p">)</span>
 <span class="n">log</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">iris_X_train</span><span class="p">,</span> <span class="n">iris_y_train</span><span class="p">)</span>
 </pre></div>
 
@@ -580,7 +580,7 @@ LogisticRegression score: 0.933333
           <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">))</span>
 <span class="n">models</span> <span class="o">=</span> <span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">models</span><span class="p">)</span>
 </pre></div>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-2467162b2d6a6aed.png" /></figure><h2>cross validation</h2>
+<figure style="flex: 79.81132075471699" ><img loading="lazy" width="846" height="530" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/73af5427b414af6455402c92562d3524.png" /></figure><h2>cross validation</h2>
 <p><a href="https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation">https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation</a></p><p><strong>RAW DEMO</strong>: KFold cross-validation:</p><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">svm</span>
 

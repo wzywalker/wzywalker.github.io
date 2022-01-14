@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2021-08-23
                 </time>
                 
-                in <a no-style class="category" href="/category/AI/">
-                    AI
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -195,7 +195,7 @@ $</p><ol>
 <li>一轮摆完后，最大的数肯定已经<strong>上浮</strong>到根节点了，把它与最末的一个数字调换位置（这个数字是一个相对小，但不一定是最小的），然后把最大的这个数从堆里移除（已经确认是最大的，位置也就确认了，不再参与比较）</li>
 <li>实现的时候，因为有“找父/子节点比大小”这样的逻辑，显然可以直接用上二叉树的性质，不要自己去观察或归纳了。</li>
 </ol>
-<p>动图比较长，耐心看下：</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/strip.jpg" /></figure><blockquote>
+<p>动图比较长，耐心看下：</p><figure style="flex: 35.714285714285715" ><img loading="lazy" width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" /></figure><blockquote>
 <p>在实现每一轮的遍历数字较大的那个子节点并交换数字的过程中，我之前用的是递归，在小数据量顺利通过，但上万条数据时碰到了<code>RecursionError: maximum recursion depth exceeded in comparison</code>, 查询本机迭代大小设置为1000，但设到几十万就不起作用了（虽然不报错），于是改成了<code>while</code>循环，代码几乎没变，但是秒过了。</p></blockquote>
 <p>递归只是让代码看起来简洁而牛逼，并没有创造什么新的东西，while能行那就算过了吧。</p><p>但是代码开始dirty了起来，大量的代码在控制边界和描述场景，显然有些条件可能是冗余的，我没有很好地合并这些边界和条件导致if太多，这是个不好的演示，但三个核心函数还是阐释了这种算法的思路：</p><ul>
 <li>摆成树（堆）</li>
@@ -286,7 +286,7 @@ $</p><ol>
 </code></pre>
 <h2>归并排序</h2>
 <p>这次先看图吧，看你能总结出啥：
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/strip.jpg" /></figure></p><ol>
+<figure style="flex: 35.714285714285715" ><img loading="lazy" width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" /></figure></p><ol>
 <li>第一步是把数组打散后两两排序，实现每一组（2个元素）是排好序的</li>
 <li>第二步仍然是两两排序，但是把前面排序好的每两个组成一个组：</li>
 </ol>
@@ -412,7 +412,7 @@ $</p><ol>
 <span class="nx">sort</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="nx">right</span><span class="p">)</span>
 </pre></div>
 <p>即代码真走到第3行了的话，所有的数据已经排好序了</p><h2>基数排序</h2>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/strip.jpg" /></figure><p>看图，为什么从个位向高位依次排过去为什么就能保证后面高位的排序不会影响低序的，直观来理解的话，就是</p><ol>
+<figure style="flex: 35.714285714285715" ><img loading="lazy" width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" /></figure><p>看图，为什么从个位向高位依次排过去为什么就能保证后面高位的排序不会影响低序的，直观来理解的话，就是</p><ol>
 <li>如果高位数字不一样，那么低位顺序是没意义的，按高位大小排即可</li>
 <li>如果高位数字一样，那么低位已经排好序了</li>
 <li>按这个逻辑由低位向高位排，按归纳法，可以推到适用普遍情况的</li>

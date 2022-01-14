@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2022-06-14
                 </time>
                 
-                in <a no-style class="category" href="/category/AI/">
-                    AI
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -93,7 +93,7 @@
 <li>The classical example of a sequence model is the <code>Hidden Markov Model</code> for <strong>part-of-speech tagging</strong>. (词性标注)</li>
 <li>Another example is the <code>conditional random field</code>.</li>
 </ul>
-<p>HMM模型的典型应用是词性标注</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-e5cb79cffa5019d4.png" /></figure><p>词性标注语料库是统计标注算法的关键训练(和测试)集。三个主要的标注语料库始终用于训练和测试英语词性标注器。</p><ol>
+<p>HMM模型的典型应用是词性标注</p><figure style="flex: 94.51219512195122" ><img loading="lazy" width="1240" height="656" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8246ff19ee962171c5d3b15abd234eec.png" /></figure><p>词性标注语料库是统计标注算法的关键训练(和测试)集。三个主要的标注语料库始终用于训练和测试英语词性标注器。</p><ol>
 <li>布朗语料库是1961年在美国出版的500篇不同体裁的书面文本的100万单词样本。</li>
 <li>《华尔街日报》语料库收录了1989年发表在《华尔街日报》上的100万个单词。</li>
 <li>总机语料库由1990-1991年收集的200万字电话对话组成。语料库的创建是通过在文本上运行一个自动的词性标记，然后由人工注释器手工更正每个标记。</li>
@@ -115,7 +115,7 @@
 <li>可见状态之间没有转换概率</li>
 <li>输出概率（<code>emission probability</code>）：隐含状态和可见状态之间的概率，比如D4下1的概率为1/4，D6下为1/6 (表现概率，激发概率，多种翻译)</li>
 </ol>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-2fd9773a2d64efcb.png" /></figure><p>应用HMM模型时候，往往是缺失了一部分信息的，</p><ul>
+<figure style="flex: 106.16438356164383" ><img loading="lazy" width="1240" height="584" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1c9b14ebecf2d171b7f511296c425412.png" /></figure><p>应用HMM模型时候，往往是缺失了一部分信息的，</p><ul>
 <li>有时候你知道骰子有几种，每种骰子是什么，但是不知道掷出来的骰子序列；</li>
 <li>有时候你只是看到了很多次掷骰子的结果，剩下的什么都不知道。</li>
 </ul>
@@ -130,20 +130,20 @@
 <li>但这个例子忽略了转移概率，即P(D6|D4), P(D4|D6,D4)，或者说默认了转移概率就是1/3，即每次挑中三个骰子的机率均等。</li>
 </ol>
 <h2>Evaluation</h2>
-<p>根据条件和序列结果求这一序列的概率是多少，比如三种骰子，投出了1，6，3的结果：</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-e2f2a555373b67f9.png" /></figure><ul>
+<p>根据条件和序列结果求这一序列的概率是多少，比如三种骰子，投出了1，6，3的结果：</p><figure style="flex: 169.86301369863014" ><img loading="lazy" width="1240" height="365" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/3008ce6fdd893286e56d1b7f9ad1a342.png" /></figure><ul>
 <li>第1列表示第一次投掷得到1的可能性和为0.18</li>
 <li>第2列为1 6的的可能性和为0.05</li>
 <li>第3列为1 6 3的可能性和为0.03</li>
 </ul>
 <p>如果远低于或远高于这个概率，必然有做过手脚的骰子。</p><h2>转移概率的矩阵表示</h2>
-<p>这次假定不同的骰子是用来作弊的，作弊者会根据情况来挑选骰子，这样转移概率就不可能是均等的了：</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-00fdee7b3f2b1889.png" /></figure><p>很幸运，这么复杂的概率转移图，竟然能用矩阵表达：
+<p>这次假定不同的骰子是用来作弊的，作弊者会根据情况来挑选骰子，这样转移概率就不可能是均等的了：</p><figure style="flex: 83.33333333333333" ><img loading="lazy" width="500" height="300" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8259518e5781e3ce798778e8da69de85.png" /></figure><p>很幸运，这么复杂的概率转移图，竟然能用矩阵表达：
 $A = 
 \begin{bmatrix}
 0.15 &amp; 0.45 &amp; 0.4 \
 0.25 &amp; 0.35 &amp; 0.4 \
 0.10 &amp; 0.55 &amp; 0.35
 \end{bmatrix}
-$</p><p>既然是3行3列，显然$A_{ij}$就是从i切换到j的概率，比如$A_{12}$ 就应该是这个人把骰子从作弊骰子1切换到2的概率。</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-1ccbc3eca7a3c79b.png" /></figure><p>相应地，发射概率（即不同骰子摇出的点数的概率）也能表示为矩阵：
+$</p><p>既然是3行3列，显然$A_{ij}$就是从i切换到j的概率，比如$A_{12}$ 就应该是这个人把骰子从作弊骰子1切换到2的概率。</p><figure style="flex: 102.04081632653062" ><img loading="lazy" width="500" height="245" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/653c3cb7f8c2f3a541d170421fe489bf.png" /></figure><p>相应地，发射概率（即不同骰子摇出的点数的概率）也能表示为矩阵：
 $B = 
 \begin{bmatrix}
 0.16 &amp; 0.16 &amp; 0.16 &amp; 0.16 &amp; 0.16 &amp; 0.16 \
@@ -266,7 +266,7 @@ $$</p>
       <span class="n">best_edge</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span><span class="n">edge</span>
 </pre></div>
 <p>example:
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-5696be9edbfe968d.png" /></figure></p><ul>
+<figure style="flex: 82.65765765765765" ><img loading="lazy" width="734" height="444" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5aa5426eb70b4c6cd0b8c4b1dacda749.png" /></figure></p><ul>
 <li>初始节点打分0，其它节点打分为$\infty$</li>
 <li>每个节点打分由其(<code>incoming edge</code>)(即来源箭头)和来源节点的打分构成</li>
 <li>如果有多个来源，则计算出该来源的得分，与该节点当前的得分做对比，取得分低的那个</li>
@@ -287,7 +287,7 @@ $$</p>
 <span class="n">reverse</span> <span class="n">best</span> <span class="n">path</span>
 </pre></div>
 <p>举例：
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-44847f9d5d3afdad.png" /></figure></p><ul>
+<figure style="flex: 102.56410256410257" ><img loading="lazy" width="800" height="390" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c97b27230bd42318efb72375c245c50b.png" /></figure></p><ul>
 <li>从图片可知，<code>path</code>就是<code>edge</code></li>
 <li>初始path是空，[]</li>
 <li>从<code>forward</code>的结果字典里找到node 3的best_edge，就是e5 [e5]</li>
@@ -297,12 +297,12 @@ $$</p>
 <li>0的best_edge是NULL，结束递归</li>
 <li>reverse: [e2, e5]</li>
 </ul>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-70f72bf0f000be99.png" /></figure><p>这个很好理解</p><ol>
+<figure style="flex: 53.25581395348837" ><img loading="lazy" width="458" height="430" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c7650195782b845d9be6e36dac55f277.png" /></figure><p>这个很好理解</p><ol>
 <li>0到农，到农产，到农产物的概率，表示为0.0+ -log(p(农/农产/农产物))</li>
 <li>在农的前提下，就有农到产，和农到产物：best(1) + -log(P(产/产物))</li>
 <li>在产的前提下，就只有best(2) + -log(P(物))了</li>
 </ol>
-<p>应用到NLP：</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-3ae73c172b3b89c1.png" /></figure><p>这里就是把node, egde具体了一下：</p><ol>
+<p>应用到NLP：</p><figure style="flex: 73.99193548387096" ><img loading="lazy" width="734" height="496" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5e643e29e4fe62ef780ba545dc3a04fb.png" /></figure><p>这里就是把node, egde具体了一下：</p><ol>
 <li>多包了一层for-each，意思是前面的代码是处理一行的</li>
 <li>node对应是单词结尾(word_end)，其实就是一个index，前面说过了</li>
 <li>edge对应是单词(word)，前面也说过了，即<code>string[5,7]</code>的意思</li>
@@ -317,7 +317,7 @@ $$</p>
 </ul>
 </li>
 </ol>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-c77fa980960418be.png" /></figure><ol>
+<figure style="flex: 90.2439024390244" ><img loading="lazy" width="592" height="328" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9de76a49c53e036f86c0c2e7a950c8cd.png" /></figure><ol>
 <li>显然这里已经知道edge不知道是一个词，而且是一个词的首尾边界</li>
 <li>也知道存到best_edges里面的其实就是词的位置索引</li>
 <li>反向的时候，从最后一个索引找到得分最低的词，再从这个单词向前找，一直找到<ul>
@@ -361,8 +361,8 @@ $$</p>
 
 
     <div class="prev">
-        <a class="ga-highlight" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/">数据结构篇九：Indexed-Priority-Queue</a>
-        <p class="yue">这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记</p>
+        <a class="ga-highlight" href="/archives/%E4%BB%8E%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6%E5%B9%B6%E7%A7%BB%E5%8A%A8%E7%9A%84shell%E5%91%BD%E4%BB%A4%E8%AF%B4%E5%BC%80%E5%8E%BB/">从查找文件并移动的shell命令说开去</a>
+        <p class="yue">一个不能更常见的需求: 从一大堆下载目录(或别的目录)里, 查找指定的文件, 并移动/复制到指定的文件夹, 如果用鼠标点开一个个的文件夹, 还有文件夹里的文件夹, 估计要累死, 当然, 即使自己不会, 也很容易查到两个shell命令:</p>
     </div>
 
 </section>

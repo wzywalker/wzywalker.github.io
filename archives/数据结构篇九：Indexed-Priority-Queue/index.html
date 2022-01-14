@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2022-01-14
                 </time>
                 
-                in <a no-style class="category" href="/category/CS/">
-                    CS
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -87,7 +87,7 @@
 <li>a traditional priority queue variant</li>
 <li>top node supports <code>quick update and deletions of key-value paris</code></li>
 </ul>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-e287109fa63ae3be.png" /></figure><p>观察这个图，数据是Anna, Bella...等等，</p><ul>
+<figure style="flex: 77.8894472361809" ><img loading="lazy" width="1240" height="796" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5e238bf5e89b7b2188cfb748c4e5990e.png" /></figure><p>观察这个图，数据是Anna, Bella...等等，</p><ul>
 <li>首先，为这一堆数据进行任意排序，得到一堆索引(0,1,...)</li>
 <li>然后组一个binary heap，这样每个元素又获得一个索引，就是在heap上的序号（<code>Position Map</code>）</li>
 </ul>
@@ -100,14 +100,14 @@
 <li>pm = 3 -&gt; ki = 8 -&gt; Issac <strong>BINGO!!!</strong></li>
 </ul>
 <p>但神奇的事发生了，有人希望复用ki这个自然数序列（闲的蛋疼？），于是多做了一个数组，把ki定义为heap上的索引，与元素原来的ki进行映射（<code>Inverse Map</code>）:IM
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-ce50aadafe092a41.png" /></figure></p><p>可以看到，这张图上张个ki到im的映射，与pm到ki的映射其实是一样的，也就是说重定义了一下，并没有引入新的东西。(pm表里找到3，对应的第一行ki表里就是8）</p><p>这个时候，我们直接用ki的3就能找到im的8，继而找到数据源的<em>Issac</em>了。</p><h2>Insertion</h2>
+<figure style="flex: 68.88888888888889" ><img loading="lazy" width="1240" height="900" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/71be1add8c1a0cde72e08fc72adbd071.png" /></figure></p><p>可以看到，这张图上张个ki到im的映射，与pm到ki的映射其实是一样的，也就是说重定义了一下，并没有引入新的东西。(pm表里找到3，对应的第一行ki表里就是8）</p><p>这个时候，我们直接用ki的3就能找到im的8，继而找到数据源的<em>Issac</em>了。</p><h2>Insertion</h2>
 <p>上面的数组，我们往里面添加第12条数据试试:</p><ul>
 <li>{ki:12, pm: 12, im:12, value:2}</li>
 <li>显然违反了binary heap的 invariant，向上冒泡，也就是跟{ki:12, pm:5, im:2, value:4}的节点互换</li>
 <li>此时，数据源肯定不会变，但是节点变了，pm的值就要交换（5， 12 互换）</li>
 <li>pm变了，把pm当成ki的映射表im也要变（12， 11互换）</li>
 </ul>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-1470af2b119b338e.png" /></figure><p>仔细观察图片，搞清楚第一行ki在两次互换时的身份就明白了</p><ul>
+<figure style="flex: 224.63768115942028" ><img loading="lazy" width="1240" height="276" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/47da2e700214e5e2de16aa42f5b92fb3.png" /></figure><p>仔细观察图片，搞清楚第一行ki在两次互换时的身份就明白了</p><ul>
 <li>pm的互换是直观的，就是节点的位置</li>
 <li>知道pm互换的依据后（2，5），在第一行找2，5对应的im值互换，因为在这个映射里，相当于pm与原ki的映射，pm此时是（2，5）了。</li>
 </ul>
@@ -149,7 +149,7 @@
 <p>在操作时，只需要知道传入的是哪种索引，及时转化就行了。</p><p>有了索引，lookup的时间复杂度就是常量时间了：O(1)</p><h2>Polling and Removals</h2>
 <p>没有什么特殊的,仍然是找到节点,与最后一个交换,移除最后一个节点,然后再看最后一个在堆里是上升还是下降.
 仍然是记得每一步交换,相应的几个索引值也需要随之交换.(polling 其实就是移除第1个节点,本质上还是 removal)
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-dd5ee538c3b4b8ae.png" /></figure></p><p>pseudo code</p><div class="highlight"><pre><span></span><span class="c1"># Deletes the node with the key index ki</span>
+<figure style="flex: 36.70811130846655" ><img loading="lazy" width="1240" height="1689" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/581b8563020c36307eae7a9bf618a7e0.png" /></figure></p><p>pseudo code</p><div class="highlight"><pre><span></span><span class="c1"># Deletes the node with the key index ki</span>
 <span class="c1"># in the heap. The key index ki must exist </span>
 <span class="c1"># and be present in the heap.</span>
 <span class="n">function</span> <span class="n">remove</span><span class="p">(</span><span class="n">ki</span><span class="p">):</span>
@@ -231,14 +231,14 @@
 <section id="ga-content_pager">
 
     <div class="next">
-        <a class="ga-highlight" href="/archives/HMM%E3%80%81NER%E3%80%81PoS%E3%80%81Viterbi%E7%AC%94%E8%AE%B0/">HMM、NER、PoS、Viterbi笔记</a>
-        <p class="yue">开局一句话，隐马尔可夫，就是在“溯源”，即产生你这个现象的源头在哪。</p>
+        <a class="ga-highlight" href="/archives/libxml-tree-h-file-not-found/">libxml-tree-h-file-not-found</a>
+        <p class="yue">stackoverflow用户对添加libxml2库表现出了极大的抱怨，原因在要把它好好地添加进去实在是太复杂了。我就是因为出现了'libxml/tree.h file not found’错误，才发现的这篇贴子，照着做，错误就消除了，备注如下：原始地址：http://stackoverflow.com/questions/1428847/libxml-tree-h-no-such-file-or-directory见e.w. parris的答案Adding libxml2 is a big, fat, finicky pain in the ass. If you're going to do it, do it before you get too far in building your project.You need to add it in two ways:1. Target settings</p>
     </div>
 
 
     <div class="prev">
-        <a class="ga-highlight" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%89%EF%BC%9AUnion-Find/">数据结构篇三：Union-Find</a>
-        <p class="yue">这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记</p>
+        <a class="ga-highlight" href="/archives/%E3%80%8AEffective-Objective-C-2-0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/">《Effective-Objective-C-2-0》笔记第1-2章</a>
+        <p class="yue"></p>
     </div>
 
 </section>

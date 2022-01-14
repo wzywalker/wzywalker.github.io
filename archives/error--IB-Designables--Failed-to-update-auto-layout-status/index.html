@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2022-01-14
                 </time>
                 
-                in <a no-style class="category" href="/category/iOS/">
-                    iOS
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -83,7 +83,7 @@
             <div class="ga-content_body">
                 <p>首先, 了解一下 <a href="http://nshipster.com/ibinspectable-ibdesignable/">IBInspectable / IBDesignable</a>
 这是让 Xcode能在设计时就体现你代码对 UI 进行的修改, 以及在设计器里能动态增加你对视图添加的属性的控件的特性(是的, 只是 xcode 的特性, 并不是语言特征)</p><p>然后, 用这个的人多半碰到了这类问题:
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-7f2bcd64bfbc2079.png" /></figure></p><blockquote>
+<figure style="flex: 200.0" ><img loading="lazy" width="360" height="90" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8dd76778db9d224fac448fc48d7671eb.png" /></figure></p><blockquote>
 <p>error: IB Designables: Failed to update auto layout status: Interface Builder Cocoa Touch Tool raised a &quot;NSInternalInconsistencyException&quot; exception: Could not load NIB in bundle: 'NSBundle</p></blockquote>
 <p>网上可能有一大堆讨论相关问题的贴子, 解决方法不尽其数, 可能都不适用你, 所以我的这篇也可能不适用你, 最好还是善用搜索, 我谨提供一种思路.</p><p>网上有让你修改工程配置的, 寻找崩溃日志的, 解决我这个问题的, 是在Storyboard 界面里选中出问题的 View(你一定要至少知道是给哪个 view 添加上 <code>IB_DESIGNABLE</code>才导致的问题, 可以通过逐个移除这个声明以测试), 再在菜单里选择: <code>Editor - Debug Selected Views</code>
 这个时候就会模拟<code>IB_DESIGNABLE</code>进行 debug, 再加上全局异常断点, 代码就会在崩溃处命中了.</p><p>我的问题是我用了两个属性, 然后在 view 的 <code>drawWithRect:</code>方法中, 这两个属性都为空, 而我的属性是在<code>initWithCoder:</code>中初始化的. 所以我再添加<code>initWithFrame:</code>, 在其中解决, 顺利解决.</p><p>这说明三个问题:</p><ol>
@@ -91,7 +91,7 @@
 <li><code>initWithFrame:</code>的时候 frame 是{0, 0, 0, 0}可别忘了, 有时候这个也是崩溃原因</li>
 <li>如果我把<code>drawWithRect:</code>中要用到的属性提前初始化一样可以避免这样的问题, 怎样做? 配合<code>IBInspectable</code>, 然后在设计器中给属性设初始值</li>
 </ol>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-71d8f6cada235f4b.png" /></figure>
+<figure style="flex: 145.88235294117646" ><img loading="lazy" width="1240" height="425" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9224752a673054143b82aadd16747841.png" /></figure>
             </div>
         </article>
         <div id="ga-tags">

@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2022-01-14
                 </time>
                 
-                in <a no-style class="category" href="/category/CS/">
-                    CS
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -83,7 +83,7 @@
             <div class="ga-content_body">
                 <p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><hr />
 <h1>Fenwick Tree (Binary Indexed Tree)</h1>
-<p>树状数组</p><p><strong>Motivation</strong></p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-cb667ca0d52fbf56.png" /></figure><ul>
+<p>树状数组</p><p><strong>Motivation</strong></p><figure style="flex: 118.0952380952381" ><img loading="lazy" width="1240" height="525" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2591209692305dbd9d640a53765581e1.png" /></figure><ul>
 <li>计算数组里任意连续片段的和，最直观的方案当然是累加：线性时间O(n)</li>
 <li>但是如果你有一个记录了每个节点到当前位置时的累加和的数组（<code>prefix sum</code>），立刻变成了常量时间</li>
 <li>问题是更新数据变成了线性时间（后续所有的求和都要改一遍）<ul>
@@ -93,14 +93,14 @@
 </ul>
 <p>所以引入了:
 <code>Fenwick Tree</code> is an efficient data structure for performing range/point queries/updates.(即在上面的动机上，还考虑了update的效率)</p><p>前面的例子在update时效率不高，所以Fenwick Tree用了一种聪明的方式，不是累加所有的值，而是分段累加，具体实现看下图：
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-2917913fd143f6b8.png" /></figure></p><ul>
+<figure style="flex: 67.24511930585683" ><img loading="lazy" width="1240" height="922" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/eb45cb86abbe7a62cd8cc8d3fc2a8f06.png" /></figure></p><ul>
 <li>把索引值用二进制表示</li>
 <li><code>LSB</code>的解释看图，实际应用上，就是看从低位到高位第一个1的右边有几个0，假设为<code>n</code>个</li>
 <li>那么该cell上存的值就是前$2^n$个cell的值的和</li>
 </ul>
 <p>图中例子是索引10，不直观，我们换成12， 二进制是1100， 最右边有2个零，那么它保存它$2^2=4$个位置的和。
 也就是说，如果你要求和，如果用了cell 12位置的值的话，至少可以省掉3次累加。</p><p>当然，它还有更牛逼的特性，结合range query一起来看吧：
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-f7a5660ce53dd6d3.png" /></figure></p><p>蓝线表示的是当然位置上累加了前几个位置的值，已经很有规律了</p><p>假如计算前11个值的和，过程是：</p><ol>
+<figure style="flex: 67.3913043478261" ><img loading="lazy" width="1240" height="920" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/0a9944a0140262760c9fb4a45cb3d75e.png" /></figure></p><p>蓝线表示的是当然位置上累加了前几个位置的值，已经很有规律了</p><p>假如计算前11个值的和，过程是：</p><ol>
 <li>11的索引是1011，右边没有0，所以当前的和为A[11]</li>
 <li>根据$2^0$来移位，来到10。<ul>
 <li>右边一个0，所以它管$2^1$个presum，目前A[11] + A[10]</li>
@@ -132,7 +132,7 @@
 <li>1010 + 10 = 1100 = 12</li>
 <li>1100 + 100 = 10000 = 16 到顶了，</li>
 </ul>
-<p>所以需要把9, 10, 12, 16分别应用这个point的更新，也就是说只有这几个cell把9计算进去了。</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-5c481cd5c7dfd9bc.png" /></figure><p>当然，可以看一下左边的示意图，更直观</p><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span> 
+<p>所以需要把9, 10, 12, 16分别应用这个point的更新，也就是说只有这几个cell把9计算进去了。</p><figure style="flex: 66.59505907626209" ><img loading="lazy" width="1240" height="931" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/57cf2e654121e8c54e9f6cd1eeb60d9b.png" /></figure><p>当然，可以看一下左边的示意图，更直观</p><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span> 
     <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">:</span>
         <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span> 
         <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">LSB</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
@@ -168,14 +168,14 @@
 <section id="ga-content_pager">
 
     <div class="next">
-        <a class="ga-highlight" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%8C%EF%BC%9APriority-Queues-%28PQs%29-with-an-interlude-on-Heaps/">数据结构篇二：Priority-Queues-(PQs)-with-an-interlude-on-Heaps</a>
-        <p class="yue">这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记优先队列和堆的插曲，在优先队列里引入了heap只是个插曲而不算正式介绍，但其实讲得差不多了。</p>
+        <a class="ga-highlight" href="/archives/ES6%E4%B8%ADgenerator%E4%BC%A0%E5%8F%82%E4%B8%8E%E8%BF%94%E5%9B%9E%E5%80%BC/">ES6中generator传参与返回值</a>
+        <p class="yue">先看两个例子,1,</p>
     </div>
 
 
     <div class="prev">
-        <a class="ga-highlight" href="/archives/iOS-App-%E7%AD%BE%E5%90%8D%E7%9A%84%E5%8E%9F%E7%90%86/">iOS-App-签名的原理</a>
-        <p class="yue">原文转载: https://wereadteam.github.io/2017/03/13/Signature/iOS 签名机制挺复杂，各种证书，Provisioning Profile，entitlements，CertificateSigningRequest，p12，AppID，概念一堆，也很容易出错，本文尝试从原理出发，一步步推出为什么会有这么多概念，希望能有助于理解 iOS App 签名的原理和流程。</p>
+        <a class="ga-highlight" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0/">李宏毅MACHINE-LEARNING-2021-SPRING笔记</a>
+        <p class="yue"></p>
     </div>
 
 </section>

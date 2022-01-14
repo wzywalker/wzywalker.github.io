@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2022-01-14
                 </time>
                 
-                in <a no-style class="category" href="/category/Skill/">
-                    Skill
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -83,7 +83,7 @@
             <div class="ga-content_body">
                 <p>我用树莓派做<code>翻墙网关</code>, <code>透明网关</code>, 通通绕到坑里出不来了, 方案很多, 思路是树莓派翻, 智能dns, 智能国内外分流, 外加让树莓派成为局域网的<code>网关</code>以便让局域网用户<code>无感翻墙</code>.<br />
 黑科技没玩转, 于是我整理思绪, 做一个最简单的局域网http代理服务器吧. 任何网络设备/应用都能找到设http代理的地方, 这样最后只要让树莓派能应用<code>gfwlist</code>的规则.</p><p>我们来看一下最终的拓扑:
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-53732f608938788b.png" /></figure></p><p>几点说明:</p><ol>
+<figure style="flex: 65.81740976645435" ><img loading="lazy" width="1240" height="942" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/82dd9437cc67d2b686f739ff2c5cf8a1.png" /></figure></p><p>几点说明:</p><ol>
 <li>如果只是Shadowsocks翻墙, 那么这一步做完就收工了. 最简步骤</li>
 <li>如果需要转成http代理, 你就再多包一层代理工具, <code>Prixovy</code>, <code>Polipo</code>等, 用关键词搜, 比, 自己定. <code>Polipo</code>配置要简单很多</li>
 <li>对, 不考虑做成网关就是这么简单, 但是我还想用<code>kcptun</code>给提提速, 所以多插一脚</li>
@@ -140,7 +140,7 @@ feedproxy.google.com
 <li>设置全局代理(需要设备Supervised)</li>
 <li>设置某个WiFi热点的代理</li>
 </ol>
-<p>我没去研究什么是<code>Supervised</code>了, 而且也希望代理好切换, 于是选择了第二种方案, 即换了wifi后就没代理了(跟在<code>iPhone</code>上设置一样)</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-f092d16231112699.jpg" /></figure>
+<p>我没去研究什么是<code>Supervised</code>了, 而且也希望代理好切换, 于是选择了第二种方案, 即换了wifi后就没代理了(跟在<code>iPhone</code>上设置一样)</p><figure style="flex: 66.66666666666667" ><img loading="lazy" width="1240" height="930" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b0eb92a0c8ee8ccdfed03a8e1552c69f.jpg" /></figure>
             </div>
         </article>
         <div id="ga-tags">
@@ -152,14 +152,14 @@ feedproxy.google.com
 <section id="ga-content_pager">
 
     <div class="next">
-        <a class="ga-highlight" href="/archives/El-Captain%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/">El-Captain设置环境变量</a>
-        <p class="yue">这里说的不是设置变量给bash/shell来用, 而是给程序使用, 比如, chromium自36版以后, 就不再内置google api keys, 官方文档说明你打包的时候没有添加key的话, 可以在runtime添加, 比如在系统的环境变量里添加进去.</p>
+        <a class="ga-highlight" href="/archives/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/">翻转二叉树</a>
+        <p class="yue">最近在找工作，所以这些算法梗又出现在了我的阅读视野里，比如经典的homebrew作者吐槽的翻转二叉树的问题。</p>
     </div>
 
 
     <div class="prev">
-        <a class="ga-highlight" href="/archives/%E9%87%8D%E8%A3%85mac%E7%B3%BB%E7%BB%9F%E5%90%8Essh%E5%BC%82%E5%B8%B8/">重装mac系统后ssh异常</a>
-        <p class="yue">表现在两个方面: ssh 登录服务器, 和通过ssh 使用 git, 报的错都是Permissino denied (publickey)git异常的解决</p>
+        <a class="ga-highlight" href="/archives/%E3%80%8ADeep-Learning-with-Python%E3%80%8B%E7%AC%94%E8%AE%B0/">《Deep-Learning-with-Python》笔记</a>
+        <p class="yue">本来是打算趁这个时间好好看看花书的，前几章看下来确实觉得获益匪浅，但看下去就发现跟不上了，特别是抱着急功近利的心态的话，目前也沉不下去真的一节节吃透地往下看。这类书终归不是入门教材，是需要你有过一定的积累后再回过头来看的。于是想到了《Deep Learning with Python》，忘记这本书怎么来的了，但是在别的地方看到了有人推荐，说是Keras的作者写的非常好的一本入门书，翻了前面几十页后发现居然跟进去了，不该讲的地方没讲比如数学细节，而且思路也极其统一，从头贯穿到尾（比如representations, latent space,  hypothesis space），我觉得很受用。三百多页全英文，居然也没查几个单词就这么看完了，以前看文档最多十来页，也算一个突破了，可见其实还是一个耐心的问题。看完后书上做了很多笔记，于是顺着笔记读了第二遍，顺便就把笔记给电子化了。不是教程，不是导读。Fundamentals of deep learning</p>
     </div>
 
 </section>

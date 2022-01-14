@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2022-01-14
                 </time>
                 
-                in <a no-style class="category" href="/category/CS/">
-                    CS
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -109,7 +109,7 @@ LCP|Sorted Suffixes|
 2|ZAZA</p><p>我们知道第一列指的是“重复个数”，也就是说，如果按我们手写的那样去遍历，至少有这么多重复的子串，重复的既是“个数”，也是“组合方式”。</p><p>所以如果我们只需要计数的话，把右边的数出来就知道有会有多少个重复的了，此例为6.</p><p>$$\tt unique\ count = \underbrace{\frac{n(n+1)}{2}}_{substr\ count} - \underbrace{\sum_{i=1}^n LCP[i]}_{duplicates}$$</p>
 <p>这是LCP的应用之一，利用了LCP本身就是在数重复次数的特征。</p><h2>K common substring problem</h2>
 <p>n个字符串，找出一个子串，它至少是k个字符串的子串，求最大子串。$2\leq k \leq n$</p><p>即如果有k=2，那么这个子串只需要是其中两个的子串就行了，如果k=n，那么就需要是每一个字符串的子串。</p><p>直接上图
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-1bb731fa712f79ec.png" /></figure></p><ul>
+<figure style="flex: 50.4885993485342" ><img loading="lazy" width="1240" height="1228" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b7cb01449aa00a46b95ca35f28751a33.png" /></figure></p><ul>
 <li>图1演示k=3时，找到了<code>ca</code>，即3个串里都有的是<code>ca</code></li>
 <li>图2演示k=2时，找到了<code>bca</code>，即<code>bca</code>存在2个串里</li>
 <li>图3演示的是用了size=4的滑窗才包含了3个字符串，以及最大匹配是<code>AG</code></li>
@@ -143,7 +143,7 @@ LCP|Sorted Suffixes|
 <li>从前面排序，客观上就把来自不同字符串的相同字母打头的子串给排到一起了</li>
 </ul>
 <p>这就是为什么在<code>Suffix</code> Array的内容里面出现Longest Common <code>Prefix</code>的内容的原因了.</p><p>聪明。</p><h2>Longest Repeated Substring (LRS)</h2>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-47d0018c79e7b2b6.png" /></figure><p>这个比暴力遍历要简单太多，直接找LCP最大值即可</p>
+<figure style="flex: 72.68464243845251" ><img loading="lazy" width="1240" height="853" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/ef47276f994f76ccabc2c60900227916.png" /></figure><p>这个比暴力遍历要简单太多，直接找LCP最大值即可</p>
             </div>
         </article>
         <div id="ga-tags">
@@ -155,14 +155,14 @@ LCP|Sorted Suffixes|
 <section id="ga-content_pager">
 
     <div class="next">
-        <a class="ga-highlight" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%9B%9B%EF%BC%9ABinary-Trees-and-Binary-Search-Trees-%28BST%29/">数据结构篇四：Binary-Trees-and-Binary-Search-Trees-(BST)</a>
-        <p class="yue">这是一位 google 工程师分享的8小时的数据结构的视频,我的笔记</p>
+        <a class="ga-highlight" href="/archives/UIImage%E8%BD%ACNSData%E6%9C%89%E6%97%B6%E4%B8%BAnil/">UIImage转NSData有时为nil</a>
+        <p class="yue">一般, 我们会用UIImagePNGRepresentation, UIImagePNGRepresentation来达到目的, 但有时候, 发现它的返回值为nil...不需要怀疑这么简单处理有什么问题, 文档 就是如此:</p>
     </div>
 
 
     <div class="prev">
-        <a class="ga-highlight" href="/archives/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/">翻转二叉树</a>
-        <p class="yue">最近在找工作，所以这些算法梗又出现在了我的阅读视野里，比如经典的homebrew作者吐槽的翻转二叉树的问题。</p>
+        <a class="ga-highlight" href="/archives/El-Captain%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/">El-Captain设置环境变量</a>
+        <p class="yue">这里说的不是设置变量给bash/shell来用, 而是给程序使用, 比如, chromium自36版以后, 就不再内置google api keys, 官方文档说明你打包的时候没有添加key的话, 可以在runtime添加, 比如在系统的环境变量里添加进去.</p>
     </div>
 
 </section>

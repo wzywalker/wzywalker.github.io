@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2022-01-14
                 </time>
                 
-                in <a no-style class="category" href="/category/iOS/">
-                    iOS
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -402,7 +402,7 @@ constraint(lessThanOrEqualToSystemSpacingBelow:multiplier:)
 <li>令B的高度相等</li>
 </ul>
 <p>就把4个A给垂直平均分配了，理解的难点就是guide也当作一个view来用，而语法上又是加到view的属性里的。同时，只要设置guide的高度相等，就会自动占用4个View之外的所有空间平均分配。
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-bf291a7ac1244dfd.png" /></figure></p><p>这么做只是为了演示layout guide，但是虽然理解了，也不知道能用它来干嘛？当成一个隐形的view去做布局？</p><p><strong>Constraint alignment</strong></p><p>通过设置view的<code>alignmentRectInsets</code>，可以改变constrains计算的起点。对我来说，又是一种padding?</p><p>同样的还有自定义baseline的<code>forFirstBaselineLayout and forLastBaselineLayout.</code></p><h3>Intrinsic Content Size</h3>
+<figure style="flex: 78.66449511400651" ><img loading="lazy" width="966" height="614" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2629afe5515d8fa7df75f83b138083fa.png" /></figure></p><p>这么做只是为了演示layout guide，但是虽然理解了，也不知道能用它来干嘛？当成一个隐形的view去做布局？</p><p><strong>Constraint alignment</strong></p><p>通过设置view的<code>alignmentRectInsets</code>，可以改变constrains计算的起点。对我来说，又是一种padding?</p><p>同样的还有自定义baseline的<code>forFirstBaselineLayout and forLastBaselineLayout.</code></p><h3>Intrinsic Content Size</h3>
 <p>button, label, image等会根据内容和预设有一个instrinsic content size，而且可以用来<strong>隐式地</strong>产生约束（<code>NSContentSizeLayoutConstraint</code>）</p><ul>
 <li><code>contentHuggingPriority(for:)</code> 某方向上阻止扩大到比intrinsic size更大的优先级，默认250</li>
 <li><code>contentCompressionResistancePriority(for:)</code>，阻止缩小的优先级，默认750</li>
@@ -517,14 +517,14 @@ constraint(lessThanOrEqualToSystemSpacingBelow:multiplier:)
 <section id="ga-content_pager">
 
     <div class="next">
-        <a class="ga-highlight" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0%5B2%5D/">cs193p_2021_笔记[2]</a>
-        <p class="yue">cs193p_2021_笔记_1</p>
+        <a class="ga-highlight" href="/archives/%E6%8A%8AGAE%E7%A8%8B%E5%BA%8F%E9%80%9A%E8%BF%87SSH%E9%83%A8%E7%BD%B2%E5%88%B0VPS/">把GAE程序通过SSH部署到VPS</a>
+        <p class="yue">大部分在文档上都写了, 写这篇文章的目的是发现现在appcfg.py update xxxx的时候会打开浏览器访问google请求授权(后台内建了一个本地server, 端口是8090, 授权成功后会带授权码请求本地的8090端口, 所以我们在 ssh 环境中是没有浏览器的, 该怎么解决呢?我玩 linux 不多, 就以我的知识量这么解决:</p>
     </div>
 
 
     <div class="prev">
-        <a class="ga-highlight" href="/archives/Drawing/">Drawing</a>
-        <p class="yue">《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第2章</p>
+        <a class="ga-highlight" href="/archives/%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%8C%E9%80%92%E5%BD%92%E4%B8%8E%E5%88%86%E6%B2%BB/">全排列，递归与分治</a>
+        <p class="yue">能够用递归和分治解决的，特征都是下一级做的事跟上一级一样（抽象），最后一层做真正的业务。比如n个数字的全排列，抽象出来就是每n-1个数字的全排列它的难点就在于抽象，因为等于什么都没描述（我要5个数字的全排列，你就说，那好，你告诉我这4个数字的全排列，我就能告诉你5个数字的全排列）。也就是说，尝试用n和n-1的思维（有点像归纳法，动态规划）去描述问题，而不去看能不能解决。具体到这里，以ABCD为例，我们的请求过程应该是这样的</p>
     </div>
 
 </section>

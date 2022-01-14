@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba785d75f2fc02bf53acd6824476cf0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/b3f8e527f1f4c5f1418ca21962b619c2.json"
         }
     </script>
     
@@ -70,8 +70,8 @@
                     2022-01-14
                 </time>
                 
-                in <a no-style class="category" href="/category/AI/">
-                    AI
+                in <a no-style class="category" href="/category/posts/">
+                    posts
                 </a>
                 
                 
@@ -534,7 +534,7 @@ learng useful <code>representations</code> of input data</p><blockquote>
 <blockquote>
 <p>而如果你是一个固定的数据集，比如几万条，那么你把所有的数据跑一遍把这个结果当成数据集（全放在内存里），那也不是不可以在这一步用数据增广。</p></blockquote>
 <h3>Fine-tuning</h3>
-<p>Fine-tuning consists of unfreezing a few of the top layers of a frozen model base used for feature extraction, and jointly training both the newly added part of the model (in this case, the fully connected classifier) and these top layers. This is called fine-tuning because it slightly adjusts the more abstract representations of the model being reused, in order to make them more relevant for the problem at hand.</p><p>前面的feature extraction方式，会把预训练的模型你选中的layers给freeze掉，即不计算梯度。这里之所以叫fine-tuning，意思就是会把最后几层(top-layers)给<code>unfreezing</code>掉，这样的好处是保留低级特征，重新训练高级特征，还保留了原来大型模型的结构，不需要自行构建。</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-78ecf7b5f847c9ef.png" /></figure><blockquote>
+<p>Fine-tuning consists of unfreezing a few of the top layers of a frozen model base used for feature extraction, and jointly training both the newly added part of the model (in this case, the fully connected classifier) and these top layers. This is called fine-tuning because it slightly adjusts the more abstract representations of the model being reused, in order to make them more relevant for the problem at hand.</p><p>前面的feature extraction方式，会把预训练的模型你选中的layers给freeze掉，即不计算梯度。这里之所以叫fine-tuning，意思就是会把最后几层(top-layers)给<code>unfreezing</code>掉，这样的好处是保留低级特征，重新训练高级特征，还保留了原来大型模型的结构，不需要自行构建。</p><figure style="flex: 15.321375186846039" ><img loading="lazy" width="410" height="1338" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/705011af7667b591af29afe03230ecc5.png" /></figure><blockquote>
 <p>但是： it’s only possible to fine-tune the top layers of the convolutional base once the classifier on <code>top has already been trained</code>. 预训练模型没有frezze住的话loss将会很大，所以变成了先train一个大体差不多的classifier，再联合起来train一遍高级特征和classifier:</p></blockquote>
 <ol>
 <li>Add your custom network on top of an already-trained base network.</li>
@@ -559,7 +559,7 @@ learng useful <code>representations</code> of input data</p><blockquote>
 
 <span class="c1"># 注意使用的是matshow而不是show</span>
 </pre></div>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-6f4ca30b4b82a0b2.png" /></figure><p>以上代码是利用了keras的Model特性，将所有layers的输出<strong>摊平</strong>（就是做了一个多头的模型），然后再顺便取了第4和第7个feature map画出来，可以看到，图一感兴趣的是<code>对角线</code>，图二提取的是<code>蓝色的亮点</code>。</p><p>结构化这些输出，可以确信初始layer确实提取的是简单特征，越往后越高级（抽象）。</p><p>A deep neural network effectively acts as an <code>information distillation</code>(信息蒸馏) pipeline, with raw data going in (in this case, RGB pictures) and being repeatedly transformed so that irrelevant information is filtered out (for example, the specific visual appearance of the image), and useful information is <code>magnified and refined</code> (for example, the class of the image).</p><blockquote>
+<figure style="flex: 101.9047619047619" ><img loading="lazy" width="856" height="420" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e5088f559521b7cc9c7b0cb129d275fe.png" /></figure><p>以上代码是利用了keras的Model特性，将所有layers的输出<strong>摊平</strong>（就是做了一个多头的模型），然后再顺便取了第4和第7个feature map画出来，可以看到，图一感兴趣的是<code>对角线</code>，图二提取的是<code>蓝色的亮点</code>。</p><p>结构化这些输出，可以确信初始layer确实提取的是简单特征，越往后越高级（抽象）。</p><p>A deep neural network effectively acts as an <code>information distillation</code>(信息蒸馏) pipeline, with raw data going in (in this case, RGB pictures) and being repeatedly transformed so that irrelevant information is filtered out (for example, the specific visual appearance of the image), and useful information is <code>magnified and refined</code> (for example, the class of the image).</p><blockquote>
 <p>关键词：有用的信息被不断<strong>放大和强化</strong></p></blockquote>
 <p>书里举了个有趣的例子，要你画一辆自行车。你画出来的并不是一辆充满细节的单车，而往往是你抽象出来的单车，你会用基本的线条勾勒出你对单车特征的理解，比如龙头，轮子等关键部件，以及相对位置。画家为什么能画得又真实又好看？那就是他们真的仔细观察了单车，他们绘画的时候用的并不是特征，而是一切细节，然而对于没有受过训练的普通人来说，往往只能用简单几笔勾勒出脑海中的单车的样子（其实并不是样子，而是特征的组合）</p><h4>Visualizing convnet filters</h4>
 <p>通过强化filter对输出的反应并绘制出来，这是从数学方法上直接观察filter，看什么最能“刺激”一个filter，用”梯度上升“最能体现这种思路：</p><p>把output当成loss，用梯度上升（每次修改input_image）训练出来的output就是这个filter的极端情况，可以认为这个filter其实是在提取什么（responsive to）：</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras.applications</span> <span class="kn">import</span> <span class="n">VGG16</span>
@@ -584,7 +584,7 @@ learng useful <code>representations</code> of input data</p><blockquote>
     <span class="n">loss_value</span><span class="p">,</span> <span class="n">grads_value</span> <span class="o">=</span> <span class="n">iterate</span><span class="p">([</span><span class="n">input_img_data</span><span class="p">])</span>
     <span class="n">input_img_data</span> <span class="o">+=</span> <span class="n">grads_value</span> <span class="o">*</span> <span class="n">step</span>  <span class="c1"># 梯度上升</span>
 </pre></div>
-<p>按上述代码的思路结构化输出并绘图：</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-229e54a409162f34.png" /></figure><p>从线条到纹理到物件（眼睛，毛皮，叶子）</p><blockquote>
+<p>按上述代码的思路结构化输出并绘图：</p><figure style="flex: 47.148288973384034" ><img loading="lazy" width="1240" height="1315" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d3df8099cd6c93450e84a4cd01b67d19.png" /></figure><p>从线条到纹理到物件（眼睛，毛皮，叶子）</p><blockquote>
 <p>each layer in a convnet learns a collection of filters such that their inputs can be expressed as a <code>combination of the filters</code>.</p></blockquote>
 <blockquote>
 <p>This is similar to how the Fourier transform decomposes signals onto a bank of cosine functions.</p></blockquote>
@@ -613,7 +613,7 @@ learng useful <code>representations</code> of input data</p><blockquote>
     <span class="n">conv_layer_output_value</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">pooled_grads_value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 <span class="n">heatmap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">conv_layer_output_value</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
-<figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-072a8e278c521822.png" /></figure><p>叠加到原图上去（用cv2融合两张图片，即相同维度的数组以不同权重逐像素相加）：</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-516c39ff29ba0d4d.png" /></figure><h1>Deep learning for text and sequences</h1>
+<figure style="flex: 77.77777777777777" ><img loading="lazy" width="1036" height="666" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9020d228898abcf96e2855b7e028374b.png" /></figure><p>叠加到原图上去（用cv2融合两张图片，即相同维度的数组以不同权重逐像素相加）：</p><figure style="flex: 75.97402597402598" ><img loading="lazy" width="702" height="462" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9261ae2a67e61c26e078db210f218d11.png" /></figure><h1>Deep learning for text and sequences</h1>
 <p>空间上的序列，时间上的序列组成的数据，比如文本，视频，天气数据等，一般用<code>recurrent neural network</code>(RNN)和<code>1D convnets</code></p><blockquote>
 <p>其实很多名词，包括convnets，我并没有在别的地方看到过，好像就是作者自己发明的，但这些不重要，知道它描述的是什么就可以了，不一定要公认术语。</p></blockquote>
 <p>通用场景：</p><ul>
@@ -732,7 +732,7 @@ learng useful <code>representations</code> of input data</p><blockquote>
 <li>但仍然理解为filter在全句里提取局部特征</li>
 </ol>
 <p>归桕结底，图片的最小单元是一个像素（一个数字），而序列（我们这里说文本）的最小单元是token，而token又被我们定义为vector（一组数字）了，那么卷积核就限制在至少要达到最小单元(vector)的维度了。</p><h3>Combining CNNs and RNNs to process long sequences</h3>
-<p>卷积能通过加深网络获取更大的感受野，但仍然是“位置无关”的，因为每个filter本就是在整个序列里搜索相同的特征。</p><p>但是它确实提取出了特征，是否可把位置关系等上下文的作业交给下游任务RNN做呢？</p><figure  size-undefined><img loading="lazy" width="-1" height="-1" src="../assets/1859625-bc08eb7926b73ca5.png" /></figure><p>不但实现，而且堆叠两种网络，还可以把数据集做得更大（CNN是矩阵运算，还能用GPU加速）。</p><h1>Advanced deep-learning best practices</h1>
+<p>卷积能通过加深网络获取更大的感受野，但仍然是“位置无关”的，因为每个filter本就是在整个序列里搜索相同的特征。</p><p>但是它确实提取出了特征，是否可把位置关系等上下文的作业交给下游任务RNN做呢？</p><figure style="flex: 50.750750750750754" ><img loading="lazy" width="676" height="666" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/bc69a05bd9def95c42c6ce450a5cf164.png" /></figure><p>不但实现，而且堆叠两种网络，还可以把数据集做得更大（CNN是矩阵运算，还能用GPU加速）。</p><h1>Advanced deep-learning best practices</h1>
 <p>这一章是介绍了更多的网络（从keras的封装特性出发）结构和模块，以及batch normalization, model ensembling等知识。</p><h2>beyond Sequential model</h2>
 <p>前面介绍的都是Sequential模型，就是一个接一个地layer前后堆叠，现实中有很多场景并不是一进一出的：</p><ol>
 <li>multi-input model</li>
@@ -1069,14 +1069,14 @@ $
 <section id="ga-content_pager">
 
     <div class="next">
-        <a class="ga-highlight" href="/archives/ES6%E4%B8%ADgenerator%E4%BC%A0%E5%8F%82%E4%B8%8E%E8%BF%94%E5%9B%9E%E5%80%BC/">ES6中generator传参与返回值</a>
-        <p class="yue">先看两个例子,1,</p>
+        <a class="ga-highlight" href="/archives/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%88%A9%E7%94%A8Privoxy%2CShadowsocks%2CKcptun%E5%81%9Ahttp%E4%BB%A3%E7%90%86%E6%8E%92%E5%9D%91%E8%AE%B0%E5%BD%95/">树莓派利用Privoxy,Shadowsocks,Kcptun做http代理排坑记录</a>
+        <p class="yue">我用树莓派做翻墙网关, 透明网关, 通通绕到坑里出不来了, 方案很多, 思路是树莓派翻, 智能dns, 智能国内外分流, 外加让树莓派成为局域网的网关以便让局域网用户无感翻墙.</p>
     </div>
 
 
     <div class="prev">
-        <a class="ga-highlight" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0/">李宏毅MACHINE-LEARNING-2021-SPRING笔记</a>
-        <p class="yue"></p>
+        <a class="ga-highlight" href="/archives/%E5%A4%87%E4%BB%BD%E7%AF%87%E7%BB%98%E5%88%B6%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E7%9A%84%E6%96%87%E7%AB%A0/">备份篇绘制聊天气泡的文章</a>
+        <p class="yue">记记思路- (void)drawRect:(CGRect)rect</p>
     </div>
 
 </section>
