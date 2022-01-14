@@ -9,8 +9,8 @@
     <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
     <meta name="generator" content="Maverick 1.2.1" />
     <meta name="template" content="Galileo" />
-    <link rel="alternate" type="application/rss+xml" title="Maverick &raquo; RSS 2.0" href="/feed/index.xml" />
-    <link rel="alternate" type="application/atom+xml" title="Maverick &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/galileo-8d8763e752.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8868.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
@@ -19,21 +19,21 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/2ff3ee0e06a1458394c0a7c92a12503f.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/2c80736c6795903d11b9000926ef666b.json"
         }
     </script>
     
-<title>从投影、正交补角度证明（推导）最小二乘法公式 - Maverick</title>
+<title>从投影、正交补角度证明（推导）最小二乘法公式 - walker's code blog</title>
 <meta name="author" content="walker" />
 <meta name="description" content="学习线性回归的时候，会教我们$X\theta=y$可以直接用最小二乘法直接把$\theta$求出来：$\theta=(X^TX)^{-1}X^Ty$并且还在我之前的博文里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。首先，在吴恩达的教材里，这个并不叫最小二乘(least suqare），而是叫Normal Equation method，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(Projection)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：首先，预备知识子空间" />
-<meta property="og:title" content="从投影、正交补角度证明（推导）最小二乘法公式 - Maverick" />
+<meta property="og:title" content="从投影、正交补角度证明（推导）最小二乘法公式 - walker's code blog" />
 <meta property="og:description" content="学习线性回归的时候，会教我们$X\theta=y$可以直接用最小二乘法直接把$\theta$求出来：$\theta=(X^TX)^{-1}X^Ty$并且还在我之前的博文里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。首先，在吴恩达的教材里，这个并不叫最小二乘(least suqare），而是叫Normal Equation method，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(Projection)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：首先，预备知识子空间" />
-<meta property="og:site_name" content="Maverick" />
+<meta property="og:site_name" content="walker's code blog" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/archives/%E4%BB%8E%E6%8A%95%E5%BD%B1%E3%80%81%E6%AD%A3%E4%BA%A4%E8%A1%A5%E8%A7%92%E5%BA%A6%E8%AF%81%E6%98%8E%EF%BC%88%E6%8E%A8%E5%AF%BC%EF%BC%89%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E5%85%AC%E5%BC%8F/" />
 <meta property="og:image" content="" />
 <meta property="article:published_time" content="2021-01-25T00:00:00-00.00" />
-<meta name="twitter:title" content="从投影、正交补角度证明（推导）最小二乘法公式 - Maverick" />
+<meta name="twitter:title" content="从投影、正交补角度证明（推导）最小二乘法公式 - walker's code blog" />
 <meta name="twitter:description" content="学习线性回归的时候，会教我们$X\theta=y$可以直接用最小二乘法直接把$\theta$求出来：$\theta=(X^TX)^{-1}X^Ty$并且还在我之前的博文里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。首先，在吴恩达的教材里，这个并不叫最小二乘(least suqare），而是叫Normal Equation method，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(Projection)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：首先，预备知识子空间" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:image" content="" />
@@ -48,8 +48,8 @@
             <header id="ga-header">
                 <div first>
                     <aside id="ga-brand">
-                        <h1 class="brand"><a class="no-style" href="/">Maverick</a></h1>
-                        <p>This is Maverick, Theme Galileo.</p>
+                        <h1 class="brand"><a class="no-style" href="/">walker's code blog</a></h1>
+                        <p>coder, reader</p>
                     </aside>
                 </div>
                 <div second id="ga-nav">
@@ -181,7 +181,7 @@ $A = \begin{bmatrix}1&amp;1\1&amp; 2\ 1&amp; 3\end{bmatrix}, \vec b = \begin{bma
                 <footer class="ga-mono" id="ga-footer">
                     <section>
                         <span id="ga-uptime"></span>
-                        <span class="brand">Maverick</span>
+                        <span class="brand">walker's code blog</span>
                     </section>
                     <section>
                         <p class="copyright">
