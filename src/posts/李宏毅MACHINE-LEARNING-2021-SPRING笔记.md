@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 李宏毅MACHINE-LEARNING-2021-SPRING笔记
+title: 李宏毅MACHINE LEARNING 2021 SPRING笔记
 slug: 李宏毅MACHINE-LEARNING-2021-SPRING笔记
 date: 2021-10-03 00:00
 status: publish

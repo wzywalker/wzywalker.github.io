@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 数据结构篇八：Balanced-Binary-Search-Trees(BBST)
+title: 数据结构篇八：Balanced Binary Search Trees(BBST)
 slug: 数据结构篇八：Balanced-Binary-Search-Trees(BBST)
 date: 2021-11-12 07:00
 status: publish

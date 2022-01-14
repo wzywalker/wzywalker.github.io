@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 数据结构篇九：Indexed-Priority-Queue
+title: 数据结构篇九：Indexed Priority Queue
 slug: 数据结构篇九：Indexed-Priority-Queue
 date: 2021-11-12 08:00
 status: publish

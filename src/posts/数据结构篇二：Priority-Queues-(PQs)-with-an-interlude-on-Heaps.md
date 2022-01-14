@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 数据结构篇二：Priority-Queues-(PQs)-with-an-interlude-on-Heaps
+title: 数据结构篇二：Priority Queues (PQs) with an interlude on Heaps
 slug: 数据结构篇二：Priority-Queues-(PQs)-with-an-interlude-on-Heaps
 date: 2021-11-12 01:00
 status: publish

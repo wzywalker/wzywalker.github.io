@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 数据结构篇七：Suffix-Array,-Longest-Common-Prefix-(LCP)-array
+title: 数据结构篇七：Suffix Array, Longest Common Prefix (LCP) array
 slug: 数据结构篇七：Suffix-Array,-Longest-Common-Prefix-(LCP)-array
 date: 2021-11-12 06:00
 status: publish

@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 数据结构篇一：Array,-Linked-List,-Stack,-Queues
-slug: 数据结构篇一：Array,-Linked-List,-Stack,-Queues
+title: 数据结构篇一：Array, Linked-List, Stack, Queues
+slug: 数据结构篇一：Array-Linked-List-Stack-Queues
 date: 2021-11-12 00:00
 status: publish
 author: walker

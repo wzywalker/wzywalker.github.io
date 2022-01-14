@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 数据结构篇五：Hash-Tables
+title: 数据结构篇五：Hash Tables
 slug: 数据结构篇五：Hash-Tables
 date: 2021-11-12 04:00
 status: publish

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 数据结构篇四：Binary-Trees-and-Binary-Search-Trees-(BST)
+title: 数据结构篇四：Binary Trees and Binary Search Trees (BST)
 slug: 数据结构篇四：Binary-Trees-and-Binary-Search-Trees-(BST)
 date: 2021-11-12 03:00
 status: publish

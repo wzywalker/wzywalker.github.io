@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 《Effective-Objective-C-2-0》笔记第1-2章
-slug: 《Effective-Objective-C-2-0》笔记第1-2章
+title: 《Effective Objective-C 2.0》笔记第1-2章
+slug: 《Effective-Objective-C-2.0》笔记第1-2章
 date: 2022-01-14 00:00
 status: publish
 author: walker

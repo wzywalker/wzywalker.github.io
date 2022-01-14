@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 数据结构篇六：Fenwick-Tree-(Binary-Indexed-Tree)
+title: 数据结构篇六：Fenwick Tree (Binary Indexed Tree)
 slug: 数据结构篇六：Fenwick-Tree-(Binary-Indexed-Tree)
 date: 2021-11-12 05:00
 status: publish
