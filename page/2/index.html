@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/77827c3aeb31044bbd156ff3ba8e3368.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/40cba7715e63db76fe2969c8abddf3cd.json"
         }
 
     </script>
@@ -55,6 +55,93 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%94%EF%BC%9AHash-Tables/" target="_self">数据结构篇五：Hash Tables</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%94%EF%BC%9AHash-Tables/" target="_self">
+                <time class="text-uppercase">
+                    November 12 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><hr />
+<h1>Hash Tables</h1>
+<ul>
+<li>key-value pair</li>
+<li>using <code>Hashing</code> technique</li>
+<li>often used tracking item frequencies</li>
+</ul>
+<p>what's <em>hash function</em>?</p><ul>
+<li>maps a key <code>x</code> to a whole number in a fixed <code>range</code>.<ul>
+<li>e.g. $H(x) = (x^2 - 6x + 9) % 10$ maps (0, 9)</li>
+<li>这个方程会为不同的x产生一样的y -&gt; <code>hash collision</code></li>
+</ul>
+</li>
+<li>can hash arbitrary objects like string, list, tuple...</li>
+<li>must be <code>deterministic</code>(确定的x产生确定的y)<ul>
+<li>因此key的应该是<code>immutable</code>的类型</li>
+</ul>
+</li>
+</ul>
+<p>关键词是<code>range</code>，你设计的function总要mod一下，将结果限制在一个范围内。这里你应该暂时能推测出hashtable的key可能就是数字吧？</p><p><strong>hash collision</strong></p><ul>
+<li><code>separate chaining</code></li>
+</ul>
+<p>用一种数据结构（通常是链表）保留所有冲突的值</p><ul>
+<li><code>open addressing</code></li>
+</ul>
+<p>为冲突的值选择一个offset（地址/值）保存 -&gt; <code>probing sequence P(x)</code></p><p>不管是怎么解决冲突，<strong>worst</strong>的情况下，hash table的操作时间也会由O(1)变成O(n)</p><p>怎么用HT来查找呢？不是把hash后的结果拼到原数据上，而是每次查询前，对key进行一次hash function，就能去查询了。</p><h2>Open Addressing</h2>
+<p><strong>probing sequences</strong></p><ul>
+<li>linear probing: P(x) = ax + b</li>
+<li>quadratic probing: p(x) = $ax^2 + bx + c$</li>
+<li>double hashing: p(k, x) = $x * H_2(k)$ 双重hash</li>
+<li>pseudo random number generator: p(k, x) = x * rng(H(k), x) 用H(k)(即hash value)做种的随机数</li>
+</ul>
+<p>总之就是在这样一个序列里找下一个位置</p><p>假设一个table size 为N的HT，使用开放寻址的伪代码：</p><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">keyHash</span> <span class="o">=</span> <span class="n">H</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>   <span class="c1"># 直接计算出来的hash value</span>
+<span class="n">index</span> <span class="o">=</span> <span class="n">keyHash</span>  <span class="c1"># 偏移过后存在HT里的index</span>
+
+<span class="k">while</span> <span class="n">table</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">keyHash</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span> <span class="o">%</span> <span class="n">N</span>  <span class="c1"># 加上偏移，考虑size（N）</span>
+    <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># 游标加1</span>
+
+<span class="c1"># now can insert (k,v) at table[index]</span>
+</pre></div>
+<h3>Chaos with cycles</h3>
+<p><strong>Linear Probling (LP)</strong></p><p>LP中，如果你<em>运气不好</em>，产生的序列的下一个值永远是occupied的状态（一般是值域小于size），就进入死循环了。</p><p>假设p(x) = 3x, H(k) = 4, N = 9
+那么H(k)+P(x) % N 只会产生{4,7,1}，如果这三个位置被占用，那就陷入了永远寻找下一个的无限循环中。</p><p>一般是限制probing function能返回刚好N个值。</p><blockquote>
+<p>当p(x)=ax的a与size的N互质，即没有公约数，<code>GCD(a, N) = 1</code>一般能产生刚好N个值。(Greatest Common Denominator)</p></blockquote>
+<blockquote>
+<p>注意，为了性能和效率的平衡，有<code>load factor</code>的存在，所以到了阈值，size就要加倍，N的变化，将会使得<code>GCD(a, N) = 1</code>的a的选择有变化，而且之前对N取模，现在取值也变发生变化，这时候需要重新map</p></blockquote>
+<p>重新map不再按元素当初添加的顺序，而是把现有HT里的值按索引顺序重新map一遍。比如第一个是k6, 即第6个添加进来的，但是现在第一个就重新计算它的值，填到新的HT里面去。</p><p><strong>Quadratic Probing （QP）</strong></p><p>QP 同样有chaos with cycles的问题，通用解决办法，三种：</p><ol>
+<li>p(x) = $x^2$, size选一个 prime number &gt; 3, and $\alpha \leq \frac{1}{2}$</li>
+<li>p(x) = $(x^2 + x) / 2$, keep the size a power of 2 （不需要是素数了）</li>
+<li>p(x)= $(-1^x) \times x^2$, make size prime N $\equiv 3$ mod 4 ???</li>
+</ol>
+<p><strong>Double Hashing</strong></p><p>Double Hashing: P(x) = $x \times H_2(k)$可见仍然类似一个一次的线性方程，$H_2(k)$就类似于ax中的a，设为$\delta$，相比固定的a, 这里只是变成了动态的，这样不同的key的待选序列就是不一样的（可以理解为系数不同了）</p><p>解决chaos:</p><ol>
+<li>size N to be a prime number</li>
+<li>calculate: $\delta = H_2(k)$ mod N<ul>
+<li>$\delta=0$ 时offset就没了，所以需要人为改为1</li>
+<li>$1 \leq \delta \lt N$ and GCD($\delta$, N) = 1</li>
+</ul>
+</li>
+</ol>
+<p>可见，虽然系数是“动态”的了，但是取值还是（1，N）中的一个而已，hash只是让其动起来的一个原因，而不是参与计算的值。</p><p>我们本来就是在求hash value，结果又要引入另一个hash function，显然这个$H_2$不能像外层这样复杂，一般是针对常见的key类型(string, int...-&gt; fundamental data type)的<code>universal hash functions</code></p><blockquote>
+<p>因为N要是一个素数，所以在double size的时候，还要继续往上找直到找到一个素数为止，比如N=7, double后，N=14，那么最终，N=17</p></blockquote>
+<figure  style="flex: 67.68558951965065" ><img width="1240" height="916" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/cbae1de97a3f72ae84ea59804293ec56.png" alt=""/></figure><h3>Issues with removing</h3>
+<p>因为冲突的hash value需要probing，probing的依据是从序列里依次取出下一个位置，检查这个位置<strong>有没有被占用</strong>，那么问题就来了，如果一个本被占用的位置，因为元素需要删除，反而变成没有占用了，这有点类似删除树节点，不但要考虑删除，还要考虑这个位置怎么接续。</p><p><strong>lazy deletion</strong>
+但HT机制比树要复杂，为了避免反复应用probing函数重新摆放后续所有节点，干脆就在删除的位置放置一个预设的标识，我们称为墓碑(<code>tombstone</code>)，而不是直接置空，然后所有的查找和添加加上这一条规则，就能快速删除又无需重新排序。</p><p>大量删除会造成空间浪费，但无需立即处理：</p><ol>
+<li>添加元素允许添加到墓碑位置</li>
+<li>到达阈值容量需要倍增的时候有一次重排，这个时候就可以移除所有的墓碑</li>
+</ol>
+<p>如果查找一个hash value，连续3个都是墓碑，第4个才是它，这是不是有点浪费时间？
+确实，所以还可以优化，当你查找过一次之后，就可以把它移到第一个墓碑的位置，这样，<strong>下次</strong>查询的时候速度就会快很多了。</p><p>整个机制，叫<code>lazy deletion</code></p><figure class="vertical-figure" style="flex: 29.61816305469556" ><img width="1148" height="1938" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a935a20b4bc9641962766872aace8306.png" alt=""/></figure></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%94%EF%BC%9AHash-Tables/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%9B%9B%EF%BC%9ABinary-Trees-and-Binary-Search-Trees-%28BST%29/" target="_self">数据结构篇四：Binary Trees and Binary Search Trees (BST)</a></h1>
@@ -1717,247 +1804,6 @@ cs193p_2021_笔记_6_Persistence
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B6%5D_Persistence/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B5%5D_Property-Wrapper/" target="_self">cs193p_2021笔记[5]_Property-Wrapper</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B5%5D_Property-Wrapper/" target="_self">
-                <time class="text-uppercase">
-                    October 24 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p><a href="https://www.jianshu.com/p/998b0ef4a2cd">cs193p_2021_笔记_1</a>
-<a href="https://www.jianshu.com/p/af0ad1bead34">cs193p_2021_笔记_2</a>
-<a href="https://www.jianshu.com/p/d103f8d12052">cs193p_2021_笔记_3_Animation_Transition</a>
-<a href="https://www.jianshu.com/p/41e7309c7f55">cs193p_2021_笔记_4_Color_Image_Gesture</a>
-cs193p_2021_笔记_5_Property Wrapper
-<a href="https://www.jianshu.com/p/a315274a4fd2">cs193p_2021_笔记_6_Persistence</a>
-<a href="https://www.jianshu.com/p/f4ae879eef9c">cs193p_2021_笔记_7_Document Architecture</a>
-<a href="https://www.jianshu.com/p/2136bdc2c6f6">cs193p_2021_笔记_8</a></p><hr />
-<h1>Property Wrappers</h1>
-<p>C#中的<code>Attributes</code>，python中的<code>Decorators</code>, Java的<code>Annonations</code>，类似的设计模式。</p><ul>
-<li>A property wrapper is actually a <code>struct</code>.</li>
-<li>这个特殊的<code>struct</code>封装了一些模板行为应用到它们wrap的vars上：<ol>
-<li>Making a var live in the heap (<code>@State</code>)</li>
-<li>Making a var publish its changes (<code>@Published</code>)</li>
-<li>Causing a View to redraw when a published change is detected (<code>@ObservedObject</code>)</li>
-</ol>
-</li>
-</ul>
-<p>即能够分配到堆上，能够通知状态变化和能重绘等，可以理解为<code>语法糖</code>。</p><div class="highlight"><pre><span></span><span class="p">@</span><span class="n">Published</span> <span class="kd">var</span> <span class="nv">emojiArt</span><span class="p">:</span> <span class="n">EmojiArt</span> <span class="p">=</span> <span class="n">EmojiArt</span><span class="p">()</span>
-
-<span class="c1">// ... is really just this struct ...</span>
-<span class="kd">struct</span> <span class="nc">Published</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nv">wrappedValue</span><span class="p">:</span> <span class="n">EmojiArt</span>
-    <span class="kd">var</span> <span class="nv">projectedValue</span><span class="p">:</span> <span class="n">Publisher</span><span class="p">&lt;</span><span class="n">EmojiArt</span><span class="p">,</span> <span class="n">Never</span><span class="p">&gt;</span>  <span class="c1">// i.e. $</span>
-<span class="p">}</span>
-
-<span class="c1">// `projected value`的类型取决于wrapper自己，比如本例就是一个`Publisher`</span>
-
-<span class="c1">// 我理解为一个属性和一个广播器</span>
-
-<span class="c1">// ... and Swift (approximately) makes these vars available to you ...</span>
-<span class="kd">var</span> <span class="nv">_emojiArt</span><span class="p">:</span> <span class="n">Published</span> <span class="p">=</span> <span class="n">Published</span><span class="p">(</span><span class="n">wrappedValue</span><span class="p">:</span> <span class="n">EmojiArt</span><span class="p">())</span> 
-<span class="kd">var</span> <span class="nv">emojiArt</span><span class="p">:</span> <span class="n">EmojiArt</span> <span class="p">{</span>
-     <span class="kr">get</span> <span class="p">{</span> <span class="n">_emojiArt</span><span class="p">.</span><span class="n">wrappedValue</span> <span class="p">}</span>
-     <span class="kr">set</span> <span class="p">{</span> <span class="n">_emojiArt</span><span class="p">.</span><span class="n">wrappedValue</span> <span class="p">=</span> <span class="n">newValue</span> <span class="p">}</span>
- <span class="p">}</span>
-</pre></div>
-<p>把get,set直接通过<code>$emojiArt</code>(即projectedValue)来使用</p><p>当一个<code>Published</code>值发生变化：</p><ul>
-<li>It publishes the change through its <em>projectedValue</em> (<code>$emojiArt</code>) which is a <code>Publisher</code>.</li>
-<li>It also invokes <code>objectWillChange.send()</code> in its enclosing <code>ObservableObject</code>.</li>
-</ul>
-<p>下面列的几种<code>Property wrapper</code>，我们主要关心最核心的两个概念，<code>wrappedValue</code>和<code>projectedValue</code>是什么就行了:</p><h2>@State</h2>
-<p>这是第二次提到了，在<code>Property Observers</code>一节里预告过，基本上点<code>@</code>的，大都为<code>Property Wrapper</code>的内容。</p><ul>
-<li>The wrappedValue is: <code>anything</code> (but almost certainly a value type).</li>
-<li>What it does:<ul>
-<li>stores the wrappedValue in the heap;</li>
-<li>when it changes, <code>invalidates</code> the <code>View</code>.</li>
-</ul>
-</li>
-<li>Projected value (i.e. $): a <code>Binding</code> (to that <em>value in the heap</em>).</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">foo</span><span class="p">:</span> <span class="nb">Int</span>
-<span class="kd">init</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">_foo</span> <span class="p">=</span> <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">initiaValue</span><span class="p">:</span> <span class="mi">5</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></div>
-<p>注意<code>_</code>和<code>$</code>的区别。</p><h2>@StateObject &amp; @ObservedObject</h2>
-<ul>
-<li>The wrappedValue is: <code>anything</code> that implements the <code>ObservableObject</code> protocol (ViewModels).</li>
-<li>What it does:<ul>
-<li><code>invalidates</code> the <code>View</code> when wrappedValue does <em>objectWillChange.send()</em>.</li>
-</ul>
-</li>
-<li>Projected value (i.e. $): a <code>Binding</code> (to the vars of the wrappedValue (a <em>ViewModel</em>)).</li>
-</ul>
-<blockquote>
-<p><strong>@StateObject V.S. @State</strong></p></blockquote>
-<ul>
-<li>一个类型是<code>ObservableObject</code>s， 一个是value type</li>
-</ul>
-<blockquote>
-<p><strong>@StateObject V.S. @ObservedObject</strong></p></blockquote>
-<ul>
-<li>@StateObject is a &quot;source of truth&quot;，也就是说可以直接赋值：<code>@StateObject var foo = SomeObservableObject()</code></li>
-<li>能用在<em>View, APP, Scene</em>等场景</li>
-<li>如果用在View里，生命周期与View一致</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="p">@</span><span class="n">main</span>
-<span class="kd">struct</span> <span class="nc">EmojiArtApp</span><span class="p">:</span> <span class="n">App</span> <span class="p">{</span>
-    <span class="c1">// stateObject, source of truth</span>
-    <span class="c1">// defined in the app</span>
-    <span class="p">@</span><span class="n">StateObject</span> <span class="kd">var</span> <span class="nv">paletteStore</span> <span class="p">=</span> <span class="n">PaletteStore</span><span class="p">(</span><span class="n">named</span><span class="p">:</span> <span class="s">&quot;default&quot;</span><span class="p">)</span>
-
-    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">Scene</span> <span class="p">{</span>
-    <span class="n">DocumentGroup</span><span class="p">(</span><span class="n">newDocument</span><span class="p">:</span> <span class="p">{</span> <span class="n">EmojiArtDocument</span><span class="p">()</span> <span class="p">})</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span>
-        <span class="n">EmojiArtDocumentView</span><span class="p">(</span><span class="n">document</span><span class="p">:</span> <span class="n">config</span><span class="p">.</span><span class="n">document</span><span class="p">)</span>
-            <span class="p">.</span><span class="n">environmentObject</span><span class="p">(</span><span class="n">paletteStore</span><span class="p">)</span>  <span class="c1">// passed by environment</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-<h2>@Binding</h2>
-<ul>
-<li>The wrappedValue is: <code>a value</code> that is bound to something else.</li>
-<li>What it does:<ul>
-<li>gets/sets the value of the wrappedValue from <code>some other source</code>.</li>
-<li>when the bound-to value changes, it <code>invalidates</code> the <code>View</code>.</li>
-<li>Form表单典型应用场景，有UI变化的控件</li>
-<li>手势过程中的State, 或drag时是否targted</li>
-<li>模态窗口的状态</li>
-<li>分割view后共享状态</li>
-<li>总之，数据源只有一个(source of the truth)的场景，就不需要用两个@State而用@Binding,</li>
-</ul>
-</li>
-<li>Projected value (i.e. $): a Binding (self; i.e. the Binding itself)</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">MyView</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
-      <span class="p">@</span><span class="n">State</span> <span class="kd">var</span> <span class="nv">myString</span> <span class="p">=</span> <span class="err">“</span><span class="n">Hello</span><span class="err">”</span>               <span class="c1">// 1</span>
-      <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
-          <span class="n">OtherView</span><span class="p">(</span><span class="n">sharedText</span><span class="p">:</span> <span class="err">$</span><span class="n">myString</span><span class="p">)</span>        <span class="c1">// 2</span>
-      <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="kd">struct</span> <span class="nc">OtherView</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
-      <span class="p">@</span><span class="n">Binding</span> <span class="kd">var</span> <span class="nv">sharedText</span><span class="p">:</span> <span class="n">string</span>             <span class="c1">// 3</span>
-      <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
-          <span class="n">Text</span><span class="p">(</span><span class="n">sharedText</span><span class="p">)</span>                        <span class="c1">// 4</span>
-          <span class="n">TextField</span><span class="p">(</span><span class="s">&quot;shared&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="err">$</span><span class="n">sharedText</span><span class="p">)</span>  <span class="c1">// 5 _myString.projectValue.projectValue</span>
-      <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-<ol>
-<li><code>_myString</code>是实际变量，包含一个<code>wrappedValue</code>，一个<code>projectedValue</code></li>
-<li><code>myString</code>就是<code>_myString.wrappedValue</code></li>
-<li><code>$myString</code>是<code>_myString.projectedValue</code>，<ul>
-<li>是一个<code>Binding&lt;String&gt;</code>，传值和接值用的就是它</li>
-<li>所以传<code>$myString</code>的地方也可以用<code>_myString.projectedValue</code>代替，学习阶段的话</li>
-</ul>
-</li>
-<li>要把<code>projectedValue</code>层层传递下去，并不是用同一个<code>projectedValue</code>，而是设计成了<code>Binding&lt;T&gt;</code><ul>
-<li>参考上面代码块的第5条</li>
-</ul>
-</li>
-</ol>
-<p>其它</p><ul>
-<li>也可以绑定一个常量：<code>OtherView(sharedText: .constant(“Howdy”))</code></li>
-<li>computed binding: <code>Binding(get:, set:).</code></li>
-</ul>
-<p>比如你的view是一个小组件，里面有一个<code>Binding var user: User</code>，那么在preview里面怎么传入这个User呢？用常量：</p><div class="highlight"><pre><span></span><span class="kd">static</span> <span class="kd">var</span> <span class="nv">preview</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
-    <span class="n">myView</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="p">.</span><span class="n">constant</span><span class="p">(</span><span class="n">User</span><span class="p">(...)))</span>
-<span class="p">}</span>
-</pre></div>
-<h2>@EnvironmenetObject</h2>
-<ul>
-<li>The wrappedValue is: <code>ObservableObject</code> obtained via .environmentObject() sent to the View.</li>
-<li>What it does: <code>invalidates</code> the View when wrappedValue does objectWillChange.send().</li>
-<li>Projected value (i.e. $): a <code>Binding</code> (to the vars of the wrappedValue (a ViewModel)).</li>
-</ul>
-<p>与<code>@ObservedObject</code>用法稍有点不同，有单独的赋值接口：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">myView</span> <span class="p">=</span> <span class="n">MyView</span><span class="p">().</span><span class="n">environmentObject</span><span class="p">(</span><span class="n">theViewModel</span><span class="p">)</span>
-<span class="c1">// 而@ObservedObject是一个普通的属性</span>
-<span class="kd">let</span> <span class="nv">myView</span> <span class="p">=</span> <span class="n">MyView</span><span class="p">(</span><span class="n">viewModel</span><span class="p">:</span> <span class="n">theViewModel</span><span class="p">)</span>
-
-<span class="c1">// Inside the View ...</span>
-<span class="p">@</span><span class="n">EnvironmentObject</span> <span class="kd">var</span> <span class="nv">viewModel</span><span class="p">:</span> <span class="n">ViewModelClass</span> 
-<span class="c1">// ... vs ...</span>
-<span class="p">@</span><span class="n">ObservedObject</span> <span class="kd">var</span> <span class="nv">viewModel</span><span class="p">:</span> <span class="n">ViewModelClass</span>
-</pre></div>
-<ul>
-<li>visible to all views in your body (except modallay presented ones)</li>
-<li>多用于多个view共享ViewModel的时候</li>
-</ul>
-<h2>@Environment</h2>
-<ul>
-<li>与<code>@EnvironmentObject</code>完全不是同一个东西</li>
-<li>这是<code>Property Wrapper</code>不只有两个变量（warped..., projected...）的的一个应用</li>
-<li>通过<code>keyPath</code>来使用：<code>@Environment(\.colorScheme) var colorScheme</code></li>
-<li>wrappedValue的类型是通过<code>keyPath</code>声明时设置的</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="n">view</span><span class="p">.</span><span class="n">environment</span><span class="p">(</span><span class="err">\</span><span class="p">.</span><span class="n">colorScheme</span><span class="p">,</span> <span class="p">.</span><span class="n">dark</span><span class="p">)</span>
-</pre></div>
-<p>so:</p><ul>
-<li>The wrappedValue is: the value of some var in <code>EnvironmentValues</code>.</li>
-<li>What it does: gets/sets a value of some var in <code>EnvironmentValues</code>.</li>
-<li>Projected value (i.e. $): none.</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="c1">// someView pop 一个 modal 的 myView,传递 environment</span>
-<span class="n">someView</span><span class="p">.</span><span class="n">sheet</span><span class="p">(</span><span class="n">isPresented</span><span class="p">:</span> <span class="n">myCondition</span><span class="p">){</span>
-    <span class="n">myView</span><span class="p">(...</span><span class="kd">init</span><span class="p">...)</span>
-    <span class="p">.</span><span class="n">enviroment</span><span class="p">(</span><span class="err">\</span><span class="p">.</span><span class="n">colorScheme</span><span class="p">,</span> <span class="n">colorScheme</span><span class="p">)</span> 
-<span class="p">}</span>
-</pre></div>
-<p>除了深色模式，还有一个典型的应用场景就是编辑模式<code>\.editMode</code>，比如点了编辑按钮后。</p><blockquote>
-<p><code>EditButton</code>是一个封装了UI和行为的控件，它只做一件事，就是更改<code>\.editmode</code>这个环境变量(的<code>isEditing</code>)</p></blockquote>
-<h2>@Publisher</h2>
-<p>It is an object that <code>emits values</code> and possibly a <code>failure object</code> if it fails while doing so.</p><div class="highlight"><pre><span></span><span class="n">Publisher</span><span class="p">&lt;</span><span class="n">Output</span><span class="p">,</span> <span class="n">Failure</span><span class="p">&gt;</span>
-</pre></div>
-<ul>
-<li>Failure需要实现<code>Error</code>，如果没有，可以传<code>Never</code></li>
-</ul>
-<h3>订阅</h3>
-<p>一种简单用法，<code>sink</code>:</p><div class="highlight"><pre><span></span><span class="n">cancellable</span> <span class="p">=</span> <span class="n">myPublisher</span><span class="p">.</span><span class="n">sink</span><span class="p">(</span>
-    <span class="n">receiveCompletion</span><span class="p">:{</span><span class="n">resultin</span><span class="p">...},</span> <span class="c1">//result is a Completion&lt;Failure&gt; enum</span>
-        <span class="n">receiveValue</span><span class="p">:</span> <span class="p">{</span> <span class="n">thingThePublisherPublishes</span> <span class="k">in</span> <span class="p">.</span> <span class="p">.</span> <span class="p">.</span> <span class="p">}</span>
-  <span class="p">)</span>
-</pre></div>
-<p>返回一个<code>Cancellable</code>，可以随时<code>.cancel()</code>，只要你持有这个<code>cancellable</code>，就能随时用这个sink</p><p>View有自己的订阅方式：</p><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">onReceive</span><span class="p">(</span><span class="n">publisher</span><span class="p">)</span> <span class="p">{</span> <span class="n">thingThePublisherPublishes</span> <span class="k">in</span>
-    <span class="c1">// do whatever you want with thingThePublisherPublishes </span>
-<span class="p">}</span>
-</pre></div>
-<ol>
-<li><code>.onReceive</code> will automatically <code>invalidate</code> your View (causing a redraw).</li>
-<li>既然参数是publisher，所以是一个binding的变量，即带<code>$</code>使用：</li>
-</ol>
-<div class="highlight"><pre><span></span><span class="p">.</span><span class="n">onReceive</span><span class="p">(</span><span class="err">$</span><span class="n">aBindData</span><span class="p">)</span> <span class="p">{</span> <span class="n">bind_data</span> <span class="k">in</span> 
-    <span class="c1">// my code</span>
-<span class="p">}</span>
-</pre></div>
-<p>publisher来源：</p><ol>
-<li><code>$</code> in front of vars marked <code>@Published</code><ul>
-<li>还记得$就是取的projectedValue吗？</li>
-<li>一般的projectedValue是一个<em>Binding</em>，Published的是是个<em>Publisher</em></li>
-</ul>
-</li>
-<li>URLSession’s <code>dataTaskPublisher</code> (publishes the Data obtained from a URL)</li>
-<li><code>Timer</code>’s publish(every:) (periodically publishes the current date and time as a Date)</li>
-<li><code>NotificationCenter</code>’s publisher(for:) (publishes notifications when system events happen)</li>
-</ol>
-<blockquote>
-<p>如果你有一个<code>ObservedObject</code>(Document)，它里面有一个<code>@Publisher</code>(background)，那么注意以下两者的区别：</p></blockquote>
-<ul>
-<li>document.<code>$</code>background: 是一个publisher</li>
-<li><code>$</code>document.background: 是一个binding</li>
-</ul>
-<blockquote>
-<p><code>.onReceive</code>只能接收<code>Publisher</code>的推送，而事实上，<code>onChange</code>（一般用于接收ObservedObject或State)同样也能接收Publisher。</p></blockquote>
-</div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B5%5D_Property-Wrapper/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

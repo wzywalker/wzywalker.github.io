@@ -5,6 +5,13 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitem
 xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
+    <loc>/archives/move_from_jianshu/</loc>
+    <lastmod>2022-01-15</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
     <loc>/archives/%E3%80%8AEffective-Objective-C-2.0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/</loc>
     <lastmod>2022-01-14</lastmod>
     <changefreq>always</changefreq>

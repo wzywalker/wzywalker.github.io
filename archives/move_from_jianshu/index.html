@@ -1,0 +1,242 @@
+<!DOCTYPE HTML>
+<html lang="english">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Prism" />
+    <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/40cba7715e63db76fe2969c8abddf3cd.json"
+        }
+
+    </script>
+    
+<title>博客搬家 - walker's code blog</title>
+<meta name="author" content="walker" />
+<meta name="description" content="原因" />
+<meta property="og:title" content="博客搬家 - walker's code blog" />
+<meta property="og:description" content="原因" />
+<meta property="og:site_name" content="walker's code blog" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/move_from_jianshu/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-01-15T12:00:00-00.00" />
+<meta name="twitter:title" content="博客搬家 - walker's code blog" />
+<meta name="twitter:description" content="原因" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
+<main>
+    <section class="prism-section row" id="prism__content">
+        <article class="yue col-md-8 offset-md-2">
+            <h1 class="prism-post-title">博客搬家</h1>
+            <div class="prism-post-time">
+                <time class="text-uppercase">
+                    January 15 2022
+                </time>
+            </div>
+            <div class="prism-content-body">
+                <h2>原因</h2>
+<p>由于</p><ol>
+<li>广告越来越多，为了显示广告，还把正文给藏了起来</li>
+<li>没有TOC</li>
+<li>会屏蔽文章</li>
+<li>导出机制不完善，文章越多越以后想导出越麻烦</li>
+<li>别的原因（比如self host)</li>
+</ol>
+<p>等原因，我决定搬出简书，目前记录的笔记已达10万字，可见对简书也没啥别的意见，风传的对程序员不友好我也没太在意过，只是个写笔记的平台而已。</p><p>本来冲着TOC，是想选择掘金的，却发现掘金已经取消了批量导入的功能，一切的一切，都把我推向了独立博客，好歹至少没有各种限制。</p><p>这次仍然选择<code>githup pages</code>来做静态博客，好处不言而喻的，生成器本想继续用<code>hexo</code>，结果突然发现了一个叫<code>Maverick</code>的，它支持宽泛的md文件的路径和图片路径，并且支持本地图片和下载远程图片，这解决了<code>hexo</code>不支持本地图片的一个痛点，本来就是简单的需求，于是打算入坑这个并不热门的生成器：</p><ol>
+<li>热度不高，开发者最近一次更新也至少6个月了</li>
+<li>只有两个官方主题，一个没有TOC，一个不怎么好看，还有一个第三方主题，仍然没有TOC，就是目前我用的这个</li>
+</ol>
+<p>也就是说踩坑机率可能不低，也就是说，我因为<code>TOC</code>出坑，折腾了半天还是没有<code>TOC</code>...</p><h2>迁移记录</h2>
+<ol>
+<li>Maverick会扫描指定目录下的所有<code>.md</code>文件，不论目录结构，我做了一个<code>posts</code>目录专门用来存放源文件</li>
+<li>打包下载简书的所有文章，google了一个导出所有md文件里图片并顺便把文件里的图片链接也改了的<a href="https://juejin.cn/post/6844904110244757511">方案</a></li>
+</ol>
+<ul>
+<li>我根据习惯的vscode笔记插件<code>dendron</code>的风格，做了一个统一的<code>assets</code>文件夹来保存图片，所以相应的markdown文件里引用图片也就用上了相对路径（原方案是仿照<code>typora</code>风格，每篇文章一个对应的assets文件夹）</li>
+</ul>
+<ol start="3">
+<li>在读文件的位置顺便把<code>frontmatter</code>加上，我是把文件放到了四个物理文件夹里让它遍历（整理下载文档的时候手动分类了），主要是为了能自动生成每篇文章的<code>category</code>（根据文件夹名）</li>
+</ol>
+<ul>
+<li>什么是<a href="https://github.com/AlanDecode/Maverick#file-arrangement-and-frontmatter">frontmatter</a>?</li>
+<li>最终的脚本发布在<a href="https://gist.github.com/walkerwzy/0c75e9b90b0b1806cf0e4aaeb845a17e">这里</a></li>
+</ul>
+<ol start="4">
+<li>最终选择了<a href="https://github.com/Reedo0910/Maverick-Theme-Prism">Prism</a>这个主题</li>
+<li>标准流程部署完<code>Github Pages</code></li>
+<li>绑域名，雇用ssl，这些都能在控制面板完成（DNS做一个CNAME需要去域名后台那边设置）</li>
+<li>抄改了一个脚本，用来执行<code>Github Actions</code>，其实就是持续集成啦</li>
+</ol>
+<ul>
+<li>据说<code>xxxx.github.io</code>风格的repo名只能把网站发布在<code>main</code>分支上而不能是<code>gh_pages</code>上，因此，最终逻辑就是，代码往<code>source</code>分支提交，然后把生成的网站往<code>main</code>分支部署</li>
+<li><a href="">脚本地址</a></li>
+</ul>
+<h2>排坑记录</h2>
+<ol>
+<li>简书下载下来的文本有时候有一些莫名其妙的不可打印字符，在build的时候Maverick这个工具都是直接报错处理，我不得不手动把这些字符找出来删除掉</li>
+<li>生成<code>frontmatter</code>时如果有格式错误的也会直接挂掉，同样需要你人工排查，再把文本改对</li>
+<li>以上都说明这个生成器的容错率是很低的，下面的不算坑，就是目前<code>Maverick</code>其实做得很单纯，就是生成器，而周边功能，比如生成博客模板，本地伺服/预览等功能都没有做，我考虑到各种编辑器都能设置代码片段，也没去干这个活了</li>
+<li>前面说了，主题太少，而且只有一个支持TOC的，很难看，我也没有去为选中的主题增加TOC了（要写CSS，响应式布局等），暂时目前这样吧</li>
+</ol>
+
+            </div>
+        </article>
+        <div class="prism-post-meta col-md-8 offset-md-2">
+    <span>walker</span>
+    
+    <span>/</span>
+    <span>
+        <a class="category no-link" href="/category/posts/" target="_self">
+        posts
+        </a>
+    </span>
+    
+    
+    <span>/</span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/tag/" target="_self">#tag</a>
+    </span>
+    
+    
+    
+    <span>/</span>
+    <span class="leancloud_visitors" id="/archives/move_from_jianshu/" data-flag-title="博客搬家"><span class="leancloud-visitors-count"></span> Views</span>
+    
+</div>
+    </section>
+
+    
+<section id="prism__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+    <ul>
+        
+        <li class="next text-muted">
+            <span title="Viewing the newest one."><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</span>
+        </li>
+        
+        
+        <li class="prev">
+            <a class="no-link" href="/archives/%E3%80%8AEffective-Objective-C-2.0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/" target="_self" title="《Effective Objective-C 2.0》笔记第1-2章">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    
+    <script>
+        var initValine = function() {
+            new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+        }
+
+    </script>
+    <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+    <div class="prism-comment-section container" id="prism__comment">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div id="vcomments"></div>
+            </div>
+        </div>
+    </div>
+    
+
+</main>
+
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
+                    </section>
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
+                            <span>Copyright © 2022 AlanDecode</span>
+                        </p>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+            </footer>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    
+</body>
+
+</html>

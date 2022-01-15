@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/77827c3aeb31044bbd156ff3ba8e3368.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/40cba7715e63db76fe2969c8abddf3cd.json"
         }
 
     </script>
@@ -55,6 +55,67 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/move_from_jianshu/" target="_self">博客搬家</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/move_from_jianshu/" target="_self">
+                <time class="text-uppercase">
+                    January 15 2022
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><h2>原因</h2>
+<p>由于</p><ol>
+<li>广告越来越多，为了显示广告，还把正文给藏了起来</li>
+<li>没有TOC</li>
+<li>会屏蔽文章</li>
+<li>导出机制不完善，文章越多越以后想导出越麻烦</li>
+<li>别的原因（比如self host)</li>
+</ol>
+<p>等原因，我决定搬出简书，目前记录的笔记已达10万字，可见对简书也没啥别的意见，风传的对程序员不友好我也没太在意过，只是个写笔记的平台而已。</p><p>本来冲着TOC，是想选择掘金的，却发现掘金已经取消了批量导入的功能，一切的一切，都把我推向了独立博客，好歹至少没有各种限制。</p><p>这次仍然选择<code>githup pages</code>来做静态博客，好处不言而喻的，生成器本想继续用<code>hexo</code>，结果突然发现了一个叫<code>Maverick</code>的，它支持宽泛的md文件的路径和图片路径，并且支持本地图片和下载远程图片，这解决了<code>hexo</code>不支持本地图片的一个痛点，本来就是简单的需求，于是打算入坑这个并不热门的生成器：</p><ol>
+<li>热度不高，开发者最近一次更新也至少6个月了</li>
+<li>只有两个官方主题，一个没有TOC，一个不怎么好看，还有一个第三方主题，仍然没有TOC，就是目前我用的这个</li>
+</ol>
+<p>也就是说踩坑机率可能不低，也就是说，我因为<code>TOC</code>出坑，折腾了半天还是没有<code>TOC</code>...</p><h2>迁移记录</h2>
+<ol>
+<li>Maverick会扫描指定目录下的所有<code>.md</code>文件，不论目录结构，我做了一个<code>posts</code>目录专门用来存放源文件</li>
+<li>打包下载简书的所有文章，google了一个导出所有md文件里图片并顺便把文件里的图片链接也改了的<a href="https://juejin.cn/post/6844904110244757511">方案</a></li>
+</ol>
+<ul>
+<li>我根据习惯的vscode笔记插件<code>dendron</code>的风格，做了一个统一的<code>assets</code>文件夹来保存图片，所以相应的markdown文件里引用图片也就用上了相对路径（原方案是仿照<code>typora</code>风格，每篇文章一个对应的assets文件夹）</li>
+</ul>
+<ol start="3">
+<li>在读文件的位置顺便把<code>frontmatter</code>加上，我是把文件放到了四个物理文件夹里让它遍历（整理下载文档的时候手动分类了），主要是为了能自动生成每篇文章的<code>category</code>（根据文件夹名）</li>
+</ol>
+<ul>
+<li>什么是<a href="https://github.com/AlanDecode/Maverick#file-arrangement-and-frontmatter">frontmatter</a>?</li>
+<li>最终的脚本发布在<a href="https://gist.github.com/walkerwzy/0c75e9b90b0b1806cf0e4aaeb845a17e">这里</a></li>
+</ul>
+<ol start="4">
+<li>最终选择了<a href="https://github.com/Reedo0910/Maverick-Theme-Prism">Prism</a>这个主题</li>
+<li>标准流程部署完<code>Github Pages</code></li>
+<li>绑域名，雇用ssl，这些都能在控制面板完成（DNS做一个CNAME需要去域名后台那边设置）</li>
+<li>抄改了一个脚本，用来执行<code>Github Actions</code>，其实就是持续集成啦</li>
+</ol>
+<ul>
+<li>据说<code>xxxx.github.io</code>风格的repo名只能把网站发布在<code>main</code>分支上而不能是<code>gh_pages</code>上，因此，最终逻辑就是，代码往<code>source</code>分支提交，然后把生成的网站往<code>main</code>分支部署</li>
+<li><a href="">脚本地址</a></li>
+</ul>
+<h2>排坑记录</h2>
+<ol>
+<li>简书下载下来的文本有时候有一些莫名其妙的不可打印字符，在build的时候Maverick这个工具都是直接报错处理，我不得不手动把这些字符找出来删除掉</li>
+<li>生成<code>frontmatter</code>时如果有格式错误的也会直接挂掉，同样需要你人工排查，再把文本改对</li>
+<li>以上都说明这个生成器的容错率是很低的，下面的不算坑，就是目前<code>Maverick</code>其实做得很单纯，就是生成器，而周边功能，比如生成博客模板，本地伺服/预览等功能都没有做，我考虑到各种编辑器都能设置代码片段，也没去干这个活了</li>
+<li>前面说了，主题太少，而且只有一个支持TOC的，很难看，我也没有去为选中的主题增加TOC了（要写CSS，响应式布局等），暂时目前这样吧</li>
+</ol>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/move_from_jianshu/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E3%80%8AEffective-Objective-C-2.0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/" target="_self">《Effective Objective-C 2.0》笔记第1-2章</a></h1>
@@ -1707,93 +1768,6 @@ LCP|Sorted Suffixes|
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AD%EF%BC%9AFenwick-Tree-%28Binary-Indexed-Tree%29/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%94%EF%BC%9AHash-Tables/" target="_self">数据结构篇五：Hash Tables</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%94%EF%BC%9AHash-Tables/" target="_self">
-                <time class="text-uppercase">
-                    November 12 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><hr />
-<h1>Hash Tables</h1>
-<ul>
-<li>key-value pair</li>
-<li>using <code>Hashing</code> technique</li>
-<li>often used tracking item frequencies</li>
-</ul>
-<p>what's <em>hash function</em>?</p><ul>
-<li>maps a key <code>x</code> to a whole number in a fixed <code>range</code>.<ul>
-<li>e.g. $H(x) = (x^2 - 6x + 9) % 10$ maps (0, 9)</li>
-<li>这个方程会为不同的x产生一样的y -&gt; <code>hash collision</code></li>
-</ul>
-</li>
-<li>can hash arbitrary objects like string, list, tuple...</li>
-<li>must be <code>deterministic</code>(确定的x产生确定的y)<ul>
-<li>因此key的应该是<code>immutable</code>的类型</li>
-</ul>
-</li>
-</ul>
-<p>关键词是<code>range</code>，你设计的function总要mod一下，将结果限制在一个范围内。这里你应该暂时能推测出hashtable的key可能就是数字吧？</p><p><strong>hash collision</strong></p><ul>
-<li><code>separate chaining</code></li>
-</ul>
-<p>用一种数据结构（通常是链表）保留所有冲突的值</p><ul>
-<li><code>open addressing</code></li>
-</ul>
-<p>为冲突的值选择一个offset（地址/值）保存 -&gt; <code>probing sequence P(x)</code></p><p>不管是怎么解决冲突，<strong>worst</strong>的情况下，hash table的操作时间也会由O(1)变成O(n)</p><p>怎么用HT来查找呢？不是把hash后的结果拼到原数据上，而是每次查询前，对key进行一次hash function，就能去查询了。</p><h2>Open Addressing</h2>
-<p><strong>probing sequences</strong></p><ul>
-<li>linear probing: P(x) = ax + b</li>
-<li>quadratic probing: p(x) = $ax^2 + bx + c$</li>
-<li>double hashing: p(k, x) = $x * H_2(k)$ 双重hash</li>
-<li>pseudo random number generator: p(k, x) = x * rng(H(k), x) 用H(k)(即hash value)做种的随机数</li>
-</ul>
-<p>总之就是在这样一个序列里找下一个位置</p><p>假设一个table size 为N的HT，使用开放寻址的伪代码：</p><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">keyHash</span> <span class="o">=</span> <span class="n">H</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>   <span class="c1"># 直接计算出来的hash value</span>
-<span class="n">index</span> <span class="o">=</span> <span class="n">keyHash</span>  <span class="c1"># 偏移过后存在HT里的index</span>
-
-<span class="k">while</span> <span class="n">table</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">keyHash</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span> <span class="o">%</span> <span class="n">N</span>  <span class="c1"># 加上偏移，考虑size（N）</span>
-    <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># 游标加1</span>
-
-<span class="c1"># now can insert (k,v) at table[index]</span>
-</pre></div>
-<h3>Chaos with cycles</h3>
-<p><strong>Linear Probling (LP)</strong></p><p>LP中，如果你<em>运气不好</em>，产生的序列的下一个值永远是occupied的状态（一般是值域小于size），就进入死循环了。</p><p>假设p(x) = 3x, H(k) = 4, N = 9
-那么H(k)+P(x) % N 只会产生{4,7,1}，如果这三个位置被占用，那就陷入了永远寻找下一个的无限循环中。</p><p>一般是限制probing function能返回刚好N个值。</p><blockquote>
-<p>当p(x)=ax的a与size的N互质，即没有公约数，<code>GCD(a, N) = 1</code>一般能产生刚好N个值。(Greatest Common Denominator)</p></blockquote>
-<blockquote>
-<p>注意，为了性能和效率的平衡，有<code>load factor</code>的存在，所以到了阈值，size就要加倍，N的变化，将会使得<code>GCD(a, N) = 1</code>的a的选择有变化，而且之前对N取模，现在取值也变发生变化，这时候需要重新map</p></blockquote>
-<p>重新map不再按元素当初添加的顺序，而是把现有HT里的值按索引顺序重新map一遍。比如第一个是k6, 即第6个添加进来的，但是现在第一个就重新计算它的值，填到新的HT里面去。</p><p><strong>Quadratic Probing （QP）</strong></p><p>QP 同样有chaos with cycles的问题，通用解决办法，三种：</p><ol>
-<li>p(x) = $x^2$, size选一个 prime number &gt; 3, and $\alpha \leq \frac{1}{2}$</li>
-<li>p(x) = $(x^2 + x) / 2$, keep the size a power of 2 （不需要是素数了）</li>
-<li>p(x)= $(-1^x) \times x^2$, make size prime N $\equiv 3$ mod 4 ???</li>
-</ol>
-<p><strong>Double Hashing</strong></p><p>Double Hashing: P(x) = $x \times H_2(k)$可见仍然类似一个一次的线性方程，$H_2(k)$就类似于ax中的a，设为$\delta$，相比固定的a, 这里只是变成了动态的，这样不同的key的待选序列就是不一样的（可以理解为系数不同了）</p><p>解决chaos:</p><ol>
-<li>size N to be a prime number</li>
-<li>calculate: $\delta = H_2(k)$ mod N<ul>
-<li>$\delta=0$ 时offset就没了，所以需要人为改为1</li>
-<li>$1 \leq \delta \lt N$ and GCD($\delta$, N) = 1</li>
-</ul>
-</li>
-</ol>
-<p>可见，虽然系数是“动态”的了，但是取值还是（1，N）中的一个而已，hash只是让其动起来的一个原因，而不是参与计算的值。</p><p>我们本来就是在求hash value，结果又要引入另一个hash function，显然这个$H_2$不能像外层这样复杂，一般是针对常见的key类型(string, int...-&gt; fundamental data type)的<code>universal hash functions</code></p><blockquote>
-<p>因为N要是一个素数，所以在double size的时候，还要继续往上找直到找到一个素数为止，比如N=7, double后，N=14，那么最终，N=17</p></blockquote>
-<figure  style="flex: 67.68558951965065" ><img width="1240" height="916" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/cbae1de97a3f72ae84ea59804293ec56.png" alt=""/></figure><h3>Issues with removing</h3>
-<p>因为冲突的hash value需要probing，probing的依据是从序列里依次取出下一个位置，检查这个位置<strong>有没有被占用</strong>，那么问题就来了，如果一个本被占用的位置，因为元素需要删除，反而变成没有占用了，这有点类似删除树节点，不但要考虑删除，还要考虑这个位置怎么接续。</p><p><strong>lazy deletion</strong>
-但HT机制比树要复杂，为了避免反复应用probing函数重新摆放后续所有节点，干脆就在删除的位置放置一个预设的标识，我们称为墓碑(<code>tombstone</code>)，而不是直接置空，然后所有的查找和添加加上这一条规则，就能快速删除又无需重新排序。</p><p>大量删除会造成空间浪费，但无需立即处理：</p><ol>
-<li>添加元素允许添加到墓碑位置</li>
-<li>到达阈值容量需要倍增的时候有一次重排，这个时候就可以移除所有的墓碑</li>
-</ol>
-<p>如果查找一个hash value，连续3个都是墓碑，第4个才是它，这是不是有点浪费时间？
-确实，所以还可以优化，当你查找过一次之后，就可以把它移到第一个墓碑的位置，这样，<strong>下次</strong>查询的时候速度就会快很多了。</p><p>整个机制，叫<code>lazy deletion</code></p><figure class="vertical-figure" style="flex: 29.61816305469556" ><img width="1148" height="1938" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a935a20b4bc9641962766872aace8306.png" alt=""/></figure></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%94%EF%BC%9AHash-Tables/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>
