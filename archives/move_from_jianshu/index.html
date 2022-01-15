@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/d5e8eefaa23ceddb08ca07d33d75a7c4.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/1bbb2a43193d2f7fa8ad9f28a2369945.json"
         }
 
     </script>
@@ -77,33 +77,32 @@
 <p>也就是说踩坑机率可能不低，也就是说，我因为<code>TOC</code>出坑，折腾了半天还是没有<code>TOC</code>...</p><h2>迁移记录</h2>
 <ol>
 <li>Maverick会扫描指定目录下的所有<code>.md</code>文件，不论目录结构，我做了一个<code>posts</code>目录专门用来存放源文件</li>
-<li>打包下载简书的所有文章，google了一个导出所有md文件里图片并顺便把文件里的图片链接也改了的<a href="https://juejin.cn/post/6844904110244757511">方案</a></li>
-</ol>
-<ul>
-<li>我根据习惯的vscode笔记插件<code>dendron</code>的风格，做了一个统一的<code>assets</code>文件夹来保存图片，所以相应的markdown文件里引用图片也就用上了相对路径（原方案是仿照<code>typora</code>风格，每篇文章一个对应的assets文件夹）</li>
+<li>打包下载简书的所有文章，google了一个导出所有md文件里图片并顺便把文件里的图片链接也改了的<a href="https://juejin.cn/post/6844904110244757511">方案</a><ul>
+<li>我根据习惯的vscode笔记插件<code>dendron</code>的风格，使用统一的<code>assets</code>文件夹来保存图片，所以相应的markdown文件里引用图片也就用上了相对路径</li>
+<li>原作者是仿照<code>typora</code>风格，每篇文章一个对应的assets文件夹</li>
 </ul>
-<ol start="3">
-<li>在读文件的位置顺便把<code>frontmatter</code>加上，我是把文件放到了四个物理文件夹里让它遍历（整理下载文档的时候手动分类了），主要是为了能自动生成每篇文章的<code>category</code>（根据文件夹名）</li>
-</ol>
-<ul>
+</li>
+<li>在读文件的位置顺便把<code>frontmatter</code>加上，我是把文件放到了四个物理文件夹里让它遍历（整理下载文档的时候手动分类了），主要是为了能自动生成每篇文章的<code>category</code>（根据文件夹名）<ul>
 <li>什么是<a href="https://github.com/AlanDecode/Maverick#file-arrangement-and-frontmatter">frontmatter</a>?</li>
 <li>最终的脚本发布在<a href="https://gist.github.com/walkerwzy/0c75e9b90b0b1806cf0e4aaeb845a17e">这里</a></li>
 </ul>
-<ol start="4">
+</li>
 <li>最终选择了<a href="https://github.com/Reedo0910/Maverick-Theme-Prism">Prism</a>这个主题</li>
 <li>标准流程部署完<code>Github Pages</code></li>
-<li>绑域名，雇用ssl，这些都能在控制面板完成（DNS做一个CNAME需要去域名后台那边设置）</li>
-<li>抄改了一个脚本，用来执行<code>Github Actions</code>，其实就是持续集成啦</li>
-</ol>
-<ul>
+<li>绑域名，启用用ssl，这些都能在控制面板完成（DNS做一个CNAME需要去域名后台那边设置）</li>
+<li>抄改了一个脚本，用来执行<code>Github Actions</code>，其实就是持续集成啦<ul>
 <li>据说<code>xxxx.github.io</code>风格的repo名只能把网站发布在<code>main</code>分支上而不能是<code>gh_pages</code>上，因此，最终逻辑就是，代码往<code>source</code>分支提交，然后把生成的网站往<code>main</code>分支部署</li>
-<li><a href="https://gist.github.com/walkerwzy/3b896e08c64c3d07cfc66d709fae2010">脚本地址</a></li>
+<li>去掉了缓存功能（踩坑了，以后研究）</li>
+<li>CI脚本发布在<a href="https://gist.github.com/walkerwzy/3b896e08c64c3d07cfc66d709fae2010">这里</a></li>
 </ul>
+</li>
+</ol>
 <h2>排坑记录</h2>
 <ol>
 <li>简书下载下来的文本有时候有一些莫名其妙的不可打印字符，在build的时候Maverick这个工具都是直接报错处理，我不得不手动把这些字符找出来删除掉</li>
 <li>生成<code>frontmatter</code>时如果有格式错误的也会直接挂掉，同样需要你人工排查，再把文本改对</li>
 <li>以上都说明这个生成器的容错率是很低的，下面的不算坑，就是目前<code>Maverick</code>其实做得很单纯，就是生成器，而周边功能，比如生成博客模板，本地伺服/预览等功能都没有做，我考虑到各种编辑器都能设置代码片段，也没去干这个活了</li>
+<li>缓存的坑，这里就不细说了，毕竟不是常发文，不在意每次build的时候有没有缓存</li>
 <li>前面说了，主题太少，而且只有一个支持TOC的，很难看，我也没有去为选中的主题增加TOC了（要写CSS，响应式布局等），暂时目前这样吧</li>
 </ol>
 
