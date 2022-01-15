@@ -48,11 +48,11 @@ jobs:
       with:
         emptyCommits: false
 
-    - name: Save build cache
-      uses: docker://peaceiris/gh-pages:v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PUBLISH_BRANCH: cache
-        PUBLISH_DIR: ./build_cache
-      with:
-        emptyCommits: false
+    # - name: Save build cache
+    #   uses: docker://peaceiris/gh-pages:v2
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     PUBLISH_BRANCH: cache
+    #     PUBLISH_DIR: ./build_cache
+    #   with:
+    #     emptyCommits: false
