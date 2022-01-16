@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 《Deep-Learning-with-Python》笔记
-slug: 《Deep-Learning-with-Python》笔记
+title: 《Deep Learning with Python》笔记
+slug: Deep-Learning-with-Python-Notes
 date: 2021-09-12 00:00
 status: publish
 author: walker

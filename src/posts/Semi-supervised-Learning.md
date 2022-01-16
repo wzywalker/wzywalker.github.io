@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Semi-supervised-Learning
+title: Semi supervised Learning
 slug: Semi-supervised-Learning
 date: 2021-06-07 00:00
 status: publish

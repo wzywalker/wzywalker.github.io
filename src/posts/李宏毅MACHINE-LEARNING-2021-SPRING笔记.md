@@ -234,14 +234,14 @@ hessian矩阵是二次微分，当一次微分为0的时候，二次微分并不
 不管是较为平坦的面，还是saddle point，如果小球以图示的方式滚下去，真实的物理世界是不可能停留在那个gradient为0或接近于0的位置的，因为它有“动量”，即惯性，甚至还可能滚过local minima，这恰好是我们需要的特性。
 ![](../assets/1859625-5c2123a5abb30e13.png)
 不但考虑当前梯度，还考虑之前累积的值（动量），这个之前，是之前所有的动量，而不是前一步的：
-$
+$$
 \begin{aligned}
 m^0 &= 0 \\
 m^1 &= -\eta g^0 \\
 m^2 &= -\lambda \eta g^0 - \eta g^1 \\
 &\vdots
 \end{aligned}
-$
+$$
 
 ### adaptive learning rate
 
