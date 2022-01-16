@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/a93aed159a38fa1e15f0447f262c225a.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/7c2aba9d7a6516946f8977c79ff8d873.json"
         }
 
     </script>
@@ -222,14 +222,14 @@
 <figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/14f0976b60bb909a3ec3b147594b49bb.png" alt=""/></figure><p>不管是较为平坦的面，还是saddle point，如果小球以图示的方式滚下去，真实的物理世界是不可能停留在那个gradient为0或接近于0的位置的，因为它有“动量”，即惯性，甚至还可能滚过local minima，这恰好是我们需要的特性。
 <figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/f2711cc9c420552051336483c760c347.png" alt=""/></figure>
 不但考虑当前梯度，还考虑之前累积的值（动量），这个之前，是之前所有的动量，而不是前一步的：
-$
+$$
 \begin{aligned}
 m^0 &amp;= 0 \
 m^1 &amp;= -\eta g^0 \
 m^2 &amp;= -\lambda \eta g^0 - \eta g^1 \
 &amp;\vdots
 \end{aligned}
-$</p><h3>adaptive learning rate</h3>
+$$</p><h3>adaptive learning rate</h3>
 <figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/632ad7d3ca2cd8bae9138dfdcd311805.png" alt=""/></figure><p>不是什么时候loss卡住了就说明到了极点(最小值，鞍点，平坦的点)</p><p>看下面这个error surface，两个参数，一个变动非常平缓，一个非常剧烈，如果应用相同的<code>learning rate</code>，要么反复横跳（过大），要么就再也挪不动步（太小）：</p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/78118fcfe7c7a300c0fb3c063101642e.png" alt=""/></figure><h3>Adagrad (Root Mean Square)</h3>
 <p>于是有了下面的优化方法，思路与<code>l2正则化</code>差不多，利用不同参数本身gradient的大小来“惩罚”它起到的作用。</p><ol>
 <li>这里用的是相除，因为我的梯度越小，步伐就可以跨得更大了。</li>
