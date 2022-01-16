@@ -13,6 +13,7 @@ tags:
 ---
 
 如果一个矩阵化简为
+
 $$
 A=
 \left[
@@ -31,6 +32,7 @@ $$
 ## 可汗学院解法
 
 先继续化简为`Reduced Row Echelon Form` (RREF)
+
 $$
 \left[
     \begin{array}{cccc|c}
@@ -42,6 +44,7 @@ $$
 $$
 
 还原为方程组:
+
 $$ 
 \begin{cases}
     x_1=-2x_2+2x_4 \\
@@ -50,12 +53,14 @@ $$
 $$
 
 用$x_2$和$x_4$来表示$x_1$和$x_3$，填满矩阵相应位置即可得解：
+
 $$
 \left[\begin{smallmatrix} x_1\\x_2\\x_3\\x_4 \end{smallmatrix}\right]=
 x_2 \left[\begin{smallmatrix} -2\\1\\0\\0 \end{smallmatrix}\right] +
 x_4 \left[\begin{smallmatrix} 2\\0\\-2\\1 \end{smallmatrix}\right] \tag{1.3}
 $$
 如果不是太直观的话，其实就是把以下方程写成了矩阵的形式：
+
 $$
 \begin{cases}
     x_1=-2x_2+2x_4 \\
@@ -78,6 +83,7 @@ Cambridge University
 > 如果是解$\bf{A}\it\vec{x}=b$，此时可用此矩阵求出特解，但此处是0，所以此步省略，直接求通解
 
 我们用$c_1$和$c_3$来表示其它列：
+
 $$
 \begin{cases}
 c_2=2c_1 \\
@@ -85,6 +91,7 @@ c_4=-2c_1+2c_3
 \end{cases} \tag{2.1}
 $$
 我们利用$c_2-c_2=0, c_4-c_4=0$来构造0值（通解都是求0）：
+
 $$
 \begin{cases}
 2c_1-\color{green}{c_2}=0 \\
@@ -92,6 +99,7 @@ $$
 \end{cases} \tag{2.2}
 $$
 补齐方程，整理顺序（以便直观地看到系数）得：
+
 $$
 \begin{cases}
 \color{red}2c_1\color{red}{-1}c_2+\color{red}{0}c_3+\color{red}{0}c_4=0 \\
@@ -100,6 +108,7 @@ $$
 $$
 
 因为矩阵乘向量可以理解为矩阵和`列向量`$\vec{c}$与向量$x$的点积之和$\sum_{i=1}^4 x_ic_i$，所以红色的系数部分其实就是$(x_1, x_2, x_3, x_4)$，得解：
+
 $$
 \left\{x\in\mathbb{R}^4:x=\lambda_1\left[\begin{smallmatrix} 2\\-1\\0\\0 \end{smallmatrix}\right]+\lambda_2\left[\begin{smallmatrix} 2\\0\\-2\\1 \end{smallmatrix}\right],\lambda_1,\lambda_2\in\mathbb{R}\right\} \tag{2.4}
 $$
@@ -115,6 +124,7 @@ by Gilbert Strang,
 Massachusetts Institute of Technology
 
 无需继续化简为`RREF`，直接对方程组：
+
 $$ 
 \begin{cases}
     x_1=-2x_2+2x_4 \\
@@ -127,6 +137,7 @@ $$
 `MIT`不止提供了这一个思路，解法二如下：
 
 这次需要化简为`RREF`，然后互换第`2`列和第`3`列（**`记住这次互换`**），还记得剑桥的方法里发现$c_1,c_3$能组成一个单位矩阵吗？这里的目的是通过移动列，直接在表现形式上变成单位矩阵：
+
 $$
 \left[
     \begin{array}{cc:cc}
@@ -138,6 +149,7 @@ $$
 \right] \tag{3.2}
 $$
 这里把用虚线反矩阵划成了四个区，左上角为一个`Identity Matrix`，我们记为`I`，右上角为自由列，我们记为`F`，矩阵（这次我们标记为**R**）变成了
+
 $$
 \bf{\it{R}}=
 \begin{bmatrix}
@@ -146,6 +158,7 @@ I&F\\
 \end{bmatrix} \tag{3. 3}
 $$
 求解$\bf{\it{R}}\it\vec{x}=0$，得到$x=\left[\begin{smallmatrix} -F\\I \end{smallmatrix}\right]$，把**F**和**I**分别展开(`记得F要乘上-1`)：
+
 $$
 \begin{bmatrix}
 -2&2\\
@@ -155,6 +168,7 @@ $$
 \end{bmatrix} \tag{3.4}
 $$
 还记得前面加粗提示的交换了两列吗？我们交换了两列，倒置后，我们要把第`2, 3`**行**给交换一下：
+
 $$
 \begin{bmatrix}
 -2&2\\

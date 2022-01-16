@@ -112,14 +112,13 @@ HMM是一个序列模型(`sequence model`)。序列模型或序列分类器是�
 ![](../assets/1859625-00fdee7b3f2b1889.png)
 
 很幸运，这么复杂的概率转移图，竟然能用矩阵表达：
-
-$A = 
+$$A = 
 \begin{bmatrix}
 0.15 & 0.45 & 0.4 \\
 0.25 & 0.35 & 0.4 \\
 0.10 & 0.55 & 0.35
 \end{bmatrix}
-$
+$$
 
 既然是3行3列，显然$A_{ij}$就是从i切换到j的概率，比如$A_{12}$ 就应该是这个人把骰子从作弊骰子1切换到2的概率。
 
@@ -211,24 +210,26 @@ $$
 
 # viterbi in NLP
 $\overbrace{
-  \enclose{circle}{0} 
+  0
   \xrightarrow[农]{2.5}
-  \enclose{circle}{1} 
+  1
   \xrightarrow[产]{4.0}
-  \enclose{circle}{2} 
+  2
 }^{1.4}
 \xrightarrow[物]{2.3}
-\enclose{circle}{3}$
+3$
 
-$\enclose{circle}{0} 
+$0
 \xrightarrow[农]{2.5}
 \underbrace{
-  \enclose{circle}{1} 
+  1
   \xrightarrow[产]{4.0}
-  \enclose{circle}{2} 
+  2
   \xrightarrow[物]{2.3}
-  \enclose{circle}{3}
+  3
 }_{2.1}$
+
+> 数字画圈的写法 $\enclose{circle}{3}$ 这个生成器暂不支持
 
 * node: $\enclose{circle}{2}$ ，圆圈，就是位置索引
 * edge: 词， 箭头，很好理解：string[0,1] = '农'

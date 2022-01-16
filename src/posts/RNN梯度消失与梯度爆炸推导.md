@@ -14,19 +14,19 @@ tags:
 ---
 
 ![](../assets/1859625-1a8b2a5bad603588.png)
-$
+$$
 \large
 \begin{aligned}
 h_t &=\sigma(z_t) = \sigma(Ux_t+Wh_{t-1} + b) \\
 y_t &= \sigma(Vh_t + c)
 \end{aligned}
-$
+$$
 
 ## 梯度消失与爆炸
 
 假设一个只有 3 个输入数据的序列，此时我们的隐藏层 h1、h2、h3 和输出 y1、y2、y3 的计算公式：
 
-$
+$$
 \large
 \begin{aligned}
 h_1 &= \sigma(Ux_1 + Wh_0 + b) \\
@@ -36,7 +36,7 @@ y_1 &= \sigma(Vh_1 + c) \\
 y_2 &= \sigma(Vh_2 + c) \\
 y_3 &= \sigma(Vh_3 + c)
 \end{aligned}
-$
+$$
 
 RNN 在时刻 t 的损失函数为 Lt，总的损失函数为 $L = L1 + L2 + L3 \Longrightarrow  \sum_{t=1}^TL_T$
 
@@ -47,8 +47,8 @@ $$
 \frac{\partial L_3}{\partial V} &= \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial V} \\
 \frac{\partial L_3}{\partial U} &= \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial U} + \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial U} + \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial h_1} \frac{\partial h_1}{\partial U} \\
 \frac{\partial L_3}{\partial W} &= \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial W} 
-\+ \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial W} 
-\+ \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial h_1} \frac{\partial h_1}{\partial W} \\
++ \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial W} 
++ \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial h_1} \frac{\partial h_1}{\partial W} \\
 \end{aligned}
 $$
 
