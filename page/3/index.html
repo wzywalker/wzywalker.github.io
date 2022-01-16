@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/7c2aba9d7a6516946f8977c79ff8d873.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/628197911571ef8eb878ea16c97a021b.json"
         }
 
     </script>
@@ -3580,14 +3580,13 @@ RETURN n
 <li>第3列为1 6 3的可能性和为0.03</li>
 </ul>
 <p>如果远低于或远高于这个概率，必然有做过手脚的骰子。</p><h2>转移概率的矩阵表示</h2>
-<p>这次假定不同的骰子是用来作弊的，作弊者会根据情况来挑选骰子，这样转移概率就不可能是均等的了：</p><figure  style="flex: 83.33333333333333" ><img width="500" height="300" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8259518e5781e3ce798778e8da69de85.png" alt=""/></figure><p>很幸运，这么复杂的概率转移图，竟然能用矩阵表达：
-$$A = 
+<p>这次假定不同的骰子是用来作弊的，作弊者会根据情况来挑选骰子，这样转移概率就不可能是均等的了：</p><figure  style="flex: 83.33333333333333" ><img width="500" height="300" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8259518e5781e3ce798778e8da69de85.png" alt=""/></figure><p>很幸运，这么复杂的概率转移图，竟然能用矩阵表达：</p><p>$A = 
 \begin{bmatrix}
 0.15 &amp; 0.45 &amp; 0.4 \
 0.25 &amp; 0.35 &amp; 0.4 \
 0.10 &amp; 0.55 &amp; 0.35
 \end{bmatrix}
-$$</p><p>既然是3行3列，显然$A_{ij}$就是从i切换到j的概率，比如$A_{12}$ 就应该是这个人把骰子从作弊骰子1切换到2的概率。</p><figure  style="flex: 102.04081632653062" ><img width="500" height="245" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/653c3cb7f8c2f3a541d170421fe489bf.png" alt=""/></figure><p>相应地，发射概率（即不同骰子摇出的点数的概率）也能表示为矩阵：
+$</p><p>既然是3行3列，显然$A_{ij}$就是从i切换到j的概率，比如$A_{12}$ 就应该是这个人把骰子从作弊骰子1切换到2的概率。</p><figure  style="flex: 102.04081632653062" ><img width="500" height="245" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/653c3cb7f8c2f3a541d170421fe489bf.png" alt=""/></figure><p>相应地，发射概率（即不同骰子摇出的点数的概率）也能表示为矩阵：
 $B = 
 \begin{bmatrix}
 0.16 &amp; 0.16 &amp; 0.16 &amp; 0.16 &amp; 0.16 &amp; 0.16 \
