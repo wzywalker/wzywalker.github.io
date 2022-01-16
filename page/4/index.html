@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/6a68a4aadbc41b83c53b12cb3391dc62.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba2b15e6a90a47b96d2821b91be3033.json"
         }
 
     </script>
@@ -1268,7 +1268,7 @@ score: 0.946047678795483
                 </time>
             </a>
         </div>
-        <div class="prism-content"><p>学习线性回归的时候，会教我们$X\theta=y$可以直接用<strong>最小二乘法</strong>直接把$\theta$求出来：</p><p>$\theta=(X^TX)^{-1}X^Ty$</p><p>并且还在我<a href="https://www.jianshu.com/p/c2d0c743dc5d">之前的博文</a>里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。</p><p>首先，在吴恩达的教材里，这个并不叫最小二乘(<code>least suqare</code>），而是叫<code>Normal Equation method</code>，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(<code>Projection</code>)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：</p><p>首先，预备知识</p><h2>子空间</h2>
+        <div class="prism-content"><p>学习线性回归的时候，会教我们$X\theta=y$可以直接用<strong>最小二乘法</strong>直接把$\theta$求出来：</p><p>$\theta=(X^TX)^{-1}X^Ty$</p><p>并且还在我<a href="https://blog.wzy.one/archives/%E7%9F%A9%E9%98%B5%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E6%B1%82%E8%A7%A3%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5/">之前的博文</a>里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。</p><p>首先，在吴恩达的教材里，这个并不叫最小二乘(<code>least suqare</code>），而是叫<code>Normal Equation method</code>，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(<code>Projection</code>)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：</p><p>首先，预备知识</p><h2>子空间</h2>
 <figure class="vertical-figure" style="flex: 35.609397944199706" ><img width="970" height="1362" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/454cb3771fb0eb69bf0301b42ad8d9f3.png" alt=""/></figure><p>笔记很清楚了，对于一个矩阵
 $A= \begin{bmatrix}
    -2 &amp; -1 &amp; -3 \
@@ -1335,64 +1335,60 @@ b + 3a = 2
         <div class="prism-content"><p>一个矩形三个顶点<code>(0,0), (50, 0), (50, 50)</code>, 变换后为<code>(30, 30), (30, 130), (130, 130)</code>, 求其仿射矩阵。</p><p>我们分别设起始和结束矩阵的坐标为：$(a_x, a_y), (b_x, b_y), (c_x, c_y)$， 变换后的加一个prime（$ ^\prime$)符号，以此类推。<br />
 要知道，一个3X2的矩阵是不可能右乘一个矩阵得到一个3X2的矩阵（只能左乘一个3X3的），<br />
 然后，每一个新坐标，都是由原坐标的(x, y)经过变换得到(x', y‘），即使是新坐标的X值，也是需要原坐标的(x, y)值参与过来进行变化的（乘以合适的系数），然后还要加上偏移的系数，以<code>x'</code>为例，应该是这样：$a^\prime_x = a_x m_{00} + a_y m_{01} + m_{02} $
-我们根据矩阵特征，补一个1，构造这个矩阵看看效果：
-$$
+我们根据矩阵特征，补一个1，构造这个矩阵看看效果：</p><p>$$
 \begin{bmatrix}
-\color{red}{a_x} &amp; \color{red}{a_y} &amp; \color{red}1 \
-b_x &amp; b_y &amp; 1 \
-c_x &amp; c_y &amp; 1 \
+\color{red}{a_x} &amp; \color{red}{a_y} &amp; \color{red}1 \\
+b_x &amp; b_y &amp; 1 \\
+c_x &amp; c_y &amp; 1 \\
 \end{bmatrix}
 \begin{bmatrix}
-\color{red}{m_{00}} \ \color{red}{m_{01}} \ \color{red}{m_{02}}
+\color{red}{m_{00}} \\ \color{red}{m_{01}} \\ \color{red}{m_{02}}
 \end{bmatrix} = 
 \begin{bmatrix}
-\color{red}{a^\prime_x} \ b^\prime_x \ c^\prime_x
+\color{red}{a^\prime_x} \\ b^\prime_x \\ c^\prime_x
 \end{bmatrix} \tag{红色部分即为上面的等式}
-$$
-这只是把三个x给变换出来了，<strong>其实你也可以认为这是把y给变换出来了</strong>（因为原理一样，只是系数不同）。<br />
-做到这一步，我们已经知道要如何求y坐标了，即我们只补一列的话，只能得到一个坐标的x值（或y值），要求另一半，根据坐标相乘的原理，看来只能把前三列置零，再把后三列复制进去了（__这样仿射矩阵也就变成6X1了__），其实就是上面矩阵乘法的重复，只不过交错一下形成x,y交错的排列：
-$$
+$$</p>
+<p>这只是把三个x给变换出来了，<strong>其实你也可以认为这是把y给变换出来了</strong>（因为原理一样，只是系数不同）。<br />
+做到这一步，我们已经知道要如何求y坐标了，即我们只补一列的话，只能得到一个坐标的x值（或y值），要求另一半，根据坐标相乘的原理，看来只能把前三列置零，再把后三列复制进去了（__这样仿射矩阵也就变成6X1了__），其实就是上面矩阵乘法的重复，只不过交错一下形成x,y交错的排列：</p><p>$$
 \begin{bmatrix}
-a_x &amp; a_y &amp; 1 &amp; 0 &amp; 0 &amp; 0 \
-0 &amp; 0 &amp; 0 &amp; a_x &amp; a_y &amp; 1 \
-b_x &amp; b_y &amp; 1 &amp; 0 &amp; 0 &amp; 0 \
-0 &amp; 0 &amp; 0 &amp; b_x &amp; b_y &amp; 1 \
-c_x &amp; c_y &amp; 1 &amp; 0 &amp; 0 &amp; 0 \
+a_x &amp; a_y &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; a_x &amp; a_y &amp; 1 \\
+b_x &amp; b_y &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; b_x &amp; b_y &amp; 1 \\
+c_x &amp; c_y &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
 0 &amp; 0 &amp; 0 &amp; c_x &amp; c_y &amp; 1 
 \end{bmatrix}
 \begin{bmatrix}
-m_{00} \ m_{01} \ m_{02} \ m_{10} \ m_{11} \ m_{12}
+m_{00} \\ m_{01} \\ m_{02} \\ m_{10} \\ m_{11} \\ m_{12}
 \end{bmatrix} = 
 \begin{bmatrix}
-a^\prime_x \ a^\prime_y \ b^\prime_x \ b^\prime_y \ c^\prime_x \ c^\prime_y \
+a^\prime_x \\ a^\prime_y \\ b^\prime_x \\ b^\prime_y \\ c^\prime_x \\ c^\prime_y \\
 \end{bmatrix}
-$$
-原理当然就是把第一个公式补全：
-$$
+$$</p>
+<p>原理当然就是把第一个公式补全：</p><p>$$
 \begin{cases}
-    ; a^\prime_x = a_x m_{00} + a_y m{01} + m_{02} \
-    ; a^\prime_y = a_x m_{10} + a_y m{11} + m_{12} \
-    \
-    ; b^\prime_x = b_x m_{00} + b_y m{01} + m_{02} \
-    ; b^\prime_y = b_x m_{10} + b_y m{11} + m_{12} \
-    \
-    ; c^\prime_x = c_x m_{00} + c_y m{01} + m_{02} \
-    ; c^\prime_y = c_x m_{10} + c_y m{11} + m_{12} \
+    \; a^\prime_x = a_x m_{00} + a_y m{01} + m_{02} \\
+    \; a^\prime_y = a_x m_{10} + a_y m{11} + m_{12} \\
+    \\
+    \; b^\prime_x = b_x m_{00} + b_y m{01} + m_{02} \\
+    \; b^\prime_y = b_x m_{10} + b_y m{11} + m_{12} \\
+    \\
+    \; c^\prime_x = c_x m_{00} + c_y m{01} + m_{02} \\
+    \; c^\prime_y = c_x m_{10} + c_y m{11} + m_{12} \\
 \end{cases}
-$$
-最小二乘的公式如下：
-$$
-\begin{equation}
-\lVert A\beta - Y \rVert{^2_2} \quad A \in \mathbb{R}^{(m\times n+1)}, \beta \in \mathbb{R}^{(n+1)\times 1}, Y \in \mathbb{R}^{m\times 1} \
-\hat \beta = (A^TA)^{-1}A^TY
-\end{equation}
-$$
-<a href="https://iewaij.github.io/introDataScience/OLS.html">推导过程见此</a></p><blockquote>
+$$</p>
+<p>最小二乘的公式如下：</p><p>$$
+\begin{aligned}
+&amp;\lVert A\beta - Y \rVert{^2_2} \quad A \in \mathbb{R}^{(m\times n+1)}, \beta \in \mathbb{R}^{(n+1)\times 1}, Y \in \mathbb{R}^{m\times 1} \\
+&amp;\hat \beta = (A^TA)^{-1}A^TY
+\end{aligned}
+$$</p>
+<p><a href="https://iewaij.github.io/introDataScience/OLS.html">推导过程见此</a></p><blockquote>
 <p>奇异矩阵没有逆矩阵，$(A^TA)^{-1}$会出现无法求解的问题，也就是该方法对数据是有约束的，这个有解，另议。</p></blockquote>
-<p>我们把A和Y都做出来了，直接套用公式即可，为了编程方便，我们把前后矩阵设为A和B，仿射矩阵为M，就成了：
-$$
+<p>我们把A和Y都做出来了，直接套用公式即可，为了编程方便，我们把前后矩阵设为A和B，仿射矩阵为M，就成了：</p><p>$$
 M = (A^TA)^{-1}A^TB
-$$</p><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+$$</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="n">A</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">]]</span>
 <span class="n">B</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="p">[</span><span class="mi">130</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="p">[</span><span class="mi">130</span><span class="p">,</span> <span class="mi">130</span><span class="p">]]</span>

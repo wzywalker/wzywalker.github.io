@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/6a68a4aadbc41b83c53b12cb3391dc62.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba2b15e6a90a47b96d2821b91be3033.json"
         }
 
     </script>
@@ -62,7 +62,7 @@
                 </time>
             </div>
             <div class="prism-content-body">
-                <p>学习线性回归的时候，会教我们$X\theta=y$可以直接用<strong>最小二乘法</strong>直接把$\theta$求出来：</p><p>$\theta=(X^TX)^{-1}X^Ty$</p><p>并且还在我<a href="https://www.jianshu.com/p/c2d0c743dc5d">之前的博文</a>里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。</p><p>首先，在吴恩达的教材里，这个并不叫最小二乘(<code>least suqare</code>），而是叫<code>Normal Equation method</code>，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(<code>Projection</code>)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：</p><p>首先，预备知识</p><h2>子空间</h2>
+                <p>学习线性回归的时候，会教我们$X\theta=y$可以直接用<strong>最小二乘法</strong>直接把$\theta$求出来：</p><p>$\theta=(X^TX)^{-1}X^Ty$</p><p>并且还在我<a href="https://blog.wzy.one/archives/%E7%9F%A9%E9%98%B5%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E6%B1%82%E8%A7%A3%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5/">之前的博文</a>里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。</p><p>首先，在吴恩达的教材里，这个并不叫最小二乘(<code>least suqare</code>），而是叫<code>Normal Equation method</code>，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(<code>Projection</code>)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：</p><p>首先，预备知识</p><h2>子空间</h2>
 <figure class="vertical-figure" style="flex: 35.609397944199706" ><img width="970" height="1362" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/454cb3771fb0eb69bf0301b42ad8d9f3.png" alt=""/></figure><p>笔记很清楚了，对于一个矩阵
 $A= \begin{bmatrix}
    -2 &amp; -1 &amp; -3 \
