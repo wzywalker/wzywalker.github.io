@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/628197911571ef8eb878ea16c97a021b.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/6a68a4aadbc41b83c53b12cb3391dc62.json"
         }
 
     </script>
@@ -102,14 +102,13 @@ $A= \begin{bmatrix}
 <p>这里终于讲到了与机器学习最接近的内容：<code>regression</code>
 <figure  style="flex: 164.89361702127658" ><img width="1240" height="376" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2da3910c441eb8061e11ea708824fd7d.png" alt=""/></figure>
 可以看到，毫无业务思维的花花肠子，很多机器学习课程里会花大量工夫从感性到理性上给你讲这些内容，因为它的期望从0跟你讲清楚，而在循序渐进的数学理论体系里，这些根本就不需要关联感性认识的，什么每年的房价啊，数学关注的只是建模。</p><p>这个回归实例里，因为需要拟合的是一条直线：$y = b + ax$，那么既有的数据就成了机器学习里的“样本”，但我们这里不需要这么理解，而是直接理解为矩阵，得到
-方程组：
-$\begin{cases}
-b + a = 1 \
-b + 2a = 2 \
+方程组：</p><p>$$\begin{cases}
+b + a = 1 \\
+b + 2a = 2 \\
 b + 3a = 2
-\end{cases}$
-提取矩阵：
-$A = \begin{bmatrix}1&amp;1\1&amp; 2\ 1&amp; 3\end{bmatrix}, \vec b = \begin{bmatrix}1\2\ 2\end{bmatrix}$ $\Rightarrow A\vec x = \vec b$</p><p>好了，在上面提到的<a href="https://www.jianshu.com/p/c2d0c743dc5d">这篇博文</a>里，我们不明就里地直接用了公式，已知A和b求变换矩阵M(即这里的$\vec x$)，还当成是机器学习的内容，而现在我们已经知道自己是在做什么，就是找b在$A$的张成子空间里的投影，就能得到最近似的解</p><p>$$\vec x \approx (A^TA)^{-1}A^T\vec b$$</p>
+\end{cases}$$</p>
+<p>提取矩阵：</p><p>$$A = \begin{bmatrix}1&amp;1\\1&amp; 2\\ 1&amp; 3\end{bmatrix}, \vec b = \begin{bmatrix}1\\2\\ 2\end{bmatrix} \Rightarrow A\vec x = \vec b$$</p>
+<p>好了，在上面提到的<a href="https://www.jianshu.com/p/c2d0c743dc5d">这篇博文</a>里，我们不明就里地直接用了公式，已知A和b求变换矩阵M(即这里的$\vec x$)，还当成是机器学习的内容，而现在我们已经知道自己是在做什么，就是找b在$A$的张成子空间里的投影，就能得到最近似的解</p><p>$$\vec x \approx (A^TA)^{-1}A^T\vec b$$</p>
 
             </div>
         </article>

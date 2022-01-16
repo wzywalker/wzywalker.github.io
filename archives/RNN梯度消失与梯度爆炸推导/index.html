@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/628197911571ef8eb878ea16c97a021b.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/6a68a4aadbc41b83c53b12cb3391dc62.json"
         }
 
     </script>
@@ -63,30 +63,31 @@
             </div>
             <div class="prism-content-body">
                 <figure  style="flex: 82.77777777777777" ><img width="596" height="360" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/794a90e7b252e2aa03842eeee7fad8de.png" alt=""/></figure>
-$
+$$
 \large
 \begin{aligned}
 h_t &amp;=\sigma(z_t) = \sigma(Ux_t+Wh_{t-1} + b) \
 y_t &amp;= \sigma(Vh_t + c)
 \end{aligned}
-$<h2>梯度消失与爆炸</h2>
-<p>假设一个只有 3 个输入数据的序列，此时我们的隐藏层 h1、h2、h3 和输出 y1、y2、y3 的计算公式：</p><p>$
+$$<h2>梯度消失与爆炸</h2>
+<p>假设一个只有 3 个输入数据的序列，此时我们的隐藏层 h1、h2、h3 和输出 y1、y2、y3 的计算公式：</p><p>$$
 \large
 \begin{aligned}
-h_1 &amp;= \sigma(Ux_1 + Wh_0 + b) \
-h_2 &amp;= \sigma(Ux_2 + Wh_1 + b) \
-h_3 &amp;= \sigma(Ux_3 + Wh_2 + b) \
-y_1 &amp;= \sigma(Vh_1 + c) \
-y_2 &amp;= \sigma(Vh_2 + c) \
+h_1 &amp;= \sigma(Ux_1 + Wh_0 + b) \\
+h_2 &amp;= \sigma(Ux_2 + Wh_1 + b) \\
+h_3 &amp;= \sigma(Ux_3 + Wh_2 + b) \\
+y_1 &amp;= \sigma(Vh_1 + c) \\
+y_2 &amp;= \sigma(Vh_2 + c) \\
 y_3 &amp;= \sigma(Vh_3 + c)
 \end{aligned}
-$</p><p>RNN 在时刻 t 的损失函数为 Lt，总的损失函数为 $L = L1 + L2 + L3 \Longrightarrow  \sum_{t=1}^TL_T$</p><p>t = 3 时刻的损失函数 L3 对于网络参数 U、W、V 的梯度如下：</p><p>$$
+$$</p>
+<p>RNN 在时刻 t 的损失函数为 Lt，总的损失函数为 $L = L1 + L2 + L3 \Longrightarrow  \sum_{t=1}^TL_T$</p><p>t = 3 时刻的损失函数 L3 对于网络参数 U、W、V 的梯度如下：</p><p>$$
 \begin{aligned}
 \frac{\partial L_3}{\partial V} &amp;= \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial V} \\
 \frac{\partial L_3}{\partial U} &amp;= \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial U} + \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial U} + \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial h_1} \frac{\partial h_1}{\partial U} \\
 \frac{\partial L_3}{\partial W} &amp;= \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial W} 
-\+ \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial W} 
-\+ \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial h_1} \frac{\partial h_1}{\partial W} \\
++ \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial W} 
++ \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial h_1} \frac{\partial h_1}{\partial W} \\
 \end{aligned}
 $$</p>
 <p>其实主要就是因为：</p><ul>

@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/628197911571ef8eb878ea16c97a021b.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/6a68a4aadbc41b83c53b12cb3391dc62.json"
         }
 
     </script>
@@ -117,13 +117,14 @@
 <li>第3列为1 6 3的可能性和为0.03</li>
 </ul>
 <p>如果远低于或远高于这个概率，必然有做过手脚的骰子。</p><h2>转移概率的矩阵表示</h2>
-<p>这次假定不同的骰子是用来作弊的，作弊者会根据情况来挑选骰子，这样转移概率就不可能是均等的了：</p><figure  style="flex: 83.33333333333333" ><img width="500" height="300" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8259518e5781e3ce798778e8da69de85.png" alt=""/></figure><p>很幸运，这么复杂的概率转移图，竟然能用矩阵表达：</p><p>$A = 
+<p>这次假定不同的骰子是用来作弊的，作弊者会根据情况来挑选骰子，这样转移概率就不可能是均等的了：</p><figure  style="flex: 83.33333333333333" ><img width="500" height="300" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8259518e5781e3ce798778e8da69de85.png" alt=""/></figure><p>很幸运，这么复杂的概率转移图，竟然能用矩阵表达：
+$$A = 
 \begin{bmatrix}
 0.15 &amp; 0.45 &amp; 0.4 \
 0.25 &amp; 0.35 &amp; 0.4 \
 0.10 &amp; 0.55 &amp; 0.35
 \end{bmatrix}
-$</p><p>既然是3行3列，显然$A_{ij}$就是从i切换到j的概率，比如$A_{12}$ 就应该是这个人把骰子从作弊骰子1切换到2的概率。</p><figure  style="flex: 102.04081632653062" ><img width="500" height="245" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/653c3cb7f8c2f3a541d170421fe489bf.png" alt=""/></figure><p>相应地，发射概率（即不同骰子摇出的点数的概率）也能表示为矩阵：
+$$</p><p>既然是3行3列，显然$A_{ij}$就是从i切换到j的概率，比如$A_{12}$ 就应该是这个人把骰子从作弊骰子1切换到2的概率。</p><figure  style="flex: 102.04081632653062" ><img width="500" height="245" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/653c3cb7f8c2f3a541d170421fe489bf.png" alt=""/></figure><p>相应地，发射概率（即不同骰子摇出的点数的概率）也能表示为矩阵：
 $B = 
 \begin{bmatrix}
 0.16 &amp; 0.16 &amp; 0.16 &amp; 0.16 &amp; 0.16 &amp; 0.16 \
@@ -200,22 +201,24 @@ $$</p>
 <p>这个就是每一个隐状态下对应不同表面文字的概率了，比如：{s:{&quot;周&quot;: 0.3357, &quot;爬&quot;:0.00003}...}</p><p>要知道，三种概率里面是有很多0的，意思就是在现有的语法体系里面不可能出现的场景，比如第一个字不可能是M和E，B后面不可能跟S，B，而M后面不可能跟B，S，以及S后面不可能跟M，E等，再比如假如哪个字永远不可能是第一个字，那么它的观测概率在S里面就永远是0，等等。</p><p>这里要计算的话，因为隐状态是用文字推断出来的，所以这个映射关系还在，那么整理一下两个数组就能把每个隐状态能对应的文字全部映射上了。</p><hr />
 <p>以下是我课程里的笔记，理解了上面的内容，理解下面是没有任何障碍的。</p><h1>viterbi in NLP</h1>
 <p>$\overbrace{
-  \enclose{circle}{0} 
+  0
   \xrightarrow[农]{2.5}
-  \enclose{circle}{1} 
+  1
   \xrightarrow[产]{4.0}
-  \enclose{circle}{2} 
+  2
 }^{1.4}
 \xrightarrow[物]{2.3}
-\enclose{circle}{3}$</p><p>$\enclose{circle}{0} 
+3$</p><p>$0
 \xrightarrow[农]{2.5}
 \underbrace{
-  \enclose{circle}{1} 
+  1
   \xrightarrow[产]{4.0}
-  \enclose{circle}{2} 
+  2
   \xrightarrow[物]{2.3}
-  \enclose{circle}{3}
-}_{2.1}$</p><ul>
+  3
+}_{2.1}$</p><blockquote>
+<p>数字画圈的写法 $\enclose{circle}{3}$ 这个生成器暂不支持</p></blockquote>
+<ul>
 <li>node: $\enclose{circle}{2}$ ，圆圈，就是位置索引</li>
 <li>edge: 词， 箭头，很好理解：string[0,1] = '农'</li>
 <li>Each edge weight is a <code>negative log probality</code><ul>
