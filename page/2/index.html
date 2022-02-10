@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/3ba2b15e6a90a47b96d2821b91be3033.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/4089f9a071a74d90ba780992e2fc0383.json"
         }
 
     </script>
@@ -55,6 +55,93 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%94%EF%BC%9AHash-Tables/" target="_self">数据结构篇五：Hash Tables</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%94%EF%BC%9AHash-Tables/" target="_self">
+                <time class="text-uppercase">
+                    November 12 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><hr />
+<h1>Hash Tables</h1>
+<ul>
+<li>key-value pair</li>
+<li>using <code>Hashing</code> technique</li>
+<li>often used tracking item frequencies</li>
+</ul>
+<p>what's <em>hash function</em>?</p><ul>
+<li>maps a key <code>x</code> to a whole number in a fixed <code>range</code>.<ul>
+<li>e.g. $H(x) = (x^2 - 6x + 9) % 10$ maps (0, 9)</li>
+<li>这个方程会为不同的x产生一样的y -&gt; <code>hash collision</code></li>
+</ul>
+</li>
+<li>can hash arbitrary objects like string, list, tuple...</li>
+<li>must be <code>deterministic</code>(确定的x产生确定的y)<ul>
+<li>因此key的应该是<code>immutable</code>的类型</li>
+</ul>
+</li>
+</ul>
+<p>关键词是<code>range</code>，你设计的function总要mod一下，将结果限制在一个范围内。这里你应该暂时能推测出hashtable的key可能就是数字吧？</p><p><strong>hash collision</strong></p><ul>
+<li><code>separate chaining</code></li>
+</ul>
+<p>用一种数据结构（通常是链表）保留所有冲突的值</p><ul>
+<li><code>open addressing</code></li>
+</ul>
+<p>为冲突的值选择一个offset（地址/值）保存 -&gt; <code>probing sequence P(x)</code></p><p>不管是怎么解决冲突，<strong>worst</strong>的情况下，hash table的操作时间也会由O(1)变成O(n)</p><p>怎么用HT来查找呢？不是把hash后的结果拼到原数据上，而是每次查询前，对key进行一次hash function，就能去查询了。</p><h2>Open Addressing</h2>
+<p><strong>probing sequences</strong></p><ul>
+<li>linear probing: P(x) = ax + b</li>
+<li>quadratic probing: p(x) = $ax^2 + bx + c$</li>
+<li>double hashing: p(k, x) = $x * H_2(k)$ 双重hash</li>
+<li>pseudo random number generator: p(k, x) = x * rng(H(k), x) 用H(k)(即hash value)做种的随机数</li>
+</ul>
+<p>总之就是在这样一个序列里找下一个位置</p><p>假设一个table size 为N的HT，使用开放寻址的伪代码：</p><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">keyHash</span> <span class="o">=</span> <span class="n">H</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>   <span class="c1"># 直接计算出来的hash value</span>
+<span class="n">index</span> <span class="o">=</span> <span class="n">keyHash</span>  <span class="c1"># 偏移过后存在HT里的index</span>
+
+<span class="k">while</span> <span class="n">table</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">keyHash</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span> <span class="o">%</span> <span class="n">N</span>  <span class="c1"># 加上偏移，考虑size（N）</span>
+    <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># 游标加1</span>
+
+<span class="c1"># now can insert (k,v) at table[index]</span>
+</pre></div>
+<h3>Chaos with cycles</h3>
+<p><strong>Linear Probling (LP)</strong></p><p>LP中，如果你<em>运气不好</em>，产生的序列的下一个值永远是occupied的状态（一般是值域小于size），就进入死循环了。</p><p>假设p(x) = 3x, H(k) = 4, N = 9
+那么H(k)+P(x) % N 只会产生{4,7,1}，如果这三个位置被占用，那就陷入了永远寻找下一个的无限循环中。</p><p>一般是限制probing function能返回刚好N个值。</p><blockquote>
+<p>当p(x)=ax的a与size的N互质，即没有公约数，<code>GCD(a, N) = 1</code>一般能产生刚好N个值。(Greatest Common Denominator)</p></blockquote>
+<blockquote>
+<p>注意，为了性能和效率的平衡，有<code>load factor</code>的存在，所以到了阈值，size就要加倍，N的变化，将会使得<code>GCD(a, N) = 1</code>的a的选择有变化，而且之前对N取模，现在取值也变发生变化，这时候需要重新map</p></blockquote>
+<p>重新map不再按元素当初添加的顺序，而是把现有HT里的值按索引顺序重新map一遍。比如第一个是k6, 即第6个添加进来的，但是现在第一个就重新计算它的值，填到新的HT里面去。</p><p><strong>Quadratic Probing （QP）</strong></p><p>QP 同样有chaos with cycles的问题，通用解决办法，三种：</p><ol>
+<li>p(x) = $x^2$, size选一个 prime number &gt; 3, and $\alpha \leq \frac{1}{2}$</li>
+<li>p(x) = $(x^2 + x) / 2$, keep the size a power of 2 （不需要是素数了）</li>
+<li>p(x)= $(-1^x) \times x^2$, make size prime N $\equiv 3$ mod 4 ???</li>
+</ol>
+<p><strong>Double Hashing</strong></p><p>Double Hashing: P(x) = $x \times H_2(k)$可见仍然类似一个一次的线性方程，$H_2(k)$就类似于ax中的a，设为$\delta$，相比固定的a, 这里只是变成了动态的，这样不同的key的待选序列就是不一样的（可以理解为系数不同了）</p><p>解决chaos:</p><ol>
+<li>size N to be a prime number</li>
+<li>calculate: $\delta = H_2(k)$ mod N<ul>
+<li>$\delta=0$ 时offset就没了，所以需要人为改为1</li>
+<li>$1 \leq \delta \lt N$ and GCD($\delta$, N) = 1</li>
+</ul>
+</li>
+</ol>
+<p>可见，虽然系数是“动态”的了，但是取值还是（1，N）中的一个而已，hash只是让其动起来的一个原因，而不是参与计算的值。</p><p>我们本来就是在求hash value，结果又要引入另一个hash function，显然这个$H_2$不能像外层这样复杂，一般是针对常见的key类型(string, int...-&gt; fundamental data type)的<code>universal hash functions</code></p><blockquote>
+<p>因为N要是一个素数，所以在double size的时候，还要继续往上找直到找到一个素数为止，比如N=7, double后，N=14，那么最终，N=17</p></blockquote>
+<figure  style="flex: 67.68558951965065" ><img width="1240" height="916" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/cbae1de97a3f72ae84ea59804293ec56.png" alt=""/></figure><h3>Issues with removing</h3>
+<p>因为冲突的hash value需要probing，probing的依据是从序列里依次取出下一个位置，检查这个位置<strong>有没有被占用</strong>，那么问题就来了，如果一个本被占用的位置，因为元素需要删除，反而变成没有占用了，这有点类似删除树节点，不但要考虑删除，还要考虑这个位置怎么接续。</p><p><strong>lazy deletion</strong>
+但HT机制比树要复杂，为了避免反复应用probing函数重新摆放后续所有节点，干脆就在删除的位置放置一个预设的标识，我们称为墓碑(<code>tombstone</code>)，而不是直接置空，然后所有的查找和添加加上这一条规则，就能快速删除又无需重新排序。</p><p>大量删除会造成空间浪费，但无需立即处理：</p><ol>
+<li>添加元素允许添加到墓碑位置</li>
+<li>到达阈值容量需要倍增的时候有一次重排，这个时候就可以移除所有的墓碑</li>
+</ol>
+<p>如果查找一个hash value，连续3个都是墓碑，第4个才是它，这是不是有点浪费时间？
+确实，所以还可以优化，当你查找过一次之后，就可以把它移到第一个墓碑的位置，这样，<strong>下次</strong>查询的时候速度就会快很多了。</p><p>整个机制，叫<code>lazy deletion</code></p><figure class="vertical-figure" style="flex: 29.61816305469556" ><img width="1148" height="1938" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a935a20b4bc9641962766872aace8306.png" alt=""/></figure></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%94%EF%BC%9AHash-Tables/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%9B%9B%EF%BC%9ABinary-Trees-and-Binary-Search-Trees-%28BST%29/" target="_self">数据结构篇四：Binary Trees and Binary Search Trees (BST)</a></h1>
@@ -530,496 +617,6 @@ D固定，同A，<span class="o">(</span><span class="m">6</span><span class="o"
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%8C%E9%80%92%E5%BD%92%E4%B8%8E%E5%88%86%E6%B2%BB/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/Drawing/" target="_self">Drawing</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/Drawing/" target="_self">
-                <time class="text-uppercase">
-                    November 03 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第2章</p><hr />
-<h1>Drawing</h1>
-<p>Many UIView subclasses, such as a UIButton or a UILabel, know how to draw themselves.</p><p>A <em>pure UIView</em> is all about drawing, and it leaves that drawing largely up to you.</p><h2>Images and Image Views</h2>
-<p>图片可以来自文件，代码，或网络。</p><h3>Image Files</h3>
-<ul>
-<li><code>init(named:)</code>，会从<code>Asset catalog</code>和<code>App bundle</code>的顶层去查找<ul>
-<li>返回的是一个Optional，因为不能确定这个路径对应一张图片，或能解码成功</li>
-<li>它会将图片缓存<ul>
-<li><code>init(contentsOfFile:)</code>则不会缓存，但不从asset catalog加载而是相对于<code>Bundle.main</code>来做路径</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>从bundle里找时不加扩展名会默认为<em>png</em></li>
-<li>直接将图片拖到代码生成的不是Optional的image，调用的是<code>init(imageLiteralResourceName:)</code>方法</li>
-<li>文件名里的@表示<code>High-resolution variants</code>，即不同分辨率下采用的图片，比如<code>@2x</code></li>
-<li>文件名里的~表示<code>Device type variants</code>，即不同设备类型下采用的图片，比如<code>~ipad</code></li>
-</ul>
-<blockquote>
-<p>尽量把图片放到asset catalog里，对不同的处理器，更宽的色域，等等
-不光影响运行时，在Apple Store对你的app对特定设备进行<em>thinning</em>都会用到
-不同size class, dark mode, ipad等等trait collection都可以设置对应的图片</p></blockquote>
-<p><strong>Vector images</strong></p><ul>
-<li>An image file in the asset catalog can be a vector-based PDF or (new in Xcode 12) an SVG.</li>
-<li><code>init(systemName:)</code> -&gt; <a href="https://developer.apple.com/sf-symbols/">SF Symbols</a><ul>
-<li><code>.withConfiguration(_:) or .applyingSymbolConfiguration(_:)</code> 进行自定义，参数是一个<em>UIImage.SymbolConfiguration</em></li>
-<li>Configurations can involve one of nine <code>weights</code>, one of three <code>scales</code>, a font or text <code>style</code>, and a <code>point size</code>, in various combinations</li>
-</ul>
-</li>
-</ul>
-<p><strong>Asset catalogs and trait collections</strong></p><p>指定trait collection初始化图片：<code>init(named:in:compatibleWith:)</code></p><ul>
-<li>A built-in interface object that displays an image, such as a UIImageView, is <code>automatically trait collection–aware</code>;</li>
-<li>it receives the <code>traitCollectionDidChange(_:)</code> message and responds accordingly.</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">tcreg</span> <span class="p">=</span> <span class="bp">UITraitCollection</span><span class="p">(</span><span class="n">verticalSizeClass</span><span class="p">:</span> <span class="p">.</span><span class="n">regular</span><span class="p">)</span>
-<span class="kd">let</span> <span class="nv">tccom</span> <span class="p">=</span> <span class="bp">UITraitCollection</span><span class="p">(</span><span class="n">verticalSizeClass</span><span class="p">:</span> <span class="p">.</span><span class="n">compact</span><span class="p">)</span>
-<span class="kd">let</span> <span class="nv">moods</span> <span class="p">=</span> <span class="bp">UIImageAsset</span><span class="p">()</span>
-<span class="kd">let</span> <span class="nv">frowney</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">named</span><span class="p">:</span><span class="s">&quot;frowney&quot;</span><span class="p">)</span><span class="o">!</span>
-<span class="kd">let</span> <span class="nv">smiley</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">named</span><span class="p">:</span><span class="s">&quot;smiley&quot;</span><span class="p">)</span><span class="o">!</span>
-<span class="n">moods</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="n">frowney</span><span class="p">,</span> <span class="n">with</span><span class="p">:</span> <span class="n">tcreg</span><span class="p">)</span>
-<span class="n">moods</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="n">smiley</span><span class="p">,</span> <span class="n">with</span><span class="p">:</span> <span class="n">tccom</span><span class="p">)</span>
-</pre></div>
-<p>由此也可见，你操作的是“一张图片”，其实它是一<strong>组</strong>带了条件的图片。</p><blockquote>
-<p>UIColor也是相同的机制，你用<code>resolvedColor(with:)</code>传入trait collection把对应的颜色取出来使用。</p></blockquote>
-<p><strong>Namespacing image files</strong></p><ul>
-<li>物理文件夹，虚拟文件夹内的图片访问时，都需要加上文件夹名（namespaing)</li>
-<li><code>init(named:)</code>的完全形态其实是<code>init(named:in:)</code>，第二个参数是bundle，比如来自某个framework.</li>
-</ul>
-<h3>Image Views</h3>
-<p>A UIImageView can actually have two images, one assigned to its <code>image</code> property and the other assigned to its <code>highlightedImage</code> property
-A UIImageView without an image and without a background color is <em>invisible</em></p><p><strong>Resizable Images</strong></p><p>用inset来设置<strong>不</strong>拉伸的区域，比如一般我们碰到的多为左右随便拉伸的胶囊按钮，需要设计师做的就是左右两个半圆（不拉伸）和中间1像素的可拉伸部分</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">marsTiled</span> <span class="p">=</span> <span class="n">mars</span><span class="p">.</span><span class="n">resizableImage</span><span class="p">(</span><span class="n">withCapInsets</span><span class="p">:</span>
-<span class="n">UIEdgeInsets</span><span class="p">(</span>
-    <span class="n">top</span><span class="p">:</span> <span class="n">mars</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="kr">left</span><span class="p">:</span> <span class="n">mars</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="n">bottom</span><span class="p">:</span> <span class="n">mars</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="kr">right</span><span class="p">:</span> <span class="n">mars</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="mi">1</span>
-<span class="p">),</span> <span class="n">resizingMode</span><span class="p">:</span> <span class="p">.</span><span class="n">stretch</span><span class="p">)</span>
-</pre></div>
-<p>所以如果只是横向拉伸，上面的代码中，top, bottom都可以设为0，或都设为图片高度（而不去除2什么的），只需要保证把UI控件的高度保持跟图片一致即可。</p><p>那么，如果不小心高度大于图片高度了呢？分两种情况，如果设了0，表示没有保留区域，直接竖向拉伸，而如果设成了图片高度，那么表示整个Y方向没有可供拉伸的像素，必然造成拉伸失败：</p><figure  style="flex: 123.51598173515981" ><img width="1082" height="438" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/be32f2993735b82ac7da004327cf4bad.png" alt=""/></figure><p><strong>Transparency Masks</strong></p><p>The image shown on the screen is formed by combining the image’s <code>transparency</code> values with a single <code>tint color</code>.</p><p>忽略图片各像素上颜色的数值，只保留透明度，就成了一个mask. (renderingMode: <code>alwaysTemplate</code>)</p><ul>
-<li>iOS gives every UIView a <code>tintColor</code>, which will be used to <code>tint any template images</code>。所以我们经常用的tintColor其实就是给模板图片染色的意思。</li>
-<li>tintColor是向下继承的</li>
-<li>The symbol images are always template images</li>
-<li>iOS 13起，可以对UIImage直接应用tint color</li>
-</ul>
-<p><strong>Reversible Images</strong></p><ul>
-<li>用<code>imageFlippedForRightToLeftLayoutDirection</code>来创建一个在从右向左的书写系统里会自动翻转的图片。<ul>
-<li>但你又可以设置<code>semanticContentAttribute</code>来阻止这个镜像行为</li>
-</ul>
-</li>
-<li>如果不考虑书写系统，可以用<code>withHorizontallyFlippedOrientation</code>强行镜像</li>
-</ul>
-<h2>Graphics Contexts</h2>
-<p>Graphics Contexts是绘图的起点，你能从如下方式得到Graphics Contexts：</p><ol>
-<li>进入UIView的 <code>draw(_:)</code>方法时，系统会给你提供一个Graphics Contexts</li>
-<li>CALayer的<code>draw(in:)</code>,或其代理的<code>draw(_:in:)</code>方法，<em>in</em>参数就是Graphics Contexts<ul>
-<li>但它不是<code>currnet context</code></li>
-</ul>
-</li>
-<li>手动创建一个</li>
-</ol>
-<p>UIKit 和 Core Graphics是两套绘制工具。</p><ul>
-<li>UIKit是大多数情况下你的选择，大部分Cocoa class知道如何绘制自己</li>
-<li>只能在current context上绘制</li>
-<li>Core Graphics is the full drawing API， often referred to as <code>Quartz (2D)</code></li>
-<li>UIKit drawing is built on top of it.</li>
-</ul>
-<p>两套体系，三种context来源，共计6种殊途同归的方式。</p><h3>Drawing on Demand</h3>
-<p>直接上代码：</p><div class="highlight"><pre><span></span><span class="c1">// UIView</span>
-
-<span class="c1">// UIKit</span>
-<span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">rect</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// 直接绘制</span>
-    <span class="kd">let</span> <span class="nv">p</span> <span class="p">=</span> <span class="bp">UIBezierPath</span><span class="p">(</span><span class="n">ovalIn</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
-    <span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">setFill</span><span class="p">()</span>
-    <span class="n">p</span><span class="p">.</span><span class="n">fill</span><span class="p">()</span>
-<span class="p">}</span>
-
-<span class="c1">// CG</span>
-<span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">rect</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// 取到context</span>
-    <span class="kd">let</span> <span class="nv">con</span> <span class="p">=</span> <span class="n">UIGraphicsGetCurrentContext</span><span class="p">()</span><span class="o">!</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">addEllipse</span><span class="p">(</span><span class="k">in</span><span class="p">:</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">fillPath</span><span class="p">()</span>
-<span class="p">}</span>
-
-<span class="c1">// CALayer</span>
-
-<span class="c1">// UIKit</span>
- <span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">layer</span><span class="p">:</span> <span class="bp">CALayer</span><span class="p">,</span> <span class="k">in</span> <span class="n">con</span><span class="p">:</span> <span class="n">CGContext</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">UIGraphicsPushContext</span><span class="p">(</span><span class="n">con</span><span class="p">)</span>
-    <span class="kd">let</span> <span class="nv">p</span> <span class="p">=</span> <span class="bp">UIBezierPath</span><span class="p">(</span><span class="n">ovalIn</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
-    <span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">setFill</span><span class="p">()</span>
-<span class="n">p</span><span class="p">.</span><span class="n">fill</span><span class="p">()</span>
-    <span class="n">UIGraphicsPopContext</span><span class="p">()</span>
-<span class="p">}</span>
-
-<span class="c1">// CG</span>
-<span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">layer</span><span class="p">:</span> <span class="bp">CALayer</span><span class="p">,</span> <span class="k">in</span> <span class="n">con</span><span class="p">:</span> <span class="n">CGContext</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">addEllipse</span><span class="p">(</span><span class="k">in</span><span class="p">:</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">fillPath</span><span class="p">()</span>
-<span class="p">}</span>
-</pre></div>
-<h3>Drawing a UIImage</h3>
-<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">r</span> <span class="p">=</span> <span class="bp">UIGraphicsImageRenderer</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="n">CGSize</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
-<span class="kd">let</span> <span class="nv">im</span> <span class="p">=</span> <span class="n">r</span><span class="p">.</span><span class="n">image</span> <span class="p">{</span> <span class="kc">_</span> <span class="k">in</span>
-    <span class="kd">let</span> <span class="nv">p</span> <span class="p">=</span> <span class="bp">UIBezierPath</span><span class="p">(</span><span class="n">ovalIn</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
-    <span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">setFill</span><span class="p">()</span>
-    <span class="n">p</span><span class="p">.</span><span class="n">fill</span><span class="p">()</span>
-<span class="p">}</span>
-<span class="c1">// im is the blue circle image, do something with it here ...</span>
-<span class="n">And</span> <span class="n">here</span><span class="err">’</span><span class="n">s</span> <span class="n">the</span> <span class="n">same</span> <span class="n">thing</span> <span class="n">using</span> <span class="n">Core</span> <span class="n">Graphics</span><span class="p">:</span>
-<span class="kd">let</span> <span class="nv">r</span> <span class="p">=</span> <span class="bp">UIGraphicsImageRenderer</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="n">CGSize</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
-<span class="kd">let</span> <span class="nv">im</span> <span class="p">=</span> <span class="n">r</span><span class="p">.</span><span class="n">image</span> <span class="p">{</span> <span class="kc">_</span> <span class="k">in</span>
-    <span class="kd">let</span> <span class="nv">con</span> <span class="p">=</span> <span class="n">UIGraphicsGetCurrentContext</span><span class="p">()</span><span class="o">!</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">addEllipse</span><span class="p">(</span><span class="k">in</span><span class="p">:</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">fillPath</span><span class="p">()</span>
-<span class="p">}</span>
-<span class="c1">// im is the blue circle image, do something with it here ...</span>
-</pre></div>
-<h2>UIImage Drawing</h2>
-<p>用已有的图像进行绘制：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">mars</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">named</span><span class="p">:</span><span class="s">&quot;Mars&quot;</span><span class="p">)</span><span class="o">!</span>
-<span class="kd">let</span> <span class="nv">sz</span> <span class="p">=</span> <span class="n">mars</span><span class="p">.</span><span class="n">size</span>
-<span class="kd">let</span> <span class="nv">r</span> <span class="p">=</span> <span class="bp">UIGraphicsImageRenderer</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="n">CGSize</span><span class="p">(</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">sz</span><span class="p">.</span><span class="n">height</span><span class="p">),</span>
-    <span class="n">format</span><span class="p">:</span><span class="n">mars</span><span class="p">.</span><span class="n">imageRendererFormat</span><span class="p">)</span>
-<span class="kd">let</span> <span class="nv">im</span> <span class="p">=</span> <span class="n">r</span><span class="p">.</span><span class="n">image</span> <span class="p">{</span> <span class="kc">_</span> <span class="k">in</span>
-    <span class="n">mars</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">at</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
-    <span class="n">mars</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">at</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
-<span class="p">}</span>
-</pre></div>
-<p>这里，绘制了两个火星，注意<code>imageRendererFormat</code>的使用</p><h2>CGImage Drawing</h2>
-<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">mars</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">named</span><span class="p">:</span><span class="s">&quot;Mars&quot;</span><span class="p">)</span><span class="o">!</span>
-<span class="c1">// extract each half as CGImage</span>
-<span class="kd">let</span> <span class="nv">marsCG</span> <span class="p">=</span> <span class="n">mars</span><span class="p">.</span><span class="n">cgImage</span><span class="p">!</span>
-<span class="kd">let</span> <span class="nv">sz</span> <span class="p">=</span> <span class="n">mars</span><span class="p">.</span><span class="n">size</span>
-<span class="kd">let</span> <span class="nv">marsLeft</span> <span class="p">=</span> <span class="n">marsCG</span><span class="p">.</span><span class="n">cropping</span><span class="p">(</span><span class="n">to</span><span class="p">:</span>
-    <span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">height</span><span class="p">))</span><span class="o">!</span>
-<span class="kd">let</span> <span class="nv">marsRight</span> <span class="p">=</span> <span class="n">marsCG</span><span class="p">.</span><span class="n">cropping</span><span class="p">(</span><span class="n">to</span><span class="p">:</span>
-    <span class="n">CGRect</span><span class="p">(</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">height</span><span class="p">))</span><span class="o">!</span>
-<span class="kd">let</span> <span class="nv">r</span> <span class="p">=</span> <span class="bp">UIGraphicsImageRenderer</span><span class="p">(</span><span class="n">size</span><span class="p">:</span> <span class="n">CGSize</span><span class="p">(</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="o">*</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">sz</span><span class="p">.</span><span class="n">height</span><span class="p">),</span>
-    <span class="n">format</span><span class="p">:</span><span class="n">mars</span><span class="p">.</span><span class="n">imageRendererFormat</span><span class="p">)</span>
-<span class="kd">let</span> <span class="nv">im</span> <span class="p">=</span> <span class="n">r</span><span class="p">.</span><span class="n">image</span> <span class="p">{</span> <span class="n">ctx</span> <span class="k">in</span>
-    <span class="kd">let</span> <span class="nv">con</span> <span class="p">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">cgContext</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">marsLeft</span><span class="p">,</span> <span class="k">in</span><span class="p">:</span>
-        <span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">height</span><span class="p">))</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">marsRight</span><span class="p">,</span> <span class="k">in</span><span class="p">:</span>
-        <span class="n">CGRect</span><span class="p">(</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span><span class="n">sz</span><span class="p">.</span><span class="n">height</span><span class="p">))</span>
-<span class="p">}</span>
-</pre></div>
-<p>当然, <code>con.draw</code>可以由UIImage来完成：</p><div class="highlight"><pre><span></span><span class="bp">UIImage</span><span class="p">(</span><span class="n">cgImage</span><span class="p">:</span> <span class="n">marsLeft</span><span class="p">!,</span>
-<span class="n">scale</span><span class="p">:</span> <span class="n">mars</span><span class="p">.</span><span class="n">scale</span><span class="p">,</span>
-<span class="n">orientation</span><span class="p">:</span> <span class="n">mars</span><span class="p">.</span><span class="n">imageOrientation</span><span class="p">).</span><span class="n">draw</span><span class="p">(</span><span class="n">at</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
-</pre></div>
-<h2>Snapshots</h2>
-<ul>
-<li><code>drawHierarchy(in:afterScreenUpdates:)</code>将整个视图存成一张图片。</li>
-<li>更快，语义更好的方法：<code>.snapshotView(afterScreenUpdates:)</code> -&gt; 输出是UIView，不是UIImage</li>
-<li><code>resizableSnapshotView(from:after- ScreenUpdates:withCapInsets:)</code>生成可缩放的</li>
-</ul>
-<h2>Core Image</h2>
-<p>The “CI” in <code>CIFilter</code> and <code>CIImage</code> stands for <code>Core Image</code>, a technology for transforming images through <em>mathematical</em> filters. (iOS 5起，从macOS引入)</p><p>用途：</p><ul>
-<li>patterns and gradients (可以被别的filter一起使用)</li>
-<li>compositing (使用composting blend modes)</li>
-<li>color (颜色调整，亮度锐度色温等等)</li>
-<li>geometric (几何相关的就是用来变形)</li>
-<li>transformation (distort, blur, stylize an image)</li>
-<li>transition (一般用于动画，通过设置frame序列)</li>
-</ul>
-<p>There are more than 200 available <code>CIFilters</code>， A CIFilter is a set of <strong>instructions</strong> for <code>generating</code> a CIImage</p><ul>
-<li>基本上，处理的都是<code>CIImage</code>(input)</li>
-<li>输出也是<code>CIImage</code>，或者另一个<code>filter</code> -&gt; 链式调用<ul>
-<li>最后一层链可以自行转换为bitmap: cg或ui image(by <code>rendering</code>方法)</li>
-<li>rendering的时候，所有的数学计算才开始发生</li>
-<li>因为只是<strong>instructions</strong></li>
-</ul>
-</li>
-<li><strong>关键词</strong>：filter是用来描述怎么<strong>生成</strong>CIImage的</li>
-<li><code>CGImage</code>和<code>UIImage</code>都能得到CIImage</li>
-</ul>
-<blockquote>
-<p>UIImage只有在已经wraps了一个<code>CIImage</code>的情况下<code>.ciImage</code>才有值，而大多数情况下是没有的。</p></blockquote>
-<p><a href="https://developer.apple.com/library/archive/documentation/GraphicsImaging/Reference/CoreImageFilterReference/index.html">Core Image Filter Reference</a>里有所有的filter的名字，用来初始化一个filter</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">filter</span> <span class="p">=</span> <span class="bp">CIFilter</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="s">&quot;CICheckerboardGenerator&quot;</span><span class="p">)</span><span class="o">!</span>
-<span class="c1">// or:</span>
-<span class="kd">let</span> <span class="nv">filter</span> <span class="p">=</span> <span class="bp">CIFilter</span><span class="p">.</span><span class="n">checkerboardGenerator</span><span class="p">()</span>
-
-<span class="c1">// 用key-value来决定行为：</span>
-<span class="bp">filter</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">forKey</span><span class="p">:</span> <span class="s">&quot;inputWidth&quot;</span><span class="p">)</span>
-<span class="c1">// or:</span>
-<span class="bp">filter</span><span class="p">.</span><span class="n">width</span> <span class="p">=</span> <span class="mi">30</span>
-<span class="c1">// or init with params</span>
-<span class="kd">init</span><span class="p">(</span><span class="n">name</span><span class="p">:</span><span class="n">parameters</span><span class="p">:)</span>
-
-<span class="c1">// apply filter on CIImage(if exists one)</span>
-<span class="n">ciimage</span><span class="p">.</span><span class="n">applyingFilter</span><span class="p">(</span><span class="kc">_</span><span class="p">:</span><span class="n">parameters</span><span class="p">:)</span>
-<span class="c1">// or output a ciimage</span>
-<span class="bp">filter</span><span class="p">.</span><span class="n">outputImage</span>
-</pre></div>
-<p><strong>Render a CIImage</strong>
-CIImage 不是一个<code>displayaable image</code></p><ul>
-<li><code>CIContext</code>.init(options:).createCGImage(_:from)<ul>
-<li>参数1是CIImage，</li>
-<li>参数2是绘制区域（所以没有frame/bounds)，叫<code>extent</code></li>
-<li>这是很昂贵的操作，建议在全app生命周期保留这个context复用</li>
-</ul>
-</li>
-<li><code>UIImage</code>.init(ciImage:)</li>
-<li>把上一次的uiimage设置成<code>UIImageView</code>的image，也能造成CIImage的渲染。</li>
-</ul>
-<p>以上说的都是&quot;render&quot; CIImage的时机，所以传入的</p><blockquote>
-<p><code>Metal</code>能快速渲染CIImage</p></blockquote>
-<p>串起一个demo:</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">moi</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">named</span><span class="p">:</span><span class="s">&quot;Moi&quot;</span><span class="p">)</span><span class="o">!</span>
-<span class="kd">let</span> <span class="nv">moici</span> <span class="p">=</span> <span class="bp">CIImage</span><span class="p">(</span><span class="n">image</span><span class="p">:</span><span class="n">moi</span><span class="p">)</span><span class="o">!</span>
-<span class="kd">let</span> <span class="nv">moiextent</span> <span class="p">=</span> <span class="n">moici</span><span class="p">.</span><span class="n">extent</span>
-<span class="kd">let</span> <span class="nv">smaller</span> <span class="p">=</span> <span class="bp">min</span><span class="p">(</span><span class="n">moiextent</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="n">moiextent</span><span class="p">.</span><span class="n">height</span><span class="p">)</span>
-<span class="kd">let</span> <span class="nv">larger</span> <span class="p">=</span> <span class="bp">max</span><span class="p">(</span><span class="n">moiextent</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="n">moiextent</span><span class="p">.</span><span class="n">height</span><span class="p">)</span>
-<span class="c1">// first filter</span>
-<span class="kd">let</span> <span class="nv">grad</span> <span class="p">=</span> <span class="bp">CIFilter</span><span class="p">.</span><span class="n">radialGradient</span><span class="p">()</span>
-<span class="n">grad</span><span class="p">.</span><span class="n">center</span> <span class="p">=</span> <span class="n">moiextent</span><span class="p">.</span><span class="n">center</span>
-<span class="n">grad</span><span class="p">.</span><span class="n">radius0</span> <span class="p">=</span> <span class="nb">Float</span><span class="p">(</span><span class="n">smaller</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span> <span class="o">*</span> <span class="mf">0.7</span>
-<span class="n">grad</span><span class="p">.</span><span class="n">radius1</span> <span class="p">=</span> <span class="nb">Float</span><span class="p">(</span><span class="n">larger</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span>
-<span class="kd">let</span> <span class="nv">gradimage</span> <span class="p">=</span> <span class="n">grad</span><span class="p">.</span><span class="n">outputImage</span><span class="p">!</span>
-<span class="c1">// 到此步为止，并没有moi这个图片参与，等于是一个纯filter</span>
-
-<span class="c1">// second filter</span>
-<span class="kd">let</span> <span class="nv">blend</span> <span class="p">=</span> <span class="bp">CIFilter</span><span class="p">.</span><span class="n">blendWithMask</span><span class="p">()</span>
-<span class="n">blend</span><span class="p">.</span><span class="n">inputImage</span> <span class="p">=</span> <span class="n">moici</span>  <span class="c1">// 设置了image</span>
-<span class="n">blend</span><span class="p">.</span><span class="n">maskImage</span> <span class="p">=</span> <span class="n">gradimage</span> <span class="c1">// 这里演示的是mask filter，按我理解并不是链式的，而且语法上也不是链式的，而是赋值给了maskImage，但书里直接说是链式的</span>
-<span class="kd">let</span> <span class="nv">blendimage</span> <span class="p">=</span> <span class="n">blend</span><span class="p">.</span><span class="n">outputImage</span><span class="p">!</span>
-
-<span class="c1">// 两种render方法</span>
-<span class="c1">// content</span>
-<span class="kd">let</span> <span class="nv">moicg</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">context</span><span class="p">.</span><span class="n">createCGImage</span><span class="p">(</span><span class="n">blendimage</span><span class="p">,</span> <span class="n">from</span><span class="p">:</span> <span class="n">moiextent</span><span class="p">)</span><span class="o">!</span> <span class="c1">// *</span>
-<span class="kc">self</span><span class="p">.</span><span class="n">iv</span><span class="p">.</span><span class="n">image</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">cgImage</span><span class="p">:</span> <span class="n">moicg</span><span class="p">)</span>
-
-<span class="c1">// UIImage</span>
-<span class="kd">let</span> <span class="nv">r</span> <span class="p">=</span> <span class="bp">UIGraphicsImageRenderer</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="n">moiextent</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
-<span class="kc">self</span><span class="p">.</span><span class="n">iv</span><span class="p">.</span><span class="n">image</span> <span class="p">=</span> <span class="n">r</span><span class="p">.</span><span class="n">image</span> <span class="p">{</span> <span class="kc">_</span> <span class="k">in</span>
-    <span class="bp">UIImage</span><span class="p">(</span><span class="n">ciImage</span><span class="p">:</span> <span class="n">blendimage</span><span class="p">).</span><span class="n">draw</span><span class="p">(</span><span class="k">in</span><span class="p">:</span><span class="n">moiextent</span><span class="p">)</span> <span class="c1">// *</span>
-<span class="p">}</span>
-</pre></div>
-<blockquote>
-<p>关于上述代码里我的疑惑，第一个filter并不是chain到第二个filter里的，但书里说是<code>obtain the final CIImage in the chain (blendimage)，看来所谓的chain，并不是fitler的chain，而是</code>outputImage`的chain?
-问题是，这是唯一且标准的filter嵌套用法么？-&gt; mask</p></blockquote>
-<p>不是的</p><ol>
-<li>对filter的outputImage继续应用<code>aplyingFilter(_:parameters)</code>来链式应用一个新的filter<ul>
-<li>返回值是CIImage，不再是filter</li>
-<li>所以如果继续chain，直接用返回值调apply...方法即可</li>
-</ul>
-</li>
-<li>把上一个filter的outputImage设为下一个filter的inputImage:</li>
-</ol>
-<div class="highlight"><pre><span></span><span class="bp">CIFilter</span><span class="w"> </span><span class="o">*</span><span class="n">gloom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">CIFilter</span><span class="w"> </span><span class="n">filterWithName</span><span class="o">:</span><span class="s">@&quot;CIGloom&quot;</span><span class="p">];</span><span class="w"></span>
-<span class="p">[</span><span class="n">gloom</span><span class="w"> </span><span class="n">setDefaults</span><span class="p">];</span><span class="w">                                        </span>
-<span class="p">[</span><span class="n">gloom</span><span class="w"> </span><span class="n">setValue</span><span class="o">:</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="n">forKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIInputImageKey</span><span class="p">];</span><span class="w"></span>
-<span class="p">[</span><span class="n">gloom</span><span class="w"> </span><span class="n">setValue</span><span class="o">:</span><span class="w"> </span><span class="mf">@25.0f</span><span class="w"> </span><span class="n">forKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIInputRadiusKey</span><span class="p">];</span><span class="w">         </span>
-<span class="p">[</span><span class="n">gloom</span><span class="w"> </span><span class="n">setValue</span><span class="o">:</span><span class="w"> </span><span class="mf">@0.75f</span><span class="w"> </span><span class="n">forKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIInputIntensityKey</span><span class="p">];</span><span class="w">      </span>
-<span class="c1">// 即outputImage</span>
-<span class="bp">CIImage</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">gloom</span><span class="w"> </span><span class="n">valueForKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIOutputImageKey</span><span class="p">];</span><span class="w">   </span>
-
-<span class="bp">CIFilter</span><span class="w"> </span><span class="o">*</span><span class="n">bumpDistortion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">CIFilter</span><span class="w"> </span><span class="n">filterWithName</span><span class="o">:</span><span class="s">@&quot;CIBumpDistortion&quot;</span><span class="p">];</span><span class="w"></span>
-<span class="p">[</span><span class="n">bumpDistortion</span><span class="w"> </span><span class="n">setDefaults</span><span class="p">];</span><span class="w">                                              </span>
-<span class="c1">// 设置inputImage (with first filter&#39;s output image) </span>
-<span class="p">[</span><span class="n">bumpDistortion</span><span class="w"> </span><span class="n">setValue</span><span class="o">:</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="n">forKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIInputImageKey</span><span class="p">];</span><span class="w"></span>
-<span class="p">[</span><span class="n">bumpDistortion</span><span class="w"> </span><span class="n">setValue</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="bp">CIVector</span><span class="w"> </span><span class="n">vectorWithX</span><span class="o">:</span><span class="mi">200</span><span class="w"> </span><span class="n">Y</span><span class="o">:</span><span class="mi">150</span><span class="p">]</span><span class="w"></span>
-<span class="w">                </span><span class="nl">forKey</span><span class="p">:</span><span class="w"> </span><span class="n">kCIInputCenterKey</span><span class="p">];</span><span class="w">                              </span>
-<span class="p">[</span><span class="n">bumpDistortion</span><span class="w"> </span><span class="n">setValue</span><span class="o">:</span><span class="w"> </span><span class="mf">@100.0f</span><span class="w"> </span><span class="n">forKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIInputRadiusKey</span><span class="p">];</span><span class="w">                </span>
-<span class="p">[</span><span class="n">bumpDistortion</span><span class="w"> </span><span class="n">setValue</span><span class="o">:</span><span class="w"> </span><span class="mf">@3.0f</span><span class="w"> </span><span class="n">forKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIInputScaleKey</span><span class="p">];</span><span class="w">                   </span>
-<span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">bumpDistortion</span><span class="w"> </span><span class="n">valueForKey</span><span class="o">:</span><span class="w"> </span><span class="n">kCIOutputImageKey</span><span class="p">];</span><span class="w"></span>
-</pre></div>
-<blockquote>
-<p>CIImage能认出EXIF里关于旋转方向的参数，并以正确的方向展示</p></blockquote>
-<h2>Blur and Vibrancy Views</h2>
-<p>毛玻璃效果，用<code>UIVisualEffectView</code>，这是个抽像类，实际用这两个：<code>UIVisualEffectView</code>和<code>UIVibrancyEffect</code>。</p><p>什么是<code>UIVibrancyEffect</code>?</p><blockquote>
-<p>An object that amplifies and adjusts the color of the content layered <code>behind</code> a visual effect view.</p></blockquote>
-<p>关键词是<code>behind</code>，即它是配合别的视效一起用的（比如毛玻璃）。文字被毛玻璃覆盖后的效果，并不是由毛玻璃层来确定的，而是由vibrancy effect自定义的。</p><p>总的来说</p><ul>
-<li>用effect初始化effect view, effect就是五种<code>material</code></li>
-<li>这个view可以当成常规view来定位，布局，添加到subview里，等等</li>
-<li>用上一个effect初始化一个vibrancy effect（with style)</li>
-<li>用vibrance effect初始化一个view</li>
-<li>创建UI控件</li>
-<li>让vibView的bounds等于内容的bounds（等于只对内容所有的范围内应用特效），并定位</li>
-<li>vibView添加到effectView的contentView的subView里去</li>
-<li>需要被vibrancy的内容（比如一个label)，则添加到vibView.contentView.addSubview(label)</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">blurEffect</span> <span class="p">=</span> <span class="bp">UIBlurEffect</span><span class="p">(</span><span class="n">style</span><span class="p">:</span> <span class="p">.</span><span class="n">systemThinMaterial</span><span class="p">)</span>
-<span class="kd">let</span> <span class="nv">blurView</span> <span class="p">=</span> <span class="bp">UIVisualEffectView</span><span class="p">(</span><span class="n">effect</span><span class="p">:</span> <span class="n">blurEffect</span><span class="p">)</span>
-<span class="n">blurView</span><span class="p">.</span><span class="n">frame</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span>
-<span class="n">blurView</span><span class="p">.</span><span class="n">autoresizingMask</span> <span class="p">=</span> <span class="p">[.</span><span class="n">flexibleWidth</span><span class="p">,</span> <span class="p">.</span><span class="n">flexibleHeight</span><span class="p">]</span>
-<span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">blurView</span><span class="p">)</span>
-<span class="kd">let</span> <span class="nv">vibEffect</span> <span class="p">=</span> <span class="bp">UIVibrancyEffect</span><span class="p">(</span>
-    <span class="n">blurEffect</span><span class="p">:</span> <span class="n">blurEffect</span><span class="p">,</span> <span class="n">style</span><span class="p">:</span> <span class="p">.</span><span class="n">label</span><span class="p">)</span>
-<span class="kd">let</span> <span class="nv">vibView</span> <span class="p">=</span> <span class="bp">UIVisualEffectView</span><span class="p">(</span><span class="n">effect</span><span class="p">:</span><span class="n">vibEffect</span><span class="p">)</span>
-<span class="kd">let</span> <span class="nv">lab</span> <span class="p">=</span> <span class="bp">UILabel</span><span class="p">()</span>
-<span class="n">lab</span><span class="p">.</span><span class="n">text</span> <span class="p">=</span> <span class="s">&quot;Hello, world&quot;</span>
-<span class="n">lab</span><span class="p">.</span><span class="n">sizeToFit</span><span class="p">()</span>
-<span class="n">vibView</span><span class="p">.</span><span class="n">bounds</span> <span class="p">=</span> <span class="n">lab</span><span class="p">.</span><span class="n">bounds</span>
-<span class="n">vibView</span><span class="p">.</span><span class="n">center</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span>
-<span class="n">vibView</span><span class="p">.</span><span class="n">autoresizingMask</span> <span class="p">=</span>
-    <span class="p">[.</span><span class="n">flexibleTopMargin</span><span class="p">,</span> <span class="p">.</span><span class="n">flexibleBottomMargin</span><span class="p">,</span>
-    <span class="p">.</span><span class="n">flexibleLeftMargin</span><span class="p">,</span> <span class="p">.</span><span class="n">flexibleRightMargin</span><span class="p">]</span>
-<span class="n">blurView</span><span class="p">.</span><span class="n">contentView</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">vibView</span><span class="p">)</span>
-<span class="n">vibView</span><span class="p">.</span><span class="n">contentView</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span>
-</pre></div>
-<h2>Drawing a UIView</h2>
-<p>UIView本身就提供了一个<code>graphics context</code>，在这个context里进行的绘制会直接显示在view里。</p><ul>
-<li>subclass UIView's <code>.draw(_:)</code>method<ul>
-<li>直到需要时才会被调用</li>
-<li>或<code>setNeedsDisplay</code>会调用</li>
-<li>一量被draw，就缓存起来了 (<code>bitmap backing store</code>)</li>
-</ul>
-</li>
-<li>实时绘制会吓到一些初学者，绘制是<code>time-comsuming operation</code></li>
-</ul>
-<p>推荐在<code>draw</code>方法里实时绘制</p><blockquote>
-<p>In fact, moving code to draw(_: ) is commonly a way to increase efficiency. This is because it is more efficient for the drawing engine to <em>render directly onto the screen</em> than for it to <em>render offscreen</em> and then copy those pixels onto the screen.</p></blockquote>
-<p>几个注意点：</p><ol>
-<li>不要手动调用draw方法，<code>setNeedsDisplay</code>会让系统决定下一个合适的时机来draw</li>
-<li>不要重载draw方法，比如你无法合并UIImageView的drawing</li>
-<li>不要在draw里做任何与绘制无关的事，配置（如背景色，添加子view/layer）项应该在别的地方做，比如<code>layoutSubviews</code></li>
-<li>第二个参数是一个rect，默认是view的bounds<ul>
-<li>如果你用<code>setNeesDisplay(_:)</code>送入了自定义的CGRect，draw里面的rect也就成了这个，如果你不在这个rect里画（而是在整个view的rect里），超出部分会被clip掉</li>
-<li>这也是为了效率，显示提供绘制的区域</li>
-</ul>
-</li>
-<li>手写draw绘制出来的view会有黑色的底色，如果你没有设计背景色，以及<code>isOpaque == true</code>时（<code>UIView.init(frame:)</code>出来的view恰好满足这两个条件， nib里拖出来的则是nil的背景，反而没这问题）<ul>
-<li>解决：实现<code>init(frame:)</code>，去设置*isOpaque`为false</li>
-</ul>
-</li>
-</ol>
-<h2>Graphics Context Commands</h2>
-<blockquote>
-<p>Under the hood, Core Graphics commands to a <code>graphics context</code> are global C functions with names like CGContextSetFillColor，但是swift的封装让调用更简单（语法糖）</p></blockquote>
-<p>当你在graphics context里绘制时，取的就是当前的设置，因此在任何绘制前，第一步都是先配置context's setting，比如你要画一根红线，再画一根蓝线</p><ol>
-<li>设置context line color red, then draw a line</li>
-<li>设置context line color blue, then draw a line</li>
-</ol>
-<p>直觉认为红和蓝只是两条线各自的属性，其实是你绘制<strong>当时</strong>，整个graphics context的设置</p><ul>
-<li>这些配置通通存成一个state</li>
-<li>这些state又会stack起来<ul>
-<li>saveGState将当前state推到栈顶</li>
-<li>restoreGstate则将state从栈顶取出，覆盖当前设置</li>
-</ul>
-</li>
-<li>只要先后配置没有冲突的项，就没必要频繁save-restore</li>
-</ul>
-<h3>Paths and Shapes</h3>
-<ul>
-<li><p>通过一系列的描述去移动一去想象中的笔，就是构建<code>path</code>的过程。（注意，不是构建<code>CGPath</code>这个封装的过程）</p><ul>
-<li>即只要你在context内，就可以用笔画东西了</li>
-</ul>
-</li>
-<li><p>只要你正确地使用<code>move(to:)</code>方法，就不需要像apple文档里动不动就用<code>beginPath</code>来设置新的path的起点</p></li>
-<li><p><code>fillPath</code>会自动<code>closePaht</code></p></li>
-<li><p>先提供path，再draw，draw的意思要么是stroke，要么是fill，要么是both（<code>drawPath</code>方法），但不能一步步来，因为draw完你的path就空了</p><ul>
-<li>衔接第一条，如果你想复用这个path，才需要用<code>CGPath</code>封装起来</li>
-</ul>
-</li>
-<li><p>如果是使用UIKit封装的语法，那么起点就是一个path <code>let path = UIBezierPath()</code></p></li>
-<li><p>那么每次draw完，要在别的位置“落笔”的话，要先清一下靠前的path: <code>path.removeAllPoints()</code></p></li>
-</ul>
-<h3>Clipping</h3>
-<ul>
-<li>clipping掉的区域就不能被绘制了</li>
-<li>通常你无法得知一个graphics context的大小，但是通过<code>boundingBoxOfClipPath</code>却能拿到整个bounding</li>
-</ul>
-<p>这一节做了几个实验，单独写到了<a href="https://www.jianshu.com/p/ade133568ac0">另一篇博文</a></p><blockquote>
-<p>前面说过，没有背景色+isOpaque会导致背景变黑，在draw里面，默认的颜色也是黑色，所以你不带任何设置的绘制你是看不到任何东西的（就是黑笔在黑纸上画）</p></blockquote>
-<h3>Gradients</h3>
-<p>gradient不能用作path的fill，但可以反过来让gradient沿着path分布，以及被clip等。</p><p>在上面应用clip绘制箭尾的例子里，我们把箭柄变成从左到右是灰-黑-灰的渐变，只需要在<code>addLine</code>并设置了line的宽度后(不要设颜色了），不是去<code>strokePath()</code>，而是：</p><div class="highlight"><pre><span></span><span class="n">con</span><span class="p">.</span><span class="n">replacePathWithStrokedPath</span><span class="p">()</span>  <span class="c1">// 不再strokePath</span>
-<span class="n">con</span><span class="p">.</span><span class="n">clip</span><span class="p">()</span>                        <span class="c1">// 再clip一次，奇偶反转</span>
-<span class="c1">// draw the gradient</span>
-<span class="kd">let</span> <span class="nv">locs</span> <span class="p">:</span> <span class="p">[</span><span class="n">CGFloat</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span> <span class="p">]</span>
-<span class="kd">let</span> <span class="nv">colors</span> <span class="p">:</span> <span class="p">[</span><span class="n">CGFloat</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span>
-        <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="c1">// starting color, transparent light gray</span>
-        <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="c1">// intermediate color, darker less transparent gray</span>
-        <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="c1">// ending color, transparent light gray</span>
-    <span class="p">]</span>
-<span class="kd">let</span> <span class="nv">sp</span> <span class="p">=</span> <span class="n">CGColorSpaceCreateDeviceGray</span><span class="p">()</span>
-<span class="kd">let</span> <span class="nv">grad</span> <span class="p">=</span> <span class="n">CGGradient</span><span class="p">(</span>
-    <span class="n">colorSpace</span><span class="p">:</span><span class="n">sp</span><span class="p">,</span> <span class="n">colorComponents</span><span class="p">:</span> <span class="n">colors</span><span class="p">,</span> <span class="n">locations</span><span class="p">:</span> <span class="n">locs</span><span class="p">,</span> <span class="bp">count</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span><span class="o">!</span>
-<span class="n">con</span><span class="p">.</span><span class="n">drawLinearGradient</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span>
-    <span class="n">start</span><span class="p">:</span> <span class="n">CGPoint</span><span class="p">(</span><span class="mi">89</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">end</span><span class="p">:</span> <span class="n">CGPoint</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">options</span><span class="p">:[])</span>
-<span class="n">con</span><span class="p">.</span><span class="n">resetClip</span><span class="p">()</span> <span class="c1">// done clipping</span>
-</pre></div>
-<p>小技巧就是用<code>replacePathWithStrokedPath</code>假装进行了描边（所以只需要线宽并不需要线的颜色），返回了一个新的path，一条粗线变成了一个矩形框。<br />
-而一旦添加了这个框，前面的奇偶关系就全反过来了，于是我们再<code>clip</code>一次，这就是头两行代码里做的事。</p><h3>Colors and Patterns</h3>
-<p>当你的suer interface sytle changes(比如黑暗模式切换), <code>draw(_:)</code>方法会被立刻调用，被设置<code>UITraitCollection.current</code>，任何支持动态颜色的<code>UIColor</code>能变成相应的颜色，但是<code>CGColor</code>不能，你需要手动触发重绘。</p><p>UIKit使用pattern非常简单，把纹理绘制到图片上，然后从纹理图片提取出颜色信息，就能像别的颜色一样<code>setFill</code>了：</p><div class="highlight"><pre><span></span><span class="c1">// create the pattern image tile</span>
-<span class="kd">let</span> <span class="nv">r</span> <span class="p">=</span> <span class="bp">UIGraphicsImageRenderer</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="n">CGSize</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
-<span class="kd">let</span> <span class="nv">stripes</span> <span class="p">=</span> <span class="n">r</span><span class="p">.</span><span class="n">image</span> <span class="p">{</span> <span class="n">ctx</span> <span class="k">in</span>
-    <span class="kd">let</span> <span class="nv">imcon</span> <span class="p">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">cgContext</span>
-    <span class="n">imcon</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">red</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
-    <span class="n">imcon</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
-    <span class="n">imcon</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
-    <span class="n">imcon</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
-<span class="p">}</span>
-<span class="c1">// paint the point of the arrow with it</span>
-<span class="kd">let</span> <span class="nv">stripesPattern</span> <span class="p">=</span> <span class="bp">UIColor</span><span class="p">(</span><span class="n">patternImage</span><span class="p">:</span><span class="n">stripes</span><span class="p">)</span>
-<span class="n">stripesPattern</span><span class="p">.</span><span class="n">setFill</span><span class="p">()</span>
-<span class="kd">let</span> <span class="nv">p</span> <span class="p">=</span> <span class="bp">UIBezierPath</span><span class="p">()</span>
-<span class="n">p</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
-<span class="n">p</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
-<span class="n">p</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
-<span class="n">p</span><span class="p">.</span><span class="n">fill</span><span class="p">()</span>
-</pre></div>
-<p>而Core Graphics则要复杂（也更底层）得多，结合注释看代码：</p><div class="highlight"><pre><span></span><span class="n">con</span><span class="p">.</span><span class="n">saveGState</span><span class="p">()</span>
-<span class="c1">// 非常重要，设置颜色空间</span>
-<span class="kd">let</span> <span class="nv">sp2</span> <span class="p">=</span> <span class="n">CGColorSpace</span><span class="p">(</span><span class="n">patternBaseSpace</span><span class="p">:</span><span class="kc">nil</span><span class="p">)</span><span class="o">!</span>
-<span class="n">con</span><span class="p">.</span><span class="n">setFillColorSpace</span><span class="p">(</span><span class="n">sp2</span><span class="p">)</span>
-<span class="c1">// 纹理绘制真正发生的地方</span>
-<span class="kd">let</span> <span class="nv">drawStripes</span> <span class="p">:</span> <span class="n">CGPatternDrawPatternCallback</span> <span class="p">=</span> <span class="p">{</span> <span class="kc">_</span><span class="p">,</span> <span class="n">con</span> <span class="k">in</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">red</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">blue</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
-<span class="p">}</span>
-<span class="c1">// 包装成一个callback给CGPattern使用</span>
-<span class="kd">var</span> <span class="nv">callbacks</span> <span class="p">=</span> <span class="bp">CGPatternCallbacks</span><span class="p">(</span>
-    <span class="n">version</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">drawPattern</span><span class="p">:</span> <span class="n">drawStripes</span><span class="p">,</span> <span class="n">releaseInfo</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span> <span class="c1">// 一个struct</span>
-
-<span class="c1">// 核心就是构造这个CGPattern</span>
-<span class="kd">let</span> <span class="nv">patt</span> <span class="p">=</span> <span class="n">CGPattern</span><span class="p">(</span><span class="n">info</span><span class="p">:</span><span class="kc">nil</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>  <span class="c1">// cell大小</span>
-    <span class="n">matrix</span><span class="p">:</span> <span class="p">.</span><span class="n">identity</span><span class="p">,</span>    <span class="c1">// cell变换，这里没有，就用.identity</span>
-    <span class="n">xStep</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="n">yStep</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>   <span class="c1">// 横向纵向复制cell时的步长</span>
-    <span class="n">tiling</span><span class="p">:</span> <span class="p">.</span><span class="n">constantSpacingMinimalDistortion</span><span class="p">,</span>  <span class="c1">// 排列方式</span>
-    <span class="n">isColored</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>      <span class="c1">// 是颜色还是画笔模式，选颜色true</span>
-    <span class="n">callbacks</span><span class="p">:</span> <span class="p">&amp;</span><span class="n">callbacks</span><span class="p">)</span><span class="o">!</span>  <span class="c1">// 纹理绘制的方法包在callback里面，传指针</span>
-<span class="kd">var</span> <span class="nv">alph</span> <span class="p">:</span> <span class="n">CGFloat</span> <span class="p">=</span> <span class="mf">1.0</span>
-<span class="n">con</span><span class="p">.</span><span class="n">setFillPattern</span><span class="p">(</span><span class="n">patt</span><span class="p">,</span> <span class="n">colorComponents</span><span class="p">:</span> <span class="p">&amp;</span><span class="n">alph</span><span class="p">)</span>
-<span class="n">con</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
-<span class="n">con</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-<span class="n">con</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
-<span class="n">con</span><span class="p">.</span><span class="n">fillPath</span><span class="p">()</span>
-<span class="n">con</span><span class="p">.</span><span class="n">restoreGState</span><span class="p">()</span>
-</pre></div>
-<h3>Graphics Context Transforms</h3>
-<p>跟前面的知识点一样，应用<em>Graphics Context Transforms</em>后，也不会影响当前已经绘制的东西。 =&gt; <code>CTM</code>即（<code>current transform matrix</code>)。</p><p>旋转的中心点是原点，大多数情况下不是你想要的，记得先translate一下。</p><div class="highlight"><pre><span></span><span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">rect</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">let</span> <span class="nv">con</span> <span class="p">=</span> <span class="n">UIGraphicsGetCurrentContext</span><span class="p">()</span><span class="o">!</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">setShadow</span><span class="p">(</span><span class="n">offset</span><span class="p">:</span> <span class="n">CGSize</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">blur</span><span class="p">:</span> <span class="mi">12</span><span class="p">)</span> <span class="c1">// 顺便演示下sahdow</span>
-    <span class="n">con</span><span class="p">.</span><span class="n">beginTransparencyLayer</span><span class="p">(</span><span class="n">auxiliaryInfo</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>  <span class="c1">// 这样重叠的阴影不会叠成黑色</span>
-    <span class="kc">self</span><span class="p">.</span><span class="n">arrow</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">at</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
-    <span class="k">for</span> <span class="kc">_</span> <span class="k">in</span> <span class="mf">0.</span><span class="p">.&lt;</span><span class="mi">3</span> <span class="p">{</span>
-        <span class="n">con</span><span class="p">.</span><span class="n">translateBy</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="mi">100</span><span class="p">)</span>
-        <span class="n">con</span><span class="p">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">by</span><span class="p">:</span> <span class="mi">30</span> <span class="o">*</span> <span class="p">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.0</span><span class="p">)</span>
-        <span class="n">con</span><span class="p">.</span><span class="n">translateBy</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="o">-</span><span class="mi">100</span><span class="p">)</span>
-        <span class="kc">self</span><span class="p">.</span><span class="n">arrow</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">at</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span> <span class="c1">// 注意这里是用前面方法生成的箭头图片来draw到指定位置</span>
-    <span class="p">}</span> 
-<span class="p">}</span>
-</pre></div>
-<figure  style="flex: 77.47747747747748" ><img width="688" height="444" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/0059ea4156dffb9df15e77df8a87f971.png" alt=""/></figure><p>注意，语法虽然是先处理context，再绘制，其实只是告知坐标系的变化，绘制的时候自动应用这些变换。</p><h3>Erasing</h3>
-<p><code>clear(_:)</code>擦除行为取决于context是透明还是实心的（透明擦成透明，实心擦成黑色），只要不是opaque，通通理解为透明，比如background color是nil, 或0.9999的透明度。</p><h2>Points and Pixels</h2>
-<p><code>con.fill(CGRect(100,0,1.0/self.contentScaleFactor,100))</code>应用contentScaleFactor画一条在任何屏幕上都锐利的1像素直线。</p><h2>Content Mode</h2>
-<p>the drawing system will <code>avoid</code> asking a view to <code>redraw</code> itself from scratch if possible; instead, it will use the <code>cached</code> result of the previous drawing operation (the <strong>bitmap backing store</strong>).</p><p>If the view is resized, the system may simply stretch or shrink or reposition the cached drawing, if your contentMode setting instructs it to do so.</p><p><code>draw(_:)</code>从原点开始绘制，所以你的<code>contentMode</code>也要相应设置为<code>topLeft</code>。而如果设置为<code>.redraw</code>，则不会使用cached content，每当view被resize的时候，就会调用<code>setNeedsDisplay</code>方法，最终触发<code>draw(_:)</code>进行重绘。</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Drawing/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>
