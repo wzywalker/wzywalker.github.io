@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Drawing
+title: Programming iOS 14 - Drawing
 slug: Drawing
-date: 2021-11-03 00:00
+date: 2021-12-25 00:00
 status: publish
 author: walker
 categories: 

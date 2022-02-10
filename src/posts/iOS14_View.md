@@ -1,6 +1,6 @@
 ---
 layout: post
-title: View
+title: Programming iOS 14 - View
 slug: View
 date: 2021-12-22 00:00
 status: publish
