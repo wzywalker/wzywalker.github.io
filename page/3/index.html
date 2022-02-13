@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/ba498fe42f95911578b4ebfec092709c.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/46c4ce6a93d100412abf26f8110fcfe0.json"
         }
 
     </script>
@@ -953,7 +953,7 @@ x5,y3 -&gt; x4匹配不到新的，抢夺失败，-&gt; x5,null
         <div class="prism-post-time">
             <a class="no-link" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-4/" target="_self">
                 <time class="text-uppercase">
-                    October 14 2021
+                    October 15 2021
                 </time>
             </a>
         </div>
@@ -1329,7 +1329,7 @@ $</p><p>O代表out_channel，大型网络里256，512比比皆是，所以它可
         <div class="prism-post-time">
             <a class="no-link" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-3/" target="_self">
                 <time class="text-uppercase">
-                    October 13 2021
+                    October 14 2021
                 </time>
             </a>
         </div>
@@ -1591,68 +1591,6 @@ $</p><p>O代表out_channel，大型网络里256，512比比皆是，所以它可
     </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-1/" target="_self">李宏毅MACHINE LEARNING 2021 SPRING笔记[1]</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-1/" target="_self">
-                <time class="text-uppercase">
-                    October 13 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><blockquote>
-<p>纯听课时一些思路和笔记，没有教程作用。
-这个课程后面就比较水了，大量的全是介绍性的东西，也罗列了大量的既往课程和论文，如果你在工作过研究中碰到了它提过的场景或问题，倒是可以把它作索引用。</p></blockquote>
-<h1>Linear Model</h1>
-<h2>Piecewise Linear</h2>
-<p>线性模型永远只有一条直线，那么对于折线（曲线），能怎样更好地建模呢？这里考虑一种方法，</p><ol>
-<li>用一个<code>常数</code>加一个<code>整流函数</code><ul>
-<li>即左右两个阈值外y值不随x值变化，阈值内才是线性变化（天生就拥有两个折角）。</li>
-</ul>
-</li>
-<li>每一个转折点加一个新的整流函数</li>
-</ol>
-<p>如下：
-<figure  style="flex: 66.625" ><img width="1066" height="800" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/bc1ab298834013a9304c0c6939d2406b.png" alt=""/></figure></p><p>如果是曲线，也可以近似地理解为数个折线构成的（取决于近似的精度），而蓝色的整流函数不好表示，事实上有sigmoid函数与它非常接近（它是曲线），所以蓝线又可以叫：<code>Hard Sigmoid</code></p><p>所以，最终成了一个常数(<code>bias</code>)和数个<code>sigmoid</code>函数来逼近真实的曲线。同时，每一个转折点<code>i</code>上s函数的具体形状（比如有多斜多高），就由一个新的线性变换来控制：$b_i + w_ix_n$，把<code>i</code>上<strong>累积的线性变换</strong>累加，就得到与$x_n$最可能逼近的曲线。</p><p>下图演示了3个转折点的情况：</p><figure  style="flex: 66.625" ><img width="1066" height="800" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1d785e5ce2165596c3ebeb09fc8fc48b.png" alt=""/></figure><p>至此，一个简单的对b,w依赖的函数变成了对（$w_i, b_i, c_i$)和, x, b的依赖，即多了很多变量。</p><ul>
-<li>$y = b + wx_1$</li>
-<li>$y = b + \sum_i c_i sigmoid(b_i + w_i x_{\color{red} 1})$</li>
-</ul>
-<p>注意这个$x_1$，即只转了一个x就要堆一个<code>sum</code>，而目前也只是演示了只有一个特征的情况。</p><p>如果更复杂一点的模型，每次不是看一个x，而看n个x，（比如利用前7天的观看数据来预测第8天的，那么建模的时候就是每一个数都要与前7天的数据建立w和b的关系）：</p><blockquote>
-<p>其实就是由一个feature变成了n个feature了，一般的教材会用不同的feature来讲解（比如影响房价的除了时间，还有面积，地段等等），而这里只是增加了天数，可能会让人没有立刻弄清楚两者其实是同一个东西。其实就是x1, x2, x3...不管它们对应的是同一<strong>类</strong>特征，而是完全不同的多个<strong>角度</strong>的特征。</p></blockquote>
-<p>现在就有一堆$wx$了</p><ul>
-<li>$y = b + \sum_j w_j x_j$</li>
-<li>现在就变成了(注意，其实就是把加号右边完整代入）：</li>
-<li>$y = b + \sum_i c_i sigmoid(b_i + \color{red}{\sum_j w_{ij} x_j})$</li>
-</ul>
-<p>展开计算，再根据特征，又可以看回矩阵了（而不是从矩阵出发来思考）：</p><figure class="vertical-figure" style="flex: 33.29129886506936" ><img width="1056" height="1586" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a84ecec9786db279d55ff5ecbb1a8124.png" alt=""/></figure><p>矩阵运算结果为(r)，再sigmoid后，设结果为a:</p><ul>
-<li>$a_i = c_i \sigma(r_i)$</li>
-<li>$y = b + \sum_i a_i$ c 和 a要乘加，仍然可以矩阵化（其实是向量化）：</li>
-<li>$y = b + c^T a$， 把上面的展开回去：</li>
-<li>$y = b + c^T \sigma(\bold b + W x)$<ul>
-<li>前后两个b是不同的，一个是数值，一个是向量</li>
-</ul>
-</li>
-</ul>
-<p>这里，我们把目前所有的“未知数”全部拉平拼成了一个向量 $\theta$：
-<figure  style="flex: 66.625" ><img width="1066" height="800" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/961de3efa8dcf472170d57c5e60f2fc4.png" alt=""/></figure></p><p>这里，如果把$c^T$写成<code>W'</code>你会发现，我们已经推导出了一个2层的神经网络：一个隐层，一个输出层：</p><ul>
-<li>b+wx 是第一层 得到<code>a</code></li>
-<li>对<code>a</code>进行一次sigmoid（别的教材里会说是激活）得到<code>a'</code></li>
-<li>把<code>a'</code>当作输入，再进行一次 b+wx (这就是隐层了)</li>
-<li>得到的输出就是网络的输出<code>o</code></li>
-</ul>
-<blockquote>
-<p>这里在用另一个角度来尝试解释神经网络，激活函数等，但要注意，sigmoid的引入原本是去”对着折线描“的，也就是说是人为选择的，而这里仍然变成了机器去”学习“，即没有告诉它哪些地方是转折点。也就是说有点陷入了用机器学习解释机器学习的情况。</p></blockquote>
-<blockquote>
-<p>但是如果是纯曲线，那么其实是可以无数个sigmoid来组合的，就不存在要去拟合某些“特定的点”，那样只要找到最合适“数量”的sigmoig就行了（因为任何一个点都可以算是折点）</p></blockquote>
-<h2>Loss</h2>
-<p>loss 没什么变化，仍旧是一堆$\theta$代入后求的值与y的差，求和。并期望找到使loss最小化的$\theta$：</p><p>$\bold \theta = arg\ \underset{\theta}{min}\ L$</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-1/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-2/" target="_self">李宏毅MACHINE LEARNING 2021 SPRING笔记[2]</a></h1>
         <div class="prism-post-time">
             <a class="no-link" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-2/" target="_self">
@@ -1847,6 +1785,68 @@ $$</p><h3>adaptive learning rate</h3>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-2/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-1/" target="_self">李宏毅MACHINE LEARNING 2021 SPRING笔记[1]</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-1/" target="_self">
+                <time class="text-uppercase">
+                    October 13 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><blockquote>
+<p>纯听课时一些思路和笔记，没有教程作用。
+这个课程后面就比较水了，大量的全是介绍性的东西，也罗列了大量的既往课程和论文，如果你在工作过研究中碰到了它提过的场景或问题，倒是可以把它作索引用。</p></blockquote>
+<h1>Linear Model</h1>
+<h2>Piecewise Linear</h2>
+<p>线性模型永远只有一条直线，那么对于折线（曲线），能怎样更好地建模呢？这里考虑一种方法，</p><ol>
+<li>用一个<code>常数</code>加一个<code>整流函数</code><ul>
+<li>即左右两个阈值外y值不随x值变化，阈值内才是线性变化（天生就拥有两个折角）。</li>
+</ul>
+</li>
+<li>每一个转折点加一个新的整流函数</li>
+</ol>
+<p>如下：
+<figure  style="flex: 66.625" ><img width="1066" height="800" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/bc1ab298834013a9304c0c6939d2406b.png" alt=""/></figure></p><p>如果是曲线，也可以近似地理解为数个折线构成的（取决于近似的精度），而蓝色的整流函数不好表示，事实上有sigmoid函数与它非常接近（它是曲线），所以蓝线又可以叫：<code>Hard Sigmoid</code></p><p>所以，最终成了一个常数(<code>bias</code>)和数个<code>sigmoid</code>函数来逼近真实的曲线。同时，每一个转折点<code>i</code>上s函数的具体形状（比如有多斜多高），就由一个新的线性变换来控制：$b_i + w_ix_n$，把<code>i</code>上<strong>累积的线性变换</strong>累加，就得到与$x_n$最可能逼近的曲线。</p><p>下图演示了3个转折点的情况：</p><figure  style="flex: 66.625" ><img width="1066" height="800" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1d785e5ce2165596c3ebeb09fc8fc48b.png" alt=""/></figure><p>至此，一个简单的对b,w依赖的函数变成了对（$w_i, b_i, c_i$)和, x, b的依赖，即多了很多变量。</p><ul>
+<li>$y = b + wx_1$</li>
+<li>$y = b + \sum_i c_i sigmoid(b_i + w_i x_{\color{red} 1})$</li>
+</ul>
+<p>注意这个$x_1$，即只转了一个x就要堆一个<code>sum</code>，而目前也只是演示了只有一个特征的情况。</p><p>如果更复杂一点的模型，每次不是看一个x，而看n个x，（比如利用前7天的观看数据来预测第8天的，那么建模的时候就是每一个数都要与前7天的数据建立w和b的关系）：</p><blockquote>
+<p>其实就是由一个feature变成了n个feature了，一般的教材会用不同的feature来讲解（比如影响房价的除了时间，还有面积，地段等等），而这里只是增加了天数，可能会让人没有立刻弄清楚两者其实是同一个东西。其实就是x1, x2, x3...不管它们对应的是同一<strong>类</strong>特征，而是完全不同的多个<strong>角度</strong>的特征。</p></blockquote>
+<p>现在就有一堆$wx$了</p><ul>
+<li>$y = b + \sum_j w_j x_j$</li>
+<li>现在就变成了(注意，其实就是把加号右边完整代入）：</li>
+<li>$y = b + \sum_i c_i sigmoid(b_i + \color{red}{\sum_j w_{ij} x_j})$</li>
+</ul>
+<p>展开计算，再根据特征，又可以看回矩阵了（而不是从矩阵出发来思考）：</p><figure class="vertical-figure" style="flex: 33.29129886506936" ><img width="1056" height="1586" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a84ecec9786db279d55ff5ecbb1a8124.png" alt=""/></figure><p>矩阵运算结果为(r)，再sigmoid后，设结果为a:</p><ul>
+<li>$a_i = c_i \sigma(r_i)$</li>
+<li>$y = b + \sum_i a_i$ c 和 a要乘加，仍然可以矩阵化（其实是向量化）：</li>
+<li>$y = b + c^T a$， 把上面的展开回去：</li>
+<li>$y = b + c^T \sigma(\bold b + W x)$<ul>
+<li>前后两个b是不同的，一个是数值，一个是向量</li>
+</ul>
+</li>
+</ul>
+<p>这里，我们把目前所有的“未知数”全部拉平拼成了一个向量 $\theta$：
+<figure  style="flex: 66.625" ><img width="1066" height="800" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/961de3efa8dcf472170d57c5e60f2fc4.png" alt=""/></figure></p><p>这里，如果把$c^T$写成<code>W'</code>你会发现，我们已经推导出了一个2层的神经网络：一个隐层，一个输出层：</p><ul>
+<li>b+wx 是第一层 得到<code>a</code></li>
+<li>对<code>a</code>进行一次sigmoid（别的教材里会说是激活）得到<code>a'</code></li>
+<li>把<code>a'</code>当作输入，再进行一次 b+wx (这就是隐层了)</li>
+<li>得到的输出就是网络的输出<code>o</code></li>
+</ul>
+<blockquote>
+<p>这里在用另一个角度来尝试解释神经网络，激活函数等，但要注意，sigmoid的引入原本是去”对着折线描“的，也就是说是人为选择的，而这里仍然变成了机器去”学习“，即没有告诉它哪些地方是转折点。也就是说有点陷入了用机器学习解释机器学习的情况。</p></blockquote>
+<blockquote>
+<p>但是如果是纯曲线，那么其实是可以无数个sigmoid来组合的，就不存在要去拟合某些“特定的点”，那样只要找到最合适“数量”的sigmoig就行了（因为任何一个点都可以算是折点）</p></blockquote>
+<h2>Loss</h2>
+<p>loss 没什么变化，仍旧是一堆$\theta$代入后求的值与y的差，求和。并期望找到使loss最小化的$\theta$：</p><p>$\bold \theta = arg\ \underset{\theta}{min}\ L$</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-1/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

@@ -181,13 +181,20 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
     <loc>/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-4/</loc>
-    <lastmod>2021-10-14</lastmod>
+    <lastmod>2021-10-15</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
 </url>
 
 <url>
     <loc>/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-3/</loc>
+    <lastmod>2021-10-14</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
+    <loc>/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-2/</loc>
     <lastmod>2021-10-13</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
@@ -195,13 +202,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
     <loc>/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-1/</loc>
-    <lastmod>2021-10-13</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-</url>
-
-<url>
-    <loc>/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-2/</loc>
     <lastmod>2021-10-13</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
