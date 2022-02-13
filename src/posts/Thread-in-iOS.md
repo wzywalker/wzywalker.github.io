@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Thread-in-iOS
+title: Programming iOS 14 - Threading
 slug: Thread-in-iOS
 date: 2021-11-26 00:00
 status: publish
