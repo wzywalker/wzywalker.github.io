@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/e83a979bdfe76b3eb88998ea61cf43ad.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/638580149e69269e25c60788952cb35a.json"
         }
 
     </script>
@@ -55,6 +55,120 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/OC%E9%9D%99%E6%80%81%E5%BA%93%E9%87%8CNSClassFromString%E5%BE%97%E5%88%B0nil%E7%9A%84%E8%A7%A3%E5%86%B3/" target="_self">OC静态库里NSClassFromString得到nil的解决</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/OC%E9%9D%99%E6%80%81%E5%BA%93%E9%87%8CNSClassFromString%E5%BE%97%E5%88%B0nil%E7%9A%84%E8%A7%A3%E5%86%B3/" target="_self">
+                <time class="text-uppercase">
+                    March 15 2018
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>如果你在静态库中有从类名反射回类的代码, 如下:</p>
+<pre><code>NSString *myClassStr = @&quot;myClass&quot;;  
+Class myClazz = NSClassFromString(myClassStr);  
+if (myClazz) {  
+    id myClassInit = [[myClazz alloc] init];  
+}
+</code></pre>
+<p>有时候(经常)会出现得到了Class为nil的情况, 网上搜索, 一般是这么说的:</p><blockquote>
+<p>The class object named by aClassName, or nil if no class by that name is currently loaded. If aClassName is nil, returns nil.</p></blockquote>
+<p>来自于64位系统的一个bug:</p><blockquote>
+<p>IMPORTANT: For 64-bit and iPhone OS applications, there is a linker bug that prevents -ObjC from loading objects files from static libraries that contain only categories and no classes. The workaround is to use the -all_load or -force_load flags. -all_load forces the linker to load all object files from every archive it sees, even those without Objective-C code. -force_load is available in Xcode 3.2 and later. It allows finer grain control of archive loading. Each -force_load option must be followed by a path to an archive, and every object file in that archive will be loaded.</p></blockquote>
+<p>就我的实测</p><ul>
+<li>首先, 你需要在你的主项目(的target)对<code>build setting</code>进行更改, 而<strong>不是</strong>静态库的项目!</li>
+<li>其次, <code>-all_load</code>有效, <code>-force_load</code>甚至编译都过不了</li>
+<li>最后, 结合上面, 就是在主项目(引用静态库的项目)的build setting里面搜索<code>other linker flags</code>, 然后把<code>-all_load</code>加进去就行了</li>
+</ul>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/OC%E9%9D%99%E6%80%81%E5%BA%93%E9%87%8CNSClassFromString%E5%BE%97%E5%88%B0nil%E7%9A%84%E8%A7%A3%E5%86%B3/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E9%80%9A%E8%BF%87GPS%E6%95%B0%E6%8D%AE%E5%8F%8D%E5%90%91%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E7%BC%96%E7%A0%81%E5%BE%97%E5%88%B0%E5%BD%93%E5%89%8D%E4%BD%8D%E7%BD%AE%E4%BF%A1%E6%81%AF/" target="_self">通过GPS数据反向地理信息编码得到当前位置信息</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E9%80%9A%E8%BF%87GPS%E6%95%B0%E6%8D%AE%E5%8F%8D%E5%90%91%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E7%BC%96%E7%A0%81%E5%BE%97%E5%88%B0%E5%BD%93%E5%89%8D%E4%BD%8D%E7%BD%AE%E4%BF%A1%E6%81%AF/" target="_self">
+                <time class="text-uppercase">
+                    January 14 2018
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><h1>检查可用性</h1>
+<p>这属于基础知识, 不赘述, 总的来说,你的设备的支持要打开, 添加CoreLocation的framework, 引用头文件, 添加委托,然后, 好的实践是在使用前编程检查相关可用性:</p>
+<pre><code>- (CLLocationManager *)locationManager
+{
+    if(!_locationManager){
+        if([CLLocationManager locationServicesEnabled]){
+            _locationManager = [[CLLocationManager alloc] init];
+            _locationManager.delegate = self;
+            _locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+            CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+            if (status == kCLAuthorizationStatusNotDetermined) {
+                NSLog(@&quot; not determined&quot;);
+                if([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]){
+                    [_locationManager requestAlwaysAuthorization];
+                }
+            }else if (status == kCLAuthorizationStatusDenied) {
+                NSLog(@&quot;denied&quot;);
+            }else if (status == kCLAuthorizationStatusRestricted) {
+                NSLog(@&quot;restricted&quot;);
+            }else if (status == kCLAuthorizationStatusAuthorizedAlways) {
+                NSLog(@&quot;always allowed&quot;);
+            }else if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
+                NSLog(@&quot;when in use allowed&quot;);
+            }else{
+            }
+        }else _locationManager = nil;
+    }
+    return _locationManager;
+}
+</code></pre>
+<p>注意<code>kCLAuthorizationStatusNotDetermined</code>状态, iOS8以后, 需要手动编辑info.plist文件, 添加两个请求用户授权时的文案, 才能正常使用, 这里觉得匪夷所思:</p>
+<pre><code>&lt;key&gt;NSLocationWhenInUseUsageDescription&lt;/key&gt;&lt;string&gt;请授权使用地理位置服务&lt;/string&gt;
+&lt;key&gt;NSLocationAlwaysUsageDescription&lt;/key&gt;&lt;string&gt;请授权使用地理位置服务&lt;/string&gt;
+</code></pre>
+<p>以上, 可随便参考网上任何<a href="http://kittenyang.com/cllocationmanager/">一篇教程</a></p><h1>请求地理位置并反向编码</h1>
+<p>这里需要注意的是, 苹果的<code>CLGeocoder</code> API并不允许你频繁调用, 一分钟一次为宜, 所以你千万不要<code>[self.locationManager startUpdatingLocation]</code>, 然后在<code>locationManager:didChangeAuthorizationStatus:</code>
+方法里去decode, 因为只是为了获取城市, 精度要求不高, 并且不需要持续更新, 所以我们就不update了, 只request一次, 然后在获取位置失败的时候再手动request一次:</p>
+<pre><code>+ (void)locationManager:(nonnull CLLocationManager *)manager didFailWithError:(nonnull NSError *)error{
+    NSLog(@&quot;fail with error:\n %@&quot;, error);
+    [self.locationManager requestLocation];
+}
+</code></pre>
+<p>相关解释参考<a href="http://stackoverflow.com/questions/17867422/kclerrordomain-error-2-after-geocoding-repeatedly-with-clgeocoder">这篇文章</a></p><p>#语言的问题</p><p>因为习惯用英文系统, 就碰到请求回来的信息是英文的原因, 这里苹果是固化起来的, 暂时不支持用参数来指定返回数据的显示语言, 借鉴<a href="http://stackoverflow.com/questions/20388891/cllocationmanager-reversegeocodelocation-language">这篇文章</a>的思路, 在请求前把当前语言设置保存起来, 临时改成中文, 请求结束后再修改回来:</p>
+<pre><code>+ (void)locationManager:(nonnull CLLocationManager *)manager didUpdateLocations:(nonnull NSArray *)locations{
+    CLLocation *location = [locations lastObject];
+    CLGeocoder *geocoder = [CLGeocoder new];
+    // 修改语言为中文
+    NSArray *currentLanguageArray = [[NSUserDefaults standardUserDefaults] objectForKey:@&quot;AppleLanguages&quot;];
+    [[NSUserDefaults standardUserDefaults] setObject: [NSArray arrayWithObjects:@&quot;zh_Hans&quot;, nil] forKey:@&quot;AppleLanguages&quot;];
+    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray&lt;CLPlacemark *&gt; * __nullable placemarks, NSError * __nullable error) {
+        // 恢复语言
+        [[NSUserDefaults standardUserDefaults] setObject:currentLanguageArray forKey:@&quot;AppleLanguages&quot;];
+        if(error){
+            NSLog(@&quot;reverse error:%@&quot;, [error localizedDescription]);
+        }else{
+            if([placemarks count] &gt; 0){
+                CLPlacemark *mark = [placemarks firstObject];
+                NSLog(@&quot;%@&quot;, mark);
+                NSLog(@&quot;城市名:%@&quot;, mark.locality);
+            }
+        }
+    }];
+}
+</code></pre>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E9%80%9A%E8%BF%87GPS%E6%95%B0%E6%8D%AE%E5%8F%8D%E5%90%91%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E7%BC%96%E7%A0%81%E5%BE%97%E5%88%B0%E5%BD%93%E5%89%8D%E4%BD%8D%E7%BD%AE%E4%BF%A1%E6%81%AF/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%88%91%E6%9C%80%E5%B8%B8%E7%94%A8%E7%9A%84%E5%87%A0%E4%B8%AAXcode%E5%BF%AB%E6%8D%B7%E9%94%AE/" target="_self">我最常用的几个Xcode快捷键</a></h1>

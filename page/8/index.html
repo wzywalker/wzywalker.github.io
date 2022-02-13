@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/e83a979bdfe76b3eb88998ea61cf43ad.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/638580149e69269e25c60788952cb35a.json"
         }
 
     </script>
@@ -55,6 +55,118 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E7%99%BE%E5%BA%A6%E5%9C%B0%E5%9B%BE%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2/" target="_self">百度地图坐标转换</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E7%99%BE%E5%BA%A6%E5%9C%B0%E5%9B%BE%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2/" target="_self">
+                <time class="text-uppercase">
+                    December 28 2018
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>首先, 我们了解一下为什么要坐标转换</p><blockquote>
+<p>国际经纬度坐标标准为WGS-84,国内必须至少使用国测局制定的GCJ-02,对地理位置进行首次加密。百度坐标在此基础上，进行了BD-09二次加密措施,更加保护了个人隐私。百度对外接口的坐标系并不是GPS采集的真实经纬度，需要通过坐标转换接口进行转换。</p></blockquote>
+<p>其次, 我们在网上搜到有通过
+<code>http://api.map.baidu.com/ag/coord/convert?from=[0/2]&amp;to=4&amp;x=纬度&amp;y=经度</code>
+这种URL来进行转换的, 其中<code>0</code>代表<code>WGS-84</code>即标准GPS设备返回的坐标, <code>2</code>代表国测局的标准, 显然<code>4</code>就是百度地图认的坐标了. 但我遍搜网络, 这个接口是没有文档的(但是确实可用). 因为会碰到跨域的问题(<code>CORS</code>), 所以就用了jQuery中script标签跨域的方式来执行, 结果这个脚本也被百度”回收”了, 当然, 网上还是有痕迹的, 我把它保存了一下, 见此<a href="https://gist.github.com/walkerwzy/718052e1c99e26ab3668">gist</a>. 
+我没在这上面花太多时间, 并没有测它支不支持批量转换(看网友写了一个transMore, 是必须批量送入, 但底层还是一次次分别请求, 不合我意).</p><p>而事实上, 百度已经提供了文档化的<a href="http://lbsyun.baidu.com/index.php?title=webapi/guide/changeposition">坐标转换接口</a>, 并且原生就支持批量请求. 显然, 我们应该用文档化的方法, 只是这种用法需要申请成为一个开发者, 添加一个应用. 这不是小事么, 于是我小包装了一下, 见此<a href="https://gist.github.com/walkerwzy/e21cc369d21bd2301932">gist</a>.</p><p>仅仅有一点小要求, 就是传入的坐标, 键名分别是<code>lon</code>(经度)和<code>lat</code>和(纬度), 并且可以传入一个(传入一个, 返回也是一个), 或者一组</p><p>转换一个坐标:</p>
+<pre><code>BMap.Convertor.translate({lon:lon, lat:lat}, 1, 5, bdkey, function (point, status, message) {
+    if(status) return show(message || &quot;转换坐标出错:&quot;+status, true);
+    var curmarker = new BMap.Marker(point);
+    baidumap.addOverlay(curmarker);
+});
+</code></pre>
+<p>一组坐标:</p>
+<pre><code>BMap.Convertor.translate([{lon:lon, lat:lat},...], 1, 5, bdkey, function (points, status, message) {
+    if(status) return show(message || &quot;转换坐标出错:&quot;+status, true);
+    // 遍历points
+});
+</code></pre>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E7%99%BE%E5%BA%A6%E5%9C%B0%E5%9B%BE%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%88%A9%E7%94%A8Privoxy%2CShadowsocks%2CKcptun%E5%81%9Ahttp%E4%BB%A3%E7%90%86%E6%8E%92%E5%9D%91%E8%AE%B0%E5%BD%95/" target="_self">树莓派利用Privoxy,Shadowsocks,Kcptun做http代理排坑记录</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%88%A9%E7%94%A8Privoxy%2CShadowsocks%2CKcptun%E5%81%9Ahttp%E4%BB%A3%E7%90%86%E6%8E%92%E5%9D%91%E8%AE%B0%E5%BD%95/" target="_self">
+                <time class="text-uppercase">
+                    November 12 2018
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>我用树莓派做<code>翻墙网关</code>, <code>透明网关</code>, 通通绕到坑里出不来了, 方案很多, 思路是树莓派翻, 智能dns, 智能国内外分流, 外加让树莓派成为局域网的<code>网关</code>以便让局域网用户<code>无感翻墙</code>.<br />
+黑科技没玩转, 于是我整理思绪, 做一个最简单的局域网http代理服务器吧. 任何网络设备/应用都能找到设http代理的地方, 这样最后只要让树莓派能应用<code>gfwlist</code>的规则.</p><p>我们来看一下最终的拓扑:
+<figure  style="flex: 65.81740976645435" ><img width="1240" height="942" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/82dd9437cc67d2b686f739ff2c5cf8a1.png" alt=""/></figure></p><p>几点说明:</p><ol>
+<li>如果只是Shadowsocks翻墙, 那么这一步做完就收工了. 最简步骤</li>
+<li>如果需要转成http代理, 你就再多包一层代理工具, <code>Prixovy</code>, <code>Polipo</code>等, 用关键词搜, 比, 自己定. <code>Polipo</code>配置要简单很多</li>
+<li>对, 不考虑做成网关就是这么简单, 但是我还想用<code>kcptun</code>给提提速, 所以多插一脚</li>
+<li>不需要更多了, 再多就又有新坑了.</li>
+</ol>
+<p>开始排坑</p><h1>shadowsocks-libev</h1>
+<p>我使用的是一键安装脚本, 它会给你默认启动成<code>ss-server</code>, 显然, 你需要的是<code>ss-local</code>, 如果从名字可以看出它们的差别, 当然还有<code>ss-redir</code>, 你要搭建<code>透明</code>代理的话用着得, 还有<code>ss-tunnel</code>, 转发DNS.</p><blockquote>
+<p><code>lsof -i:8530</code>看看跑8530端口的是哪个程序</p></blockquote>
+<p>我讲解一下怎么把<code>ss-server</code>改成<code>ss-local</code>.</p><ol>
+<li>它是以<code>ss-server -c &lt;configFILE&gt; -f &lt;pidFILE&gt;</code>启动的, 写在了<code>/etc/init.d/shadowsocks</code> 里面, 你把所有<code>ss-server</code>改为<code>ss-local</code>, 然后顺便把<code>-f</code>参数删掉</li>
+<li>改完后, 保存: <code>update-rc.d -f shadowsocks defaults</code></li>
+<li>重启: <code>/etc/init.d/shadowsocks restart</code></li>
+</ol>
+<p>如果需要连kcptun, 那么这里是第二个需要注意的地方, 即你的服务器地址本应为<code>shadowsocks</code>服务器地址及端口, 这里要改成<code>127.0.0.1:&lt;kcptun端口&gt;</code></p><p>shadowsocks就上述两个需要注意的地方.
+如果你使用了python版, go版的, 或是手工安装的libev版, 那么<code>改ss-server</code>这个坑你就碰不到了</p><h1>kcptun</h1>
+<p>下载<code>Linux</code>版的kcptun包, 选择名字里含有<code>client</code>和<code>armv7</code>的文件即可, 这里无其它坑, 选对文件是关键, 配置文件参数与服务端一致即可.</p><blockquote>
+<p>网上有些文章说一定要保持server文件和client文件是同一天的, 我实测没必要. 我的server端都部署了一年了, 今天用的最新的client, 没什么问题</p></blockquote>
+<h1>Privoxy</h1>
+<p>这里坑比较多</p><ol>
+<li>按网上普通的教程, 设置自己的监听端口(默认8118)和shadowsocks的(127.0.0.1:1080), 没问题</li>
+<li>做完上一步, 我用电脑设置树莓派的8118端口为代理服务器, 居然所有流量<strong>已经</strong>(划重点)被转发了, 而理论上这时是需要你自己添加规则(<code>.action文件</code>)的,否则就是直连.</li>
+<li>找了很多资料, 没人碰到跟我一样的情况, 所以我是绕了一圈, 做了一个<code>不转发所有流量</code>的规则, 然后再在后面跟上我的gfw的规则, 才会选择性地转发. 奇怪</li>
+<li>最后就是网上找一个能转<code>gfwlist</code>规则的方案应用到<code>action</code>里就好, 比如<a href="https://github.com/snachx/gfwlist2privoxy">这个</a></li>
+</ol>
+<p>分享一个action文件编写的良好实践, 应用别名:</p>
+<pre><code>{{alias}}
+direct   = +forward-override{forward .}
+socks    = +forward-override{forward-socks5 localhost:8080 .}
+httproxy = +forward-override{forward localhost:8000 .}
+
+{direct}
+.google.com
+.googleusercontent.com
+.mozilla.com
+【我就是在这里设了一个*.*, direct了所有的流量】
+
+{socks}
+.youtube.com
+.ytimg.com
+
+{httproxy}
+.twitter.com
+.blogspot.com
+feedproxy.google.com
+</code></pre>
+<p>#总结</p><ol>
+<li>树莓派对外暴露<code>Privoxy</code>的<code>8118</code>端口, 转发至<code>shadowsocks</code>的<code>1080</code>端口</li>
+<li><code>shadowsocks</code>转发至<code>kcptun</code>的<code>1087</code>端口</li>
+<li><code>kcptun client</code>与<code>kcptun server</code>的<code>29900</code>通讯</li>
+<li><code>kcptun server</code>与<code>shadowsocks server</code>的<code>8530</code>通讯</li>
+</ol>
+<p>等于把拓扑图口述了一遍~~~我也是想清了这个才最终思路清晰地做完所有事的</p><p>最后, 不管是<code>privoxy</code>还是<code>shadowsocks</code>还是<code>kcptun</code>, 都是需要加入自启动的, 你可以选择在<code>/etc/rc.local</code>里面依次写入启动脚本, 也可以在<code>/etc/init.d/</code>里面添加对应的脚本文件</p><p>本文不是教程, 是排坑指南. 相应的安装, 配置, 加启动, 可以搜既有教程, 如果碰到跟我一样的问题, 希望帮助到了你.</p><p>#题外话
+我的目的其实是给我的<code>Apple TV</code>第3代翻墙, 结果发现它居然不能直接设置http代理, 得用<code>Apple Configurator 2</code>来设置, 并推到设备上. 这里有两个选择</p><ol>
+<li>设置全局代理(需要设备Supervised)</li>
+<li>设置某个WiFi热点的代理</li>
+</ol>
+<p>我没去研究什么是<code>Supervised</code>了, 而且也希望代理好切换, 于是选择了第二种方案, 即换了wifi后就没代理了(跟在<code>iPhone</code>上设置一样)</p><figure  style="flex: 66.66666666666667" ><img width="1240" height="930" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b0eb92a0c8ee8ccdfed03a8e1552c69f.jpg" alt=""/></figure><h1>TODO:</h1>
+<p>udp2raw, and udp2raw on mac</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%88%A9%E7%94%A8Privoxy%2CShadowsocks%2CKcptun%E5%81%9Ahttp%E4%BB%A3%E7%90%86%E6%8E%92%E5%9D%91%E8%AE%B0%E5%BD%95/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E4%BD%BF%E7%94%A8openssl%E5%88%9B%E5%BB%BA%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%8F%8A%E9%83%A8%E7%BD%B2%E5%88%B0IIS%E6%95%99%E7%A8%8B/" target="_self">使用openssl创建自签名证书及部署到IIS教程</a></h1>
@@ -602,120 +714,6 @@ UITableView里面长项条目显示标准菜单, 只需要实现下述代理方�
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/UIMenuController%E7%9A%84%E4%BD%BF%E7%94%A8/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/OC%E9%9D%99%E6%80%81%E5%BA%93%E9%87%8CNSClassFromString%E5%BE%97%E5%88%B0nil%E7%9A%84%E8%A7%A3%E5%86%B3/" target="_self">OC静态库里NSClassFromString得到nil的解决</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/OC%E9%9D%99%E6%80%81%E5%BA%93%E9%87%8CNSClassFromString%E5%BE%97%E5%88%B0nil%E7%9A%84%E8%A7%A3%E5%86%B3/" target="_self">
-                <time class="text-uppercase">
-                    March 15 2018
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>如果你在静态库中有从类名反射回类的代码, 如下:</p>
-<pre><code>NSString *myClassStr = @&quot;myClass&quot;;  
-Class myClazz = NSClassFromString(myClassStr);  
-if (myClazz) {  
-    id myClassInit = [[myClazz alloc] init];  
-}
-</code></pre>
-<p>有时候(经常)会出现得到了Class为nil的情况, 网上搜索, 一般是这么说的:</p><blockquote>
-<p>The class object named by aClassName, or nil if no class by that name is currently loaded. If aClassName is nil, returns nil.</p></blockquote>
-<p>来自于64位系统的一个bug:</p><blockquote>
-<p>IMPORTANT: For 64-bit and iPhone OS applications, there is a linker bug that prevents -ObjC from loading objects files from static libraries that contain only categories and no classes. The workaround is to use the -all_load or -force_load flags. -all_load forces the linker to load all object files from every archive it sees, even those without Objective-C code. -force_load is available in Xcode 3.2 and later. It allows finer grain control of archive loading. Each -force_load option must be followed by a path to an archive, and every object file in that archive will be loaded.</p></blockquote>
-<p>就我的实测</p><ul>
-<li>首先, 你需要在你的主项目(的target)对<code>build setting</code>进行更改, 而<strong>不是</strong>静态库的项目!</li>
-<li>其次, <code>-all_load</code>有效, <code>-force_load</code>甚至编译都过不了</li>
-<li>最后, 结合上面, 就是在主项目(引用静态库的项目)的build setting里面搜索<code>other linker flags</code>, 然后把<code>-all_load</code>加进去就行了</li>
-</ul>
-</div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/OC%E9%9D%99%E6%80%81%E5%BA%93%E9%87%8CNSClassFromString%E5%BE%97%E5%88%B0nil%E7%9A%84%E8%A7%A3%E5%86%B3/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E9%80%9A%E8%BF%87GPS%E6%95%B0%E6%8D%AE%E5%8F%8D%E5%90%91%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E7%BC%96%E7%A0%81%E5%BE%97%E5%88%B0%E5%BD%93%E5%89%8D%E4%BD%8D%E7%BD%AE%E4%BF%A1%E6%81%AF/" target="_self">通过GPS数据反向地理信息编码得到当前位置信息</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E9%80%9A%E8%BF%87GPS%E6%95%B0%E6%8D%AE%E5%8F%8D%E5%90%91%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E7%BC%96%E7%A0%81%E5%BE%97%E5%88%B0%E5%BD%93%E5%89%8D%E4%BD%8D%E7%BD%AE%E4%BF%A1%E6%81%AF/" target="_self">
-                <time class="text-uppercase">
-                    January 14 2018
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><h1>检查可用性</h1>
-<p>这属于基础知识, 不赘述, 总的来说,你的设备的支持要打开, 添加CoreLocation的framework, 引用头文件, 添加委托,然后, 好的实践是在使用前编程检查相关可用性:</p>
-<pre><code>- (CLLocationManager *)locationManager
-{
-    if(!_locationManager){
-        if([CLLocationManager locationServicesEnabled]){
-            _locationManager = [[CLLocationManager alloc] init];
-            _locationManager.delegate = self;
-            _locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
-            CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
-            if (status == kCLAuthorizationStatusNotDetermined) {
-                NSLog(@&quot; not determined&quot;);
-                if([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]){
-                    [_locationManager requestAlwaysAuthorization];
-                }
-            }else if (status == kCLAuthorizationStatusDenied) {
-                NSLog(@&quot;denied&quot;);
-            }else if (status == kCLAuthorizationStatusRestricted) {
-                NSLog(@&quot;restricted&quot;);
-            }else if (status == kCLAuthorizationStatusAuthorizedAlways) {
-                NSLog(@&quot;always allowed&quot;);
-            }else if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
-                NSLog(@&quot;when in use allowed&quot;);
-            }else{
-            }
-        }else _locationManager = nil;
-    }
-    return _locationManager;
-}
-</code></pre>
-<p>注意<code>kCLAuthorizationStatusNotDetermined</code>状态, iOS8以后, 需要手动编辑info.plist文件, 添加两个请求用户授权时的文案, 才能正常使用, 这里觉得匪夷所思:</p>
-<pre><code>&lt;key&gt;NSLocationWhenInUseUsageDescription&lt;/key&gt;&lt;string&gt;请授权使用地理位置服务&lt;/string&gt;
-&lt;key&gt;NSLocationAlwaysUsageDescription&lt;/key&gt;&lt;string&gt;请授权使用地理位置服务&lt;/string&gt;
-</code></pre>
-<p>以上, 可随便参考网上任何<a href="http://kittenyang.com/cllocationmanager/">一篇教程</a></p><h1>请求地理位置并反向编码</h1>
-<p>这里需要注意的是, 苹果的<code>CLGeocoder</code> API并不允许你频繁调用, 一分钟一次为宜, 所以你千万不要<code>[self.locationManager startUpdatingLocation]</code>, 然后在<code>locationManager:didChangeAuthorizationStatus:</code>
-方法里去decode, 因为只是为了获取城市, 精度要求不高, 并且不需要持续更新, 所以我们就不update了, 只request一次, 然后在获取位置失败的时候再手动request一次:</p>
-<pre><code>+ (void)locationManager:(nonnull CLLocationManager *)manager didFailWithError:(nonnull NSError *)error{
-    NSLog(@&quot;fail with error:\n %@&quot;, error);
-    [self.locationManager requestLocation];
-}
-</code></pre>
-<p>相关解释参考<a href="http://stackoverflow.com/questions/17867422/kclerrordomain-error-2-after-geocoding-repeatedly-with-clgeocoder">这篇文章</a></p><p>#语言的问题</p><p>因为习惯用英文系统, 就碰到请求回来的信息是英文的原因, 这里苹果是固化起来的, 暂时不支持用参数来指定返回数据的显示语言, 借鉴<a href="http://stackoverflow.com/questions/20388891/cllocationmanager-reversegeocodelocation-language">这篇文章</a>的思路, 在请求前把当前语言设置保存起来, 临时改成中文, 请求结束后再修改回来:</p>
-<pre><code>+ (void)locationManager:(nonnull CLLocationManager *)manager didUpdateLocations:(nonnull NSArray *)locations{
-    CLLocation *location = [locations lastObject];
-    CLGeocoder *geocoder = [CLGeocoder new];
-    // 修改语言为中文
-    NSArray *currentLanguageArray = [[NSUserDefaults standardUserDefaults] objectForKey:@&quot;AppleLanguages&quot;];
-    [[NSUserDefaults standardUserDefaults] setObject: [NSArray arrayWithObjects:@&quot;zh_Hans&quot;, nil] forKey:@&quot;AppleLanguages&quot;];
-    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray&lt;CLPlacemark *&gt; * __nullable placemarks, NSError * __nullable error) {
-        // 恢复语言
-        [[NSUserDefaults standardUserDefaults] setObject:currentLanguageArray forKey:@&quot;AppleLanguages&quot;];
-        if(error){
-            NSLog(@&quot;reverse error:%@&quot;, [error localizedDescription]);
-        }else{
-            if([placemarks count] &gt; 0){
-                CLPlacemark *mark = [placemarks firstObject];
-                NSLog(@&quot;%@&quot;, mark);
-                NSLog(@&quot;城市名:%@&quot;, mark.locality);
-            }
-        }
-    }];
-}
-</code></pre>
-</div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E9%80%9A%E8%BF%87GPS%E6%95%B0%E6%8D%AE%E5%8F%8D%E5%90%91%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E7%BC%96%E7%A0%81%E5%BE%97%E5%88%B0%E5%BD%93%E5%89%8D%E4%BD%8D%E7%BD%AE%E4%BF%A1%E6%81%AF/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

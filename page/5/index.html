@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/e83a979bdfe76b3eb88998ea61cf43ad.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/638580149e69269e25c60788952cb35a.json"
         }
 
     </script>
@@ -55,6 +55,318 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/RNN%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1%E4%B8%8E%E6%A2%AF%E5%BA%A6%E7%88%86%E7%82%B8%E6%8E%A8%E5%AF%BC/" target="_self">RNN梯度消失与梯度爆炸推导</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/RNN%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1%E4%B8%8E%E6%A2%AF%E5%BA%A6%E7%88%86%E7%82%B8%E6%8E%A8%E5%AF%BC/" target="_self">
+                <time class="text-uppercase">
+                    May 09 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><figure  style="flex: 82.77777777777777" ><img width="596" height="360" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/794a90e7b252e2aa03842eeee7fad8de.png" alt=""/></figure>
+$$
+\large
+\begin{aligned}
+h_t &amp;=\sigma(z_t) = \sigma(Ux_t+Wh_{t-1} + b) \
+y_t &amp;= \sigma(Vh_t + c)
+\end{aligned}
+$$<h2>梯度消失与爆炸</h2>
+<p>假设一个只有 3 个输入数据的序列，此时我们的隐藏层 h1、h2、h3 和输出 y1、y2、y3 的计算公式：</p><p>$$
+\large
+\begin{aligned}
+h_1 &amp;= \sigma(Ux_1 + Wh_0 + b) \\
+h_2 &amp;= \sigma(Ux_2 + Wh_1 + b) \\
+h_3 &amp;= \sigma(Ux_3 + Wh_2 + b) \\
+y_1 &amp;= \sigma(Vh_1 + c) \\
+y_2 &amp;= \sigma(Vh_2 + c) \\
+y_3 &amp;= \sigma(Vh_3 + c)
+\end{aligned}
+$$</p>
+<p>RNN 在时刻 t 的损失函数为 Lt，总的损失函数为 $L = L1 + L2 + L3 \Longrightarrow  \sum_{t=1}^TL_T$</p><p>t = 3 时刻的损失函数 L3 对于网络参数 U、W、V 的梯度如下：</p><p>$$
+\begin{aligned}
+\frac{\partial L_3}{\partial V} &amp;= \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial V} \\
+\frac{\partial L_3}{\partial U} &amp;= \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial U} + \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial U} + \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial h_1} \frac{\partial h_1}{\partial U} \\
+\frac{\partial L_3}{\partial W} &amp;= \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial W} 
++ \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial W} 
++ \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial h_1} \frac{\partial h_1}{\partial W} \\
+\end{aligned}
+$$</p>
+<p>其实主要就是因为：</p><ul>
+<li>对V求偏导时，$h_3$是常数</li>
+<li>对U求偏导时：<ul>
+<li>$h_3$里有U，所以要继续对h3应用<code>chain rule</code></li>
+<li>$h_3$里的$W, b$是常数，但是$h_2$里又有U，继续<code>chain rule</code></li>
+<li>以此类推，直到$h_0$</li>
+</ul>
+</li>
+<li>对W求偏导时一样</li>
+</ul>
+<p>所以：</p><ol>
+<li>参数矩阵 V (对应输出 $y_t$) 的梯度很显然并没有长期依赖</li>
+<li>U和V显然就是连乘($\prod$)后累加($\sum$)</li>
+</ol>
+<p>$$
+\begin{aligned}
+\frac{\partial L_t}{\partial U} = \sum_{k=0}^{t} \frac{\partial L_t}{\partial y_t} \frac{\partial y_t}{\partial h_t}
+(\prod_{j=k+1}^{t}\frac{\partial h_j}{\partial h_{j-1}})
+\frac{\partial h_k}{\partial U} \\
+\frac{\partial L_t}{\partial W} = \sum_{k=0}^{t} \frac{\partial L_t}{\partial y_t} \frac{\partial y_t}{\partial h_t}
+(\prod_{j=k+1}^{t}\frac{\partial h_j}{\partial h_{j-1}})
+\frac{\partial h_k}{\partial W}
+\end{aligned}
+$$</p>
+<p>其中的连乘项就是导致 RNN 出现梯度消失与梯度爆炸的罪魁祸首，连乘项可以如下变换：</p><ul>
+<li>$h_j = tanh(Ux_j + Wh_{j-1} + b)$</li>
+<li>$\prod_{j=k+1}^{t}\frac{\partial h_j}{\partial h_{j-1}} =\prod_{j=k+1}^{t} tanh' \times W$</li>
+</ul>
+<p>tanh' 表示 tanh 的导数，可以看到 RNN 求梯度的时候，实际上用到了 (tanh' × W) 的连乘。当 (tanh' × W) &gt; 1 时，多次连乘容易导致梯度爆炸；当 (tanh' × W) &lt; 1 时，多次连乘容易导致梯度消失。</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/RNN%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1%E4%B8%8E%E6%A2%AF%E5%BA%A6%E7%88%86%E7%82%B8%E6%8E%A8%E5%AF%BC/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/RNN%E4%B8%ADbidirectional%E5%92%8Cnum_layer%E5%AF%B9output%E5%92%8Chidden%E5%BD%A2%E7%8A%B6%E7%9A%84%E5%BD%B1%E5%93%8D/" target="_self">RNN中bidirectional和num_layer对output和hidden形状的影响</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/RNN%E4%B8%ADbidirectional%E5%92%8Cnum_layer%E5%AF%B9output%E5%92%8Chidden%E5%BD%A2%E7%8A%B6%E7%9A%84%E5%BD%B1%E5%93%8D/" target="_self">
+                <time class="text-uppercase">
+                    April 13 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><h2>Batch first</h2>
+<p>首先，我们要习惯接受<code>batch_first=False</code>（就是默认值）的思维，因为NLP中批量处理句子，是每一句取第一个词，第二个词，以此类推。
+按我们习惯的把数据放在同一批（即<code>batch_first=True</code>）的思路虽然可以做到（善用切片即可），但是绕了弯路。但是如果第1批都是第1个字，第2批全是第2个字，这会自然很多（<strong>行优先</strong>）。</p><p>所以至少<code>Pytorch</code>内部，你设了True，内部也是按False来处理的，只是给了你一个语法糖（当然你组织数据就必须按True来组织了。</p><p>看个实例：</p><figure  style="flex: 79.69151670951157" ><img width="1240" height="778" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d6a0d9ea71601f8b89c0e8465751baf4.png" alt=""/></figure><ol>
+<li>假定批次是64，句长截为70，在还没有向量化的数据中，那么显然一次的输入应该为(70x64)，批次在第2位</li>
+<li>注意第一行，全是2，这是设定的<code>&lt;bos&gt;</code>，这已经很好地表示了在行优先的系统里（比如<code>Matlab</code>就是列优先），会自然而且把<strong>每句话</strong>的第一个词读出来的设定了。</li>
+</ol>
+
+<pre><code># 我用的torchtext的Field进行演示， SRC是一个Field
+[SRC.vocab.itos[i] for i in range(1,4)]  
+['&lt;pad&gt;', '&lt;bos&gt;', '&lt;eos&gt;']
+</code></pre>
+<ol start="3">
+<li>可见，2是开始，3是结束，1是空格（当然这是我设置的）</li>
+<li>同时也能注意到，最后一行有的是3，有的是1，有的都不是，就说明句子是以70为长度进行截断的，自然结束的是3，补<code>&lt;pad&gt;</code>的是1，截断的那么那个字是多少就是多少</li>
+<li>竖向取一条就是一整句话，打印出来就是箭头指向的那一大坨（共70个数字）</li>
+<li>对它进行<code>index_to_string</code>(itos)，则还原出了这句话</li>
+<li>nn.Embedding做了两件事：</li>
+</ol>
+<ul>
+<li>根据vocabulary进行one-hot（稀疏）$\rightarrow$ 所以你要告诉它词典大小</li>
+<li>然后再embedding成指定的低维向量（稠密）</li>
+<li>所以70个数字就成了70x300，拼上维度，就是70x64x300</li>
+</ul>
+<p>既然讲到这了，多讲两行，假定hidden_dim=256, 一个<code>nn.RNN</code>会输出的<code>outputs</code>和<code>hidden</code>的形状如下：</p>
+<pre><code>&gt;&gt;&gt; outputs.shape
+torch.Size([70, 64, 256])
+&gt;&gt;&gt; hidden.shape
+torch.Size([1, 64, 256])
+</code></pre>
+<ol>
+<li>即300维进去，256维出来，但是因为句子有70的长度，那就是70个output，hidden是从前传到后的，当然是最后一个</li>
+<li>也因此，如果你不需要叠加多层RNN，你只需要最后一个字的output就行了<code>outputs[-1,:,:]</code>, 这个结果送到全连接层里去进行分类。</li>
+</ol>
+<h2>自己写一个RNN</h2>
+<p>其实就是要自己把上述形状变化做对就行了。就是几个线性变换，所以我们用<code>nn.Linear</code>来拼接:</p><ol>
+<li>input: 2x5x3 $\Rightarrow$ 5个序列，每一个2个词，每个词用3维向量表示</li>
+<li>hidden=10, 无embedding，num_class=7</li>
+<li>期待形状：</li>
+</ol>
+<ul>
+<li>output: 2x5x7</li>
+<li>hidden:1x5x10</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">RNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">=</span> <span class="n">hidden_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i2h</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span> <span class="o">+</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i2o</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span> <span class="o">+</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">softmax</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LogSoftmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">hidden</span><span class="p">):</span>
+        <span class="n">combined</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="nb">input</span><span class="p">,</span> <span class="n">hidden</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># input shape: (2, 5, 3)</span>
+        <span class="c1"># hidden shape: (2, 5, 10)</span>
+        <span class="c1"># combine shape (2, 5, 13)</span>
+        <span class="n">hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">i2h</span><span class="p">(</span><span class="n">combined</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">i2o</span><span class="p">(</span><span class="n">combined</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">hidden</span>
+
+    <span class="k">def</span> <span class="nf">initHidden</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
+
+<span class="n">hidden_size</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">num_class</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="nb">input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,(</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">rnn</span> <span class="o">=</span> <span class="n">RNN</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">hidden_size</span><span class="p">,</span><span class="n">num_class</span><span class="p">)</span>
+<span class="n">out</span><span class="p">,</span> <span class="n">hid</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">))</span>
+<span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">hid</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+<p>output:</p>
+<pre><code>(torch.Size([2, 5, 7]), torch.Size([2, 5, 10]))
+</code></pre>
+<p>可见，output是一样的，hidden的形状不一样，事实上每一个字确实是会产生hidden的，但是pytorch并没有把它返出来（消费掉就没用了）。这里就pass了，我们主要是看一下双向和多层的情况下形状的变化，下面我们用pytorch自己的RNN来测试。</p><h1>num_layers</h1>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">num_layers</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">rnn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">RNN</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="n">num_layers</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">h0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">num_layers</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="c1"># 几层就需要初始几个hidden</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># input: 5x3 -&gt; 1x12 # N个批次， 5个序列(比如5个字，每个字由3个数字的向量组成)</span>
+<span class="n">o</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">h0</span><span class="p">)</span> <span class="c1"># 5个output, 一个final hidden</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;output shape&#39;</span><span class="p">,</span> <span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hidden shape&#39;</span><span class="p">,</span> <span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+<p>输出：</p>
+<pre><code>output shape torch.Size([5, 2, 12])  # 2个批次，5个词，12维度输出
+hidden shape torch.Size([3, 2, 12]) # 3层会输出3个hidden，2个批次
+</code></pre>
+<p>加上embedding, RNN改成GRU</p><div class="highlight"><pre><span></span><span class="c1"># 这次加embedding</span>
+<span class="c1"># 顺便把 RNN 改 GRU</span>
+<span class="n">vocab_size</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">embed_size</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">hidden_size</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="c1"># 要求词典长度不超过5，输出向量长度为10</span>
+<span class="n">emb</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">vocab_size</span><span class="p">,</span> <span class="n">embed_size</span><span class="p">)</span> 
+<span class="c1"># 输入为embeding维度，输出（和隐层）为8维度</span>
+<span class="n">rnn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">embed_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># 这次设了num_layers=2，就要求有两个hidden了</span>
+<span class="n">h0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+<span class="c1"># 因为数据会用embedding包一次，所以input没有了维度要求（只有大小要求，每个数字要小于字典长度）</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">))</span> 
+<span class="n">e</span> <span class="o">=</span> <span class="n">emb</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;input.shape:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;embedding.shape:&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># (3,4)会扩展成（3,4,10), 10维是rnn的input维度，正好</span>
+<span class="n">o</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">h0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;output.shape:</span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">, hidden.shape:</span><span class="si">{</span><span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+<pre><code>input.shape: torch.Size([5, 3])
+embedding.shape: torch.Size([5, 3, 10])
+output.shape:torch.Size([5, 3, 8]), hidden.shape:torch.Size([2, 3, 8])
+</code></pre>
+<p>唯一要注意的变化就是input，因为embedding是把字典大小的维度转换成指定大小的维度，暗含了你里面的每一个数字都是字典的索引，所以你组装demo数据的时候，要生成小于字典大小(<code>vocab_size</code>）的数字作为输入。</p><h2>bidirectional</h2>
+<p>这次加<strong>bidirectional</strong></p><ul>
+<li>batch_first = False</li>
+<li>x (5, 3) -&gt; 3个序列，每个序列5个数</li>
+<li>embedding(5, 10) -&gt; 输入字典长5，输出向量长10 -&gt; (5, 3, 10) -&gt; 3个序列，每个序列5个10维向量</li>
+<li>hidden必须为8维，4个（num_layers=2, bidirection),3个批次 -&gt; (4,3,8)</li>
+<li>rnn(10, 8) -&gt; 输入10维，输出8维</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># 这次加 bidirection</span>
+
+<span class="n">vocab_size</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">embed_size</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">hidden_size</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">num_layers</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="c1"># 要求词典长度不超过5，输出向量长度为10</span>
+<span class="n">emb</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">vocab_size</span><span class="p">,</span> <span class="n">embed_size</span><span class="p">)</span> 
+<span class="c1"># 输入为embeding维度，输出（和隐层）为8维度</span>
+<span class="n">rnn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">embed_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="n">num_layers</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># 这次设了num_layers=2，就要求有两个hidden了</span>
+<span class="c1"># 加上双向，就有4个了，这里乘以2</span>
+<span class="c1"># h0 = (torch.rand(2, batch_size, hidden_size), torch.rand(2, batch_size, hidden_size))</span>
+<span class="n">h0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">num_layers</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+<span class="c1"># 因为数据会用embedding包一次，所以input没有了维度要求（只有大小要求，每个数要小于字典长度）</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">))</span> 
+<span class="n">e</span> <span class="o">=</span> <span class="n">emb</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;input.shape:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;embedding.shape:&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># (3,4)会扩展成（3,4,10), 10维是rnn的input维度，正好</span>
+<span class="c1"># hidden = torch.cat((h0[-2,:,:], h0[-1,:,:]),1)</span>
+<span class="n">o</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">h0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;output.shape:</span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">, hidden.shape:</span><span class="si">{</span><span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+<pre><code>input.shape: torch.Size([5, 3])
+embedding.shape: torch.Size([5, 3, 10])
+output.shape:torch.Size([5, 3, 16]), hidden.shape:torch.Size([4, 3, 8])
+</code></pre>
+<p>可见，双向会使输出多一倍，可以用<code>[:hidden_size], [hidden_size:]</code>分别取出来，我们<strong>验证</strong>一下，用框架生成一个双向的GRU，然后手动生成一个正向的一个负向的，复制参数，看一下输出：</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch.autograd</span> <span class="kn">import</span> <span class="n">Variable</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># 制作一个正序和反序的input</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span>
+<span class="n">random_input</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">normal_</span><span class="p">(),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">reverse_input</span> <span class="o">=</span> <span class="n">random_input</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">:,</span> <span class="p">:]</span>
+
+<span class="n">bi_grus</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">reverse_gru</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">gru</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">reverse_gru</span><span class="o">.</span><span class="n">weight_ih_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">weight_ih_l0_reverse</span>
+<span class="n">reverse_gru</span><span class="o">.</span><span class="n">weight_hh_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">weight_hh_l0_reverse</span>
+<span class="n">reverse_gru</span><span class="o">.</span><span class="n">bias_ih_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">bias_ih_l0_reverse</span>
+<span class="n">reverse_gru</span><span class="o">.</span><span class="n">bias_hh_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">bias_hh_l0_reverse</span>
+<span class="n">gru</span><span class="o">.</span><span class="n">weight_ih_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">weight_ih_l0</span>
+<span class="n">gru</span><span class="o">.</span><span class="n">weight_hh_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">weight_hh_l0</span>
+<span class="n">gru</span><span class="o">.</span><span class="n">bias_ih_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">bias_ih_l0</span>
+<span class="n">gru</span><span class="o">.</span><span class="n">bias_hh_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">bias_hh_l0</span>
+
+<span class="n">bi_output</span><span class="p">,</span> <span class="n">bi_hidden</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="p">(</span><span class="n">random_input</span><span class="p">)</span>
+<span class="n">output</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="n">gru</span><span class="p">(</span><span class="n">random_input</span><span class="p">)</span>
+<span class="n">reverse_output</span><span class="p">,</span> <span class="n">reverse_hidden</span> <span class="o">=</span> <span class="n">reverse_gru</span><span class="p">(</span><span class="n">reverse_input</span><span class="p">)</span>  <span class="c1"># 分别取[(4,3,2,1,0),:,:] -&gt; 即倒序送入input</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;bi_output:&#39;</span><span class="p">,</span> <span class="n">bi_output</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bi_output</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bi_output</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>                <span class="c1"># 双向输出中的后半截</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">reverse_output</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="c1"># 反向输出</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>                   <span class="c1"># 单独一个rnn的输出 </span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bi_output</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>                <span class="c1"># 双向输出中的前半截</span>
+</pre></div>
+
+<pre><code>bi_output: torch.Size([5, 1, 2])
+tensor([[-0.2336, -0.3068],
+        [ 0.0660, -0.6004],
+        [ 0.0859, -0.5620],
+        [ 0.2164, -0.5750],
+        [ 0.1229, -0.3608]])
+tensor([-0.3068, -0.6004, -0.5620, -0.5750, -0.3608])
+tensor([-0.3068, -0.6004, -0.5620, -0.5750, -0.3608])
+tensor([-0.2336,  0.0660,  0.0859,  0.2164,  0.1229])
+tensor([-0.2336,  0.0660,  0.0859,  0.2164,  0.1229])
+</code></pre>
+<p>现在你们应该知道<code>bidirectional</code>的双倍输出是怎么回事了，再来看看hidden</p><div class="highlight"><pre><span></span><span class="n">hidden</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">reverse_hidden</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">bi_hidden</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">bi_hidden</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">reverse_hidden</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">hidden</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+</pre></div>
+
+<pre><code>(torch.Size([1, 1, 1]), torch.Size([1, 1, 1]), torch.Size([2, 1, 1]))
+(tensor([ 0.1229, -0.3068]), tensor([-0.3068]), tensor([0.1229]))
+</code></pre>
+<ul>
+<li>正向的输出就是单向rnn</li>
+<li>反向的输出就是把数据反传的单向rnn</li>
+<li>双向rnn出来的第最后一个hidden（后半截）就是反向完成后的hidden</li>
+</ul>
+<figure  style="flex: 83.6996336996337" ><img width="914" height="546" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/67bb7c8df3810d83a7f07909fbd601f9.png" alt=""/></figure><p>由打印出来的数据可知：</p><ul>
+<li>最后一个hidden，就是反向RNN的最后一个hidden（时间点在开头）</li>
+<li>也是双向RNN里的第一个输出（<strong>的最后一个元素</strong>）</li>
+<li>也是单向RNN（但是数据反传）（或者正向，但逆时序）里的最后一个输出</li>
+</ul>
+<hr />
+<p>双向RNN里</p><ul>
+<li>倒数第二个hidden，是正向的最后一个hidden（时间点在结尾）</li>
+<li>它也是output里面的值，它是双向输出里的最后一个的<strong>第一个元素</strong></li>
+</ul>
+<p>总的来说</p><ul>
+<li>output由正反向输出横向拼接（所有）</li>
+<li>hidden由正反向hidden竖向拼接（top layer)</li>
+</ul>
+<figure  style="flex: 71.92575406032482" ><img width="1240" height="862" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/671265db99cdb4c1fcda808d82a08794.png" alt=""/></figure></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/RNN%E4%B8%ADbidirectional%E5%92%8Cnum_layer%E5%AF%B9output%E5%92%8Chidden%E5%BD%A2%E7%8A%B6%E7%9A%84%E5%BD%B1%E5%93%8D/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%87%A0%E7%A7%8D%E6%95%99%E6%9D%90%E9%87%8C%E6%B1%82%E8%A7%A3Ax%3D0%E7%AC%94%E8%AE%B0/" target="_self">几种教材里求解Ax=0笔记</a></h1>
@@ -1462,218 +1774,6 @@ AD-Hoc 相当于企业分发的限制版，限制安装设备数量，较少用�
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/shell%E5%91%BD%E4%BB%A4%E7%94%A8%E6%AD%A3%E5%88%99%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/ES6%E4%B8%ADgenerator%E4%BC%A0%E5%8F%82%E4%B8%8E%E8%BF%94%E5%9B%9E%E5%80%BC/" target="_self">ES6中generator传参与返回值</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/ES6%E4%B8%ADgenerator%E4%BC%A0%E5%8F%82%E4%B8%8E%E8%BF%94%E5%9B%9E%E5%80%BC/" target="_self">
-                <time class="text-uppercase">
-                    November 13 2020
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>先看两个例子,</p><p>1,</p>
-<pre><code>function* f() {
-  for(var i=0; true; i++) {
-    var reset = yield i;
-    if(reset) { i = -1; }
-  }
-}
-
-var g = f();
-
-document.write(g.next().value) // { value: 0, done: false }
-document.write(g.next().value) // { value: 1, done: false }
-document.write(g.next(true).value) // { value: 0, done: false }
-</code></pre>
-<p>2,</p>
-<pre><code>function* gen(x){
-  try {
-    var y = yield x + 2;
-  } catch (e){ 
-    document.write(e);
-  }
-  return y;
-}
-
-var g = gen(1);
-g.next();
-g.throw（'出错了'）;
-</code></pre>
-<p>有什么区别?
-第一个里传入了一个<code>true</code>参数, 第二个里传入了一个<code>1</code>参数, 目的都是期望传递给generator.
-但例一演示的参数, 传过去是传给了<code>yield</code>语句本身的返回值, 即<code>reset</code>, 也就是说, 如果你没有传参, 每一次<code>next</code>方法, <code>reset</code>获取的结果都是<code>undefined</code>
-例二中, 方法本身就有入参, 所以千万不要搞错了, 这种入参等于是一个<code>种子</code>, 所以只需要在实例化这个生成器的时候才需要传.</p><p>区别就在是在生成器里传, 还是在生成器的next方法里传. 前者是给生成器赋种子值, 后者是给每个yield赋返回值</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/ES6%E4%B8%ADgenerator%E4%BC%A0%E5%8F%82%E4%B8%8E%E8%BF%94%E5%9B%9E%E5%80%BC/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/SwiftUI%E7%9A%84ViewModifier%E5%92%8CAnimation%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_self">SwiftUI的ViewModifier和Animation学习笔记</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/SwiftUI%E7%9A%84ViewModifier%E5%92%8CAnimation%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_self">
-                <time class="text-uppercase">
-                    October 17 2020
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>我们通过这篇文章练习如下几个知识点，借用的是斯坦福CS193p的课程里的demo，但是代码是我写的，也就是对着最终的效果写出我的实现的意思</p><h2>ViewModifier</h2>
-<figure class="vertical-figure" style="flex: 33.333333333333336" ><img width="212" height="318" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d841a907770d839bdbd57e0119a8651e.png" alt=""/></figure><p>首先，我们的卡片分为正面和背面，背面是纯色很简单，正面有一个圆环，和一张图片（实际是<code>emoji</code>，也就是<code>String</code>)，我们用<code>ZStack</code>布局好后即可：</p><div class="highlight"><pre><span></span><span class="n">ZStack</span> <span class="p">{</span>
-            <span class="n">Group</span> <span class="p">{</span>
-                <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">).</span><span class="n">fill</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">white</span><span class="p">)</span>
-                <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">).</span><span class="n">stroke</span><span class="p">(</span><span class="n">lineWidth</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">)</span>
-    				<span class="n">CountDownCircle</span><span class="p">()</span>  <span class="c1">// 卡片内容1</span>
-    				<span class="n">Text</span><span class="p">(</span><span class="n">card</span><span class="p">.</span><span class="n">content</span><span class="p">)</span> <span class="c1">// 卡片内容2</span>
-            <span class="p">}.</span><span class="n">opacity</span><span class="p">(</span><span class="n">isFaceUp</span> <span class="p">?</span> <span class="mf">1.0</span> <span class="p">:</span> <span class="mf">0.0</span><span class="p">)</span>
-                <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">)</span>
-                    <span class="p">.</span><span class="n">opacity</span><span class="p">(</span><span class="n">isFaceUp</span> <span class="p">?</span> <span class="mf">0.0</span> <span class="p">:</span> <span class="mf">1.0</span><span class="p">)</span>
-        <span class="p">}</span>
-</pre></div>
-<p>所以其实卡片内容就是emoji和圆环，因此我们就想，可不可以在我绘制好这两个内容后，调用一个通用方法就能把它变成一张卡片呢？</p><p><code>ViewModifier</code>就是干这个的，使用语法如同：<code>myView.modifier(Cardify(isFaceUp:))</code>
-提取出来的<code>modifier</code>如下：</p><div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">Cardify</span><span class="p">:</span> <span class="n">ViewModifier</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nv">isFaceUp</span><span class="p">:</span> <span class="nb">Bool</span>
-
-    <span class="kd">func</span> <span class="nf">body</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="n">Content</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
-        <span class="n">ZStack</span> <span class="p">{</span>
-            <span class="n">Group</span> <span class="p">{</span>
-                <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">).</span><span class="n">fill</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">white</span><span class="p">)</span>
-                <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">).</span><span class="n">stroke</span><span class="p">(</span><span class="n">lineWidth</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">)</span>
-                <span class="n">content</span>  <span class="c1">// 正面卡片内容</span>
-            <span class="p">}.</span><span class="n">opacity</span><span class="p">(</span><span class="n">isFaceUp</span> <span class="p">?</span> <span class="mf">1.0</span> <span class="p">:</span> <span class="mf">0.0</span><span class="p">)</span>
-            <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">)</span>
-            <span class="p">.</span><span class="n">opacity</span><span class="p">(</span><span class="n">isFaceUp</span> <span class="p">?</span> <span class="mf">0.0</span> <span class="p">:</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c1">// 反面卡片内容</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-<h2>Extension</h2>
-<p>更进一步，SwiftUI不是有很多<code>View.font(..).opacity(...)</code>的用法么，其中的<code>font</code>，<code>opacity</code>就是这些modifier，然后扩展（<code>extension</code>）给<code>View</code>的，我们也可以：</p><div class="highlight"><pre><span></span><span class="kd">extension</span> <span class="nc">View</span> <span class="p">{</span>
-    <span class="kd">func</span> <span class="nf">cardify</span><span class="p">(</span><span class="n">isFaceUp</span><span class="p">:</span> <span class="nb">Bool</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
-        <span class="kc">self</span><span class="p">.</span><span class="n">modifier</span><span class="p">(</span><span class="n">Cardify</span><span class="p">(</span><span class="n">isFaceUp</span><span class="p">:</span> <span class="n">isFaceUp</span><span class="p">))</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-<p>很简单的语法，这样最终<code>myView.cardify(isFaceUp:)</code>就能把当前内容给“<strong>卡片化</strong>”了</p><h2>Animation</h2>
-<p>想点击卡片翻面的时候有一个翻页效果，有一个原生的<code>rotation3DEffect</code>方法：</p><div class="highlight"><pre><span></span><span class="n">myView</span><span class="p">.</span><span class="n">rotation3DEffect</span><span class="p">(</span>
-            <span class="p">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">animatableData</span><span class="p">),</span>
-            <span class="n">axis</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>  <span class="c1">// 沿Y轴翻转，即水平翻转</span>
-            <span class="p">)</span>
-</pre></div>
-<p>实际效果如下：
-<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><p>动画加长了，我们能看清卡片虽然有了翻面的动面，但是在开始动画的一瞬间，卡片的正面就显示出来了，我们来解决这个问题，所以我这里并不是系统讲解动画，而是在对解决问题的思路做个笔记。</p><blockquote>
-<p>题外话，我觉得<code>SwiftUI</code>和<code>Flutter</code>诞生时代相同，很多理念也驱同，在动画方面，也是放弃了以前要么从头画起，要么用封装得很好的有限几个动画的思路，基本上让你能用自绘+插值的方式来自己控制动画（有点类似关键帧，但关键帧的帧与帧之间也是自动的），而现在你可以完全对一个过程进行Linear interpolation，来控制动画过程（Flutter中的<code>lerp</code>函数就是干这个的，本节也有SwiftUI的类似实现）。</p></blockquote>
-<p>比如这个翻转，<code>Objective-C</code>里直接就给你实现好了，在SwiftUI里，给的是一个最基本的几何变换，至于这上面的效果，就要你自己实现了。我认为这是对的。</p><p>按课程里的思路，卡片要么正面，要么反面，是由<code>isFaceUp</code>决定的，加入动画后，那需要这个属性在进行了50%（也就是90˚）的时候才改值</p><p>而这个属性是卡片的属性，与动画无关，所以<strong>第一个决策</strong>，就是把动画函数写到<code>ViewModifier</code>里面去，传进去的是卡片的属性，但是在<code>modifier</code>里，我们把它适当转化成应该转的角度（0˚或90˚）,这样在<code>modifier</code>里面不管做什么变化，都不影响外部调用者自己的语义了（方法和参数都没变）：</p><div class="highlight"><pre><span></span><span class="kd">init</span><span class="p">(</span><span class="n">isFaceUp</span><span class="p">:</span> <span class="nb">Bool</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// step1 这里接的是布尔值，但是我们需要把它转成对应的翻转角度</span>
-        <span class="n">animatableData</span> <span class="p">=</span> <span class="n">isFaceUp</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="mi">180</span>
-    <span class="p">}</span>
-
-    <span class="c1">// 重新定义了isFaceUp，改由翻转角度的大小决定</span>
-    <span class="c1">// 从而解决isFaceUp在第一时间就改变的问题</span>
-    <span class="kd">var</span> <span class="nv">isFaceUp</span><span class="p">:</span> <span class="nb">Bool</span> <span class="p">{</span>
-        <span class="c1">// step3</span>
-        <span class="n">animatableData</span> <span class="o">&lt;</span> <span class="mi">90</span>
-    <span class="p">}</span>
-</pre></div>
-<p>剩下的就是语法了，我们要实现一个<code>Animatable</code>的协议，与<code>ViewModifier</code>协议合并成<code>AnimatableModifier</code>，它只有一个属性，用我的话来说，就是前面提到的“动画插值”，我一直用这一个概念来理解这些新库里的动画原理，你也可以有你的理解。</p><p>总之，它需要你指定一个提供插值的来源，在这个例子中，这个来源就是<code>rotation3DEffect</code>函数，因为它会自动执行动画，显然里面的“<strong>角度</strong>”参数是会自己变的，我们要的就是捕捉这个“<strong>角度</strong>”，组合起来，看代码：</p><div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">Cardify</span><span class="p">:</span> <span class="n">AnimatableModifier</span> <span class="p">{</span>
-    <span class="kd">init</span><span class="p">(</span><span class="n">isFaceUp</span><span class="p">:</span> <span class="nb">Bool</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// step1 把参数转化成动画插值的（最终）值</span>
-        <span class="n">animatableData</span> <span class="p">=</span> <span class="n">isFaceUp</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="mi">180</span>
-    <span class="p">}</span>
-
-    <span class="kd">var</span> <span class="nv">isFaceUp</span><span class="p">:</span> <span class="nb">Bool</span> <span class="p">{</span>
-        <span class="c1">// step3 通过插值来反推正反面</span>
-        <span class="n">animatableData</span> <span class="o">&lt;</span> <span class="mi">90</span>
-    <span class="p">}</span>
-
-    <span class="c1">// step0</span>
-    <span class="c1">// 把写死的角度变成插值</span>
-    <span class="kd">var</span> <span class="nv">animatableData</span><span class="p">:</span> <span class="nb">Double</span> <span class="c1">// 这个类型是自定义的， 我们要用它来旋转角度，所以是double</span>
-
-    <span class="kd">func</span> <span class="nf">body</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="n">Content</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
-        <span class="n">ZStack</span> <span class="p">{</span>
-            <span class="n">Group</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="n">isFaceUp</span> <span class="p">{</span>
-    					<span class="c1">// 卡片正面代码                </span>
-                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                	   <span class="c1">// 卡片反面代码</span>
-                <span class="p">}</span>
-        <span class="c1">// step2</span>
-        <span class="c1">// 课程里是有额外的角度参数，并且与animatableData进行了绑定</span>
-        <span class="c1">// 其实为了演示插值的作用，不包装更直观</span>
-        <span class="p">.</span><span class="n">rotation3DEffect</span><span class="p">(</span>
-            <span class="p">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">animatableData</span><span class="p">),</span>
-            <span class="n">axis</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-            <span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-<p>效果如下，其实就是解决了如何捕捉动画进度的问题，也就是<code>animatableData</code>
-<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><h2>Animation2</h2>
-<p>多一个例子，课程里每张卡片翻开就会倒计时，原本是一个大饼，我根据我的喜好改成了圆环（其实是我学教程的习惯，尽可能不去做跟教程一样的事，避免思维惰性）</p><p>那么怎么让进度条动起来呢？终于讲到了怎么手动计算<strong>插值</strong>，并把这组值推给动画库让它动起来的过程了。</p><p>有了上一个例子，我查看了一个<code>Shape</code>的定义，原生就conform to protocol <code>Animatable</code>的，所以我们直接添加一个<code>AnimatedData</code>试试。</p><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nv">animatableData</span><span class="p">:</span> <span class="nb">Double</span>   <span class="c1">// degrees</span>
-</pre></div>
-<blockquote>
-<p>这里跟上例有一点区别，上一例动画是系统库做好的，我们只是<code>capture value</code>，所以几乎只要把那个变量摆在那，别处需要的时候直接使用就可以了，而现在我们是要主动更改这个data，从而实现绘图的不断更新，所以稍微复杂了些。</p></blockquote>
-<p>课程里把起点和终点都做成了动画参数，可能是为了演示<code>AnimatablePair</code>，而本例中起点其实是不变的，所以我实事求是，把它用最简单的方法来实现，同时，放弃对象化思维，使用动画插值的思维，不去考虑插值与原来的类的属性有什么关系，直接把插值用在需要变化的位置，这是做教学的话最直观的方案了，按我的做法，代码几乎没有变化，就多了一行和改了一行：</p><div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">CountDownCircle</span><span class="p">:</span> <span class="n">Shape</span> <span class="p">{</span>
-
-<span class="cm">/* </span>
-<span class="cm">以下注释掉的是教程的用法，保留了data与angle的关系</span>
-<span class="cm">    var endAngle: Angle  //</span>
-<span class="cm">    var animatableData: Double {</span>
-<span class="cm">        get {</span>
-<span class="cm">            endAngle.degrees</span>
-<span class="cm">        }</span>
-<span class="cm">        set {</span>
-<span class="cm">            print(&quot;set: \(newValue)&quot;)</span>
-<span class="cm">            endAngle = Angle.degrees(newValue)</span>
-<span class="cm">        }</span>
-<span class="cm">*/</span>    
-    <span class="c1">// 我直观展示这个插值的用法</span>
-    <span class="kd">var</span> <span class="nv">animatableData</span><span class="p">:</span> <span class="nb">Double</span>   <span class="c1">// degrees</span>
-
-    <span class="kd">func</span> <span class="nf">path</span><span class="p">(</span><span class="k">in</span> <span class="n">rect</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Path</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nv">p</span> <span class="p">=</span> <span class="n">Path</span><span class="p">()</span>
-        <span class="kd">let</span> <span class="nv">center</span> <span class="p">=</span> <span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">rect</span><span class="p">.</span><span class="n">midX</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">rect</span><span class="p">.</span><span class="n">midY</span><span class="p">)</span>
-        <span class="n">p</span><span class="p">.</span><span class="n">addArc</span><span class="p">(</span><span class="n">center</span><span class="p">:</span> <span class="n">center</span><span class="p">,</span>
-                 <span class="n">radius</span><span class="p">:</span> <span class="p">(</span><span class="n">rect</span><span class="p">.</span><span class="n">width</span><span class="o">-</span><span class="mf">10.0</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span>
-                 <span class="n">startAngle</span><span class="p">:</span> <span class="n">Angle</span><span class="p">.</span><span class="n">degrees</span><span class="p">(</span><span class="mi">0</span><span class="o">-</span><span class="mi">90</span><span class="p">),</span>
-                 <span class="n">endAngle</span><span class="p">:</span> <span class="n">Angle</span><span class="p">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">animatableData</span><span class="p">),</span> <span class="c1">//endAngle（教程用endAngle）,</span>
-                 <span class="n">clockwise</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">p</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-<p>改造很简单，就是把告诉动画库“<strong>结束角度</strong>”是一个需要变动的值就好了，我们调用的时候把一个<strong>能自己变化的值</strong>送到这个参数里就能动起来。对调用者进行一点准备：</p><div class="highlight"><pre><span></span><span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">animatedData</span><span class="p">:</span> <span class="nb">Double</span> <span class="p">=</span> <span class="mf">0.0</span>
-
-    <span class="kd">private</span> <span class="kd">func</span> <span class="nf">startRemainingCountdown</span><span class="p">()</span> <span class="p">{</span>
-        <span class="n">animatedData</span> <span class="p">=</span> <span class="err">剩余进度</span>
-        <span class="n">withAnimation</span><span class="p">(.</span><span class="n">linear</span><span class="p">(</span><span class="n">duration</span><span class="p">:</span> <span class="err">剩余时间</span><span class="p">))</span> <span class="p">{</span>
-            <span class="n">animatedData</span> <span class="p">=</span> <span class="mf">0.0</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-</pre></div>
-<p>这里做了两件事：</p><ol>
-<li><code>@State</code>的用法，<code>View</code>是无状态的，现在我们要做动画，需要保持一些状态，这里我们保持一个“进度”的值</li>
-<li>添加了一个触发动画的函数，就是设置动画初值，设置终止值，然后通过<code>withAnimation</code>函数让它自动生成插值序列，这就是我前面提过的类似的<code>Flutter</code>的<code>lerp</code>方法，SwiftUI中没找到，但是变相提供了用系统动画来提供插值的做法。</li>
-</ol>
-<p>使用就很简单了，把“<strong>进度</strong>”填到相应的参数位，然后选择一个时机触发，我们这里选择的是<code>onAppear</code></p><div class="highlight"><pre><span></span><span class="n">CountDownCircle</span><span class="p">(</span><span class="n">animatableData</span><span class="p">:</span> <span class="o">-</span><span class="n">animatedData</span><span class="o">*</span><span class="mi">360</span><span class="o">-</span><span class="mi">90</span><span class="p">)</span>
-        <span class="p">.</span><span class="n">stroke</span><span class="p">(</span><span class="n">style</span><span class="p">:</span> <span class="n">strokeStyle</span><span class="p">).</span><span class="n">opacity</span><span class="p">(</span><span class="mf">0.4</span><span class="p">)</span>
-        <span class="p">.</span><span class="n">onAppear</span> <span class="p">{</span>
-            <span class="n">startRemainingCountdown</span><span class="p">()</span>
-        <span class="p">}</span>
-</pre></div>
-<blockquote>
-<p>需要注意的是<code>withAnimation</code>过程中对值的更改我们并不能显式捕捉，至少我试图把它显示在UI上观察它的变化是失败的，直接显示了最终值，而在接这个变化的插值的底层函数里，我能在<code>animatableData</code>的<code>set</code>方法里看到确实设置了无数的插值，暂时没有理解<code>withAnimation</code>真的有有没有直接对两个数字直接生成一系列中间值</p></blockquote>
-<p>效果如下：
-<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><h2>后记</h2>
-<p>动画我之前写过一篇：<a href="https://www.jianshu.com/p/0e4c8f0e1c23">用CALayer绘图,添加动画和渐变</a>，很明显可以看到，以前的写法仍然是黑匣子，即告诉动画库，请给我动画，动画的要求是blablabla，而现在都走了插值的路线，即把一系列值告诉你，你按照每个值直接绘图就是了，绘成啥样我自己负责。这就是我这篇文章反复强调的思路的变化，我喜欢这种思路。</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/SwiftUI%E7%9A%84ViewModifier%E5%92%8CAnimation%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

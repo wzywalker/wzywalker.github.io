@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/e83a979bdfe76b3eb88998ea61cf43ad.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/638580149e69269e25c60788952cb35a.json"
         }
 
     </script>
@@ -55,6 +55,300 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-5/" target="_self">《Deep Learning with Python》笔记[5]</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-5/" target="_self">
+                <time class="text-uppercase">
+                    September 27 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><h1>Deep learning for text and sequences</h1>
+<p>空间上的序列，时间上的序列组成的数据，比如文本，视频，天气数据等，一般用<code>recurrent neural network</code>(RNN)和<code>1D convnets</code></p><blockquote>
+<p>其实很多名词，包括convnets，我并没有在别的地方看到过，好像就是作者自己发明的，但这些不重要，知道它描述的是什么就可以了，不一定要公认术语。</p></blockquote>
+<p>通用场景：</p><ul>
+<li>[分类: 文本分类] Document classification and timeseries classification, such as identifying the topic of an article or the author of a book</li>
+<li>[分类: 文本比较] Timeseries comparisons, such as estimating how closely related two documents or two stock tickers are</li>
+<li>[分类: 生成] Sequence-to-sequence learning, such as decoding an English sentence into French</li>
+<li>[分类: 情感分析]Sentiment analysis, such as classifying the sentiment of tweets or movie reviews as positive or negative</li>
+<li>[回归: 预测]Timeseries forecasting, such as predicting the future weather at a certain location, given recent weather data</li>
+</ul>
+<p>我画蛇添足地加了是分类问题还是回归问题.</p><blockquote>
+<p>none of these deeplearning models truly understand text in a human sense</p></blockquote>
+<p>Deep learning for natural-language processing is <code>pattern recognition</code> applied to words, sentences, and paragraphs, in much <strong>the same</strong> way that computer vision is pattern recognition applied to pixels.</p><h2>tokenizer</h2>
+<p>图像用像素上的颜色来数字化，那文字也把什么数字化呢？</p><ul>
+<li>拆分为词，把每个词转化成向量</li>
+<li>拆分为字（或字符），把每个字符转化为向量</li>
+<li>把字（词）与前n个字（词）组合成单元，转化为向量，（类似滑窗），N-Grams</li>
+</ul>
+<p>all of above are <code>tokens</code>, and breaking text into such tokens is called <code>tokenization</code>. These vectors, packed into sequence tensors, are fed into deep neural networks.</p><p><code>N-grams</code>这种生成的token是无序的，就像一个袋子装了一堆词：<code>bag-of-words</code>: a set of tokens rather than a list of sequence.</p><p>所以句子结构信息丢失了，更适合用于浅层网络。作为一种rigid, brittle（僵硬的，脆弱的）特征工程方式，深度学习采用多层网络来提取特征。</p><h2>vectorizer</h2>
+<p>token -&gt; vector:</p><ul>
+<li>one-hot encoding</li>
+<li>token/word embedding (word2vec)</li>
+</ul>
+<h3>one-hot</h3>
+<ol>
+<li>以token总数量（一般就是字典容量）为维度</li>
+<li>一般无序，所以生成的时候只需要按出现顺序编索引就好了</li>
+<li>有时候也往往伴随丢弃不常用词，以减小维度</li>
+<li>也可以在字符维度编码（维度更低）</li>
+<li>一个小技巧，如果索引数字过大，可以把单词hash到固定维度(未跟进)</li>
+</ol>
+<p>特点/问题：</p><ul>
+<li>sparse</li>
+<li>high-dimensional, 比如几千几万</li>
+<li>no spatial relationship</li>
+<li>hardcoded</li>
+</ul>
+<h3>word embeddings</h3>
+<ul>
+<li>Dense</li>
+<li>Lower-dimensional，比如128，256...</li>
+<li>Spatial relationships (语义接近的向量空间上也接近)</li>
+<li>Learned from data</li>
+</ul>
+<p>to obtain word embeddings:</p><ol>
+<li>当成训练参数之一(以Embedding层的身份)，跟着训练任务一起训练</li>
+<li>pretrained word embeddings<ul>
+<li>Word2Vec(2013, google)<ul>
+<li>CBOW</li>
+<li>Skip-Gram</li>
+</ul>
+</li>
+<li>GloVe(2014, Stanford))</li>
+<li>前提是语言环境差不多，不同学科/专业/行业里的词的关系是完全不同的<ul>
+<li>GloVe从wikipedia和很多通用语料库里训练，可以尝试在许多非专业场景里使用。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>keras加载训练词向量的方式：</p><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_weights</span><span class="p">([</span><span class="n">embedding_matrix</span><span class="p">])</span>
+<span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">trainable</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+<p>pytorch：</p><div class="highlight"><pre><span></span><span class="c1"># TEXT, LABEL为torchtext的Field对象</span>
+<span class="kn">from</span> <span class="nn">torchtext.vocab</span> <span class="kn">import</span> <span class="n">Vectors</span>
+<span class="n">vectors</span><span class="o">=</span><span class="n">Vectors</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;./sgns.sogou.word&#39;</span><span class="p">)</span> <span class="c1">#使用预训练的词向量，维度为300Dimension</span>
+<span class="n">TEXT</span><span class="o">.</span><span class="n">build_vocab</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">vectors</span><span class="o">=</span><span class="n">vectors</span><span class="p">)</span> <span class="c1">#构建词典</span>
+<span class="n">LABEL</span><span class="o">.</span><span class="n">build_vocab</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+
+<span class="n">vocab_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">TEXT</span><span class="o">.</span><span class="n">vocab</span><span class="p">)</span>
+<span class="n">vocab_vectors</span> <span class="o">=</span> <span class="n">TEXT</span><span class="o">.</span><span class="n">vocab</span><span class="o">.</span><span class="n">vectors</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span> <span class="c1">#准备好预训练词向量</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">embedding</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">num_embeddings</span><span class="o">=</span><span class="n">vocab_size</span><span class="err">，</span> <span class="n">embedding_dim</span><span class="o">=</span><span class="n">embedding_size</span><span class="p">)</span>
+
+<span class="c1"># 上面是为了回顾，真正用来做对比的是下面这两句</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">vocab_vectors</span><span class="p">))</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+<blockquote>
+<p>预训练词向量也可以继续训练，以得到task-specific embedding</p></blockquote>
+<h2>Recurrent neural networks(RNN)</h2>
+<p>sequence, time series类的数据，天然会受到前后数据的影响，RNN通过将当前token计算的时候引入上一个token的计算结果（反向的话就能获得下一个token的结果）以获取上下文的信息。</p><p>前面碰到的网络，数据消费完就往前走（按我这种说法，后面还有很多“等着二次消费的”模块，比如inception, resdual等等），叫做<code>feedforward network</code>。显然，RNN中，一个token产生输出后并不是直接丢给下一层，而是还复制了一份丢给了同层的下一个token. 这样，当前token的<code>output</code>成了下一个token的<code>state</code>。</p><ul>
+<li>因为一个output其实含有“前面“所有的信息，一般只需要最后一个output</li>
+<li>如果是堆叠多层网络，则需要返回<strong>所有</strong>output</li>
+</ul>
+<p>序列过长梯度就消失了，所谓的<strong>遗忘</strong> （推导见另一篇笔记，）  -&gt; <code>LSTM</code>, <code>GRU</code></p><h3>Long Short-Term Memory(LSTM)</h3>
+<ol>
+<li>想象有一根传送带穿过sequence</li>
+<li>同一组input和state会进行三次相同的线性变换，有没有联想到<code>transformer</code>用同一个输出去生成<code>q, k, v</code>？</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="n">output_t</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">state_t</span><span class="p">,</span> <span class="n">Uo</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">input_t</span><span class="p">,</span> <span class="n">Wo</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">C_t</span><span class="p">,</span> <span class="n">Vo</span><span class="p">)</span> <span class="o">+</span> <span class="n">bo</span><span class="p">)</span>
+<span class="n">i_t</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">state_t</span><span class="p">,</span> <span class="n">Ui</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">input_t</span><span class="p">,</span> <span class="n">Wi</span><span class="p">)</span> <span class="o">+</span> <span class="n">bi</span><span class="p">)</span> 
+<span class="n">f_t</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">state_t</span><span class="p">,</span> <span class="n">Uf</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">input_t</span><span class="p">,</span> <span class="n">Wf</span><span class="p">)</span> <span class="o">+</span> <span class="n">bf</span><span class="p">)</span> 
+<span class="n">k_t</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">state_t</span><span class="p">,</span> <span class="n">Uk</span><span class="p">)</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">input_t</span><span class="p">,</span> <span class="n">Wk</span><span class="p">)</span> <span class="o">+</span> <span class="n">bk</span><span class="p">)</span>
+
+<span class="n">c_t</span><span class="o">+</span><span class="mi">1</span> <span class="o">=</span> <span class="n">i_t</span> <span class="o">*</span> <span class="n">k_t</span> <span class="o">+</span> <span class="n">c_t</span> <span class="o">*</span> <span class="n">f_t</span>  <span class="c1"># 仍然有q，k，v的意思（i,k互乘，加上f， 生成新c）</span>
+</pre></div>
+<blockquote>
+<p>不要去考虑哪个是<strong>遗忘门</strong>，<strong>记忆门</strong>，还是<strong>输出门</strong>，最终是由weights决定的，而不是设计。</p></blockquote>
+<p>Just keep in mind what the LSTM cell is meant to do:</p><blockquote>
+<p>allow past information to be <code>reinjected</code> at a later time, thus fighting the vanishing-gradient problem.</p></blockquote>
+<p>关键词：reinject</p><h3>dropout</h3>
+<p>不管是keras还是pytorch，都帮你隐藏了dropout的坑。 你能看到应用这些框架的时候，是需要你把dropout传进去的，而不是手动接一个dropoutlayer，原因是需要在序列每一个节点上应用同样的dropout mask才能起作用，不然就会起到反作用。</p><p>keras封装得要复杂一点：</p><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span>
+                    <span class="n">dropout</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                    <span class="n">recurrent_dropout</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                    <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">float_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+</pre></div>
+<h3>stacking recurrent layers</h3>
+<p>前面说过，设计好的模型的一个判断依据是至少让模型能跑到overfitting。如果到了overfitting，表现还不是很好，那么可以考虑增加模型容量（叠更多层，以及拓宽layer的输出维度）</p><p>堆叠多层就需要用到每个节点上的输出，而不只关心最后一个输出了。</p><h3>Bidriectional</h3>
+<p>keras奇葩的bidirectional语法：</p><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Bidirectional</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">32</span><span class="p">)))</span>
+</pre></div>
+<p>其实这是设计模式在类的封装上的典型应用，善用继承和多态，无侵入地扩展类的方法和属性，而不是不断魔改原代码，加参数，改API。但在脚本语言风格里的环境里，这么玩就有点格格不入了。</p><h2>Sequence processing with convnets</h2>
+<ol>
+<li>卷积用到序列上去也是可以的</li>
+<li>一个向量只表示一个token，如果把token的向量打断就违背了token是最小单元的初衷，所以序列上的卷积，不可能像图片上两个方向去滑窗了。(<code>Conv1D</code>的由来)</li>
+<li>一个卷积核等于提取了n个关联的上下文（有点类似<code>n-grams</code>），堆叠得够深感受野更大，可能得到更大的上下文。</li>
+<li>但仍然理解为filter在全句里提取局部特征</li>
+</ol>
+<p>归桕结底，图片的最小单元是一个像素（一个数字），而序列（我们这里说文本）的最小单元是token，而token又被我们定义为vector（一组数字）了，那么卷积核就限制在至少要达到最小单元(vector)的维度了。</p><h3>Combining CNNs and RNNs to process long sequences</h3>
+<p>卷积能通过加深网络获取更大的感受野，但仍然是“位置无关”的，因为每个filter本就是在整个序列里搜索相同的特征。</p><p>但是它确实提取出了特征，是否可把位置关系等上下文的作业交给下游任务RNN做呢？</p><figure  style="flex: 50.750750750750754" ><img width="676" height="666" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/bc69a05bd9def95c42c6ce450a5cf164.png" alt=""/></figure><p>不但实现，而且堆叠两种网络，还可以把数据集做得更大（CNN是矩阵运算，还能用GPU加速）。</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Deep-Learning-with-Python-Notes-5/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-4/" target="_self">《Deep Learning with Python》笔记[4]</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-4/" target="_self">
+                <time class="text-uppercase">
+                    September 22 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><h1>Deep learning for computer vision</h1>
+<h2>Convolution Network</h2>
+<p>The convolution operation extracts patches from its input feature map and applies the same transformation to all of these patches, producing an output feature map.</p><ul>
+<li>convolution layers learn local patterns(局部特征)<ul>
+<li>The patterns they learn are translation invariant.（局部特征可在图片别的地方重复）</li>
+<li>有的教材里会说每个滑窗一个特征，然后引入<strong>参数共享</strong>才讲到一个特征其实可以用在所有滑窗</li>
+</ul>
+</li>
+<li>They can learn spatial hierarchies of patterns(低级特征堆叠成高级特征)</li>
+<li>depth axis no longer stand for specific colors as in RGB input; rather, they stand for filters(表示图片时，3个通道有原始含义，卷积开始后通道只表示filter了)</li>
+<li><code>valid</code> and <code>same</code> convolution（加不加padding让filter在最后一个像素时也能计算）</li>
+<li><code>stride</code>，滑窗步长</li>
+<li><code>max-pooling</code> or <code>average-pooling</code><ul>
+<li>usually 2x2 windows by stride 2 -&gt; 下采样(downsample)</li>
+<li>更大的感受野</li>
+<li>更小的输出</li>
+<li>不是唯一的下采样方式（比如在卷积中使用stride也可以）</li>
+<li>一般用max而不是average(寻找最强的表现)</li>
+</ul>
+</li>
+<li>小数据集<ul>
+<li>data augmenetation(旋转平衡缩放shear翻转等)<ul>
+<li>不能产生当前数据集不存在的信息</li>
+<li>所以仍需要dropout</li>
+</ul>
+</li>
+<li>pretrained network(适用通用物体)<ul>
+<li>feature extraction</li>
+<li>fine-tuneing</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Using a pretrained convnet</h3>
+<p>A pretrained network is a saved network that was previously trained <strong>on a large dataset</strong> typically on a large-scale image-classification task.</p><h3>Feature extraction</h3>
+<p>Feature extraction consists of using the representations learned by a previous network to extract interesting features from new samples. These features are then run through a <em>new classifier</em>, which is trained from scratch.</p><ol>
+<li>即只使用别的大型模型提取的representations（特征），来构建自己的分类器。</li>
+<li>原本模型的分类器不但是为特定任务写的，而且基本上丧失了位置和空间信息，只保留了对该任务上的presence probability.</li>
+<li>最初的层一般只能提取到线，边缘，颜色等低级特征，再往后会聚合出一些纹理，更高的层就可能会叠加出一些眼，耳等抽象的特征，所以你的识别对象与pretrained数据源差别很大的时候，就需要考虑把最尾巴的几层layer也舍弃掉。（e.g. VGG16最后一层提取了512个feature map）</li>
+<li>两种用法：<ul>
+<li>跑一次预训练模型你选中的部分，把参数存起来（$\leftarrow$错），把输出当作dataset作为自己构建的分类器的input。<ul>
+<li>快，省资源，但是需要把数据集固定住，等于没法做data augmentation</li>
+<li>跑预训练模型时不需要计算梯度(freeze)</li>
+<li>其实应用预训练模型就等于别人的预处理数据集，而真实的模型只有一个小分类器</li>
+</ul>
+</li>
+<li>合并到自定义的网络中当成普通网络训练<ul>
+<li>慢，但是能做数据增广了</li>
+<li>需手动设置来自预训练模型的梯度不需要计算梯度</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>注：这里为什么单独跑预训练模型不能数据增广呢？</p></blockquote>
+<blockquote>
+<p>教材用的是keras, 它处理数据的方式是做一个generaotr，只要你给定数据增广的规则（参数），哪怕只有一张图，它也是可以无穷无尽地给你生成下一张的。所以每一次训练都能有新的数据喂到网络里。这是出于内存考虑，不需要真的把数据全部加载到内存里。</p></blockquote>
+<blockquote>
+<p>而如果你是一个固定的数据集，比如几万条，那么你把所有的数据跑一遍把这个结果当成数据集（全放在内存里），那也不是不可以在这一步用数据增广。</p></blockquote>
+<h3>Fine-tuning</h3>
+<p>Fine-tuning consists of unfreezing a few of the top layers of a frozen model base used for feature extraction, and jointly training both the newly added part of the model (in this case, the fully connected classifier) and these top layers. This is called fine-tuning because it slightly adjusts the more abstract representations of the model being reused, in order to make them more relevant for the problem at hand.</p><p>前面的feature extraction方式，会把预训练的模型你选中的layers给freeze掉，即不计算梯度。这里之所以叫fine-tuning，意思就是会把最后几层(top-layers)给<code>unfreezing</code>掉，这样的好处是保留低级特征，重新训练高级特征，还保留了原来大型模型的结构，不需要自行构建。</p><figure class="vertical-figure" style="flex: 15.321375186846039" ><img width="410" height="1338" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/705011af7667b591af29afe03230ecc5.png" alt=""/></figure><blockquote>
+<p>但是： it’s only possible to fine-tune the top layers of the convolutional base once the classifier on <code>top has already been trained</code>. 预训练模型没有frezze住的话loss将会很大，所以变成了先train一个大体差不多的classifier，再联合起来train一遍高级特征和classifier:</p></blockquote>
+<ol>
+<li>Add your custom network on top of an already-trained base network.</li>
+<li>Freeze the base network.</li>
+<li>Train the part you added. (第一次train)</li>
+<li>Unfreeze some layers in the base network.</li>
+<li>Jointly train both these layers and the part you added.（第二次train）</li>
+</ol>
+<p>但千万别把所有层都unfrezze来训练了</p><ol>
+<li>低级特征都为边缘和颜色，无需重新训练</li>
+<li>小数据量训练大型模型，model capacity相当大，非常容易过拟合</li>
+</ol>
+<h3>Visualizing what convents learn</h3>
+<p>并不是所有的深度学习都是黑盒子，至少对图像的卷积网络不是 -&gt; <code>representations of visual concepts</code>, 下面介绍<strong>三种</strong>视觉化和可解释性的representations的方法。</p><h4>Visualizing intermediate activations</h4>
+<p>就是把每个中间层(基本上是&quot;卷积+池化+激活“)可视化出来，This gives a view into how an input is <code>decomposed</code> into the different filters learned by the network.</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="n">layer_outputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">layer</span><span class="o">.</span><span class="n">output</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[:</span><span class="mi">8</span><span class="p">]]</span> <span class="n">activation_model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">layer_outputs</span><span class="p">)</span>
+
+<span class="n">activations</span> <span class="o">=</span> <span class="n">activation_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">img_tensor</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">matshow</span><span class="p">(</span><span class="n">first_layer_activation</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
+
+<span class="c1"># 注意使用的是matshow而不是show</span>
+</pre></div>
+<figure  style="flex: 101.9047619047619" ><img width="856" height="420" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e5088f559521b7cc9c7b0cb129d275fe.png" alt=""/></figure><p>以上代码是利用了keras的Model特性，将所有layers的输出<strong>摊平</strong>（就是做了一个多头的模型），然后再顺便取了第4和第7个feature map画出来，可以看到，图一感兴趣的是<code>对角线</code>，图二提取的是<code>蓝色的亮点</code>。</p><p>结构化这些输出，可以确信初始layer确实提取的是简单特征，越往后越高级（抽象）。</p><p>A deep neural network effectively acts as an <code>information distillation</code>(信息蒸馏) pipeline, with raw data going in (in this case, RGB pictures) and being repeatedly transformed so that irrelevant information is filtered out (for example, the specific visual appearance of the image), and useful information is <code>magnified and refined</code> (for example, the class of the image).</p><blockquote>
+<p>关键词：有用的信息被不断<strong>放大和强化</strong></p></blockquote>
+<p>书里举了个有趣的例子，要你画一辆自行车。你画出来的并不是一辆充满细节的单车，而往往是你抽象出来的单车，你会用基本的线条勾勒出你对单车特征的理解，比如龙头，轮子等关键部件，以及相对位置。画家为什么能画得又真实又好看？那就是他们真的仔细观察了单车，他们绘画的时候用的并不是特征，而是一切细节，然而对于没有受过训练的普通人来说，往往只能用简单几笔勾勒出脑海中的单车的样子（其实并不是样子，而是特征的组合）</p><h4>Visualizing convnet filters</h4>
+<p>通过强化filter对输出的反应并绘制出来，这是从数学方法上直接观察filter，看什么最能“刺激”一个filter，用”梯度上升“最能体现这种思路：</p><p>把output当成loss，用梯度上升（每次修改input_image）训练出来的output就是这个filter的极端情况，可以认为这个filter其实是在提取什么（responsive to）：</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras.applications</span> <span class="kn">import</span> <span class="n">VGG16</span>
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">backend</span> <span class="k">as</span> <span class="n">K</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">VGG16</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="s1">&#39;imagenet&#39;</span><span class="p">,</span> <span class="n">include_top</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">layer_name</span> <span class="o">=</span> <span class="s1">&#39;block3_conv1&#39;</span>
+<span class="n">filter_index</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">layer_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">layer_name</span><span class="p">)</span><span class="o">.</span><span class="n">output</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">layer_output</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">filter_index</span><span class="p">])</span>  <span class="c1"># output就是loss</span>
+
+<span class="n">grads</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">gradients</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">input</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># 对input求微分</span>
+<span class="n">grads</span> <span class="o">/=</span> <span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">grads</span><span class="p">)))</span> <span class="o">+</span> <span class="mf">1e-5</span><span class="p">)</span>
+
+<span class="n">iterate</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">input</span><span class="p">],</span> <span class="p">[</span><span class="n">loss</span><span class="p">,</span> <span class="n">grads</span><span class="p">])</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># 理解静态图的用法</span>
+<span class="n">loss_value</span><span class="p">,</span> <span class="n">grads_value</span> <span class="o">=</span> <span class="n">iterate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">3</span><span class="p">))])</span>
+
+<span class="n">input_img_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">*</span> <span class="mi">20</span> <span class="o">+</span> <span class="mf">128.</span>
+<span class="n">step</span> <span class="o">=</span> <span class="mf">1.</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">40</span><span class="p">):</span>
+    <span class="n">loss_value</span><span class="p">,</span> <span class="n">grads_value</span> <span class="o">=</span> <span class="n">iterate</span><span class="p">([</span><span class="n">input_img_data</span><span class="p">])</span>
+    <span class="n">input_img_data</span> <span class="o">+=</span> <span class="n">grads_value</span> <span class="o">*</span> <span class="n">step</span>  <span class="c1"># 梯度上升</span>
+</pre></div>
+<p>按上述代码的思路结构化输出并绘图：</p><figure class="vertical-figure" style="flex: 47.148288973384034" ><img width="1240" height="1315" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d3df8099cd6c93450e84a4cd01b67d19.png" alt=""/></figure><p>从线条到纹理到物件（眼睛，毛皮，叶子）</p><blockquote>
+<p>each layer in a convnet learns a collection of filters such that their inputs can be expressed as a <code>combination of the filters</code>.</p></blockquote>
+<blockquote>
+<p>This is similar to how the Fourier transform decomposes signals onto a bank of cosine functions.</p></blockquote>
+<p>用傅里叶变换来类比卷积网络每一层就是把input表示成一系列特征的组合。</p><h4>Visualizing heatmaps of class activation</h4>
+<p>which parts of a given image led a convnet to its final classification decision. 即图像有哪一部分对最终的决策起了作用。</p><ul>
+<li><code>class activation map</code> (CAM) visualization,</li>
+<li><code>Grad-CAM</code>: Visual Explanations from Deep Networks via Gradient-based Localization.”</li>
+</ul>
+<blockquote>
+<p>you’re weighting a spatial map of “how intensely the input image activates different channels” by “how important each channel is with regard to the class,” resulting in a spatial map of “how intensely the input image activates the class.</p></blockquote>
+<p>解读上面这句话：</p><p>不同channels（特征）对图像的激活的强度<br />
++<br />
+每个特征对(鉴定为）该类别的重要程度<br />
+=<br />
+该“类别”对图像的激活的强度</p><p>一张两只亚洲象的例图，使用VGG16来做分类，得到92.5%的置信度的亚洲象的判断，为了visualize哪个部分才是“最像亚洲象”的，使用<code>Grad-CAM</code>处理：</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras.applications.vgg16</span> <span class="kn">import</span> <span class="n">VGG16</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">VGG16</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="s1">&#39;imagenet&#39;</span><span class="p">)</span>
+<span class="n">african_e66lephant_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">output</span><span class="p">[:,</span> <span class="mi">386</span><span class="p">]</span>  <span class="c1"># 亚洲象在IMGNET的类别是386</span>
+<span class="n">last_conv_layer</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s1">&#39;block5_conv3&#39;</span><span class="p">)</span> <span class="c1"># top conv layer</span>
+
+<span class="n">grads</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">gradients</span><span class="p">(</span><span class="n">african_elephant_output</span><span class="p">,</span> <span class="n">last_conv_layer</span><span class="o">.</span><span class="n">output</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> 
+<span class="n">pooled_grads</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">iterate</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">input</span><span class="p">],</span>
+                     <span class="p">[</span><span class="n">pooled_grads</span><span class="p">,</span> <span class="n">last_conv_layer</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">pooled_grads_value</span><span class="p">,</span> <span class="n">conv_layer_output_value</span> <span class="o">=</span> <span class="n">iterate</span><span class="p">([</span><span class="n">x</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">512</span><span class="p">):</span>
+    <span class="n">conv_layer_output_value</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">pooled_grads_value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="n">heatmap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">conv_layer_output_value</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+<figure  style="flex: 77.77777777777777" ><img width="1036" height="666" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9020d228898abcf96e2855b7e028374b.png" alt=""/></figure><p>叠加到原图上去（用cv2融合两张图片，即相同维度的数组以不同权重逐像素相加）：</p><figure  style="flex: 75.97402597402598" ><img width="702" height="462" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9261ae2a67e61c26e078db210f218d11.png" alt=""/></figure></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Deep-Learning-with-Python-Notes-4/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-3/" target="_self">《Deep Learning with Python》笔记[3]</a></h1>
@@ -1582,318 +1876,6 @@ $$</p>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Semi-supervised-Learning/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/RNN%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1%E4%B8%8E%E6%A2%AF%E5%BA%A6%E7%88%86%E7%82%B8%E6%8E%A8%E5%AF%BC/" target="_self">RNN梯度消失与梯度爆炸推导</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/RNN%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1%E4%B8%8E%E6%A2%AF%E5%BA%A6%E7%88%86%E7%82%B8%E6%8E%A8%E5%AF%BC/" target="_self">
-                <time class="text-uppercase">
-                    May 09 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><figure  style="flex: 82.77777777777777" ><img width="596" height="360" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/794a90e7b252e2aa03842eeee7fad8de.png" alt=""/></figure>
-$$
-\large
-\begin{aligned}
-h_t &amp;=\sigma(z_t) = \sigma(Ux_t+Wh_{t-1} + b) \
-y_t &amp;= \sigma(Vh_t + c)
-\end{aligned}
-$$<h2>梯度消失与爆炸</h2>
-<p>假设一个只有 3 个输入数据的序列，此时我们的隐藏层 h1、h2、h3 和输出 y1、y2、y3 的计算公式：</p><p>$$
-\large
-\begin{aligned}
-h_1 &amp;= \sigma(Ux_1 + Wh_0 + b) \\
-h_2 &amp;= \sigma(Ux_2 + Wh_1 + b) \\
-h_3 &amp;= \sigma(Ux_3 + Wh_2 + b) \\
-y_1 &amp;= \sigma(Vh_1 + c) \\
-y_2 &amp;= \sigma(Vh_2 + c) \\
-y_3 &amp;= \sigma(Vh_3 + c)
-\end{aligned}
-$$</p>
-<p>RNN 在时刻 t 的损失函数为 Lt，总的损失函数为 $L = L1 + L2 + L3 \Longrightarrow  \sum_{t=1}^TL_T$</p><p>t = 3 时刻的损失函数 L3 对于网络参数 U、W、V 的梯度如下：</p><p>$$
-\begin{aligned}
-\frac{\partial L_3}{\partial V} &amp;= \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial V} \\
-\frac{\partial L_3}{\partial U} &amp;= \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial U} + \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial U} + \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial h_1} \frac{\partial h_1}{\partial U} \\
-\frac{\partial L_3}{\partial W} &amp;= \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial W} 
-+ \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial W} 
-+ \frac{\partial L_3}{\partial y_3} \frac{\partial y_3}{\partial h_3} \frac{\partial h_3}{\partial h_2} \frac{\partial h_2}{\partial h_1} \frac{\partial h_1}{\partial W} \\
-\end{aligned}
-$$</p>
-<p>其实主要就是因为：</p><ul>
-<li>对V求偏导时，$h_3$是常数</li>
-<li>对U求偏导时：<ul>
-<li>$h_3$里有U，所以要继续对h3应用<code>chain rule</code></li>
-<li>$h_3$里的$W, b$是常数，但是$h_2$里又有U，继续<code>chain rule</code></li>
-<li>以此类推，直到$h_0$</li>
-</ul>
-</li>
-<li>对W求偏导时一样</li>
-</ul>
-<p>所以：</p><ol>
-<li>参数矩阵 V (对应输出 $y_t$) 的梯度很显然并没有长期依赖</li>
-<li>U和V显然就是连乘($\prod$)后累加($\sum$)</li>
-</ol>
-<p>$$
-\begin{aligned}
-\frac{\partial L_t}{\partial U} = \sum_{k=0}^{t} \frac{\partial L_t}{\partial y_t} \frac{\partial y_t}{\partial h_t}
-(\prod_{j=k+1}^{t}\frac{\partial h_j}{\partial h_{j-1}})
-\frac{\partial h_k}{\partial U} \\
-\frac{\partial L_t}{\partial W} = \sum_{k=0}^{t} \frac{\partial L_t}{\partial y_t} \frac{\partial y_t}{\partial h_t}
-(\prod_{j=k+1}^{t}\frac{\partial h_j}{\partial h_{j-1}})
-\frac{\partial h_k}{\partial W}
-\end{aligned}
-$$</p>
-<p>其中的连乘项就是导致 RNN 出现梯度消失与梯度爆炸的罪魁祸首，连乘项可以如下变换：</p><ul>
-<li>$h_j = tanh(Ux_j + Wh_{j-1} + b)$</li>
-<li>$\prod_{j=k+1}^{t}\frac{\partial h_j}{\partial h_{j-1}} =\prod_{j=k+1}^{t} tanh' \times W$</li>
-</ul>
-<p>tanh' 表示 tanh 的导数，可以看到 RNN 求梯度的时候，实际上用到了 (tanh' × W) 的连乘。当 (tanh' × W) &gt; 1 时，多次连乘容易导致梯度爆炸；当 (tanh' × W) &lt; 1 时，多次连乘容易导致梯度消失。</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/RNN%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1%E4%B8%8E%E6%A2%AF%E5%BA%A6%E7%88%86%E7%82%B8%E6%8E%A8%E5%AF%BC/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/RNN%E4%B8%ADbidirectional%E5%92%8Cnum_layer%E5%AF%B9output%E5%92%8Chidden%E5%BD%A2%E7%8A%B6%E7%9A%84%E5%BD%B1%E5%93%8D/" target="_self">RNN中bidirectional和num_layer对output和hidden形状的影响</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/RNN%E4%B8%ADbidirectional%E5%92%8Cnum_layer%E5%AF%B9output%E5%92%8Chidden%E5%BD%A2%E7%8A%B6%E7%9A%84%E5%BD%B1%E5%93%8D/" target="_self">
-                <time class="text-uppercase">
-                    April 13 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><h2>Batch first</h2>
-<p>首先，我们要习惯接受<code>batch_first=False</code>（就是默认值）的思维，因为NLP中批量处理句子，是每一句取第一个词，第二个词，以此类推。
-按我们习惯的把数据放在同一批（即<code>batch_first=True</code>）的思路虽然可以做到（善用切片即可），但是绕了弯路。但是如果第1批都是第1个字，第2批全是第2个字，这会自然很多（<strong>行优先</strong>）。</p><p>所以至少<code>Pytorch</code>内部，你设了True，内部也是按False来处理的，只是给了你一个语法糖（当然你组织数据就必须按True来组织了。</p><p>看个实例：</p><figure  style="flex: 79.69151670951157" ><img width="1240" height="778" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d6a0d9ea71601f8b89c0e8465751baf4.png" alt=""/></figure><ol>
-<li>假定批次是64，句长截为70，在还没有向量化的数据中，那么显然一次的输入应该为(70x64)，批次在第2位</li>
-<li>注意第一行，全是2，这是设定的<code>&lt;bos&gt;</code>，这已经很好地表示了在行优先的系统里（比如<code>Matlab</code>就是列优先），会自然而且把<strong>每句话</strong>的第一个词读出来的设定了。</li>
-</ol>
-
-<pre><code># 我用的torchtext的Field进行演示， SRC是一个Field
-[SRC.vocab.itos[i] for i in range(1,4)]  
-['&lt;pad&gt;', '&lt;bos&gt;', '&lt;eos&gt;']
-</code></pre>
-<ol start="3">
-<li>可见，2是开始，3是结束，1是空格（当然这是我设置的）</li>
-<li>同时也能注意到，最后一行有的是3，有的是1，有的都不是，就说明句子是以70为长度进行截断的，自然结束的是3，补<code>&lt;pad&gt;</code>的是1，截断的那么那个字是多少就是多少</li>
-<li>竖向取一条就是一整句话，打印出来就是箭头指向的那一大坨（共70个数字）</li>
-<li>对它进行<code>index_to_string</code>(itos)，则还原出了这句话</li>
-<li>nn.Embedding做了两件事：</li>
-</ol>
-<ul>
-<li>根据vocabulary进行one-hot（稀疏）$\rightarrow$ 所以你要告诉它词典大小</li>
-<li>然后再embedding成指定的低维向量（稠密）</li>
-<li>所以70个数字就成了70x300，拼上维度，就是70x64x300</li>
-</ul>
-<p>既然讲到这了，多讲两行，假定hidden_dim=256, 一个<code>nn.RNN</code>会输出的<code>outputs</code>和<code>hidden</code>的形状如下：</p>
-<pre><code>&gt;&gt;&gt; outputs.shape
-torch.Size([70, 64, 256])
-&gt;&gt;&gt; hidden.shape
-torch.Size([1, 64, 256])
-</code></pre>
-<ol>
-<li>即300维进去，256维出来，但是因为句子有70的长度，那就是70个output，hidden是从前传到后的，当然是最后一个</li>
-<li>也因此，如果你不需要叠加多层RNN，你只需要最后一个字的output就行了<code>outputs[-1,:,:]</code>, 这个结果送到全连接层里去进行分类。</li>
-</ol>
-<h2>自己写一个RNN</h2>
-<p>其实就是要自己把上述形状变化做对就行了。就是几个线性变换，所以我们用<code>nn.Linear</code>来拼接:</p><ol>
-<li>input: 2x5x3 $\Rightarrow$ 5个序列，每一个2个词，每个词用3维向量表示</li>
-<li>hidden=10, 无embedding，num_class=7</li>
-<li>期待形状：</li>
-</ol>
-<ul>
-<li>output: 2x5x7</li>
-<li>hidden:1x5x10</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">RNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">RNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">=</span> <span class="n">hidden_size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">i2h</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span> <span class="o">+</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">i2o</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span> <span class="o">+</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">softmax</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LogSoftmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">hidden</span><span class="p">):</span>
-        <span class="n">combined</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="nb">input</span><span class="p">,</span> <span class="n">hidden</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="c1"># input shape: (2, 5, 3)</span>
-        <span class="c1"># hidden shape: (2, 5, 10)</span>
-        <span class="c1"># combine shape (2, 5, 13)</span>
-        <span class="n">hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">i2h</span><span class="p">(</span><span class="n">combined</span><span class="p">)</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">i2o</span><span class="p">(</span><span class="n">combined</span><span class="p">)</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">hidden</span>
-
-    <span class="k">def</span> <span class="nf">initHidden</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
-
-<span class="n">hidden_size</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">num_class</span> <span class="o">=</span> <span class="mi">7</span>
-<span class="nb">input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,(</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
-
-<span class="n">rnn</span> <span class="o">=</span> <span class="n">RNN</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">hidden_size</span><span class="p">,</span><span class="n">num_class</span><span class="p">)</span>
-<span class="n">out</span><span class="p">,</span> <span class="n">hid</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">))</span>
-<span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">hid</span><span class="o">.</span><span class="n">shape</span>
-</pre></div>
-<p>output:</p>
-<pre><code>(torch.Size([2, 5, 7]), torch.Size([2, 5, 10]))
-</code></pre>
-<p>可见，output是一样的，hidden的形状不一样，事实上每一个字确实是会产生hidden的，但是pytorch并没有把它返出来（消费掉就没用了）。这里就pass了，我们主要是看一下双向和多层的情况下形状的变化，下面我们用pytorch自己的RNN来测试。</p><h1>num_layers</h1>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">num_layers</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">rnn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">RNN</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="n">num_layers</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">h0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">num_layers</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="c1"># 几层就需要初始几个hidden</span>
-<span class="n">x0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># input: 5x3 -&gt; 1x12 # N个批次， 5个序列(比如5个字，每个字由3个数字的向量组成)</span>
-<span class="n">o</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">h0</span><span class="p">)</span> <span class="c1"># 5个output, 一个final hidden</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;output shape&#39;</span><span class="p">,</span> <span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hidden shape&#39;</span><span class="p">,</span> <span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-</pre></div>
-<p>输出：</p>
-<pre><code>output shape torch.Size([5, 2, 12])  # 2个批次，5个词，12维度输出
-hidden shape torch.Size([3, 2, 12]) # 3层会输出3个hidden，2个批次
-</code></pre>
-<p>加上embedding, RNN改成GRU</p><div class="highlight"><pre><span></span><span class="c1"># 这次加embedding</span>
-<span class="c1"># 顺便把 RNN 改 GRU</span>
-<span class="n">vocab_size</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">embed_size</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">hidden_size</span> <span class="o">=</span> <span class="mi">8</span>
-<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="c1"># 要求词典长度不超过5，输出向量长度为10</span>
-<span class="n">emb</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">vocab_size</span><span class="p">,</span> <span class="n">embed_size</span><span class="p">)</span> 
-<span class="c1"># 输入为embeding维度，输出（和隐层）为8维度</span>
-<span class="n">rnn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">embed_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="c1"># 这次设了num_layers=2，就要求有两个hidden了</span>
-<span class="n">h0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
-<span class="c1"># 因为数据会用embedding包一次，所以input没有了维度要求（只有大小要求，每个数字要小于字典长度）</span>
-<span class="n">x0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">))</span> 
-<span class="n">e</span> <span class="o">=</span> <span class="n">emb</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;input.shape:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;embedding.shape:&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># (3,4)会扩展成（3,4,10), 10维是rnn的input维度，正好</span>
-<span class="n">o</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">h0</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;output.shape:</span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">, hidden.shape:</span><span class="si">{</span><span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-</pre></div>
-
-<pre><code>input.shape: torch.Size([5, 3])
-embedding.shape: torch.Size([5, 3, 10])
-output.shape:torch.Size([5, 3, 8]), hidden.shape:torch.Size([2, 3, 8])
-</code></pre>
-<p>唯一要注意的变化就是input，因为embedding是把字典大小的维度转换成指定大小的维度，暗含了你里面的每一个数字都是字典的索引，所以你组装demo数据的时候，要生成小于字典大小(<code>vocab_size</code>）的数字作为输入。</p><h2>bidirectional</h2>
-<p>这次加<strong>bidirectional</strong></p><ul>
-<li>batch_first = False</li>
-<li>x (5, 3) -&gt; 3个序列，每个序列5个数</li>
-<li>embedding(5, 10) -&gt; 输入字典长5，输出向量长10 -&gt; (5, 3, 10) -&gt; 3个序列，每个序列5个10维向量</li>
-<li>hidden必须为8维，4个（num_layers=2, bidirection),3个批次 -&gt; (4,3,8)</li>
-<li>rnn(10, 8) -&gt; 输入10维，输出8维</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="c1"># 这次加 bidirection</span>
-
-<span class="n">vocab_size</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">embed_size</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">hidden_size</span> <span class="o">=</span> <span class="mi">8</span>
-<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="n">num_layers</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="c1"># 要求词典长度不超过5，输出向量长度为10</span>
-<span class="n">emb</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">vocab_size</span><span class="p">,</span> <span class="n">embed_size</span><span class="p">)</span> 
-<span class="c1"># 输入为embeding维度，输出（和隐层）为8维度</span>
-<span class="n">rnn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">embed_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="n">num_layers</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="c1"># 这次设了num_layers=2，就要求有两个hidden了</span>
-<span class="c1"># 加上双向，就有4个了，这里乘以2</span>
-<span class="c1"># h0 = (torch.rand(2, batch_size, hidden_size), torch.rand(2, batch_size, hidden_size))</span>
-<span class="n">h0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">num_layers</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
-<span class="c1"># 因为数据会用embedding包一次，所以input没有了维度要求（只有大小要求，每个数要小于字典长度）</span>
-<span class="n">x0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">))</span> 
-<span class="n">e</span> <span class="o">=</span> <span class="n">emb</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;input.shape:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;embedding.shape:&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># (3,4)会扩展成（3,4,10), 10维是rnn的input维度，正好</span>
-<span class="c1"># hidden = torch.cat((h0[-2,:,:], h0[-1,:,:]),1)</span>
-<span class="n">o</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">h0</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;output.shape:</span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">, hidden.shape:</span><span class="si">{</span><span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-</pre></div>
-
-<pre><code>input.shape: torch.Size([5, 3])
-embedding.shape: torch.Size([5, 3, 10])
-output.shape:torch.Size([5, 3, 16]), hidden.shape:torch.Size([4, 3, 8])
-</code></pre>
-<p>可见，双向会使输出多一倍，可以用<code>[:hidden_size], [hidden_size:]</code>分别取出来，我们<strong>验证</strong>一下，用框架生成一个双向的GRU，然后手动生成一个正向的一个负向的，复制参数，看一下输出：</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch.autograd</span> <span class="kn">import</span> <span class="n">Variable</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="c1"># 制作一个正序和反序的input</span>
-<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span>
-<span class="n">random_input</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">normal_</span><span class="p">(),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">reverse_input</span> <span class="o">=</span> <span class="n">random_input</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">:,</span> <span class="p">:]</span>
-
-<span class="n">bi_grus</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">reverse_gru</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">gru</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="n">reverse_gru</span><span class="o">.</span><span class="n">weight_ih_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">weight_ih_l0_reverse</span>
-<span class="n">reverse_gru</span><span class="o">.</span><span class="n">weight_hh_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">weight_hh_l0_reverse</span>
-<span class="n">reverse_gru</span><span class="o">.</span><span class="n">bias_ih_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">bias_ih_l0_reverse</span>
-<span class="n">reverse_gru</span><span class="o">.</span><span class="n">bias_hh_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">bias_hh_l0_reverse</span>
-<span class="n">gru</span><span class="o">.</span><span class="n">weight_ih_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">weight_ih_l0</span>
-<span class="n">gru</span><span class="o">.</span><span class="n">weight_hh_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">weight_hh_l0</span>
-<span class="n">gru</span><span class="o">.</span><span class="n">bias_ih_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">bias_ih_l0</span>
-<span class="n">gru</span><span class="o">.</span><span class="n">bias_hh_l0</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="o">.</span><span class="n">bias_hh_l0</span>
-
-<span class="n">bi_output</span><span class="p">,</span> <span class="n">bi_hidden</span> <span class="o">=</span> <span class="n">bi_grus</span><span class="p">(</span><span class="n">random_input</span><span class="p">)</span>
-<span class="n">output</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="n">gru</span><span class="p">(</span><span class="n">random_input</span><span class="p">)</span>
-<span class="n">reverse_output</span><span class="p">,</span> <span class="n">reverse_hidden</span> <span class="o">=</span> <span class="n">reverse_gru</span><span class="p">(</span><span class="n">reverse_input</span><span class="p">)</span>  <span class="c1"># 分别取[(4,3,2,1,0),:,:] -&gt; 即倒序送入input</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;bi_output:&#39;</span><span class="p">,</span> <span class="n">bi_output</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">bi_output</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">bi_output</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>                <span class="c1"># 双向输出中的后半截</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">reverse_output</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="c1"># 反向输出</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>                   <span class="c1"># 单独一个rnn的输出 </span>
-<span class="nb">print</span><span class="p">(</span><span class="n">bi_output</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>                <span class="c1"># 双向输出中的前半截</span>
-</pre></div>
-
-<pre><code>bi_output: torch.Size([5, 1, 2])
-tensor([[-0.2336, -0.3068],
-        [ 0.0660, -0.6004],
-        [ 0.0859, -0.5620],
-        [ 0.2164, -0.5750],
-        [ 0.1229, -0.3608]])
-tensor([-0.3068, -0.6004, -0.5620, -0.5750, -0.3608])
-tensor([-0.3068, -0.6004, -0.5620, -0.5750, -0.3608])
-tensor([-0.2336,  0.0660,  0.0859,  0.2164,  0.1229])
-tensor([-0.2336,  0.0660,  0.0859,  0.2164,  0.1229])
-</code></pre>
-<p>现在你们应该知道<code>bidirectional</code>的双倍输出是怎么回事了，再来看看hidden</p><div class="highlight"><pre><span></span><span class="n">hidden</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">reverse_hidden</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">bi_hidden</span><span class="o">.</span><span class="n">shape</span>
-<span class="n">bi_hidden</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">reverse_hidden</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">hidden</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
-</pre></div>
-
-<pre><code>(torch.Size([1, 1, 1]), torch.Size([1, 1, 1]), torch.Size([2, 1, 1]))
-(tensor([ 0.1229, -0.3068]), tensor([-0.3068]), tensor([0.1229]))
-</code></pre>
-<ul>
-<li>正向的输出就是单向rnn</li>
-<li>反向的输出就是把数据反传的单向rnn</li>
-<li>双向rnn出来的第最后一个hidden（后半截）就是反向完成后的hidden</li>
-</ul>
-<figure  style="flex: 83.6996336996337" ><img width="914" height="546" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/67bb7c8df3810d83a7f07909fbd601f9.png" alt=""/></figure><p>由打印出来的数据可知：</p><ul>
-<li>最后一个hidden，就是反向RNN的最后一个hidden（时间点在开头）</li>
-<li>也是双向RNN里的第一个输出（<strong>的最后一个元素</strong>）</li>
-<li>也是单向RNN（但是数据反传）（或者正向，但逆时序）里的最后一个输出</li>
-</ul>
-<hr />
-<p>双向RNN里</p><ul>
-<li>倒数第二个hidden，是正向的最后一个hidden（时间点在结尾）</li>
-<li>它也是output里面的值，它是双向输出里的最后一个的<strong>第一个元素</strong></li>
-</ul>
-<p>总的来说</p><ul>
-<li>output由正反向输出横向拼接（所有）</li>
-<li>hidden由正反向hidden竖向拼接（top layer)</li>
-</ul>
-<figure  style="flex: 71.92575406032482" ><img width="1240" height="862" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/671265db99cdb4c1fcda808d82a08794.png" alt=""/></figure></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/RNN%E4%B8%ADbidirectional%E5%92%8Cnum_layer%E5%AF%B9output%E5%92%8Chidden%E5%BD%A2%E7%8A%B6%E7%9A%84%E5%BD%B1%E5%93%8D/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>
