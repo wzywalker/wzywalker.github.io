@@ -2,7 +2,7 @@
 layout: post
 title: 李宏毅MACHINE LEARNING 2021 SPRING笔记[2]
 slug: 李宏毅MACHINE-LEARNING-2021-SPRING笔记-2
-date: 2021-10-13 11:09
+date: 2021-10-13 02:00
 status: publish
 author: walker
 categories: 
@@ -10,387 +10,336 @@ categories:
 tags:
   - 李宏毅
   - 机器学习
-  - CNN
-  - 卷积神经网络
-  - GPT
-  - seq2seq
-  - GLUE
-  - Bert
-  - Transformer
-  - AlphaGo
-  - self attention
-  - self supervised learning
+  - optimization
+  - RMSProp
+  - Adam
+  - Adagrad
+  - Batch Normalization
 ---
 
-# CNN
+# Optimization
 
-1. **Receptive field**
+真实世界训练样本会很大，
+* 我们往往不会把整个所有数据直接算一次loss，来迭代梯度，
+* 而是分成很多小份(mini-batch)每一小份计算一次loss（然后迭代梯度）
+* 下一个小batch认前一次迭代的结果
+* 也就是说，其实这是一个不严谨的迭代，用别人数据的结果来当成本轮数据的前提
+    * 最准确的当然是所有数据计算梯度和迭代。
+    * 一定要找补的话，可以这么认为：
+        * 即使一个小batch，也是可以训练到合理的参数的
+        * 所以前一个batch训练出来的数据，是一定程度上合理的
+        * 现在换了新的数据，但保持上一轮的参数，反而可以防止`过拟合`
 
-不管是计算机，还是人脑，去认一个物，都是去判断特定的patten（所以就会有错认的图片产生），这也说明，如果神经网络要去辨识物体，是不需要每个神经元都把整张图片看一次的，只需要关注一些特征区域就好了。（感受野, `Receptive field`)
+![](../assets/1859625-9d953fa0a5c68501.png)
 
-如果你一直用3x3，会不会看不到大的patten呢？$\rightarrow$ 会也不会。
+minibatch还有一个极端就是batchsize=1，即每次看完一条数据就与真值做loss，这当然是可以的，而且它非常快。但是：
+1. 小batch虽然快，但是它非常noisy（及每一笔数据都有可能是个例，没有其它数据来抵消它的影响）
+2. 因为有gpu平行运算的原因，只要不是batch非常大（比如10000以上），其实mini-batch并不慢
+3. 如果是小样本，mini-batch反而更快，因为它一来可以平行运算，在计算gradient的时候不比小batch慢，但是它比小batch要小几个数量级的update.
 
-首先，小的filter当然是不可能看到它的感受野以外的部分，但是，神经网络是多层架构，你这层的输出再被卷一次，这时候每一个数字代表的就是之前的9个像素计算的结果，这一轮的9个数字就是上一层的81个像素（因为stride的原因，大部分是重复的）的计算结果，换言之，感受野大大增强了，也就是说，你只需要增加层数，就可以在小的filter上得到大的patten.
+仍然有个但是：实验证明小的batch size会有更高的准确率。
+![](../assets/1859625-343cae0915fcaaa8.png)
 
-2. **filter & feature map**
+两个local minimal，右边那个认为是不好的，因为它只要有一点偏差，与真值就会有巨大的差异。但是没懂为什么大的batch会更容易落在右边。
 
-从神经元角度和全连接角度出发的话，每个框其实可以有自己的参数的（即你用了64步把整个图片扫描完的话，就有64组参数），而事实上为了简化模型，可以让某些框对应同样的参数（**参数共享**），原因就是同一特征可能出现在多个位置，比如人有两只脚。
+这是什么问题？其实是optimization的问题，后面会用一些方法来解决。
 
-再然后，实际上每一次都是用一组参数扫完全图的，意思是在每个角落都只搜索这**一个特征**。
+## Sigmoid -> RelU
 
-我们把这种机制叫`filter`，一个filter只找一种特征，乘加出来的结果叫`feature map`，即这个filter提取出来的特征图。
+前面我们用了soft的折线来模拟折线，其实还可以叠加两个真的折线(`ReLU`)，这才是我一直说的`整流函数`的名字的由来。
 
-因此，
-* 你想提取多少个特征，就得有多少个filter
-* 表现出来就成了你这一层输出有多少个channel
-* 这就是为什么你的图片进来是3channel，出来就是N个channel了，取决于你设计了多少个filter
+![](../assets/1859625-4479e5576c2ed5a0.png)
 
-3. **Pooling & subsampling**
+仔细看图，c和c'在第二个转折的右边，一个是向无穷大变，一个是向无穷小变，只要找到合理的斜率，就能抵消掉两个趋势，变成一条直线。
 
-由于图像的视觉特征，你把它放大或缩小都能被人眼认出来，因此就产生了pooling这种机制，可以降低样本的大小，这主要是为了减小运算量吧（硬件性能足够就可以不考虑它）。
+如果要用ReLU，那么简单替换一下： 
 
-4. **Data Augmentation**
+* $y = b + \sum_i {\color{ccdd00}{c_i}} sigmoid(\color{green}{b_i} + \sum_j \color{blue}{w_{ij}} x_j)$
+* $y = b + \sum_{\color{red}2i} {\color{ccdd00}{c_i}} \color{red}{max}(\color{red}0,\ \color{green}{b_i} + \sum_j \color{blue}{w_{ij}} x_j)$
 
-CNN并不能识别缩放、旋转、裁切、翻转过的图片，因此训练数据的增强也是必要的。
+红色的即为改动的部分，也呼应了2个relu才构成一个sigmoid的铺垫。
 
-## AlphaGo
+把每一个a当成之前的x，我们可以继续套上新的w,b,c等，生成新的a->a'
+![](../assets/1859625-ef692679760b967f.png)
 
-**layer 1**
-1. 能被影像化的问题就可以尝试CNN，围棋可以看成是一张19x19的图片
-2. 每一个位置被总结出了48种可能的情况(超参1)
-3. 所以输入就是19x19x48
-4. 用0来padding成23x23
-5. 很多patten、定式也是影像化的，可以被filter扫出来
-6. 总结出5x5大小的filter就够用了（超参2）
-7. 就用了192个fitler（即每一次output有48层channel)（超参3）
-8. stride = 1
-9. ReLU
+![](../assets/1859625-3a13832b5c1c6b04.png)
 
-**layer 2-12**
-1. padding成 21x21
-2. 192个 3x3 filter with stride = 1
-3. ReLU
+而如果再叠一层，在课程里的资料里，在训练集上loss仍然能下降（到0.1），但是在测试集里，loss反而上升了（0.44)，这意味着开始过拟合了。
 
-**layer 13**
-1. 1x1 filter stride = 1
-2. bias
-3. softmax
+这就是反向介绍神经元和神经网络。先介绍数学上的动机，组成网络后再告诉你这是什么，而不是一上来就给你扯什么是神经元什么是神经网络，再来解释每一个神经元干了什么。
 
-其中192(个filter)这个超参对比了128，256，384等，也就是说人类并不理解它每一次都提取了什么特征。
+而传统的神经网络课程里，sigmoid是在逻辑回归里才引入的，是为了把输出限定在1和0之间。显然这里的目的不是这样的，是为了用足够多的sigmoid或relu来逼近真实的曲线（折线）
 
-> subsampling对围棋也有用吗？ 上面的结构看出并没有用，事实上，围棋你抽掉一行一列影响是很大的。
+## Framework of ML
 
-# Self-Attention
+### 通用步骤：
+1. 设定一个函数来描述问题$y = f_\theta(x)$, 其中$\theta$就是所有未知数（参数）
+2. 设定一个损失函数$L(\theta)$
+3. 求让损失函数尽可能小的$\theta^* = arg\ \underset{\theta}{\rm min}L(\theta)$
 
-前面说的都是输入为一个向量（总会拉平成一维向量），如果是多个向量呢？有这样的场景吗？
-* 一段文字，每一个文字都用one-hot或word-embedding来表示
-    * 不但是多个向量，而且还长短不齐
-* 一段语音，每25ms采样形成一个向量，步长为每10ms重复采样，形成向量序列
-    * 400 sample points (16khz)
-    * 39-dim MFCC
-    * 80-dim filter bank output
-    * 参考人类语言处理课程
-* 一个Graph组向量（比如social network)
-    * 每个节点（每个人的profile）就是一个向量
-* 一个分子结构
-    * 每个原子就是一个one-hot
+### 拟合不了的原因：
+1. 过大的loss通常“暗示”了模型不合适（**model bias**），比如上面的用前1天数据预测后一天，可以尝试改成前7天，前30天等。
+    * 大海里捞针，针其实不在海里
+2. 优化问题，梯度下降不到目标值
+    * 针在大海里，我却没有办法把它找出来
 
-**输出是什么样的？**
+### 如何判断是loss optimization没做好？
+用不同模型来比较（更简单的，更浅的）
+![](../assets/1859625-a47194566126e9d4.png)
 
-1. 一个向量对应一个输出
-    * 文字 -> POS tagging
-    * 语音 -> a, a, b, b(怎么去重也参考[人类语言处理](https://speech.ee.ntu.edu.tw/~hylee/dlhlp/2020-spring.html)课程)
-    * graph -> 每个节点输出特性（比如每个人的购买决策）
-2. 只有一个输出
-    * 文字 -> 情绪分析，舆情分析
-    * 语音 -> 判断是谁说的
-    * graph -> 输出整个graph的特性，比如亲水性如何
-3. 不定输出（由network自己决定）
-    * 这就叫seq2seq
-    * 文字 -> 翻译
-    * 语音 -> 真正的语音识别
+上图中，为什么56层的表现还不如20层呢？是`overfitting`吗？**不一定**。
 
-self-attention
+我们看一下在训练集里的表现，56层居然也不如20层，这合理吗？ **不合理**
 
-稍稍回顾一下self attention里最重要的q, k, v的部分：
+> 但凡20层能做到的，多出的36层可以直接全部identity（即复制前一层的输出），也不可能比20层更差（神经网络总可以学到的）
 
-![](../assets/1859625-2e4df1ab5ca25149.png)
+这时，就是你的loss optimization有问题了。
 
-图示的是q2与所有的k相乘，再分别与对应的v相乘，然后相加，得到q2对应的输出：b2的过程。
+### 如何解决overfitting
 
-下图则是矩阵化后的结论：
-![](../assets/1859625-69882dd1e6b2701e.png)
-具体细节看专题
+1. 增加数据量
+    * 增加数据量的绝对数量
+    * data augmentation数据增强（比如反复随机从训练集里取，或者对图像进行旋转缩放位移和裁剪等）
+3. 缩减模型弹性
+    * （低次啊，更少的参数「特征」啊）
+    * 更少的神经元，层数啊
+    * 考虑共用参数
+    * early stopping
+    * regularization 
+        * 让损失函数与每个特征系数直接挂勾，就变成了惩罚项
+        * 因为它的值越大，会让损失函数越大，这样可以“惩罚”过大的权重
+    * dropout
+        * 随机丢弃一些计算结果
 
-真正要学的，就是图中的$W^q, W^k, W^v$
+## Missmatch
 
-## Multi-head Self-attention
-![](../assets/1859625-8ae9ebcbbd998558.png)
+课上一个测试，预测2/26的观看人数（周五，历史数据都是观看量低），但因为公开了这个测试，引起很多人疯狂点击，结果造成了这一天的预测结果非常差。
 
-CNN是Self-attention的特例
+这个不叫overfitting，而是`mismatch`，表示的是**训练集和测试集的分布是不一样的**
 
-![](../assets/1859625-1e5ceafb18ac5d32.png)
+mismatch的问题，再怎么增加数据也是不可能解决的。
 
-## Self-attention for Graph
+## optimization problems
 
-了解更多：https://youtu.be/eybCCtNKwzA
+到目前为止，有两个问题没有得到解决：
+1. loss optimization有问题怎么解决
+    * 其实就是判断是不是saddle point（鞍点）
+2. mismatch怎么解决
 
-# Transformer
+### saddle point
+![](../assets/1859625-153bf93ab74dd8b4.png)
 
-Transformer是一个seq2seq的model
+hessian矩阵是二次微分，当一次微分为0的时候，二次微分并不一定为0。这是题眼。 
 
-以下场景，不管看上去像不像是seq2seq的特征，都可以尝试用seq2seq（trnasformer）来“硬train一发”
+对于红杠内的部分，设$\theta - \theta^T = v$，有：
+* for all v: $v^T H v > 0 \rightarrow \theta'$附近的$\theta$都要更大
+    * -> 确实是在`local minima`
+* for all v: $v^T H v < 0 \rightarrow \theta'$附近的$\theta$都要更小
+    * -> 确实是在`local maxima`
+* 而时大时小，说明是在`saddle point`
 
-* QA类的问题，送进去question + context，输出answer
-    * 翻译，摘要，差别，情感分析，只要训练能套上上面的格式，就有可能
-* 文法剖析，送入是句子，输出是树状的语法结构
-    * 把树状结构摊平（其实就是多层括号）
-    * 然后就用这个对应关系来当成翻译来训练（即把语法当成翻译）
-* multi-label classification
-    * 你不能在做multi-class classification的时候取top-k,因为有的属于一个类，有的属于三个类，k不定
-    * 所以你把每个输入和N个输出也丢到seq2seq里去硬train一发，网络会自己学到每个文章属于哪“些”类别（不定个数，也像翻译一样）
-* object dectection
-    * 这个更匪夷所思，感兴趣看论文：https://arxiv.org/abs/2005.12872(End-to-End Object Detection with Transformers)
+事实上我们不可能去检查`所有的v`，这里用Hessian matrix来判断：
+* $\rm H$ is `positive definite` $\rightarrow$ all eigen values are positive $\rightarrow$ local minimal
+* $\rm H$ is `negative definite` $\rightarrow$ all eigen values are negative $\rightarrow$ local maximal
 
-## Encoder
+用一个很垃圾的网络举例，输入是1，输出是1，有w1, w2两层网络参数，因为函数简单，两次微分得到的hessian矩阵还是比较简单直观的：
+![](../assets/1859625-43de51903c56d851.png)
 
-Q, K, V(relavant/similarity), zero padding mask, layer normalization, residual等, 具体看`self-attention`一节。
+由于特征值有正有负，我们判断在些(0, 0)这个`critical point`，它是一个`saddle point`.
 
-## Decoder
+如果你判断出当前的参数确实卡在了鞍点，它同时也指明了`update direction`!
 
-### AT v.s. NAT
+![](../assets/1859625-162e0908ac2ce4d4.png)
 
-我们之前用的decoder都是一个一个字地预测（输出的）
-* 所以才有position-mask（用来屏蔽当前位置后面的字）
+图中，
+1. 先构建出了一个小于0的结果，以便找到可以让$L(\theta)$收敛的目标
+2. 这个结果依赖于找到这样一个u
+    * 这个u是$\theta, \theta'$相减的结果
+    * 它还是$H$的`eigen vector`
+    * 它的`eigen value`$\rightarrow \lambda$ 还要小于0
 
-这种叫`Auto Regressive`，简称`AT`,`NAT`即`Non Auto Regressive`
+实际上，`eigen value`是可以直接求出来的（上例已经求出来了），由它可以推出`eigen vector`，比如[1, 1]$^T$（自行补相关课程），往往会一对多，应该都是合理的，我们顺着共中一个u去更新$\theta$，就可以继续收敛loss。
 
-![](../assets/1859625-680f5c4380c93898.png)
+> 实际不会真的去计算hessian matrix?
 
-它一次生成输出的句子。
+### Momentum
+![](../assets/1859625-eb2390a6beff8f1d.png)
 
-至于seq2seq的输出是不定长的，它是怎么在一次输出里面确定长度的，上图已经给出了几种做法：
-1. 另做一个predictor来输出一个数字，表示应该输出的长度
-2. 直接用一个足够长的<bos>做输入（比如300个），那输出也就有300个，取到第一个<eos>为止
+不管是较为平坦的面，还是saddle point，如果小球以图示的方式滚下去，真实的物理世界是不可能停留在那个gradient为0或接近于0的位置的，因为它有“动量”，即惯性，甚至还可能滚过local minima，这恰好是我们需要的特性。
+![](../assets/1859625-5c2123a5abb30e13.png)
+不但考虑当前梯度，还考虑之前累积的值（动量），这个之前，是之前所有的动量，而不是前一步的：
+$$
+\begin{aligned}
+m^0 &= 0 \\
+m^1 &= -\eta g^0 \\
+m^2 &= -\lambda \eta g^0 - \eta g^1 \\
+&\vdots
+\end{aligned}
+$$
 
-因为不是一个一个生成了，好处
-1. 可以平行运算。
-2. 输出的长度更可控
+### adaptive learning rate
 
-> NAT通常表现不如AT好 (why? **Multi-mmodality**)
+![](../assets/1859625-3036d6027b02b243.png)
 
-detail: https://youtu.be/jvyKmU4OM3c (Non-Autoregressive Sequence Generation)
+不是什么时候loss卡住了就说明到了极点(最小值，鞍点，平坦的点)
 
-### AT
+看下面这个error surface，两个参数，一个变动非常平缓，一个非常剧烈，如果应用相同的`learning rate`，要么反复横跳（过大），要么就再也挪不动步（太小）：
 
-在decoder里最初有让人看不懂的三个箭头从encode的输出里指出来:
+![](../assets/1859625-a4ad370fd272ab52.png)
 
-![](../assets/1859625-6574d04e094f240a.png)
+### Adagrad (Root Mean Square)
 
-其实这就是`cross attention`
+于是有了下面的优化方法，思路与`l2正则化`差不多，利用不同参数本身gradient的大小来“惩罚”它起到的作用。
 
-![](../assets/1859625-8d8049bb84081547.png)
+1. 这里用的是相除，因为我的梯度越小，步伐就可以跨得更大了。
+2. 并且采用的是梯度的平方和(`Root Mean Square`)
+![](../assets/1859625-ee61f47985824c5a.png)
 
-它就是把自己第一层(self-attention后)的输出乘一个$W^q$得到的`q`，去跟encoder的输出分别乘$W^k, W^v$得到的k和v运算($\sum q \times k \times v$)得到当前位置的输出的过程。
+![](../assets/1859625-2a5770ec8edaeaf6.png)
 
-而且研究者也尝试过各种`cross attention`的方法，而不仅仅是本文中的无论哪一层都用`encoder`最后一层的输出做q和v这一种方案：
+图中可以看出平缓的$\theta_1$就可以应用大的学习率，反之亦然。这个方法就是`Adagrad`的由来。不同的参数用不同的步伐来迭代，这是一种思路。
 
-![](../assets/1859625-12d3f05c2a546bfe.png)
+这就解决问题了吗？看下面这个新月形的error surface，不卖关子了，这个以前接触的更多，即梯度随时间的变化而不同，
 
-## Training Tips
+![](../assets/1859625-9d0ffe171786a907.png)
 
-### 复制机制
+### RMSProp
 
-![](../assets/1859625-46f9d4aecc642f6b.png)
+这个方法是找不到论文的。核心思想是在`Adagrad`做平方和的时候，给了一个$\alpha$作为当前这个梯度的权重(0,1)，而把前面产生的$\sigma$直接应用$(1-\alpha)$：
 
-一些场景，训练的时候没必要去“生成”阅读材料里提到的一些概念，只需要把它“复制”出来即可，比如上述的人名，专有名字，概念等，以及对文章做摘要等。
+* $\theta_i^{t+1} \leftarrow \theta_i^t - \frac{\eta}{\color{red}{\sigma_i^t}} g_i^t$
+* $\sigma_i^t = \sqrt{\alpha(\theta_i^{t-1})^2 + (1-\alpha)(g_i^t)^2}$
 
-* Pointer Network: https://youtu.be/VdOyqNQ9aww
-* Copying Mechanism in Seq2Seq https://arxiv.org/abs/1603.06393
+![](../assets/1859625-e5ecd2f7cb3fcb27.png)
 
-### Guided Attention
+### Adam: (RMSProp + Momentum)
 
-像语音这种连续性的，需要强制指定(guide)它的attention顺序，相对而言，文字跳跃感可以更大，语音一旦不连续就失去了可听性了，一些关键字：
-* Monotonic Attention
-* Location-aware attention
+![](../assets/1859625-82a0f7e2d48fadb7.png)
 
-### Beam Search
+### Learning Rate Scheduling
 
-![](../assets/1859625-8b07d1dc44895d0b.png)
+终于来到了最直观的lr scheduling部分，也是最容易理解的，随着时间的变化（如果你拟合有效的话），越接近local minima，lr越小。
 
-### Optimizing Evaluation Metrics / BLEU
+而RMSProp一节里说的lr随时间变化并不是这一节里的随时间变化，而是设定一个权重，始终让**当前**的梯度拥有最高权重，注重的是当前与过往，而schedule则考量的是有计划的减小。
 
-* 训练的时候loss用的是cross entropy，要求loss越小越好，
-* 而在evaluation的时候，我们用的是预测值与真值的`BLEU score`，要求score越大越好
+下图中，应用了adam优化后，由于长久以来横向移动累积的小梯度会突然爆发，形成了图中的局面，应用了scheduling后，人为在越靠近极值学习率越低，很明显直接就解决了这个问题。
+![](../assets/1859625-61681993d7933f62.png)
 
-* 那么越小的cross entropy loss真的能产生越高的BLEU score吗？ 未必
-* 那么能不能在训练的时候也用BLEU score呢？ 不行，它太复杂没法微分，就没法bp做梯度了。
+而`warm up`没有在原理或直观上讲解更多，了解一下吧，实操上是很可行的，很多知名的网络都用了它：
 
-### Exposure bias
+![](../assets/1859625-59bca02513b04524.png)
 
-训练时候应用了`Teaching force`，用了全部或部分真值当作预测结果来训练（或防止一错到底），而eval的时候确实就是一错到底的模式了。
+要强行解释的话，就是adam的$\theta$是一个基于统计的结果，所以要在看了足够多的数据之后才有意义，因此采用了一开始小步伐再增加到大步伐这样一个过度，拿到足够的数据之后，才开始一个正常的不断减小的schedule的过程。
 
-# Self-supervised Learning
+更多可参考：`RAdam`: https://arxiv.org/abs/1908.03265
 
-* 芝麻街家庭：elmo, bert, erine...
-* bert就是transformer的encoder
+### Summary of Optimization
+![](../assets/1859625-527578692542295f.png)
 
-## Bert
+回顾下`Momentum`，它就是不但考虑当前的梯度，还考虑之前所有的梯度（加起来），通过数学计算，当然是能算出它的”动量“的。
 
-### GLUE
+那么同样是累计过往的梯度，一个在分母（$\theta$)，一个在分子（momentum)，那不是抵消了吗？
 
-GLUE: General Language Understanding Evaluation
+1. momentum是相加，保留了方向
+2. $\sigma$是平方和，只保留了大小
 
-基本上就是看以下这九个模型的得分：
 
-![](../assets/1859625-0895ab4b9a46e931.png)
+## Batch Normalization
 
-训练：
-1. 预测mask掉的词(masked token prediction)
-    * 为训练数据集添加部分掩码，预测可能的输出
-    * 类似word2vec的C-Bow
-2. 预测下一个句子（分类，比如是否相关）(next sentence prediction)
-    * 在句首添加<cls>用来接分类结果
-    * 用<sep>来表示句子分隔
+沿着cost surface找到最低点有一个思路，就是能不能把山“铲平”？即把地貌由崎岖变得平滑点？ `batch normalization`就是其中一种把山铲平的方法。
+![](../assets/1859625-2b4da7bf4fe85b71.png)
 
-下游任务（Downstream Task） <- Fine Tune:
-1. sequence -> class: sentiment analysis
-    * 这是需要有label的
-    * <cls>节点对的linear部分是随机初始化
-    * bert部分是pre-train的
-2. sequence -> sequence(等长): POS tagging
-3. 2 sequences -> class: NLI(从句子A能否推出句子B)(Natural Language Inferencee)
-    * 也比如文章下面的留言的立场分析
-    * 用<cls>输出分类结果，用<sep>分隔句子
-4. Extraction-based Question Answering: 基于已有文本的问答系统
-    * 答案一定是出现在文章里面的
-    * 输入文章和问题的向量
-    * 输出两个数字(start, end)，表示答案在文章中的索引
+其实就是人为控制了error的范围，让它在各个feature上面的“数量级”基本一致（均值0，方差1），这样产生的error surface不会出现某参数影响相当小，某些影响又相当大，而纯粹是因为input本身量级不同的原因（比如房价动以百万计，而年份是一年一年增的）
 
-QA输出：
+error surface可以想象成每一个特征拥有一个轴（课程用二到三维演示），BN让每条轴上的ticks拥有差不多的度量。
 
-![](../assets/1859625-6e6c9471f5515877.png)
+然后，你把它丢到深层网络里去，你的输出的分布又是不可控的，要接下一个网络的话，你的输出又成了下一个网络的输入。虽然你在输出前nomalization过了，但是可能被极大和极小的权重w又给变了了数量级不同的输出
 
-思路：
-1. 用<cls>input<sep>document 的格式把输入摆好
-2. 用pre-trained的bert模型输出同样个数的向量
-3. 准备两个与bert模型等长的向量（比如768维）a, b（random initialized)
-4. a与document的每个向量相乘(inner product)
-5. softmax后，找到最大值，对应的位置(argmax)即为start index
-6. 同样的事b再做一遍，得到end index
+再然后，不像第一层，输入的数据来自于训练资料，下一层的输入是要在上一层的输出进行sigmoid之后的
 
-![](../assets/1859625-e94a647f82156c38.png)
+再然后，你去看看sigmoid函数的形状，它在大于一定值或小于一定值之后，对x的变化是非常不敏感了，这样非常容易了出现梯度消失的现象。
 
-### Bert train seq2seq
+于是，出于以下两个原因，我们都会考虑在输出后也接一次batch normalization::
+1. 归一化（$\mu=0, \delta=1$)
+2. 把输入压缩到一个（sigmoid梯度较大的）小区间内
 
-也是可能的。就是你把输入“弄坏”，比如去掉一些字词，打乱词序，倒转，替换等任意方式，让一个decoder把它还原。 -> **BART**
+照这个思路，我们是需要在sigmoid之前进行一次BN的，而有的教材会告诉你之前之后做都没关系，那么之后去做就丧失了以上第二条的好处。
 
-### 附加知识
+**副作用**
 
-有研究人员用bert去分类DNA，蛋白质，音乐。以DNA为例，元素为A,C,G,T,分别对应4个随机词汇，再用bert去分类（用一个英文的pre-trained model），同样的例子用在了蛋白质和音乐上，居然发现效果全部要好于“纯随机”。
+* 以前$x_1 \rightarrow z_1 \rightarrow a_1$
+* 现在$\tilde z_1$是用所有$z_i$算出来的，不再是独立的了
 
-如果之前的实验说明了bert看懂了我们的文章，那么这个荒诞的实验（用完全无关的随意的英文单词代替另一学科里面的类别）似乎证明了事情没有那么简单。
+**后记1**
 
-### More
+最后，实际还会把$\tilde z_i$再这么处理一次：
+* $\hat z_i = \gamma \odot \tilde z_i + \beta$
 
-1. https://youtu.be/1_gRK9EIQpc
-2. https://youtu.be/Bywo7m6ySlk
+不要担心又把量级和偏移都做回去了，会以1和0为初始值慢慢learn的。
 
-## Multi-lingual Bert
+**后记2**
 
-略 
+推理的时候，如果batch size不够，甚至只有一条时，怎么去算$\mu, \sigma$呢？
 
-## GPT-3
+pytorch在训练的时候会计算`moving average`of $\mu$ and $\sigma$ of the batches.(每次把当前批次的均值和历史均值来计算一个新的历史均值$\bar \mu$)
+* $\bar \mu \leftarrow p \bar \mu + (1-p)\mu_t$
 
-训练是predict next token...so it can do generation(能做生成)
+推理的时候用$\bar \mu, \bar \sigma$。
 
-> Language Model 都能做generation
-![](../assets/1859625-687d9cf507137131.png)
+最后，用了BN，平滑了error surface，学习率就可以设大一点了，加速收敛。
 
-https://youtu.be/DOG1L9lvsDY
+# Classification
 
-别的模型是pre-train后，再fine-tune， GPT-3是想实现zero-shot，
+用数字来表示class，就会存在认为1跟2比较近与3比较远的可能（从数学运算来看也确实是的，毕竟神经网络就是不断地乘加和与真值减做对比），所以引入了one-hot，它的特征就是class之间无关联。
 
-### Image
+恰恰是这个特性，使得用one-hot来表示词向量的时候成了一个要克服的缺点。预测单词确实是一个分类问题，然后词与词之间却并不是无关的，恰恰是有距离远近的概念的，而把它还原回数字也解决不了问题，因为单个数字与前后的数字确实近了，但是空间上还是可以和很多数字接近的，所以向量还是必要的，于是又继续打补丁，才有了稠密矩阵embedding的诞生。
 
-**SimCLR**
+## softmax
 
-* https://arxiv.org/abs/2002.05709
-* https://github.com/google-research/simclr
+softmax的一个简单的解释就是你的真值是0和1的组合(one-hot)，但你的预测值可以是任何数，因为你需要把它normalize到(0,1)的区间。
 
-**BYOL**
+当class只有两个时，用softmax和用sigmoid是一样的。
 
-* **B**ootstrap **y**our **o**own **l**atent
-* https://arxiv.org/abs/2006.07733
+## loss
 
-### Speech
+可以继续用MeanSquare Error(MSE) $ e = \sum_i(\hat y_i - y'_i)^2$，但更常用的是：
 
-在bert上有九个任务(GLUE)来差别效果好不好，在speech领域还缺乏这样的数据库。
+### Cross-entropy
 
-## Auto Encoder
+$e = - \sum_i \hat y_i lny'_i$
 
-也是一种`self-supervised` Learning Framework -> 也叫 pre-train, 回顾：
-![](../assets/1859625-43a21995530788b6.png)
+> `Minimizing cross-entropy` is equivalent to `maximizing likelihood`
+![](../assets/1859625-011803fa18ea1c80.png)
 
-在这个之前，其实有个更古老的任务，它就是`Auto Encoder`
+linear regression是想从真值与预测值的差来入手找到最合适的参数，而logistic regression是想找到一个符合真值分布的的预测分布。
 
-![](../assets/1859625-2c3764ec5ff4cb6b.png)
+在吴恩达的课程里，这个损失函数是”找出来的“：
 
-* 用图像为例，通过一个网络encode成一个向量后，再通过一个网络解码(reconstrucion)回这张图像（哪怕有信息缺失）
-* 中间生成的那个向量可以理解为对原图进行的压缩
-* 或者说一种降维
+![](../assets/1859625-e5bfbd4de3527f60.png)
 
-降维的课程：
-* PCA: https://youtu.be/iwh5o_M4BNU
-* t-SNE: https://youtu.be/GBUEjkpoxXc
+1. 首先，$\theta x$后的值可以是任意值，所以再sigmoid一下，以下记为hx
+2. hx的意思就是`y为1的概率`
+3. 我需要一个损失函数，希望当真值是0时，预测y为1的概率的误差应该为无穷大
+    * 也就是说hx=0时，损失函数的结果应该是无穷大
+    * 而hx=1时, 损失应该为0
+4. 同理，当y为1时，hx=0时损失应该是无穷大，hx=1时损失为0
+5. 这时候才告诉你，log函数**刚好长这样**，请回看上面的两张图
 
-有一个de-noising的Auto-encoder, 给入的是加了噪音的数据，经过encode-decode之后还原的是没有加噪音的数据
+而别的地方是告诉你log是为了把概率连乘变成连加，方便计算。李宏毅这里干脆就直接告诉你公式长这样了。。。
 
-这就像加了噪音去训练bert
+这里绕两个弯就好了：
+1. y=1时，预测y为1的概率为1， y=0时，应预测y=1的概率为0
+2. 而这里是做损失函数，所以预测对了损失为0，错了损失无穷大
+3. 预测为1的概率就是hx，横轴也是hx
 
-![](../assets/1859625-71c69ce2d3693253.png)
+> 课程里说softmax和cross entorpy紧密到pytorch里直接就把两者结合到一起了，应用cross entropy的时候把softmax加到了你的network的最后一层（也就是说你没必要手写）。这里说的只是pytorch是这么处理的吗？
+>
+> ----是的
 
-### Feature Disentangle
+### CE v.s. MSE
 
-去解释auto-encoder压成的向量就叫`Feature Disentagle`，比如一段音频，哪些是内容，哪些是人物；一段文字，哪些表示语义，哪些是语法；一张图片，哪些表示物体，哪些表示纹理，等。
+数学证明：http://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2015_2/Lecture/Deep%20More%20(v2).ecm.mp4/index.html
 
-应用： voice conversion -> 变声器
+![](../assets/1859625-29ba3177a9772077.png)
 
-传统的做法应该是每一个语句，都有两种语音的资料，N种语言/语音的话，就需要N份。有Feature Disentangle的话，只要有两种语音的encoder，就能知道哪些是语音特征，哪些是内容特征，拼起来，就能用A的语音去读B的内容。所以**前提**就是能分析压缩出来的向量。
-
-### Discrete Latent Representation
-
-如果压缩成的向量不是实数，而是一个binary或one-hot
-* binary: 每一个维度几乎都有它的含义，我们只需要看它是0还是1
-* one-hot: 直接变分类了。-> `unsupervised classification`
-
-**VQVAE**
-
-![](../assets/1859625-f8bab3e37a58d91b.png)
-
-* Vector Quantized Variational Auot-encoder https://arxiv.org/abs/1711.00937
-
-### Text as Representation
-
-* https://arxiv.org/abs/1810.02851
-
-如果压缩成的不是一个向量，而也是一段`word sequence`，那么是不是就成了`summary`的任务？ 只要encoder和decoder都是seq2seq的model
-
--> seq2seq2seq auto-encoder -> `unsupervised summarization`
-
-事实上训练的时候encoder和decoder可能产生强关联，这个时候就引入一个额外的`discriminator`来作判别:
-![](../assets/1859625-03f7f375744bc8cf.png)
-
-有点像cycle GAN，一个generator接一个discriminator，再接另一个generator
-
-### abnormal detection
-
-![](../assets/1859625-39b0acc3bf74a2ef.png)
-
-* Part 1: https://youtu.be/gDp2LXGnVLQ
-* Part 2: https://youtu.be/cYrNjLxkoXs
-* Part 3: https://youtu.be/ueDlm2FkCnw
-* Part 4: https://youtu.be/XwkHOUPbc0Q
-* Part 5: https://youtu.be/Fh1xFBktRLQ
-* Part 6: https://youtu.be/LmFWzmn2rFY
-* Part 7: https://youtu.be/6W8FqUGYyDo
+单看实验结果，初始位置同为loss较大的左上角，因为CE有明显的梯度，很容易找到右下角的极值，但是MSE即使loss巨大，但是却没有梯度。因此对于逻辑回归，选择交叉熵从实验来看是合理的，数学推导请看上面的链接。
