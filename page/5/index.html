@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/638580149e69269e25c60788952cb35a.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/9fc2b5f540cd4374ca2ea87dc9a6da43.json"
         }
 
     </script>
@@ -55,6 +55,81 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/Semi-supervised-Learning/" target="_self">Semi supervised Learning</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/Semi-supervised-Learning/" target="_self">
+                <time class="text-uppercase">
+                    June 07 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>李宏毅机器学习2021spring的家庭作业里面有一个<code>Semi-supervised Learning</code>的任务。</p><p>具体来说，就是一个图片分类的任务（11个食品类别），但只给了你几百个有标注的图片，同时，还给了你几千张没有标的图片（用来训练，而不是测试）。</p><p>思路也很简单，既然样本量过小，我们就得自己扩充样本量，但这次不是用数据增广(<code>Augumentation</code>)，而是自己造样本：</p><ol>
+<li>用小样本训练一个模型，用这个模型来predict没有标注的图片（文本有补述）</li>
+<li>对预测输出的11个类别softmax后，观察最大值，如果大于你设定的某个threshold，比如0.68，就把该图片和最大值所映射的类别当成一组真值添加到训练集里去</li>
+<li>我用的是<code>torch.utils.data</code>里的<code>TensorDataset</code>来构建手动创建的增强数据集，然后用了<code>ConcatDataset</code>与原训练集拼接：</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">TensorDataset</span>
+
+<span class="k">def</span> <span class="nf">get_pseudo_labels</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.65</span><span class="p">):</span>
+    <span class="c1"># This functions generates pseudo-labels of a dataset using given model.</span>
+    <span class="c1"># It returns an instance of DatasetFolder containing images whose prediction confidences exceed a given threshold.</span>
+    <span class="c1"># You are NOT allowed to use any models trained on external data for pseudo-labeling.</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+
+    <span class="c1"># Construct a data loader.</span>
+    <span class="n">data_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Make sure the model is in eval mode.</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="c1"># Define softmax function.</span>
+    <span class="n">softmax</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Iterate over the dataset by batches.</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([])</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([])</span>
+    <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">data_loader</span><span class="p">):</span>
+        <span class="n">img</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">batch</span>
+
+        <span class="c1"># Forward the data</span>
+        <span class="c1"># Using torch.no_grad() accelerates the forward process.</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">logits</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+
+        <span class="c1"># Obtain the probability distributions by applying softmax on logits.</span>
+        <span class="n">probs</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">logits</span><span class="p">)</span>
+
+        <span class="c1"># ---------- TODO ----------</span>
+        <span class="c1"># 在这里根据阈值判断是否保留</span>
+        <span class="c1"># Filter the data and construct a new dataset.</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">prob</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">probs</span><span class="p">):</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">prob</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">images</span><span class="p">,</span> <span class="n">img</span><span class="p">[</span><span class="n">idx</span><span class="p">]))</span>   <span class="c1"># 用索引选出对应的图片</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">targets</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">c</span><span class="p">)))</span> <span class="c1"># 用最大值索引当class</span>
+
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">TensorDataset</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>  <span class="c1"># 拼成tensor dataset</span>
+
+    <span class="c1"># # Turn off the eval mode.</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">dataset</span>
+</pre></div>
+<p>使用：</p><div class="highlight"><pre><span></span><span class="n">pseudo_set</span> <span class="o">=</span> <span class="n">get_pseudo_labels</span><span class="p">(</span><span class="n">unlabeled_set</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+
+<span class="c1"># Construct a new dataset and a data loader for training.</span>
+<span class="c1"># This is used in semi-supervised learning only.</span>
+<span class="n">concat_dataset</span> <span class="o">=</span> <span class="n">ConcatDataset</span><span class="p">([</span><span class="n">train_set</span><span class="p">,</span> <span class="n">pseudo_set</span><span class="p">])</span> <span class="c1"># 拼接两个dataset(只要有感兴趣的两组数组即可)</span>
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">concat_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">pin_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+<p>看来，所谓的半监督仍然是有监督，对于没有标注的数据，仍然要想办法用已有数据去为它打标，接下来就是普通的监督学习了。</p><hr />
+<p>最后，在实际的demo代码中，能看到并不是我最初理解的“先用小样本训练好一个模型”，再用它来过滤un-labeled样本，增广到训练集去，即对训练集的增广是一劳永逸的（像别的增广方案一样）</p><p>而是每一个epoch里面都<strong>重新</strong>去增广一次，这个思路更类似于GAN（生成对抗网络），<code>generator</code>和<code>discriminator</code>是一起训练的。</p><p>也所以，第一次去增广的时候，其实就是一个初始化的model，也就是说，一个比较垃圾的数据集（当然，初始化的model未必能预测出置信度高的结果，以至于并不会有太多pseudo labels进入训练集）</p><p>因此，相比较纯监督学习，假如训练集是2000条，那么整个epoch轮次里，都是2000条数据在训练；而半监督学习里，可能是200, 220, 350, 580, 1000, 1500...这样累增的样本量（随着模型越来越好，置信度应该是越来越高的），如果epoch数量不够，可能并没有在相同2000左右的样本量下得到足够的训练</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Semi-supervised-Learning/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/RNN%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1%E4%B8%8E%E6%A2%AF%E5%BA%A6%E7%88%86%E7%82%B8%E6%8E%A8%E5%AF%BC/" target="_self">RNN梯度消失与梯度爆炸推导</a></h1>
@@ -1694,86 +1769,6 @@ AD-Hoc 相当于企业分发的限制版，限制安装设备数量，较少用�
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/iOS-App-%E7%AD%BE%E5%90%8D%E7%9A%84%E5%8E%9F%E7%90%86/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/shell%E5%91%BD%E4%BB%A4%E7%94%A8%E6%AD%A3%E5%88%99%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/" target="_self">shell命令用正则批量重命名文件</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/shell%E5%91%BD%E4%BB%A4%E7%94%A8%E6%AD%A3%E5%88%99%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/" target="_self">
-                <time class="text-uppercase">
-                    November 14 2020
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>又是用shell来操作文件的问题.</p><p>我下了老友记的全集, 结果在NAS里死活匹配不出3季以后的剧集信息, 因为打包来源相同, 一直没深究, 只当是刮削工具做得不好, 今天才发现从第4季开始, 所有的文件名格式都错了, 如:</p><div class="highlight"><pre><span></span><span class="n">Friends</span><span class="p">.</span><span class="n">s10</span><span class="p">.</span><span class="mf">06.2003</span><span class="p">.</span><span class="n">BDRip</span><span class="p">.</span><span class="mi">1080</span><span class="n">p</span><span class="p">.</span><span class="n">Ukr</span><span class="p">.</span><span class="n">Eng</span><span class="p">.</span><span class="n">AC3</span><span class="p">.</span><span class="n">Hurtom</span><span class="p">.</span><span class="n">TNU</span><span class="p">.</span><span class="n">Tenax555</span><span class="p">.</span><span class="n">mkv</span>
-</pre></div>
-<p>中的<code>s10.06</code>应为<code>s10.e06</code>, 那么改对不就是了么. 又是批量任务啊, 这次的需求从上次的批量移动文件变成了批量修改文件名.</p><p>事实上<code>mv</code>其实也是重命名工具, 奈何这次的规则稍微复杂, 我还是想要用正则来匹配, 一番搜索, 找到了<code>rename</code>这个工具. 网上的相关文章似乎有点旧, 跟今天我Homebrew下来的的文档有出入, 因此也就没看网上的文档了, 建议自己看一下官方文档, 还自带了<code>tutorial</code>和<code>cookbook</code>, 很良心啊, 看完基本自己就会了.</p><p>新版的<code>rename</code>工具把选项分为了<code>switch</code>和<code>transforms</code>, 自然文档也就成了:</p>
-<pre><code>rename [switches|transforms] [files]
-</code></pre>
-<p>既然都推荐你们看文档了, 我了不一一介绍了, 挑几个需要注意的讲, 最后再揭晓我是如何完成这次批量重命名的.</p><p>##debug
-<code>-n</code>这个<code>switch</code>可以显示本次命令将被如何执行, 而不真正执行, 这非常像上一篇文章里介绍<code>xargs</code>时的<code>-p</code>, 在<code>rename</code>的语境里, 它叫<code>dry-run</code>. 总之我就是通过这个学习的, 非常有用.</p><p>##替换
-新版<code>rename</code>加了很多像去头啊, 去尾啊, 加前缀啊, 加尾缀啊, 去空白啊, 变大小写啊等等的选项, 这个去读文档, 执行一些简单且明确的任务用这些<code>switch</code>和<code>transforms</code>比自己去构建正则要来的简单, 这也是作者把这些小功能全提取出来的目的吧. 由于我的目标是正则, 着重关注<code>-s</code>这个<code>transform</code>.</p><p>假设有文件<code>abc123.mp3</code>和<code>abc456.mp3</code>, 以下命令均加了<code>-n</code>, 以便直接看输出</p><div class="highlight"><pre><span></span><span class="c1">#替换</span>
-<span class="err">$</span><span class="n">rename</span> <span class="o">-</span><span class="n">n</span> <span class="o">-</span><span class="n">s</span> <span class="n">abc</span> <span class="n">mmm</span> <span class="o">*</span>
-<span class="err">$</span><span class="n">rename</span> <span class="o">-</span><span class="n">n</span> <span class="s1">&#39;s/abc/mmm/&#39;</span> <span class="o">*</span>
-<span class="c1">#以上两句只是展示两种写法/格式</span>
-<span class="c1">#输出:</span>
-<span class="s1">&#39;abc123.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;mmm123.mp3&#39;</span>
-<span class="s1">&#39;abc456.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;mmm456.mp3&#39;</span>
-
-<span class="c1">#加前缀</span>
-<span class="err">$</span><span class="n">rename</span> <span class="o">-</span><span class="n">n</span> <span class="s1">&#39;s/^/album_/&#39;</span> <span class="o">*.</span><span class="n">mp3</span>
-<span class="c1">#输出:</span>
-<span class="s1">&#39;abc123.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;album_abc123.mp3&#39;</span>
-<span class="s1">&#39;abc456.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;album_abc456.mp3&#39;</span>
-
-<span class="c1">#演示一次错误的加前缀方式</span>
-<span class="err">$</span><span class="n">rename</span> <span class="o">-</span><span class="n">n</span> <span class="s1">&#39;s/^/album_^/&#39;</span> <span class="o">*.</span><span class="n">mp3</span>
-<span class="c1">#输出:</span>
-<span class="s1">&#39;abc123.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;album_^abc123.mp3&#39;</span>
-<span class="s1">&#39;abc456.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;album_^abc456.mp3&#39;</span>
-<span class="c1">#看到了吧? 直接把^给替换了, 而不是插入</span>
-
-<span class="c1">#去后缀</span>
-<span class="err">$</span><span class="n">rename</span> <span class="o">-</span><span class="n">n</span> <span class="s1">&#39;s/\.mp3//&#39;</span> <span class="o">*.</span><span class="n">mp3</span>
-<span class="c1">#输出:</span>
-<span class="s1">&#39;abc123.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;abc123&#39;</span>
-<span class="s1">&#39;abc456.mp3&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;abc456&#39;</span>
-
-<span class="c1">#分组</span>
-<span class="err">$</span><span class="n">touch</span> <span class="n">AA</span><span class="o">.</span><span class="n">S01</span><span class="mf">.12</span><span class="o">.</span><span class="n">mkv</span> <span class="n">AA</span><span class="o">.</span><span class="n">S01</span><span class="mf">.13</span><span class="o">.</span><span class="n">mkv</span> <span class="n">AA</span><span class="o">.</span><span class="n">S01</span><span class="mf">.14</span><span class="o">.</span><span class="n">mkv</span>
-<span class="c1">#这次把文件搞复杂点, 假定有如上三个文件, 我们要把12改为E12, 以此类推</span>
-<span class="err">$</span><span class="n">rename</span> <span class="o">-</span><span class="n">n</span> <span class="s1">&#39;s/\.(\d</span><span class="si">{2}</span><span class="s1">)\./\.E$1\./&#39;</span> <span class="o">*.</span><span class="n">mkv</span>
-<span class="c1">#输出:</span>
-<span class="s1">&#39;AA.S01.12.mkv&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;AA.S01.E12.mkv&#39;</span>
-<span class="s1">&#39;AA.S01.13.mkv&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;AA.S01.E13.mkv&#39;</span>
-<span class="s1">&#39;AA.S01.14.mkv&#39;</span> <span class="n">would</span> <span class="n">be</span> <span class="n">renamed</span> <span class="n">to</span> <span class="s1">&#39;AA.S01.E14.mkv&#39;</span>
-</pre></div>
-<p>看到最后一个例子是不是发现我的目标已经达到了? 我没有深入研究, 只是简单的根据实际情况把前后带点符号, 中间夹了两位数字的提取了出来, 加了字母<code>E</code>, 可能还有更简便的办法, 但我看到输出, 就急急测试去了, 果然等待数秒后, 文件全部重命名成功.</p><p>##递归
-当然没那么简单, 因为4-10季的内容在各自的文件夹里, 如何递归呢? 看过我<a href="https://www.jianshu.com/p/6fab4aedc07e">上一篇文章</a>的人可能会想到我又去借管道和<code>xargs</code>了吧? 这次得益于我提前读了文档, 里面也有介绍, 它还能直接应用<code>find</code>过来的结果, 还不需要像<code>xargs</code>一样给个占位, 应该是作者直接做的支持, 所以我的最终命令是这样的:</p><div class="highlight"><pre><span></span><span class="err">$</span><span class="bp">find</span> <span class="p">.</span> <span class="o">-</span><span class="n">name</span> <span class="s">&quot;*.mkv&quot;</span> <span class="o">-</span><span class="n">print0</span> <span class="o">|</span> <span class="n">rename</span> <span class="o">-</span><span class="n">n</span> <span class="err">&#39;</span><span class="n">s</span><span class="o">/</span><span class="err">\</span><span class="p">.(</span><span class="err">\</span><span class="n">d</span><span class="p">{</span><span class="mi">2</span><span class="p">})</span><span class="err">\</span><span class="p">.</span><span class="o">/</span><span class="err">\</span><span class="p">.</span><span class="n">e</span><span class="nv">$1</span><span class="err">\</span><span class="p">.</span><span class="o">/</span><span class="err">&#39;</span>
-</pre></div>
-<blockquote>
-<p>是的, 肯定要先<code>-n</code>看看有没有操作失误, 文件出问题就麻烦了(建议先复制一份).</p></blockquote>
-<p>此外, 因为用的是管道, 所以最后的<code>[files]</code>参数就不需要了, 我之前就是疏忽了, 复制过来时留着前面做测试的<code>*.mkv</code>尾巴, 看到出错提示才意识到.</p><blockquote>
-<p>2021/4/22
-我又来批量重命名的时候，发现<code>-print0</code>加上反而不行了，也就是说把带了换行符的<code>find</code>输出直接送到<code>rename</code> 里面，反而能成功，拼成一行送进去的不行，不知道上次是怎么成功的。</p></blockquote>
-<p>so far so good.</p><p>##吐槽
-简书的代码块, 预览里很好看, 发布出去千奇百怪, 是什么鬼, 为了给代码着色, 我不得不在代码语言标识上乱写一通(反正写bash是不着色的)</p><hr />
-<h2>Bonus</h2>
-<p>不小心看到关于<code>mv</code>的<a href="%5Bhttps://news.ycombinator.com/item?id=22860140">这个技巧</a>, 如果改动的只是文件名的一小部分, 比如在<code>10</code>前面加个<code>e</code>变成<code>e10</code>, 这么做就可以了</p><div class="highlight"><pre><span></span><span class="n">mv</span> <span class="n">Friends</span><span class="p">.</span><span class="n">s06</span><span class="p">.{,</span><span class="n">e</span><span class="p">}</span><span class="mf">10.1080</span><span class="n">p</span><span class="p">.</span><span class="n">x265</span><span class="p">.</span><span class="n">mkv</span>
-</pre></div>
-<p>而不需要</p><div class="highlight"><pre><span></span><span class="n">mv</span> <span class="n">Friends</span><span class="p">.</span><span class="n">s06</span><span class="p">.</span><span class="mf">10.1080</span><span class="n">p</span><span class="p">.</span><span class="n">x265</span><span class="p">.</span><span class="n">mkv</span> <span class="n">Friends</span><span class="p">.</span><span class="n">s06</span><span class="p">.</span><span class="n">e10</span><span class="p">.</span><span class="mi">1080</span><span class="n">p</span><span class="p">.</span><span class="n">x265</span><span class="p">.</span><span class="n">mkv</span>
-</pre></div>
-<p>原文里面有两个例子, 一目了然</p><div class="highlight"><pre><span></span><span class="nt">mv</span><span class="w"> </span><span class="nt">foo-bar-</span><span class="p">{</span><span class="err">baz,quux</span><span class="p">}.</span><span class="nc">txt</span><span class="w"></span>
-<span class="nt">mv</span><span class="w"> </span><span class="nt">foo-bar</span><span class="p">{</span><span class="err">,-baz</span><span class="p">}.</span><span class="nc">txt</span><span class="w"></span>
-</pre></div>
-<p>以上显示的是更改和添加, 显然,你也可以猜到删除的用法, 看起来跟rename用法类似</p><div class="highlight"><pre><span></span><span class="nt">mv</span><span class="w"> </span><span class="nt">foo-bar</span><span class="p">{</span><span class="err">-baz,</span><span class="p">}.</span><span class="nc">txt</span><span class="w"></span>
-</pre></div>
-<p>当然这个贴子有很大的争论, 感兴趣可以看看.</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/shell%E5%91%BD%E4%BB%A4%E7%94%A8%E6%AD%A3%E5%88%99%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

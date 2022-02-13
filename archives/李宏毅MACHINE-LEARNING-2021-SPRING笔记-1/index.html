@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/638580149e69269e25c60788952cb35a.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/9fc2b5f540cd4374ca2ea87dc9a6da43.json"
         }
 
     </script>
@@ -107,189 +107,7 @@
 <blockquote>
 <p>但是如果是纯曲线，那么其实是可以无数个sigmoid来组合的，就不存在要去拟合某些“特定的点”，那样只要找到最合适“数量”的sigmoig就行了（因为任何一个点都可以算是折点）</p></blockquote>
 <h2>Loss</h2>
-<p>loss 没什么变化，仍旧是一堆$\theta$代入后求的值与y的差，求和。并期望找到使loss最小化的$\theta$：</p><p>$\bold \theta = arg\ \underset{\theta}{min}\ L$</p><h1>Optimization</h1>
-<p>真实世界训练样本会很大，</p><ul>
-<li>我们往往不会把整个所有数据直接算一次loss，来迭代梯度，</li>
-<li>而是分成很多小份(mini-batch)每一小份计算一次loss（然后迭代梯度）</li>
-<li>下一个小batch认前一次迭代的结果</li>
-<li>也就是说，其实这是一个不严谨的迭代，用别人数据的结果来当成本轮数据的前提<ul>
-<li>最准确的当然是所有数据计算梯度和迭代。</li>
-<li>一定要找补的话，可以这么认为：<ul>
-<li>即使一个小batch，也是可以训练到合理的参数的</li>
-<li>所以前一个batch训练出来的数据，是一定程度上合理的</li>
-<li>现在换了新的数据，但保持上一轮的参数，反而可以防止<code>过拟合</code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure  style="flex: 66.625" ><img width="1066" height="800" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a5c3447aeea455b8aea110482cbcd750.png" alt=""/></figure><p>minibatch还有一个极端就是batchsize=1，即每次看完一条数据就与真值做loss，这当然是可以的，而且它非常快。但是：</p><ol>
-<li>小batch虽然快，但是它非常noisy（及每一笔数据都有可能是个例，没有其它数据来抵消它的影响）</li>
-<li>因为有gpu平行运算的原因，只要不是batch非常大（比如10000以上），其实mini-batch并不慢</li>
-<li>如果是小样本，mini-batch反而更快，因为它一来可以平行运算，在计算gradient的时候不比小batch慢，但是它比小batch要小几个数量级的update.</li>
-</ol>
-<p>仍然有个但是：实验证明小的batch size会有更高的准确率。
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5ff5b42e644a35896a5ff9419e005465.png" alt=""/></figure></p><p>两个local minimal，右边那个认为是不好的，因为它只要有一点偏差，与真值就会有巨大的差异。但是没懂为什么大的batch会更容易落在右边。</p><p>这是什么问题？其实是optimization的问题，后面会用一些方法来解决。</p><h2>Sigmoid -&gt; RelU</h2>
-<p>前面我们用了soft的折线来模拟折线，其实还可以叠加两个真的折线(<code>ReLU</code>)，这才是我一直说的<code>整流函数</code>的名字的由来。</p><figure  style="flex: 66.625" ><img width="1066" height="800" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/dad7e4a61c95964819eb135b85290edf.png" alt=""/></figure><p>仔细看图，c和c'在第二个转折的右边，一个是向无穷大变，一个是向无穷小变，只要找到合理的斜率，就能抵消掉两个趋势，变成一条直线。</p><p>如果要用ReLU，那么简单替换一下：</p><ul>
-<li>$y = b + \sum_i {\color{ccdd00}{c_i}} sigmoid(\color{green}{b_i} + \sum_j \color{blue}{w_{ij}} x_j)$</li>
-<li>$y = b + \sum_{\color{red}2i} {\color{ccdd00}{c_i}} \color{red}{max}(\color{red}0,\ \color{green}{b_i} + \sum_j \color{blue}{w_{ij}} x_j)$</li>
-</ul>
-<p>红色的即为改动的部分，也呼应了2个relu才构成一个sigmoid的铺垫。</p><p>把每一个a当成之前的x，我们可以继续套上新的w,b,c等，生成新的a-&gt;a'
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/fe56169175a358925eb1493eef7511a9.png" alt=""/></figure></p><figure  style="flex: 52.01793721973094" ><img width="928" height="892" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/565aa95b1ba87a098f82bb221977d8f1.png" alt=""/></figure><p>而如果再叠一层，在课程里的资料里，在训练集上loss仍然能下降（到0.1），但是在测试集里，loss反而上升了（0.44)，这意味着开始过拟合了。</p><p>这就是反向介绍神经元和神经网络。先介绍数学上的动机，组成网络后再告诉你这是什么，而不是一上来就给你扯什么是神经元什么是神经网络，再来解释每一个神经元干了什么。</p><p>而传统的神经网络课程里，sigmoid是在逻辑回归里才引入的，是为了把输出限定在1和0之间。显然这里的目的不是这样的，是为了用足够多的sigmoid或relu来逼近真实的曲线（折线）</p><h2>Framework of ML</h2>
-<h3>通用步骤：</h3>
-<ol>
-<li>设定一个函数来描述问题$y = f_\theta(x)$, 其中$\theta$就是所有未知数（参数）</li>
-<li>设定一个损失函数$L(\theta)$</li>
-<li>求让损失函数尽可能小的$\theta^* = arg\ \underset{\theta}{\rm min}L(\theta)$</li>
-</ol>
-<h3>拟合不了的原因：</h3>
-<ol>
-<li>过大的loss通常“暗示”了模型不合适（<strong>model bias</strong>），比如上面的用前1天数据预测后一天，可以尝试改成前7天，前30天等。<ul>
-<li>大海里捞针，针其实不在海里</li>
-</ul>
-</li>
-<li>优化问题，梯度下降不到目标值<ul>
-<li>针在大海里，我却没有办法把它找出来</li>
-</ul>
-</li>
-</ol>
-<h3>如何判断是loss optimization没做好？</h3>
-<p>用不同模型来比较（更简单的，更浅的）
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/4a4478c4160c3e330f1d7bdc4ac4b2bb.png" alt=""/></figure></p><p>上图中，为什么56层的表现还不如20层呢？是<code>overfitting</code>吗？<strong>不一定</strong>。</p><p>我们看一下在训练集里的表现，56层居然也不如20层，这合理吗？ <strong>不合理</strong></p><blockquote>
-<p>但凡20层能做到的，多出的36层可以直接全部identity（即复制前一层的输出），也不可能比20层更差（神经网络总可以学到的）</p></blockquote>
-<p>这时，就是你的loss optimization有问题了。</p><h3>如何解决overfitting</h3>
-<ol>
-<li>增加数据量<ul>
-<li>增加数据量的绝对数量</li>
-<li>data augmentation数据增强（比如反复随机从训练集里取，或者对图像进行旋转缩放位移和裁剪等）</li>
-</ul>
-</li>
-<li>缩减模型弹性<ul>
-<li>（低次啊，更少的参数「特征」啊）</li>
-<li>更少的神经元，层数啊</li>
-<li>考虑共用参数</li>
-<li>early stopping</li>
-<li>regularization<ul>
-<li>让损失函数与每个特征系数直接挂勾，就变成了惩罚项</li>
-<li>因为它的值越大，会让损失函数越大，这样可以“惩罚”过大的权重</li>
-</ul>
-</li>
-<li>dropout<ul>
-<li>随机丢弃一些计算结果</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<h2>Missmatch</h2>
-<p>课上一个测试，预测2/26的观看人数（周五，历史数据都是观看量低），但因为公开了这个测试，引起很多人疯狂点击，结果造成了这一天的预测结果非常差。</p><p>这个不叫overfitting，而是<code>mismatch</code>，表示的是<strong>训练集和测试集的分布是不一样的</strong></p><p>mismatch的问题，再怎么增加数据也是不可能解决的。</p><h2>optimization problems</h2>
-<p>到目前为止，有两个问题没有得到解决：</p><ol>
-<li>loss optimization有问题怎么解决<ul>
-<li>其实就是判断是不是saddle point（鞍点）</li>
-</ul>
-</li>
-<li>mismatch怎么解决</li>
-</ol>
-<h3>saddle point</h3>
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/71ae2a0cf3a214a3c0660ad34a18874e.png" alt=""/></figure><p>hessian矩阵是二次微分，当一次微分为0的时候，二次微分并不一定为0。这是题眼。</p><p>对于红杠内的部分，设$\theta - \theta^T = v$，有：</p><ul>
-<li>for all v: $v^T H v &gt; 0 \rightarrow \theta'$附近的$\theta$都要更大<ul>
-<li>-&gt; 确实是在<code>local minima</code></li>
-</ul>
-</li>
-<li>for all v: $v^T H v &lt; 0 \rightarrow \theta'$附近的$\theta$都要更小<ul>
-<li>-&gt; 确实是在<code>local maxima</code></li>
-</ul>
-</li>
-<li>而时大时小，说明是在<code>saddle point</code></li>
-</ul>
-<p>事实上我们不可能去检查<code>所有的v</code>，这里用Hessian matrix来判断：</p><ul>
-<li>$\rm H$ is <code>positive definite</code> $\rightarrow$ all eigen values are positive $\rightarrow$ local minimal</li>
-<li>$\rm H$ is <code>negative definite</code> $\rightarrow$ all eigen values are negative $\rightarrow$ local maximal</li>
-</ul>
-<p>用一个很垃圾的网络举例，输入是1，输出是1，有w1, w2两层网络参数，因为函数简单，两次微分得到的hessian矩阵还是比较简单直观的：
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/149c13520fe91f6bd35b4512d3feb892.png" alt=""/></figure></p><p>由于特征值有正有负，我们判断在些(0, 0)这个<code>critical point</code>，它是一个<code>saddle point</code>.</p><p>如果你判断出当前的参数确实卡在了鞍点，它同时也指明了<code>update direction</code>!</p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/81aa9722408cf52b4a133a54a7435dd9.png" alt=""/></figure><p>图中，</p><ol>
-<li>先构建出了一个小于0的结果，以便找到可以让$L(\theta)$收敛的目标</li>
-<li>这个结果依赖于找到这样一个u<ul>
-<li>这个u是$\theta, \theta'$相减的结果</li>
-<li>它还是$H$的<code>eigen vector</code></li>
-<li>它的<code>eigen value</code>$\rightarrow \lambda$ 还要小于0</li>
-</ul>
-</li>
-</ol>
-<p>实际上，<code>eigen value</code>是可以直接求出来的（上例已经求出来了），由它可以推出<code>eigen vector</code>，比如[1, 1]$^T$（自行补相关课程），往往会一对多，应该都是合理的，我们顺着共中一个u去更新$\theta$，就可以继续收敛loss。</p><blockquote>
-<p>实际不会真的去计算hessian matrix?</p></blockquote>
-<h3>Momentum</h3>
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/14f0976b60bb909a3ec3b147594b49bb.png" alt=""/></figure><p>不管是较为平坦的面，还是saddle point，如果小球以图示的方式滚下去，真实的物理世界是不可能停留在那个gradient为0或接近于0的位置的，因为它有“动量”，即惯性，甚至还可能滚过local minima，这恰好是我们需要的特性。
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/f2711cc9c420552051336483c760c347.png" alt=""/></figure>
-不但考虑当前梯度，还考虑之前累积的值（动量），这个之前，是之前所有的动量，而不是前一步的：
-$$
-\begin{aligned}
-m^0 &amp;= 0 \
-m^1 &amp;= -\eta g^0 \
-m^2 &amp;= -\lambda \eta g^0 - \eta g^1 \
-&amp;\vdots
-\end{aligned}
-$$</p><h3>adaptive learning rate</h3>
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/632ad7d3ca2cd8bae9138dfdcd311805.png" alt=""/></figure><p>不是什么时候loss卡住了就说明到了极点(最小值，鞍点，平坦的点)</p><p>看下面这个error surface，两个参数，一个变动非常平缓，一个非常剧烈，如果应用相同的<code>learning rate</code>，要么反复横跳（过大），要么就再也挪不动步（太小）：</p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/78118fcfe7c7a300c0fb3c063101642e.png" alt=""/></figure><h3>Adagrad (Root Mean Square)</h3>
-<p>于是有了下面的优化方法，思路与<code>l2正则化</code>差不多，利用不同参数本身gradient的大小来“惩罚”它起到的作用。</p><ol>
-<li>这里用的是相除，因为我的梯度越小，步伐就可以跨得更大了。</li>
-<li>并且采用的是梯度的平方和(<code>Root Mean Square</code>)</li>
-</ol>
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5cad715ddff837d3280d5f38270b27c6.png" alt=""/></figure><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e6eb54b116d3c2b0889449550c4ab5a1.png" alt=""/></figure><p>图中可以看出平缓的$\theta_1$就可以应用大的学习率，反之亦然。这个方法就是<code>Adagrad</code>的由来。不同的参数用不同的步伐来迭代，这是一种思路。</p><p>这就解决问题了吗？看下面这个新月形的error surface，不卖关子了，这个以前接触的更多，即梯度随时间的变化而不同，</p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2faed0f3097f4189d91a745c25ee50ca.png" alt=""/></figure><h3>RMSProp</h3>
-<p>这个方法是找不到论文的。核心思想是在<code>Adagrad</code>做平方和的时候，给了一个$\alpha$作为当前这个梯度的权重(0,1)，而把前面产生的$\sigma$直接应用$(1-\alpha)$：</p><ul>
-<li>$\theta_i^{t+1} \leftarrow \theta_i^t - \frac{\eta}{\color{red}{\sigma_i^t}} g_i^t$</li>
-<li>$\sigma_i^t = \sqrt{\alpha(\theta_i^{t-1})^2 + (1-\alpha)(g_i^t)^2}$</li>
-</ul>
-<figure  style="flex: 118.22660098522168" ><img width="960" height="406" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e2c29123c5ddf87908d3328295e5bb79.png" alt=""/></figure><h3>Adam: (RMSProp + Momentum)</h3>
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/399b29c70ef02dadc3f57a47ddca3a2f.png" alt=""/></figure><h3>Learning Rate Scheduling</h3>
-<p>终于来到了最直观的lr scheduling部分，也是最容易理解的，随着时间的变化（如果你拟合有效的话），越接近local minima，lr越小。</p><p>而RMSProp一节里说的lr随时间变化并不是这一节里的随时间变化，而是设定一个权重，始终让<strong>当前</strong>的梯度拥有最高权重，注重的是当前与过往，而schedule则考量的是有计划的减小。</p><p>下图中，应用了adam优化后，由于长久以来横向移动累积的小梯度会突然爆发，形成了图中的局面，应用了scheduling后，人为在越靠近极值学习率越低，很明显直接就解决了这个问题。
-<figure  style="flex: 50.7399577167019" ><img width="960" height="946" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/3d5a17833ffc7c40d1b452b9e7bd6771.png" alt=""/></figure></p><p>而<code>warm up</code>没有在原理或直观上讲解更多，了解一下吧，实操上是很可行的，很多知名的网络都用了它：</p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/4357f7df834313bc33800b14e2268252.png" alt=""/></figure><p>要强行解释的话，就是adam的$\theta$是一个基于统计的结果，所以要在看了足够多的数据之后才有意义，因此采用了一开始小步伐再增加到大步伐这样一个过度，拿到足够的数据之后，才开始一个正常的不断减小的schedule的过程。</p><p>更多可参考：<code>RAdam</code>: <a href="https://arxiv.org/abs/1908.03265">https://arxiv.org/abs/1908.03265</a></p><h3>Summary of Optimization</h3>
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/fd50408d5cc7b3a7fc6a1b7e8542a01d.png" alt=""/></figure><p>回顾下<code>Momentum</code>，它就是不但考虑当前的梯度，还考虑之前所有的梯度（加起来），通过数学计算，当然是能算出它的”动量“的。</p><p>那么同样是累计过往的梯度，一个在分母（$\theta$)，一个在分子（momentum)，那不是抵消了吗？</p><ol>
-<li>momentum是相加，保留了方向</li>
-<li>$\sigma$是平方和，只保留了大小</li>
-</ol>
-<h2>Batch Normalization</h2>
-<p>沿着cost surface找到最低点有一个思路，就是能不能把山“铲平”？即把地貌由崎岖变得平滑点？ <code>batch normalization</code>就是其中一种把山铲平的方法。
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/495d3f5866aebabc0cc9e30a73ac917c.png" alt=""/></figure></p><p>其实就是人为控制了error的范围，让它在各个feature上面的“数量级”基本一致（均值0，方差1），这样产生的error surface不会出现某参数影响相当小，某些影响又相当大，而纯粹是因为input本身量级不同的原因（比如房价动以百万计，而年份是一年一年增的）</p><p>error surface可以想象成每一个特征拥有一个轴（课程用二到三维演示），BN让每条轴上的ticks拥有差不多的度量。</p><p>然后，你把它丢到深层网络里去，你的输出的分布又是不可控的，要接下一个网络的话，你的输出又成了下一个网络的输入。虽然你在输出前nomalization过了，但是可能被极大和极小的权重w又给变了了数量级不同的输出</p><p>再然后，不像第一层，输入的数据来自于训练资料，下一层的输入是要在上一层的输出进行sigmoid之后的</p><p>再然后，你去看看sigmoid函数的形状，它在大于一定值或小于一定值之后，对x的变化是非常不敏感了，这样非常容易了出现梯度消失的现象。</p><p>于是，出于以下两个原因，我们都会考虑在输出后也接一次batch normalization::</p><ol>
-<li>归一化（$\mu=0, \delta=1$)</li>
-<li>把输入压缩到一个（sigmoid梯度较大的）小区间内</li>
-</ol>
-<p>照这个思路，我们是需要在sigmoid之前进行一次BN的，而有的教材会告诉你之前之后做都没关系，那么之后去做就丧失了以上第二条的好处。</p><p><strong>副作用</strong></p><ul>
-<li>以前$x_1 \rightarrow z_1 \rightarrow a_1$</li>
-<li>现在$\tilde z_1$是用所有$z_i$算出来的，不再是独立的了</li>
-</ul>
-<p><strong>后记1</strong></p><p>最后，实际还会把$\tilde z_i$再这么处理一次：</p><ul>
-<li>$\hat z_i = \gamma \odot \tilde z_i + \beta$</li>
-</ul>
-<p>不要担心又把量级和偏移都做回去了，会以1和0为初始值慢慢learn的。</p><p><strong>后记2</strong></p><p>推理的时候，如果batch size不够，甚至只有一条时，怎么去算$\mu, \sigma$呢？</p><p>pytorch在训练的时候会计算<code>moving average</code>of $\mu$ and $\sigma$ of the batches.(每次把当前批次的均值和历史均值来计算一个新的历史均值$\bar \mu$)</p><ul>
-<li>$\bar \mu \leftarrow p \bar \mu + (1-p)\mu_t$</li>
-</ul>
-<p>推理的时候用$\bar \mu, \bar \sigma$。</p><p>最后，用了BN，平滑了error surface，学习率就可以设大一点了，加速收敛。</p><h1>Classification</h1>
-<p>用数字来表示class，就会存在认为1跟2比较近与3比较远的可能（从数学运算来看也确实是的，毕竟神经网络就是不断地乘加和与真值减做对比），所以引入了one-hot，它的特征就是class之间无关联。</p><p>恰恰是这个特性，使得用one-hot来表示词向量的时候成了一个要克服的缺点。预测单词确实是一个分类问题，然后词与词之间却并不是无关的，恰恰是有距离远近的概念的，而把它还原回数字也解决不了问题，因为单个数字与前后的数字确实近了，但是空间上还是可以和很多数字接近的，所以向量还是必要的，于是又继续打补丁，才有了稠密矩阵embedding的诞生。</p><h2>softmax</h2>
-<p>softmax的一个简单的解释就是你的真值是0和1的组合(one-hot)，但你的预测值可以是任何数，因为你需要把它normalize到(0,1)的区间。</p><p>当class只有两个时，用softmax和用sigmoid是一样的。</p><h2>loss</h2>
-<p>可以继续用MeanSquare Error(MSE) $ e = \sum_i(\hat y_i - y'_i)^2$，但更常用的是：</p><h3>Cross-entropy</h3>
-<p>$e = - \sum_i \hat y_i lny'_i$</p><blockquote>
-<p><code>Minimizing cross-entropy</code> is equivalent to <code>maximizing likelihood</code></p></blockquote>
-<figure  style="flex: 67.24511930585683" ><img width="1240" height="922" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/57db1539a499b753d283f44fd02b1476.png" alt=""/></figure><p>linear regression是想从真值与预测值的差来入手找到最合适的参数，而logistic regression是想找到一个符合真值分布的的预测分布。</p><p>在吴恩达的课程里，这个损失函数是”找出来的“：</p><figure class="vertical-figure" style="flex: 42.29195088676671" ><img width="1240" height="1466" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/962ad32822f268909e640f943fb27eaa.png" alt=""/></figure><ol>
-<li>首先，$\theta x$后的值可以是任意值，所以再sigmoid一下，以下记为hx</li>
-<li>hx的意思就是<code>y为1的概率</code></li>
-<li>我需要一个损失函数，希望当真值是0时，预测y为1的概率的误差应该为无穷大<ul>
-<li>也就是说hx=0时，损失函数的结果应该是无穷大</li>
-<li>而hx=1时, 损失应该为0</li>
-</ul>
-</li>
-<li>同理，当y为1时，hx=0时损失应该是无穷大，hx=1时损失为0</li>
-<li>这时候才告诉你，log函数<strong>刚好长这样</strong>，请回看上面的两张图</li>
-</ol>
-<p>而别的地方是告诉你log是为了把概率连乘变成连加，方便计算。李宏毅这里干脆就直接告诉你公式长这样了。。。</p><p>这里绕两个弯就好了：</p><ol>
-<li>y=1时，预测y为1的概率为1， y=0时，应预测y=1的概率为0</li>
-<li>而这里是做损失函数，所以预测对了损失为0，错了损失无穷大</li>
-<li>预测为1的概率就是hx，横轴也是hx</li>
-</ol>
-<blockquote>
-<p>课程里说softmax和cross entorpy紧密到pytorch里直接就把两者结合到一起了，应用cross entropy的时候把softmax加到了你的network的最后一层（也就是说你没必要手写）。这里说的只是pytorch是这么处理的吗？</p><p>----是的</p></blockquote>
-<h3>CE v.s. MSE</h3>
-<p>数学证明：<a href="http://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2015_2/Lecture/Deep%20More%20(v2).ecm.mp4/index.html">http://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2015_2/Lecture/Deep%20More%20(v2).ecm.mp4/index.html</a></p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/97f9a28a6fef03ce00f321f79903a216.png" alt=""/></figure><p>单看实验结果，初始位置同为loss较大的左上角，因为CE有明显的梯度，很容易找到右下角的极值，但是MSE即使loss巨大，但是却没有梯度。因此对于逻辑回归，选择交叉熵从实验来看是合理的，数学推导请看上面的链接。</p>
+<p>loss 没什么变化，仍旧是一堆$\theta$代入后求的值与y的差，求和。并期望找到使loss最小化的$\theta$：</p><p>$\bold \theta = arg\ \underset{\theta}{min}\ L$</p>
             </div>
         </article>
         <div class="prism-post-meta col-md-8 offset-md-2">
@@ -318,10 +136,6 @@ $$</p><h3>adaptive learning rate</h3>
     </span>
     
     <span class="prism-tag">
-        <a class="no-link" href="/tag/optimization/" target="_self">#optimization</a>
-    </span>
-    
-    <span class="prism-tag">
         <a class="no-link" href="/tag/classicfication/" target="_self">#classicfication</a>
     </span>
     
@@ -337,22 +151,6 @@ $$</p><h3>adaptive learning rate</h3>
         <a class="no-link" href="/tag/relu/" target="_self">#relu</a>
     </span>
     
-    <span class="prism-tag">
-        <a class="no-link" href="/tag/RMSProp/" target="_self">#RMSProp</a>
-    </span>
-    
-    <span class="prism-tag">
-        <a class="no-link" href="/tag/Adam/" target="_self">#Adam</a>
-    </span>
-    
-    <span class="prism-tag">
-        <a class="no-link" href="/tag/Adagrad/" target="_self">#Adagrad</a>
-    </span>
-    
-    <span class="prism-tag">
-        <a class="no-link" href="/tag/Batch%20Normalization/" target="_self">#Batch Normalization</a>
-    </span>
-    
     
     
     <span>/</span>
@@ -366,12 +164,12 @@ $$</p><h3>adaptive learning rate</h3>
     <ul>
         
         <li class="next">
-            <a class="no-link" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-2/" target="_self" title="李宏毅MACHINE LEARNING 2021 SPRING笔记[2]"><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</a>
+            <a class="no-link" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-3/" target="_self" title="李宏毅MACHINE LEARNING 2021 SPRING笔记[3]"><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</a>
         </li>
         
         
         <li class="prev">
-            <a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-7/" target="_self" title="《Deep Learning with Python》笔记[7]">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+            <a class="no-link" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-2/" target="_self" title="李宏毅MACHINE LEARNING 2021 SPRING笔记[2]">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
         </li>
         
     </ul>

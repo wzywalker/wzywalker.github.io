@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/638580149e69269e25c60788952cb35a.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/9fc2b5f540cd4374ca2ea87dc9a6da43.json"
         }
 
     </script>
@@ -55,6 +55,30 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%BC%80%E5%8F%91apple-pay%E7%A2%B0%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" target="_self">开发apple-pay碰到的问题总结</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E5%BC%80%E5%8F%91apple-pay%E7%A2%B0%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" target="_self">
+                <time class="text-uppercase">
+                    March 04 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>本来想简单总结一下Apple Pay 开发过程中的几个问题, 结果被<a href="http://www.lilongcnc.cc/2016/02/28/9-applepay%E6%94%AF%E4%BB%98%E7%95%8C%E9%9D%A2%E8%B0%83%E7%94%A8%E5%92%8C%E8%8E%B7%E5%8F%96payment%E5%8F%82%E6%95%B0%E9%93%B6%E8%81%94%E6%89%A3%E6%AC%BE%E6%B5%81%E7%A8%8B/">这篇文章</a>全碰上了, 干脆全文转载, 作者对相关资源整理得比较详细, 比较有参考价值, 建议阅读, 我做个概述.</p><p>总的来说, 我们做过 APNs 推送的话, 申请 商户ID 并关联到 apple id, 申请证书, 生成provisioning profile等步骤都差不多</p><p>然后我真机调试有两个地方没通过, 下文也总结了, 我拎出来单独说一下:</p><p>1, Payment request is invalid: check your entitlements. Connection to remote alert view service failed</p><blockquote>
+<p>原因:</p></blockquote>
+<p>粗心, 把merchant id写错了.
+之所以要把粗心的事也列出来, 是因为, 我出问题是粗心, 但是因为集成苹果支付的过程中, 是需要在配置界面的<code>Capabilities</code>里面用下拉列表选择一个<code>merchant id</code>, 以及代码里还要写一次的, 如果你有多个<code>merchant id</code>, 或者开发过程中切换过, 下拉列表值和代码里手写的值要记得同步, 没有同步, 一样会得上上面的错误</p><p>2, 进不到didAuthorizePayment方法.</p><blockquote>
+<p>原因:</p></blockquote>
+<p><code>payrequest.merchantCapabilities = PKMerchantCapability3DS|PKMerchantCapabilityEMV</code>. 
+看到了吧, 后面的 EMV 是必须要加的
+大部分碰到同样问题的同学估计都是看 WWDC 的视频, 里面的小哥说3DS 是必须的, 显然在咱们大天朝, EMV 也是必须的.</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%BC%80%E5%8F%91apple-pay%E7%A2%B0%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E7%99%BE%E5%BA%A6%E5%9C%B0%E5%9B%BE%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2/" target="_self">百度地图坐标转换</a></h1>
@@ -624,96 +648,6 @@ int main(int argc, const char * argv[]) {
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Xcode%E8%87%AA%E5%A2%9Ebuild%E5%8F%B7/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/UIMenuController%E7%9A%84%E4%BD%BF%E7%94%A8/" target="_self">UIMenuController的使用</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/UIMenuController%E7%9A%84%E4%BD%BF%E7%94%A8/" target="_self">
-                <time class="text-uppercase">
-                    March 21 2018
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>#1, 基本使用
-以对一个UILabel长按弹出菜单为例
-##子类化UILabel
-因为需要覆盖这几个方法:
-<code>- (BOOL)canBecomeFirstResponder</code>; 返回YES 
-同时需要在每次UI元素出现的时候去<code>becomeFirstResponder</code>一次,才能显示出菜单. 在我的实测中, 我在<code>ViewDidLoad</code>里面这么做了, 当UI导航到别的页面(导航控件, 或modal页面), 然后回来, 菜单又失效了, 所以我写到<code>ViewWillAppear</code>里面去了, 通过</p><p><code>- (BOOL)canPerformAction:(SEL)action withSender:(nullable id)sender</code>;
-这个方法会在每一个menuItem生成的时候调用一次, 因此在方法体里就要根据action来判断是否需要显示在菜单里, 如果不需要, 则返回<code>NO</code>. 也就是说, 如果你什么都不做, 直接返一个<code>YES</code>, 那么所有的默认菜单项都会显示出来, 此处我们只要一个<code>Copy</code>选项吧:</p>
-<pre><code>- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    return (action == @selector(copy:));
-}
-</code></pre>
-<p>##添加触发方式
-如果是以长按为触发, 则添加长按手势, 代码片段如下:</p>
-<pre><code>// 在awakeFromNib里面添加即可
-UILongPressGestureRecognizer *menuGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(menu:)];
-    menuGesture.minimumPressDuration = 0.2;
-    [self addGestureRecognizer:menuGesture];
-
-- (void)menu:(UILongPressGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateBegan) {
-        UIMenuController *menu = [UIMenuController sharedMenuController];
-        [menu setTargetRect:self.frame inView:self.superView]; // 把谁的位置告诉控制器, 菜单就会以其为基准在合适的位置出现
-        [menu setMenuVisible:YES animated:YES];
-    }
-}
-</code></pre>
-<p>##编写菜单行为
-上面我们只要了copy, 那么就覆盖默认的copy方法:</p>
-<pre><code>- (void)copy:(id)sender {
-    UIPasteboard *paste = [UIPasteboard generalPasteboard];
-    paste.string = self.text;
-}
-</code></pre>
-<p>#2, 添加自定义菜单项
-自定义菜单只需要在菜单控制器添加几个item即可, 结合上例, 我的那个label是显示电话号码的, 那么就让它多显示一个”打电话”和一个”发短信”菜单吧, 唯一需要注意的是, 在设置自定义菜单项时, 设置的items只影响自定义部分, 标准菜单项仍然是由<code>canPerformAction</code>决定的:</p>
-<pre><code>UIMenuItem *itemCall = [[UIMenuItem alloc] initWithTitle:@&quot;Call&quot; action:@selector(call:)];
-UIMenuItem *itemMessage = [[UIMenuItem alloc] initWithTitle:@&quot;Message&quot; action:@selector(message:)];
-[[UIMenuController sharedMenuController] setMenuItems: @[itemCall, itemMessage]];
-[[UIMenuController sharedMenuController] update];
-</code></pre>
-<blockquote>
-<p>注, 添加了两个菜单后, canPerformAction需要相应变化, 自己想想应该怎么改. 也可以在下一节看代码. 当然也要自行写完里面的call和message方法, 参照copy的写法即可</p></blockquote>
-<p>#3, UITableViewCell长按显示菜单
-##标准菜单项
-UITableView里面长项条目显示标准菜单, 只需要实现下述代理方法即可:</p>
-<pre><code>- (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
-- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-    return (action == @selector(copy:)); // 只显示Copy
-}
-
-- (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-    if (action == @select(copy:)) {
-        UIPasteboard *paste = [UIPasteboard generalPasteboard];
-        paste.string = cell.detailLabel.text; // 自行写业务逻辑
-    }
-}
-</code></pre>
-<p>#4, TableViewCell添加自定义菜单项</p><p>同样也得子类化一个TableViewCell,目的也是为了覆盖同样的几个方法:</p>
-<pre><code>- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    return (action == @selector(copy:) || action == @selector(call:) || action == @selector(message:)); // 此处我们把三个行为都写全了, 回答上一节的问题
-}
-
-- (BOOL)canBecomeFirstResponder {
-    return YES;
-}
-</code></pre>
-<p>但因为tableView已经实现了菜单, 所以不需要显式为每个cell去<code>becomeFirtResponder</code>了.</p><p>添加菜单项的方法同上, 写菜单行为的方法同<code>copy:</code>, 都是一样的.</p><blockquote>
-<p>注: 你们或许已经发现了, 添加自定义菜单项的时候, 仍然需要<code>canPerformAction</code>, 在这里, 与tableView代理里面的同名方法有什么关系? 是的, 两个都要写, tableView里面的只会影响标准菜单, 文档说只支持这两个<code>UIResponderStandardEditActions</code> (copy/paste)</p></blockquote>
-<blockquote>
-<p>注: 然而, <code>- (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender</code>这个方法却有点别扭, 一来不需要去实现了, 二来又不能注释掉(你们自己试一下), 等于一定要留一个空的方法体在那里…</p></blockquote>
-</div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/UIMenuController%E7%9A%84%E4%BD%BF%E7%94%A8/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

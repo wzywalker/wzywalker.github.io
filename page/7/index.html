@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/638580149e69269e25c60788952cb35a.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/9fc2b5f540cd4374ca2ea87dc9a6da43.json"
         }
 
     </script>
@@ -55,6 +55,79 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/Fixing-Chrome-58%2B-%5Bmissing_subjectAltName%5D-with-openssl-when-using-sel/" target="_self">Fixing-Chrome-58+-[missing_subjectAltName]-with-openssl-when-using-sel</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/Fixing-Chrome-58%2B-%5Bmissing_subjectAltName%5D-with-openssl-when-using-sel/" target="_self">
+                <time class="text-uppercase">
+                    January 01 2020
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p><a href="https://alexanderzeitler.com/articles/Fixing-Chrome-missing_subjectAltName-selfsigned-cert-openssl/">原文链接</a></p><h1>说在前面</h1>
+<blockquote>
+<ol>
+<li><code>createselfsignedcertificate.sh</code>文件里的sudo删掉了</li>
+</ol>
+</blockquote>
+<ol start="2">
+<li><code>server.csr.cnf</code>里<code>dn</code>里面的内容请改成自己的</li>
+<li><code>v3.ext</code>里面的DNS.1也更改为自己的server</li>
+<li>本来我只想绑一个固定的 IP, 基本通过, 但是在mac的chrome58下, 仍然过不了, 最终还是通过域名解决</li>
+</ol>
+<p>上一个在 chrome58下终于变绿的图片
+<figure  style="flex: 397.72727272727275" ><img width="700" height="88" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b09b9db95e4ba72877937a236a42b9ef.png" alt=""/></figure></p><h1>原文转载</h1>
+<p>Since version 58, Chrome requires SSL certificates to use SAN (Subject Alternative Name) instead of the popular Common Name (CN), thus <a href="https://groups.google.com/a/chromium.org/forum/#%21msg/security-dev/IGT2fLJrAeo/csf_1Rh1AwAJ">CN support has been removed</a>.If you're using self signed certificates (but not only!) having only CN defined, you get an error like this when calling a website using the self signed certificate:
+<figure  style="flex: 100.89887640449439" ><img width="898" height="445" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/df44dd6d5d409cc33b66c052ab9e7b81.png" alt=""/></figure>
+Here's how to create a self signed certificate with SAN using openssl</p><p>First, lets create a root CA cert using <code>createRootCA.sh</code>:</p><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+mkdir ~/ssl/openssl genrsa -des3 -out ~/ssl/rootCA.key <span class="m">2048</span>
+openssl req -x509 -new -nodes -key ~/ssl/rootCA.key -sha256 -days <span class="m">1024</span> -out ~/ssl/rootCA.pem
+</pre></div>
+<p>Next, create a file <code>createselfsignedcertificate.sh</code>:</p><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+openssl req -new -sha256 -nodes -out server.csr -newkey rsa:2048 -keyout server.key -config &lt;<span class="o">(</span> cat server.csr.cnf <span class="o">)</span>
+openssl x509 -req -in server.csr -CA ~/ssl/rootCA.pem -CAkey ~/ssl/rootCA.key -CAcreateserial -out server.crt -days <span class="m">500</span> -sha256 -extfile v3.ext
+</pre></div>
+<p>Then, create the openssl configuration file <code>server.csr.cnf</code>
+ referenced in the openssl command above:</p>
+<pre><code>[req]
+default_bits = 2048
+prompt = no
+default_md = sha256
+distinguished_name = dn
+
+[dn]
+C=US
+ST=New York
+L=Rochester
+O=End Point
+OU=Testing Domain
+emailAddress=you@example.com
+CN = localhost
+</code></pre>
+<p>Now we need to create the <code>v3.ext</code> file in order to create a X509 v3 certificate instead of a v1 which is the default when not specifying a extension file:</p>
+<pre><code>authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = localhost
+</code></pre>
+<p>In order to create your cert, first run <code>createRootCA.sh</code> which we created first. Next, run <code>createselfsignedcertificate.sh</code> to create the self signed cert using localhost as the SAN and CN.
+After adding <code>the rootCA.pem</code> to the list of your trusted root CAs, you can use the <code>server.key</code> and <code>server.crt</code> in your web server and browse <a href="https://localhost%C2%A0using">https://localhost%C2%A0using</a> Chrome 58 or later:
+<figure class="vertical-figure" style="flex: 41.278195488721806" ><img width="549" height="665" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b18d58c0b394b4a435202d5bf5858e47.jpg" alt=""/></figure>
+You can also verify your certificate to contain the SAN by calling</p>
+<pre><code>openssl x509 -text -in server.crt -noout
+</code></pre>
+<p>Watch for this line <code>Version: 3 (0x2)</code> as well as <code>X509v3 Subject Alternative Name:</code> (and below).
+Happy self signing!</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Fixing-Chrome-58%2B-%5Bmissing_subjectAltName%5D-with-openssl-when-using-sel/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%B0%86%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9%E7%94%A8%E4%BD%9CTime-Machine%E5%B9%B6%E5%8A%A0%E5%AF%86/" target="_self">将共享文件夹用作Time-Machine并加密</a></h1>
@@ -602,30 +675,6 @@ git push origin master
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Windows%E4%B8%8B%E7%94%A8AHK%E6%9D%A5%E6%98%A0%E5%B0%84Mac%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%BC%80%E5%8F%91apple-pay%E7%A2%B0%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" target="_self">开发apple-pay碰到的问题总结</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E5%BC%80%E5%8F%91apple-pay%E7%A2%B0%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" target="_self">
-                <time class="text-uppercase">
-                    March 04 2019
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>本来想简单总结一下Apple Pay 开发过程中的几个问题, 结果被<a href="http://www.lilongcnc.cc/2016/02/28/9-applepay%E6%94%AF%E4%BB%98%E7%95%8C%E9%9D%A2%E8%B0%83%E7%94%A8%E5%92%8C%E8%8E%B7%E5%8F%96payment%E5%8F%82%E6%95%B0%E9%93%B6%E8%81%94%E6%89%A3%E6%AC%BE%E6%B5%81%E7%A8%8B/">这篇文章</a>全碰上了, 干脆全文转载, 作者对相关资源整理得比较详细, 比较有参考价值, 建议阅读, 我做个概述.</p><p>总的来说, 我们做过 APNs 推送的话, 申请 商户ID 并关联到 apple id, 申请证书, 生成provisioning profile等步骤都差不多</p><p>然后我真机调试有两个地方没通过, 下文也总结了, 我拎出来单独说一下:</p><p>1, Payment request is invalid: check your entitlements. Connection to remote alert view service failed</p><blockquote>
-<p>原因:</p></blockquote>
-<p>粗心, 把merchant id写错了.
-之所以要把粗心的事也列出来, 是因为, 我出问题是粗心, 但是因为集成苹果支付的过程中, 是需要在配置界面的<code>Capabilities</code>里面用下拉列表选择一个<code>merchant id</code>, 以及代码里还要写一次的, 如果你有多个<code>merchant id</code>, 或者开发过程中切换过, 下拉列表值和代码里手写的值要记得同步, 没有同步, 一样会得上上面的错误</p><p>2, 进不到didAuthorizePayment方法.</p><blockquote>
-<p>原因:</p></blockquote>
-<p><code>payrequest.merchantCapabilities = PKMerchantCapability3DS|PKMerchantCapabilityEMV</code>. 
-看到了吧, 后面的 EMV 是必须要加的
-大部分碰到同样问题的同学估计都是看 WWDC 的视频, 里面的小哥说3DS 是必须的, 显然在咱们大天朝, EMV 也是必须的.</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%BC%80%E5%8F%91apple-pay%E7%A2%B0%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>
