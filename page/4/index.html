@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/9fc2b5f540cd4374ca2ea87dc9a6da43.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/ba498fe42f95911578b4ebfec092709c.json"
         }
 
     </script>
@@ -961,18 +961,19 @@ learng useful <code>representations</code> of input data</p><blockquote>
 <li>括号里的表示是这一轮该位置赋的新值，它来自于标红位，同时，括号的位置也就是上一轮的标红位</li>
 <li>划掉的表示已经压缩了左右边界，下一轮就不要在这些数里面选了（为了视觉简洁，标红位就不划了）</li>
 </ul>
-<p>$
+<p>$$
 \require{cancel}
 \begin{array}{c|cccccc|l}
-index&amp;0&amp;1&amp;2&amp;3&amp;4&amp;5&amp;\
+index&amp;0&amp;1&amp;2&amp;3&amp;4&amp;5&amp;\\
 \hline
-array&amp;\color{red}6&amp;7&amp;3&amp;2&amp;14&amp;9\
-\underleftarrow{\small找小数}&amp;\cancel{(2)}&amp;7&amp;3&amp;\color{red}2&amp;\cancel{14}&amp;\cancel{9}&amp;找到2，放到索引0\
-\underrightarrow{\small找大数}&amp;\cancel{2}&amp;\color{red}7&amp;3&amp;(7)&amp;\cancel{14}&amp;\cancel{9}&amp;找到7，放到索引3\
-\underleftarrow{\small找小数}&amp;\cancel{2}&amp;(3)&amp;\color{red}3&amp;\cancel{7}&amp;\cancel{14}&amp;\cancel{9}&amp;找到3，放到索引2\
+array&amp;\color{red}6&amp;7&amp;3&amp;2&amp;14&amp;9\\
+\underleftarrow{\small找小数}&amp;\cancel{(2)}&amp;7&amp;3&amp;\color{red}2&amp;\cancel{14}&amp;\cancel{9}&amp;找到2，放到索引0\\
+\underrightarrow{\small找大数}&amp;\cancel{2}&amp;\color{red}7&amp;3&amp;(7)&amp;\cancel{14}&amp;\cancel{9}&amp;找到7，放到索引3\\
+\underleftarrow{\small找小数}&amp;\cancel{2}&amp;(3)&amp;\color{red}3&amp;\cancel{7}&amp;\cancel{14}&amp;\cancel{9}&amp;找到3，放到索引2\\
 &amp;2&amp;3&amp;(6)&amp;7&amp;14&amp;9&amp;(1,2)索引间已没有大于6的数，排序完成，回填6
 \end{array}
-$</p><ol>
+$$</p>
+<figure  style="flex: 156.39810426540285" ><img width="1320" height="422" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e08d30ceffd1969ef727d57a8f7ee241.png" alt=""/></figure><ol>
 <li>注意第1次从右往左找比6小的数时，找到2，右边的14，9就可以全部划掉了，因为我永远是在用6在左右查找，这一次pass了，后面永远会pass</li>
 </ol>
 <ul>
@@ -1047,7 +1048,7 @@ $</p><ol>
 <li>一轮摆完后，最大的数肯定已经<strong>上浮</strong>到根节点了，把它与最末的一个数字调换位置（这个数字是一个相对小，但不一定是最小的），然后把最大的这个数从堆里移除（已经确认是最大的，位置也就确认了，不再参与比较）</li>
 <li>实现的时候，因为有“找父/子节点比大小”这样的逻辑，显然可以直接用上二叉树的性质，不要自己去观察或归纳了。</li>
 </ol>
-<p>动图比较长，耐心看下：</p><figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure><blockquote>
+<p>动图比较长，耐心看下：</p><figure  style="flex: 62.5" ><img width="350" height="280" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5aa56935b19cd4afe2cd50fb2ff0b485.gif" alt=""/></figure><blockquote>
 <p>在实现每一轮的遍历数字较大的那个子节点并交换数字的过程中，我之前用的是递归，在小数据量顺利通过，但上万条数据时碰到了<code>RecursionError: maximum recursion depth exceeded in comparison</code>, 查询本机迭代大小设置为1000，但设到几十万就不起作用了（虽然不报错），于是改成了<code>while</code>循环，代码几乎没变，但是秒过了。</p></blockquote>
 <p>递归只是让代码看起来简洁而牛逼，并没有创造什么新的东西，while能行那就算过了吧。</p><p>但是代码开始dirty了起来，大量的代码在控制边界和描述场景，显然有些条件可能是冗余的，我没有很好地合并这些边界和条件导致if太多，这是个不好的演示，但三个核心函数还是阐释了这种算法的思路：</p><ul>
 <li>摆成树（堆）</li>
@@ -1138,7 +1139,7 @@ $</p><ol>
 </code></pre>
 <h2>归并排序</h2>
 <p>这次先看图吧，看你能总结出啥：
-<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><ol>
+<figure  style="flex: 83.33333333333333" ><img width="300" height="180" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9f48407474a15d03bd183eafc6266e88.gif" alt=""/></figure></p><ol>
 <li>第一步是把数组打散后两两排序，实现每一组（2个元素）是排好序的</li>
 <li>第二步仍然是两两排序，但是把前面排序好的每两个组成一个组：</li>
 </ol>
@@ -1264,7 +1265,7 @@ $</p><ol>
 <span class="nx">sort</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="nx">right</span><span class="p">)</span>
 </pre></div>
 <p>即代码真走到第3行了的话，所有的数据已经排好序了</p><h2>基数排序</h2>
-<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure><p>看图，为什么从个位向高位依次排过去为什么就能保证后面高位的排序不会影响低序的，直观来理解的话，就是</p><ol>
+<figure  style="flex: 126.0377358490566" ><img width="668" height="265" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/3c9e057d213761a0ebe19f5453b4a629.png" alt=""/></figure><p>看图，为什么从个位向高位依次排过去为什么就能保证后面高位的排序不会影响低序的，直观来理解的话，就是</p><ol>
 <li>如果高位数字不一样，那么低位顺序是没意义的，按高位大小排即可</li>
 <li>如果高位数字一样，那么低位已经排好序了</li>
 <li>按这个逻辑由低位向高位排，按归纳法，可以推到适用普遍情况的</li>
