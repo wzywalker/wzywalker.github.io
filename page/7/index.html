@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/4089f9a071a74d90ba780992e2fc0383.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/e83a979bdfe76b3eb88998ea61cf43ad.json"
         }
 
     </script>
@@ -55,6 +55,261 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/iOS%E7%AD%BE%E5%90%8D%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" target="_self">iOS签名相关命令</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/iOS%E7%AD%BE%E5%90%8D%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" target="_self">
+                <time class="text-uppercase">
+                    October 09 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>用openssl查看CSR文件内容</p>
+<pre><code>openssl asn1parse -i -in CertificateSigningRequest.certSigningRequest
+</code></pre>
+<p>查看下发的证书的内容:</p>
+<pre><code>openssl x509 -inform der -in ios_development.cer -noout -text
+</code></pre>
+<p>可以使用如下命令查看一个mobileprovision：</p>
+<pre><code>security cms -D -i embedded.mobileprovision
+</code></pre>
+<p>ipa文件是一个zip包，可以使用如下命令解压：</p>
+<pre><code>/usr/bin/unzip -q xxx.ipa -d &lt;destination&gt;
+</code></pre>
+<p>用下面命令，列出系统中可用于签名的有效证书：</p>
+<pre><code>/usr/bin/security find-identity -v -p codesigning
+</code></pre>
+<p>使用如下命令对xxx.app目录签名，codesign程序会自动将其中的文件都签名，（Frameworks不会自动签）：</p>
+<pre><code>/user/bin/codesign -fs &quot;iPhone Developer: Your Cert Name (VDT388662Q)&quot; --no-strict Payload/xxx.app
+</code></pre>
+<p>最后用下面命令校验签名是否合法：</p>
+<pre><code>/usr/bin/codesign -v xxx.app
+</code></pre>
+<p>使用zip命令重新打包成ipa包</p>
+<pre><code>/usr/bin/zip -qry destination source
+</code></pre>
+<p><a href="%5Bhttps://zhuanlan.zhihu.com/p/53006952%5D(https://zhuanlan.zhihu.com/p/53006952)">来源</a></p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/iOS%E7%AD%BE%E5%90%8D%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%85%B3%E4%BA%8E%40synthesize/" target="_self">关于@synthesize</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E5%85%B3%E4%BA%8E%40synthesize/" target="_self">
+                <time class="text-uppercase">
+                    August 16 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>首先, <code>@synthesize myLocalVar = _myLocalVar;</code> 这句话是显式帮你省掉了一个 <code>getter</code> 方法和一个 <code>setter</code> 方法. 两个方法长什么样不赘述.</p><p>其次, 从某个版本的 Xcode 开始, 你连 <code>@synthesize</code> 这句话也不需要写了, 但是请注意, 这只是一个 IDE 的特性. 你不需要手动合成, 不代表 <code>@synthesize</code> 不作用了, 仅仅是让<strong>你</strong>能少写这一句话, 而 Xcode 帮你补全了.</p><p>再次, @synthesize 仅仅是一个 <a href="http://clang.llvm.org/docs/LanguageExtensions.html#objective-c-autosynthesis-of-properties">clang 的 Objective-C 语言扩展</a> (<code>autosynthesis of properties</code>), 然后<code>clang</code>恰好是 Xcode 的默认编译器. 也就是说, 如果你换成了 <code>gcc</code>, 那么这个特性也就不复存在了.</p><p>基于上述, 如果你使用了自己的文本编辑器, 然后用自己用 <code>clang</code> 从命令行编译, <code>@synthesize</code> 这一句话是需要自己写的.</p><p>最后, 有如下例外</p><ol>
+<li>对于 <code>readwrite</code> 类型的属性, 你自行实现了 <code>getter</code> 和 <code>setter</code></li>
+<li>对于 <code>readonly</code>  类型的属性, 你自行实现了 <code>getter</code>
+ 以上两种情况, 你一旦自行实现了对应的 <code>getter</code> 或 <code>setter</code>, 对于本文的<code>myLocalVar</code>例子, 你将发现 <code>_myLocalVar</code>没有了, 意味着你需要<code>@synthesize</code>一下.</li>
+<li><code>dynamic</code>与<code>synthesize</code>是互斥的</li>
+<li><code>@protocol</code>中声明的属性</li>
+<li><code>category</code>中声明的属性</li>
+<li>你覆盖(<code>overridden</code>)父类的属性时, 必须手动<code>synthesize</code>.</li>
+</ol>
+<p>参考资料:
+1, <a href="https://stackoverflow.com/questions/19784454/when-should-i-use-synthesize-explicitly?answertab=votes">When should I use @synthesize explicitly?</a>
+2, <a href="http://suree.org/2015/09/01/Dynamic-Synthesize/">@dynamic 与 @synthesize 关键词详解</a></p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%85%B3%E4%BA%8E%40synthesize/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E9%87%8D%E8%A3%85mac%E7%B3%BB%E7%BB%9F%E5%90%8Essh%E5%BC%82%E5%B8%B8/" target="_self">重装mac系统后ssh异常</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E9%87%8D%E8%A3%85mac%E7%B3%BB%E7%BB%9F%E5%90%8Essh%E5%BC%82%E5%B8%B8/" target="_self">
+                <time class="text-uppercase">
+                    August 03 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>表现在两个方面: <code>ssh 登录服务器</code>, 和<code>通过ssh 使用 git</code>, 报的错都是<code>Permissino denied (publickey)</code></p><h2>git异常的解决</h2>
+<p>根据<a href="https://help.github.com/articles/error-permission-denied-publickey/">github文档</a>, 我可以解决第二个问题, 第一个问题(ssh login)解决后再来更新.</p><p>使用git出现问题, 并不局限于 github, 我连 gitlab 也是一样. 其实根据文档一项项检测,我在<code>ssh-add -l</code>这一句发现了问题, 虽然我生成了密钥, 但是它的输出显示我没有私钥, 照如下解决即可:</p><blockquote>
+<p><strong>Tip</strong>: On most systems the default private keys (~/.ssh/id_rsa</p></blockquote>
+<p>, ~/.ssh/id_dsa and ~/.ssh/identity) are <strong>automatically</strong> added to the SSH authentication agent. You shouldn't need to run <code>ssh-add path/to/key</code>
+ unless you override the file name when you generate a key.</p><p>也就是说, 把你的id_rsa文件手动指定一下<code>ssh_add 文件路径</code>(不知道为什么会出这种鬼问题)</p><h2>SSH自动登录异常的解决</h2>
+<p>这是补充的内容, 刚刚解决.</p><p>首先, 你登不上这是服务端的问题, 没有把你的公钥写到<code>~/.ssh/authorized_keys</code>里面去, 你想办法把它写进去(当你 <code>ssh</code> 不上去的时候, <code>scp</code>当然也不行)</p><p>写进去后, 仍然报错, 我们继续看日志:
+<code>ssh root@mydomain.com -v</code> 或 <code>ssh root@mydomain.com -vvv</code> (更详细的日志)</p><p>通过看日志, 你可以一步步看到问题:</p>
+<pre><code>...
+debug2: service_accept: ssh-userauth
+debug1: SSH2_MSG_SERVICE_ACCEPT received
+debug3: send packet: type 50
+debug3: receive packet: type 51
+debug1: Authentications that can continue: publickey
+debug3: start over, passed a different list publickey
+debug3: preferred publickey,keyboard-interactive,password
+debug3: authmethod_lookup publickey
+debug3: remaining preferred: keyboard-interactive,password
+debug3: authmethod_is_enabled publickey
+debug1: Next authentication method: publickey
+debug1: Trying private key: .ssh/id_rsa
+debug3: no such identity: .ssh/id_rsa: No such file or directory
+debug2: we did not send a packet, disable method
+debug1: No more authentication methods to try.
+Permission denied (publickey).
+</code></pre>
+<p>注意截取的<strong>倒数第4行</strong>:
+首先, 它昨天不是这么提示的, 它提示的是<code>.ssh/id_rsd</code>, 我到配置文件里把它改成了<code>rsa</code>, 因为我生成的是 <code>rsa</code></p><blockquote>
+<p>配置文件的地址是: <code>/etc/ssh/ssh_config</code>, 改的节点名是<code>IdentityFile</code></p></blockquote>
+<p>其次, 顺便看一下<code>RSAAuthentication</code> 和 <code>PubkeyAuthentication</code>这两项是不是 yes(如果是注释状态, 不要动, 默认是 yes)</p><p>这样, 服务端有你的公钥, 本地配置了 <code>IdentityFile</code> 路径, 就可以登录了, 但我一直没成功的原因在于, 我在原配置文件改的, 它是路径是<code>.ssh/id_rsa,.ssh/id_rsd</code>, 我单纯把 rsd 的去掉, 却没发现它的路径是错的, 直到看了日志提示这个文件不存在, 才想起把格式改对.</p><p>我碰到的情况不知道是不是个例, 比如同一个文件</p>
+<pre><code>UserKnownHostsFile ~/.ssh/known_hosts,~/.ssh/known_hosts2
+</code></pre>
+<p>这一行, 路径格式却是正确的, 匪夷所思.</p><p>总之, 你碰到<code>Permission denied (public key)</code>这个问题, 就结合 git 和 server 这两情况, 看是没有 identity, 还是 id_rsa路径配错了. (前提是公钥必须已经写到服务器上去了)</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E9%87%8D%E8%A3%85mac%E7%B3%BB%E7%BB%9F%E5%90%8Essh%E5%BC%82%E5%B8%B8/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%A4%87%E4%BB%BDNginx%E8%AE%BE%E7%BD%AEphp%E7%9A%84%E6%96%B9%E6%B3%95/" target="_self">备份Nginx设置php的方法</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E5%A4%87%E4%BB%BDNginx%E8%AE%BE%E7%BD%AEphp%E7%9A%84%E6%96%B9%E6%B3%95/" target="_self">
+                <time class="text-uppercase">
+                    July 31 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>版本nginx/1.12.2</p>
+<pre><code>  location ~ \.php$ {
+    fastcgi_pass   unix:/run/php/php7.0-fpm.sock;
+    fastcgi_param  SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+    include        fastcgi_params;
+   }
+</code></pre>
+<p>我机器上的fastcgi_param值不对, 改成上图成功, 备份下</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%A4%87%E4%BB%BDNginx%E8%AE%BE%E7%BD%AEphp%E7%9A%84%E6%96%B9%E6%B3%95/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E8%AE%A9Objective-C%E4%B9%9F%E6%9C%89map%E5%8A%9F%E8%83%BD/" target="_self">让Objective-C也有map功能</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E8%AE%A9Objective-C%E4%B9%9F%E6%9C%89map%E5%8A%9F%E8%83%BD/" target="_self">
+                <time class="text-uppercase">
+                    July 30 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>map一个数组是大部分高级语言都有的, OC 没有, 有几个方案让它实现, 我优选出三个:</p><h2>原生实现</h2>
+<p>其实就是<code>valueForKeyPath</code>的活用:</p><div class="highlight"><pre><span></span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">allEmployees</span><span class="w"> </span><span class="n">valueForKeyPath</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;[collect].{daysOff&lt;10}.name&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">albumCovers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">records</span><span class="w"> </span><span class="n">valueForKeyPath</span><span class="o">:</span><span class="s">@&quot;[collect].{artist like &#39;Bon Iver&#39;}.&lt;NSUnarchiveFromDataTransformerName&gt;.albumCoverImageData&quot;</span><span class="p">];</span><span class="w"></span>
+</pre></div>
+<h2>category</h2>
+<p>这个大家肯定早想到过了, 你没有, 我给你扩展出来一个:</p><p>定义:</p><div class="highlight"><pre><span></span><span class="k">@interface</span> <span class="bp">NSArray</span> <span class="nl">(Map)</span><span class="w"></span>
+
+<span class="p">-</span> <span class="p">(</span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nf">mapObjectsUsingBlock:</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">))</span><span class="nv">block</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">@end</span><span class="w"></span>
+
+<span class="k">@implementation</span> <span class="bp">NSArray</span> <span class="nl">(Map)</span><span class="w"></span>
+
+<span class="p">-</span> <span class="p">(</span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nf">mapObjectsUsingBlock:</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">))</span><span class="nv">block</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="n">arrayWithCapacity</span><span class="o">:</span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">count</span><span class="p">]];</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">enumerateObjectsUsingBlock</span><span class="o">:^</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">,</span><span class="w"> </span><span class="kt">BOOL</span><span class="w"> </span><span class="o">*</span><span class="n">stop</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="p">[</span><span class="n">result</span><span class="w"> </span><span class="n">addObject</span><span class="o">:</span><span class="n">block</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">idx</span><span class="p">)];</span><span class="w"></span>
+<span class="w">    </span><span class="p">}];</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span><span class="n">o</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">@end</span><span class="w"></span>
+</pre></div>
+<p>使用:</p><div class="highlight"><pre><span></span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">people</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="l">@[</span><span class="w"></span>
+<span class="w">                     </span><span class="l">@{</span><span class="w"> </span><span class="s">@&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Bob&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">@&quot;city&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Boston&quot;</span><span class="w"> </span><span class="l">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                     </span><span class="l">@{</span><span class="w"> </span><span class="s">@&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Rob&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">@&quot;city&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Cambridge&quot;</span><span class="w"> </span><span class="l">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                     </span><span class="l">@{</span><span class="w"> </span><span class="s">@&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Robert&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">@&quot;city&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Somerville&quot;</span><span class="w"> </span><span class="l">}</span><span class="w"></span>
+<span class="w">                  </span><span class="l">]</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// per the original question</span>
+<span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">people</span><span class="w"> </span><span class="n">mapObjectsUsingBlock</span><span class="o">:^</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">obj</span><span class="p">[</span><span class="s">@&quot;name&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="p">}];</span><span class="w"></span>
+<span class="c1">// (Bob, Rob, Robert)</span>
+
+<span class="c1">// you can do just about anything in a block</span>
+<span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">fancyNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">people</span><span class="w"> </span><span class="n">mapObjectsUsingBlock</span><span class="o">:^</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="bp">NSString</span><span class="w"> </span><span class="n">stringWithFormat</span><span class="o">:</span><span class="s">@&quot;%@ of %@&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">obj</span><span class="p">[</span><span class="s">@&quot;name&quot;</span><span class="p">],</span><span class="w"> </span><span class="n">obj</span><span class="p">[</span><span class="s">@&quot;city&quot;</span><span class="p">]];</span><span class="w"></span>
+<span class="p">}];</span><span class="w"></span>
+<span class="c1">// (Bob of Boston, Rob of Cambridge, Robert of Somerville)</span>
+</pre></div>
+<h2>三方库</h2>
+<p>是的, 一般简单功能能自己实现就自己实现, xcode 项目还是不能像 <code>nodejs</code>项目一样, 哪怕有的包里也只有一句话, 我也要从用第三方的...ddddd</p><p>js 的世界里, <code>underscore</code>用来处理数组可算神器, 自然, 我也挑中了同样名字的 OC 库: <a href="http://underscorem.org/">Underscore</a></p><div class="highlight"><pre><span></span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">tweets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Underscore</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Let&#39;s make sure that we only operate on NSDictionaries, you never</span>
+<span class="w">    </span><span class="c1">// know with these APIs ;-)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Underscore</span><span class="p">.</span><span class="n">isDictionary</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Remove all tweets that are in English</span>
+<span class="w">    </span><span class="p">.</span><span class="n">reject</span><span class="p">(</span><span class="o">^</span><span class="kt">BOOL</span><span class="w"> </span><span class="p">(</span><span class="bp">NSDictionary</span><span class="w"> </span><span class="o">*</span><span class="n">tweet</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="n">tweet</span><span class="p">[</span><span class="s">@&quot;iso_language_code&quot;</span><span class="p">]</span><span class="w"> </span><span class="n">isEqualToString</span><span class="o">:</span><span class="s">@&quot;en&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Create a simple string representation for every tweet</span>
+<span class="w">    </span><span class="p">.</span><span class="n">map</span><span class="p">(</span><span class="o">^</span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="bp">NSDictionary</span><span class="w"> </span><span class="o">*</span><span class="n">tweet</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tweet</span><span class="p">[</span><span class="s">@&quot;from_user_name&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tweet</span><span class="p">[</span><span class="s">@&quot;text&quot;</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="bp">NSString</span><span class="w"> </span><span class="n">stringWithFormat</span><span class="o">:</span><span class="s">@&quot;%@: %@&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">unwrap</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+<blockquote>
+<p>当然, 所有方案来源于<a href="http://stackoverflow.com/questions/6127638/nsarray-equivalent-of-map">StackOverflow</a> 上的答案, 一些其它方案, 其它库(如<a href="http://cocoadocs.org/docsets/BlocksKit/2.2.3/Categories/NSArray+BlocksKit.html#//api/name/bk_map:">BlocksKit</a>), 都可以试试, 也挺简洁的</p></blockquote>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E8%AE%A9Objective-C%E4%B9%9F%E6%9C%89map%E5%8A%9F%E8%83%BD/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E8%AE%A9%E4%BD%A0fork%E4%B8%8B%E6%9D%A5%E7%9A%84%E9%A1%B9%E7%9B%AE%E4%B8%8E%E6%BA%90%E9%A1%B9%E7%9B%AE%E4%BF%9D%E6%8C%81%E5%90%8C%E6%AD%A5/" target="_self">让你fork下来的项目与源项目保持同步</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E8%AE%A9%E4%BD%A0fork%E4%B8%8B%E6%9D%A5%E7%9A%84%E9%A1%B9%E7%9B%AE%E4%B8%8E%E6%BA%90%E9%A1%B9%E7%9B%AE%E4%BF%9D%E6%8C%81%E5%90%8C%E6%AD%A5/" target="_self">
+                <time class="text-uppercase">
+                    March 23 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>原文<a href="https://2buntu.com/articles/1459/keeping-your-forked-repo-synced-with-the-upstream-source/">在此</a>, 建议阅读, 我把关键步骤抽出来了, 方便概览</p><p>(也就是add remote upstream, fetch upstream, rebase, 再push)</p><p>Step 1: Forking a repo</p>
+<pre><code>git clone https://github.com/nitin-test/blog-example-fork.git
+git remote add upstream https://github.com/nitstorm/blog-example.git
+git remote
+git remote show origin
+git remote show upstream
+</code></pre>
+<p>Step 2: Making changes and submitting Pull Requests</p>
+<pre><code>git checkout -b word-addition
+git commit -am &quot;Adds the word memory&quot;
+git push origin word-addition
+# 网页端发起merge到master
+</code></pre>
+<p>Step 3: Keeping the forked repo synced with the main repo</p>
+<pre><code># 确保你是在master分支
+git checkout master
+git fetch upstream
+git rebase upstream/master
+git push origin master
+</code></pre>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E8%AE%A9%E4%BD%A0fork%E4%B8%8B%E6%9D%A5%E7%9A%84%E9%A1%B9%E7%9B%AE%E4%B8%8E%E6%BA%90%E9%A1%B9%E7%9B%AE%E4%BF%9D%E6%8C%81%E5%90%8C%E6%AD%A5/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/Windows%E4%B8%8B%E7%94%A8AHK%E6%9D%A5%E6%98%A0%E5%B0%84Mac%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE/" target="_self">Windows下用AHK来映射Mac常用快捷键</a></h1>
@@ -314,437 +569,6 @@ feedproxy.google.com
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%88%A9%E7%94%A8Privoxy%2CShadowsocks%2CKcptun%E5%81%9Ahttp%E4%BB%A3%E7%90%86%E6%8E%92%E5%9D%91%E8%AE%B0%E5%BD%95/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E4%BD%BF%E7%94%A8openssl%E5%88%9B%E5%BB%BA%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%8F%8A%E9%83%A8%E7%BD%B2%E5%88%B0IIS%E6%95%99%E7%A8%8B/" target="_self">使用openssl创建自签名证书及部署到IIS教程</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E4%BD%BF%E7%94%A8openssl%E5%88%9B%E5%BB%BA%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%8F%8A%E9%83%A8%E7%BD%B2%E5%88%B0IIS%E6%95%99%E7%A8%8B/" target="_self">
-                <time class="text-uppercase">
-                    October 13 2018
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>#创建自签名证书
-首先，创建一个私钥文件：</p>
-<pre><code>openssl genrsa -out myselfsigned.key 2048
-</code></pre>
-<p>然后利用私钥创建自签名证书：</p>
-<pre><code>openssl req -new -x509 -key myselfsigned.key -out myselfsigned.cer -days 36500
-</code></pre>
-<p>执行上面的两个操作之后会提示输入以下几个内容(为了显示正常尽量使用英文)：</p><blockquote>
-<ol>
-<li>Country Name (2 letter code) [AU]:CN //国家简称</li>
-</ol>
-</blockquote>
-<ol>
-<li>State or Province Name (full name) [Some-State]:GuangDong //州或省的名字</li>
-<li>Locality Name (eg, city) []:ShenZhen //区或市县的名称</li>
-<li>Organization Name (eg, company) [Internet Widgits Pty Ltd]:Comapny //公司或组织名</li>
-<li>Organizational Unit Name (eg, section) []:Mobile //单位或者是部门名称</li>
-<li>Common Name (e.g. server FQDN or YOUR name) []:xxxxxx //域名或服务器名或IP</li>
-<li>Email Address []:xxxxx@gmail.com //Email地址</li>
-</ol>
-<p>注, 上述可直接在命令中用<code>-subj</code>跟在语句后面, 如:</p>
-<pre><code>openssl req -new -x509 -key myselfsigned.key -out myselfsigned.cer -days 36500 -subj /CN=域名或服务器名或IP
-</code></pre>
-<p>至此, 生成的myselfsigned.cer分别应用到服务器端以及客户端(通过邮件, 链接等方式下发), 即可使用, 配置IIS见下文</p><p>#创建自己的证书颁发机构(CA)
-即使是测试目的, 也会出现有多个站点需要自定义证书的情况, 不可能要求用户每个站点装一个 我们何不把自己添加成一个证书颁发机构(CA), 然后把这个证书装给客户端, 那么由这个CA颁发的证书都会被自动信任.</p><p>首先, 用同样的语法创建一个证书, 我们把名字取明确一些, 就叫<code>myCA</code>吧(跟第一步生成普通证书是一样一样的, 只是这次我们把它理解成一个证书颁发机构)</p>
-<pre><code>openssl genrsa -out myCA.key 2048
-openssl req -new -x509 -key myCA.key -out myCA.cer -days 36500
-</code></pre>
-<p>然后, 基于这个证书生成一个证书请求(<code>CSR</code>), (同样, 先生成一个key, 要用key来请求)</p>
-<pre><code>openssl genrsa -out server.key 2048
-openssl req -new -out server.req -key server.key -subj /CN=域名
-</code></pre>
-<blockquote>
-<p>注:</p></blockquote>
-<ol>
-<li>一旦域名配置了, 用不同于这个域名的主机名来请求, 就会校验失败</li>
-<li>这里用到了上面说的-subj参数</li>
-</ol>
-<p>最后, 通过服务器证书(我们理解的CA), 对这个签发请求进行签发</p>
-<pre><code>openssl x509 -req -in server.req -out server.cer -CAkey myCA.key -CA myCA.cer -days 36500 -CAcreateserial -CAserial serial
-</code></pre>
-<p>#配置IIS
-我们的使用场景是IIS伺服了一个静态文件服务器(没错, 是用来放iOS企业部署的的plist和ipa文件的), 做到如下几步</p><p>##转化证书格式
-IIS导入证书需要转化为pkcs12格式(X509格式?), 中间会询问一次密码, 牢记, 或者与导出的文件一起保存</p>
-<pre><code>openssl pkcs12 -export -clcerts -in server.cer -inkey server.key -out iis.pfx
-</code></pre>
-<p>现在总结一下, 目前为止, 除去<code>key</code>和<code>car</code>, 生成了<code>myCA.cer</code>, <code>server.cer</code> 和<code>iis.pfx</code>三个文件</p><p>##将myCA.cer添加为”受信任的根证书颁发机构”
-打开IE &gt; 工具 &gt; Internet选项 &gt; 内容 &gt; 证书 &gt; 受信任的根证书颁发机构 &gt; 导入 &gt; 选择iis.pfx &gt; 输入密码 &gt; 导入</p><p>##添加服务器证书
-这需要两个步骤</p><p>首先, 在IIS管理器(<code>inetmgr</code>)的根目录上(就是机器名), 选择”服务器证书”, 导入我们刚才用<code>server.cer</code>生成的<code>iis.pfx</code>, 即给IIS添加了一个证书(如果有多个, 重复以上步骤)</p><p>然后, 找到网站节点, 右键, “编辑绑定”, 添加一个供https访问的端口(默认是443), 此时会要求你选择一个证书, 把刚才通过管理器添加的证书名选出来, 即可.</p><p>最后, 把<code>server.cer</code>通用你们企业自己的方式颁发给需要使用的客户端(邮件, 链接等, 均可), 如果是iPhone, 点击了<code>server.cer</code>文件后, 会导航到设置里面安装, 安装并信任后, 在设置 &gt; 通用 &gt; Profiles里面可以看到你信任的证书使用openssl创建自签名证书及部署到IIS教程</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E4%BD%BF%E7%94%A8openssl%E5%88%9B%E5%BB%BA%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%8F%8A%E9%83%A8%E7%BD%B2%E5%88%B0IIS%E6%95%99%E7%A8%8B/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/libxml-tree-h-file-not-found/" target="_self">libxml-tree-h-file-not-found</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/libxml-tree-h-file-not-found/" target="_self">
-                <time class="text-uppercase">
-                    September 22 2018
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>stackoverflow用户对添加libxml2库表现出了极大的抱怨，原因在要把它好好地添加进去实在是太复杂了。</p><p>我就是因为出现了'libxml/tree.h file not found’错误，才发现的这篇贴子，照着做，错误就消除了，备注如下：</p><p>原始地址：<a href="http://stackoverflow.com/questions/1428847/libxml-tree-h-no-such-file-or-directory"><a href="http://stackoverflow.com/questions/1428847/libxml-tree-h-no-such-file-or-directory">http://stackoverflow.com/questions/1428847/libxml-tree-h-no-such-file-or-directory</a></a></p><p>见e.w. parris的答案</p><p>Adding libxml2 is a big, fat, finicky pain in the ass. If you're going to do it, do it before you get too far in building your project.</p><p>You need to add it in two ways:</p><h2>1. Target settings</h2>
-<p>Click on your target (not your project) and select Build Phases.</p><p>Click on the reveal triangle titled Link Binary With Libraries. Click on the + to add a library.</p><p>Scroll to the bottom of the list and select libxml2.dylib. That adds the libxml2 library to your project.</p><blockquote>
-<p>注: xcode 7 以后, <code>.dylib</code>文件变成了<code>.tbd</code>文件, 想要引用<code>.dylib</code>文件, 点<code>add others</code> → <code>cmd+shift+G</code>→type <code>/usr/lib</code> → find <code>libxml2.dylib</code> or <code>libxml2.2.dylib</code></p></blockquote>
-<h2>2. Project settings</h2>
-<p>Now you have to tell your project where to look for it three more times.</p><p>Select the Build Settings tab.</p><p>Scroll down to the Linking section. Under your projects columns double click on the Other Linker Flags row. Click the + and add -lxml2 to the list.</p><p>Still more.</p><p>In the same tab, scroll down to the Search Paths section.</p><p>Under your projects column in the Framework Search Paths row add /usr/lib/libxml2.dylib.</p><p>In the Header Search Paths and the User Header Search Paths row add $(SDKROOT)/usr/include/libxml2.</p><p>In those last two cases make sure that path is entered in Debug and Release.</p><h2>3. Clean</h2>
-<p>Under the Product Menu select Clean.</p><p>Then, if I were you (and lets face it, I probably am) I'd quit Xcode and walk away. When you come back and launch you should be good to go.</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/libxml-tree-h-file-not-found/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/iOS%E5%BA%94%E7%94%A83D-Touch%E5%BF%AB%E6%8D%B7%E8%AE%BF%E9%97%AE/" target="_self">iOS应用3D-Touch快捷访问</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/iOS%E5%BA%94%E7%94%A83D-Touch%E5%BF%AB%E6%8D%B7%E8%AE%BF%E9%97%AE/" target="_self">
-                <time class="text-uppercase">
-                    September 14 2018
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>#用法</p><h2>添加快捷项(UIApplicationShortcutItem)</h2>
-<p>有两种途径, 编辑<code>Info.plist</code>或代码添加</p><h3>Info.plist</h3>
-<div class="highlight"><pre><span></span><span class="nt">&lt;key&gt;</span>UIApplicationShortcutItems<span class="nt">&lt;/key&gt;</span>
-<span class="nt">&lt;array&gt;</span>
-    <span class="nt">&lt;dict&gt;</span>
-       <span class="cm">&lt;!--图标, 必须--&gt;</span>
-    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemIconType<span class="nt">&lt;/key&gt;</span>
-    	<span class="nt">&lt;string&gt;</span>UIApplicationShortcutIconTypeCapturePhoto<span class="nt">&lt;/string&gt;</span>
-    	<span class="cm">&lt;!--标题, 必须--&gt;</span>
-    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemTitle<span class="nt">&lt;/key&gt;</span>
-    	<span class="nt">&lt;string&gt;</span>Scan<span class="nt">&lt;/string&gt;</span>
-    	<span class="cp">&lt;!-副标题--&gt;</span>
-    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemSubtitle<span class="nt">&lt;/key&gt;</span>
-    	<span class="nt">&lt;string&gt;</span>QR Code<span class="nt">&lt;/string&gt;</span>
-    	<span class="cm">&lt;!--快捷项标识符--&gt;</span>
-    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemType<span class="nt">&lt;/key&gt;</span>
-    	<span class="nt">&lt;string&gt;</span>$(PRODUCT_BUNDLE_IDENTIFIER).Scan<span class="nt">&lt;/string&gt;</span>
-    <span class="nt">&lt;/dict&gt;</span>
-<span class="nt">&lt;/array&gt;</span>
-</pre></div>
-<p>完整可选项见<a href="https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/iPhoneOSKeys.html">文档</a></p><h3>代码添加</h3>
-<div class="highlight"><pre><span></span><span class="c1">// Construct the items.</span>
-<span class="kd">let</span> <span class="nv">shortcut3</span> <span class="p">=</span> <span class="bp">UIMutableApplicationShortcutItem</span><span class="p">(</span>
-    <span class="n">type</span><span class="p">:</span> <span class="n">ShortcutIdentifier</span><span class="p">.</span><span class="n">Third</span><span class="p">.</span><span class="n">type</span><span class="p">,</span> 
-    <span class="n">localizedTitle</span><span class="p">:</span> <span class="s">&quot;Play&quot;</span><span class="p">,</span> 
-    <span class="n">localizedSubtitle</span><span class="p">:</span> <span class="s">&quot;Will Play an item&quot;</span><span class="p">,</span> 
-    <span class="n">icon</span><span class="p">:</span> <span class="bp">UIApplicationShortcutIcon</span><span class="p">(</span><span class="n">type</span><span class="p">:</span> <span class="p">.</span><span class="n">play</span><span class="p">),</span> 
-    <span class="n">userInfo</span><span class="p">:</span> <span class="p">[</span>
-        <span class="n">AppDelegate</span><span class="p">.</span><span class="n">applicationShortcutUserInfoIconKey</span><span class="p">:</span> <span class="n">UIApplicationShortcutIconType</span><span class="p">.</span><span class="n">play</span><span class="p">.</span><span class="n">rawValue</span>
-    <span class="p">]</span>
-<span class="p">)</span>
-
-<span class="kd">let</span> <span class="nv">shortcut4</span> <span class="p">=</span> <span class="p">...</span> <span class="c1">// 同上</span>
-
-<span class="c1">// Update the application providing the initial &#39;dynamic&#39; shortcut items.</span>
-<span class="n">application</span><span class="p">.</span><span class="n">shortcutItems</span> <span class="p">=</span> <span class="p">[</span><span class="n">shortcut3</span><span class="p">,</span> <span class="n">shortcut4</span><span class="p">]</span>
-</pre></div>
-<h2>良好实践</h2>
-<ol>
-<li>实现一个<code>(BOOL)handleShortcutItem:(UIApplicationShortcutItem *)shortcutItem</code>返<code>BOOL</code>值的方法, 里面进行业务操作</li>
-<li>实现代理方法:</li>
-</ol>
-
-<pre><code>- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler {
-    completionHandler([self handleShortcutItem:shortcutItem]);
-}
-</code></pre>
-<ol start="3">
-<li>在<code>didBecomeActive</code>方法里判断是否需要 handle 快捷方式</li>
-</ol>
-<div class="highlight"><pre><span></span><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">applicationDidBecomeActive:</span><span class="p">(</span><span class="bp">UIApplication</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nv">application</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">handleShortcutItem</span><span class="o">:</span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="p">];</span><span class="w"></span>
-<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nil</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-</pre></div>
-<ol start="4">
-<li>3说明如果你需要提取一个属性<code>launchedShortcutItem</code></li>
-<li>如果提取了属性, 那么<code>didFinishLaunch</code>也可以顺便改为:</li>
-</ol>
-<div class="highlight"><pre><span></span><span class="kt">BOOL</span><span class="w"> </span><span class="n">shouldPerformAdditionalDelegateHandling</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">YES</span><span class="p">;</span><span class="w"></span>
-<span class="bp">UIApplicationShortcutItem</span><span class="w"> </span><span class="o">*</span><span class="n">shortcutItem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="bp">UIApplicationShortcutItem</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">launchOptions</span><span class="p">[</span><span class="n">UIApplicationLaunchOptionsShortcutItemKey</span><span class="p">];</span><span class="w"></span>
-<span class="k">if</span><span class="p">(</span><span class="n">shortcutItem</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shortcutItem</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">shouldPerformAdditionalDelegateHandling</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NO</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="c1">// 你的其它初始代码</span>
-
-<span class="k">return</span><span class="w"> </span><span class="n">shouldPerformAdditionalDelegateHandling</span><span class="p">;</span><span class="w">  </span><span class="c1">// 通常这里返的是 YES;</span>
-</pre></div>
-<p>试试吧</p><p>#参考资料</p><ol>
-<li><a href="https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/Adopting3DTouchOniPhone/">官方文档</a></li>
-<li><a href="https://developer.apple.com/library/content/samplecode/ApplicationShortcuts/Introduction/Intro.html#//apple_ref/doc/uid/TP40016545">示例代码</a></li>
-<li><a href="https://developer.apple.com/documentation/uikit/uiapplicationshortcuticontype">快捷图标</a></li>
-<li><a href="https://github.com/DeskConnect/SBShortcutMenuSimulator">模拟器支持</a></li>
-<li><a href="https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/iPhoneOSKeys.html">iOS Keys</a> 一些键值的说明</li>
-</ol>
-</div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/iOS%E5%BA%94%E7%94%A83D-Touch%E5%BF%AB%E6%8D%B7%E8%AE%BF%E9%97%AE/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%A4%87%E4%BB%BD%E7%AF%87%E7%BB%98%E5%88%B6%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E7%9A%84%E6%96%87%E7%AB%A0/" target="_self">备份篇绘制聊天气泡的文章</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E5%A4%87%E4%BB%BD%E7%AF%87%E7%BB%98%E5%88%B6%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E7%9A%84%E6%96%87%E7%AB%A0/" target="_self">
-                <time class="text-uppercase">
-                    September 06 2018
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>记记思路</p><div class="highlight"><pre><span></span><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">drawRect:</span><span class="p">(</span><span class="n">CGRect</span><span class="p">)</span><span class="nv">rect</span><span class="w"></span>
-<span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGContextRef</span><span class="w"> </span><span class="n">context</span><span class="o">=</span><span class="n">UIGraphicsGetCurrentContext</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGContextSetLineWidth</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="mf">.5f</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGContextSetStrokeColorWithColor</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">lightGrayColor</span><span class="p">].</span><span class="n">CGColor</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGContextSetRGBFillColor</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">    </span><span class="n">rect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGFloat</span><span class="w"> </span><span class="n">radius</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cornerRadius</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">    </span><span class="n">CGFloat</span><span class="w"> </span><span class="n">minx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRectGetMinX</span><span class="p">(</span><span class="n">rect</span><span class="p">),</span><span class="w"> </span><span class="n">midx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRectGetMidX</span><span class="p">(</span><span class="n">rect</span><span class="p">),</span><span class="w"> </span><span class="n">maxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRectGetMaxX</span><span class="p">(</span><span class="n">rect</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGFloat</span><span class="w"> </span><span class="n">miny</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRectGetMinY</span><span class="p">(</span><span class="n">rect</span><span class="p">),</span><span class="w"> </span><span class="n">midy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRectGetMidY</span><span class="p">(</span><span class="n">rect</span><span class="p">),</span><span class="w"> </span><span class="n">maxy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRectGetMaxY</span><span class="p">(</span><span class="n">rect</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">    </span><span class="n">CGMutablePathRef</span><span class="w"> </span><span class="n">outlinePath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPathCreateMutable</span><span class="p">();</span><span class="w"></span>
-
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="p">[</span><span class="n">User</span><span class="w"> </span><span class="n">isCurrentUser</span><span class="o">:</span><span class="n">message</span><span class="p">.</span><span class="n">user</span><span class="p">])</span><span class="w"></span>
-<span class="w">    </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">minx</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">        </span><span class="n">CGPathMoveToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">midx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">midy</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">maxy</span><span class="p">,</span><span class="w"> </span><span class="n">midx</span><span class="p">,</span><span class="w"> </span><span class="n">maxy</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">maxy</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">midy</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddLineToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">20</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddLineToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">15</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddLineToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">,</span><span class="w"> </span><span class="n">midx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathCloseSubpath</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">        </span><span class="n">CGContextSetShadowWithColor</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">lightGrayColor</span><span class="p">].</span><span class="n">CGColor</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextAddPath</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">outlinePath</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextFillPath</span><span class="p">(</span><span class="n">context</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">        </span><span class="n">CGContextAddPath</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">outlinePath</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextClip</span><span class="p">(</span><span class="n">context</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPoint</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPointMake</span><span class="p">(</span><span class="n">rect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">rect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPoint</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPointMake</span><span class="p">(</span><span class="n">rect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">rect</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextDrawLinearGradient</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">normalGradient</span><span class="p">],</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="k">else</span><span class="w"></span>
-<span class="w">    </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">maxx</span><span class="o">-=</span><span class="mi">5</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathMoveToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">midx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">midy</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">maxy</span><span class="p">,</span><span class="w"> </span><span class="n">midx</span><span class="p">,</span><span class="w"> </span><span class="n">maxy</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">maxy</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">midy</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddLineToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">20</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddLineToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">15</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddLineToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">,</span><span class="w"> </span><span class="n">midx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathCloseSubpath</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">        </span><span class="n">CGContextSetShadowWithColor</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">lightGrayColor</span><span class="p">].</span><span class="n">CGColor</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextAddPath</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">outlinePath</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextFillPath</span><span class="p">(</span><span class="n">context</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">        </span><span class="n">CGContextAddPath</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">outlinePath</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextClip</span><span class="p">(</span><span class="n">context</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPoint</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPointMake</span><span class="p">(</span><span class="n">rect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">rect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPoint</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPointMake</span><span class="p">(</span><span class="n">rect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">rect</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextDrawLinearGradient</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">greenGradient</span><span class="p">],</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-
-
-<span class="w">    </span><span class="n">CGContextDrawPath</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">kCGPathFillStroke</span><span class="p">);</span><span class="w"></span>
-
-<span class="p">}</span><span class="w"></span>
-
-<span class="p">-</span> <span class="p">(</span><span class="n">CGGradientRef</span><span class="p">)</span><span class="nf">normalGradient</span><span class="w"></span>
-<span class="p">{</span><span class="w"></span>
-
-<span class="w">    </span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="o">*</span><span class="n">normalGradientLocations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="n">arrayWithObjects</span><span class="o">:</span><span class="w"></span>
-<span class="w">                                               </span><span class="p">[</span><span class="bp">NSNumber</span><span class="w"> </span><span class="n">numberWithFloat</span><span class="o">:</span><span class="mf">0.0f</span><span class="p">],</span><span class="w"></span>
-<span class="w">                                               </span><span class="p">[</span><span class="bp">NSNumber</span><span class="w"> </span><span class="n">numberWithFloat</span><span class="o">:</span><span class="mf">1.0f</span><span class="p">],</span><span class="w"></span>
-<span class="w">                                               </span><span class="nb">nil</span><span class="p">];</span><span class="w"></span>
-
-
-<span class="w">    </span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="o">*</span><span class="n">colors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="n">arrayWithCapacity</span><span class="o">:</span><span class="mi">2</span><span class="p">];</span><span class="w"></span>
-
-<span class="w">    </span><span class="bp">UIColor</span><span class="w"> </span><span class="o">*</span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">whiteColor</span><span class="p">];</span><span class="w"></span>
-<span class="w">    </span><span class="p">[</span><span class="n">colors</span><span class="w"> </span><span class="n">addObject</span><span class="o">:</span><span class="p">(</span><span class="kt">id</span><span class="p">)[</span><span class="n">color</span><span class="w"> </span><span class="n">CGColor</span><span class="p">]];</span><span class="w"></span>
-<span class="w">    </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">StyleView</span><span class="w"> </span><span class="n">lightColorFromColor</span><span class="o">:</span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">cloudsColor</span><span class="p">]];</span><span class="w"></span>
-<span class="w">    </span><span class="p">[</span><span class="n">colors</span><span class="w"> </span><span class="n">addObject</span><span class="o">:</span><span class="p">(</span><span class="kt">id</span><span class="p">)[</span><span class="n">color</span><span class="w"> </span><span class="n">CGColor</span><span class="p">]];</span><span class="w"></span>
-<span class="w">    </span><span class="bp">NSMutableArray</span><span class="w">  </span><span class="o">*</span><span class="n">normalGradientColors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">colors</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">locCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">normalGradientLocations</span><span class="w"> </span><span class="n">count</span><span class="p">];</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGFloat</span><span class="w"> </span><span class="n">locations</span><span class="p">[</span><span class="n">locCount</span><span class="p">];</span><span class="w"></span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">[</span><span class="n">normalGradientLocations</span><span class="w"> </span><span class="n">count</span><span class="p">];</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="bp">NSNumber</span><span class="w"> </span><span class="o">*</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">normalGradientLocations</span><span class="w"> </span><span class="n">objectAtIndex</span><span class="o">:</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
-<span class="w">        </span><span class="n">locations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">location</span><span class="w"> </span><span class="n">floatValue</span><span class="p">];</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGColorSpaceRef</span><span class="w"> </span><span class="n">space</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGColorSpaceCreateDeviceRGB</span><span class="p">();</span><span class="w"></span>
-
-<span class="w">    </span><span class="n">CGGradientRef</span><span class="w"> </span><span class="n">normalGradient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGGradientCreateWithColors</span><span class="p">(</span><span class="n">space</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="k">__bridge</span><span class="w"> </span><span class="n">CFArrayRef</span><span class="p">)</span><span class="n">normalGradientColors</span><span class="p">,</span><span class="w"> </span><span class="n">locations</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGColorSpaceRelease</span><span class="p">(</span><span class="n">space</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">normalGradient</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-</pre></div>
-<p>效果
-<figure  style="flex: 93.841642228739" ><img width="640" height="341" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/4d8b42255239c728170682586ed2f78c.png" alt=""/></figure></p><p>来源<a href="http://stackoverflow.com/questions/11196112/speech-bubble-in-ios-sdk-using-objective-c">StackOverflow</a></p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%A4%87%E4%BB%BD%E7%AF%87%E7%BB%98%E5%88%B6%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E7%9A%84%E6%96%87%E7%AB%A0/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/UIImage%E8%BD%ACNSData%E6%9C%89%E6%97%B6%E4%B8%BAnil/" target="_self">UIImage转NSData有时为nil</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/UIImage%E8%BD%ACNSData%E6%9C%89%E6%97%B6%E4%B8%BAnil/" target="_self">
-                <time class="text-uppercase">
-                    July 14 2018
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>一般, 我们会用<code>UIImagePNGRepresentation</code>, <code>UIImagePNGRepresentation</code>来达到目的, 但有时候, 发现它的返回值为<code>nil</code>...</p><p>不需要怀疑这么简单处理有什么问题, <a href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIKitFunctionReference/#//apple_ref/c/func/UIImagePNGRepresentation">文档</a> 就是如此:</p><blockquote>
-<p><strong>Return Value</strong></p><p>A data object containing the PNG data, or nil if there was a problem generating the data. <strong>This function may return nil if the image has no data</strong> or if the underlying CGImageRef contains data in an unsupported bitmap format.</p></blockquote>
-<p>也就是说, 没有<code>data</code>的情况还是挺多的, 我们还是放弃这个方法吧, 换别的吧, 提供三种思路</p><h2>复制一张图片</h2>
-<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nv">imageName</span><span class="p">:</span> <span class="nb">String</span> <span class="p">=</span> <span class="s">&quot;MyImageName.png&quot;</span>
-<span class="kd">var</span> <span class="nv">image</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">named</span><span class="p">:</span> <span class="n">imageName</span><span class="p">)</span>
-<span class="kd">var</span> <span class="nv">rep</span> <span class="p">=</span> <span class="n">UIImagePNGRepresentation</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-</pre></div>
-<p>当然, 这不能保证什么</p><h2>重绘一张图片</h2>
-<div class="highlight"><pre><span></span><span class="n">UIGraphicsBeginImageContext</span><span class="p">(</span><span class="n">originalImage</span><span class="p">.</span><span class="n">size</span><span class="p">);</span><span class="w"></span>
-<span class="p">[</span><span class="n">originalImage</span><span class="w"> </span><span class="n">drawInRect</span><span class="o">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">originalImage</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">originalImage</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">)];</span><span class="w"></span>
-<span class="bp">UIImage</span><span class="w"> </span><span class="o">*</span><span class="n">newImage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UIGraphicsGetImageFromCurrentImageContext</span><span class="p">();</span><span class="w"></span>
-<span class="n">UIGraphicsEndImageContext</span><span class="p">();</span><span class="w"></span>
-</pre></div>
-<p>或</p><div class="highlight"><pre><span></span><span class="n">UIGraphicsBeginImageContext</span><span class="p">(</span><span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-<span class="kd">let</span> <span class="nv">image</span> <span class="p">=</span> <span class="n">UIGraphicsGetImageFromCurrentImageContext</span><span class="p">()</span>
-<span class="n">UIGraphicsEndImageContext</span><span class="p">()</span>
-</pre></div>
-<h2>不用 UIImage</h2>
-<p>1和2都没验证过, 但都是在StackOverflow上别人贴出的答案, 我之所以不验证了, 因为我是这么做的</p><div class="highlight"><pre><span></span><span class="n">CGDataProviderRef</span><span class="w"> </span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGImageGetDataProvider</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">CGImage</span><span class="p">);</span><span class="w"></span>
-<span class="bp">NSData</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="n">CFBridgingRelease</span><span class="p">(</span><span class="n">CGDataProviderCopyData</span><span class="p">(</span><span class="n">provider</span><span class="p">));</span><span class="w"></span>
-</pre></div>
-<p>通了就没动力继续试啦, 而且本身已经很简洁了, 此外方法名也非常直白&quot;<code>DataProvider</code>&quot;, 还想怎样!</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/UIImage%E8%BD%ACNSData%E6%9C%89%E6%97%B6%E4%B8%BAnil/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E7%90%86%E8%A7%A3__bridge/" target="_self">理解__bridge</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E7%90%86%E8%A7%A3__bridge/" target="_self">
-                <time class="text-uppercase">
-                    June 14 2018
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>比较受用, 全文转载, <a href="https://abson.github.io/2016/08/19/Object-C-%E7%90%86%E8%A7%A3%E6%A1%A5%E6%8E%A5/">原文点此</a></p><p>##为什么使用要使用 Object-C++</p><p>在 iOS 开发当中，难免会使用到 OC 跟 C++混编的情况，一是为了程序对负责计算性能的提高，二是因为某些三方开源库是用 C++ 来写的，这两个原因也是让我下决心学好 C++ 的因素，毕竟开源才是王道，一直只写着 OC 却不能窥其究竟，确实难受，让只能让人停留在门外，坐井观天。</p><p>##什么是桥接 ？</p><p>桥接，是 object-c 在 ARC 环境下开发出来的一种用作转换 C 指针跟 OC 类指针的一种转换技术。
-当然，这种技术在 MRC 中是不存在的，也就是桥接是 ARC 的连带产物，因为 ARC 就是解放了我们程序员的双手，当然对内存的概念又淡化了，所以在 ARC 未被业界接受之前多少也是因为这个桥接让人们感觉恶心。</p><p>##桥接用到的3个方法：</p><blockquote>
-<p>(__bridge &lt;#type#&gt;)&lt;#expression#&gt;</p></blockquote>
-<p>(__bridge_retained &lt;#CF type#&gt;)&lt;#expression#&gt;
-(__bridge_transfer &lt;#Objective-C type#&gt;)&lt;#expression#&gt;)</p><p>##桥接方法的用途：</p><p>__bridge ：用作于普通的 C 指针与 OC 指针的转换，不做任何操作。</p>
-<pre><code>void *p;
-NSObject *objc = [[NSObject alloc] init];
-p = (__bridge void*)objc;
-</code></pre>
-<p>这里的 void *p 指针直接指向了 NSObject *objc 这个 OC 类，p 指针并不拥有 OC 对象，跟普通的指针指向地址无疑。所以这个出现了一个问题，OC 对象被释放，p 指针也就 Gameover 了。</p><p>__bridge_retained：用作 C 指针与 OC 指针的转换，并且也用拥有着被转换对象的所有权</p><p>那么这个是什么意思呢？可以先看下面展示代码</p>
-<pre><code>@interface ABSClass : NSObject
-@property (nonatomic, copy) NSString *name;
-@end
-@implementation ABSClass
-@end
-int main(int argc, const char * argv[]) {
-    @autoreleasepool {
-        void *p;
-        {
-            ABSClass *objc = [[ABSClass alloc]init];
-            objc.name = @&quot;我们&quot;;
-            p = (__bridge void*)objc;
-        }
-        NSLog(@&quot;%@&quot;, [(__bridge ABSClass *)p name]);
-    }
-    return 0;
-}
-</code></pre>
-<p>这段代码看上去大体与上面一段一样，但是我们添加了一个作用域 {} ， 在作用域中创建 ABSClass *objc 这个对象，然后用作用域外的 p，指针进行桥接(__bridge)指向，然后输出 <code>ABSClass objc这个对象的name属性的值，按道理来说我们会看到控制台上输出我们这两个字。 但是，当我们一运行程序，毫无疑问，程序很崩溃在NSLog(@”%@”, [(__bridge ABSClass )p name]);这句代码中。 有点基础的小伙伴都知道，当ABSClass objc这个对象出了作用域范围，内存就会被回收，但是我们在作用域范围外还用void p去访问objc</code> 的内存，当然会崩溃啦。
-那么，我们尝试修改为以下代码</p>
-<pre><code>@interface ABSClass : NSObject
-@property (nonatomic, copy) NSString *name;
-@end
-@implementation ABSClass
-@end
-int main(int argc, const char * argv[]) {
-    @autoreleasepool {
-        void *p;
-        {
-            ABSClass *objc = [[ABSClass alloc]init];
-            objc.name = @&quot;我们&quot;;
-            p = (__bridge_retained void*)objc;
-        }
-        NSLog(@&quot;%@&quot;, [(__bridge ABSClass *)p name]);
-    }
-    return 0;
-}
-</code></pre>
-<p>程序正常运行，因为我们使用了 __bridge_retained 就相当于 MRC 下的 retain ，将内存计数器 +1，然后用 void *p 指向改内存，所以当 *objc过了作用域，引用计算器 -1，也并没有释放 void *p 所引用的内存。</p><p>__bridge_transfer：用作 C 指针与 OC 指针的转换，并在拥有对象所有权后将原先对象所有权释放。(只支持 C 指针转换 OC 对象指针)</p><p>说起来相当绕口，其实可以理解为先将对象的引用计数器 +1，然后再将引用计数器 -1。
-通过以下代码展现：</p>
-<pre><code>@interface ABSClass : NSObject
-@property (nonatomic, copy) NSString *name;
-@end
-@implementation ABSClass
-@end
-int main(int argc, const char * argv[]) {
-    @autoreleasepool {
-        void *p;
-        @autoreleasepool {
-            ABSClass *obj = [[ABSClass alloc] init];
-            obj.name = @&quot;我们&quot;;
-            p = (__bridge_retained void *)obj;
-        }
-        id obj = (__bridge_transfer id)p;
-        NSLog(@&quot;%@&quot;, [(__bridge ABSClass *)p name]);
-        NSLog(@&quot;%@&quot;, [(ABSClass *)obj name]);
-        NSLog(@&quot;Hello, World!&quot;);
-    }
-    return 0;
-}
-</code></pre>
-<p>以上代码可以正确运行，在我们将 void *p 指针转换为进行 __bridge_transfer 为 OC 指针，这个操作其实相当于 - (void)set: 操作，转换为 MRC 为如下代码 :</p>
-<pre><code>id obj = (id)p
-[obj retain];
-[(id)p release];
-</code></pre>
-<p>我们先将新值 retain，然后再将旧值 release，这样是为了保证引用计数器始终为1，一个 retain 对应一个 release。</p><p>好了，以上做法就是 C/C++ 指针与 OC 对象指针的相互转换介绍，希望能帮助更多的小伙伴理解。</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E7%90%86%E8%A7%A3__bridge/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

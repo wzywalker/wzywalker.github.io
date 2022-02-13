@@ -173,8 +173,29 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+    <loc>/archives/Deep-Learning-with-Python-Notes-7/</loc>
+    <lastmod>2021-10-12</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
+    <loc>/archives/Deep-Learning-with-Python-Notes-6/</loc>
+    <lastmod>2021-10-03</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
     <loc>/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2021-10-03</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
+    <loc>/archives/Deep-Learning-with-Python-Notes-5/</loc>
+    <lastmod>2021-09-27</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
 </url>
@@ -187,7 +208,28 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-    <loc>/archives/Deep-Learning-with-Python-Notes/</loc>
+    <loc>/archives/Deep-Learning-with-Python-Notes-4/</loc>
+    <lastmod>2021-09-22</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
+    <loc>/archives/Deep-Learning-with-Python-Notes-3/</loc>
+    <lastmod>2021-09-18</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
+    <loc>/archives/Deep-Learning-with-Python-Notes-2/</loc>
+    <lastmod>2021-09-15</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
+    <loc>/archives/Deep-Learning-with-Python-Notes-1/</loc>
     <lastmod>2021-09-12</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>

@@ -1,0 +1,387 @@
+<!DOCTYPE HTML>
+<html lang="english">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Prism" />
+    <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/e83a979bdfe76b3eb88998ea61cf43ad.json"
+        }
+
+    </script>
+    
+<title>《Deep Learning with Python》笔记[4] - walker's code blog</title>
+<meta name="author" content="walker" />
+<meta name="description" content="Deep learning for computer vision" />
+<meta property="og:title" content="《Deep Learning with Python》笔记[4] - walker's code blog" />
+<meta property="og:description" content="Deep learning for computer vision" />
+<meta property="og:site_name" content="walker's code blog" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/Deep-Learning-with-Python-Notes-4/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2021-09-22T10:03:00-00.00" />
+<meta name="twitter:title" content="《Deep Learning with Python》笔记[4] - walker's code blog" />
+<meta name="twitter:description" content="Deep learning for computer vision" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
+<main>
+    <section class="prism-section row" id="prism__content">
+        <article class="yue col-md-8 offset-md-2">
+            <h1 class="prism-post-title">《Deep Learning with Python》笔记[4]</h1>
+            <div class="prism-post-time">
+                <time class="text-uppercase">
+                    September 22 2021
+                </time>
+            </div>
+            <div class="prism-content-body">
+                <h1>Deep learning for computer vision</h1>
+<h2>Convolution Network</h2>
+<p>The convolution operation extracts patches from its input feature map and applies the same transformation to all of these patches, producing an output feature map.</p><ul>
+<li>convolution layers learn local patterns(局部特征)<ul>
+<li>The patterns they learn are translation invariant.（局部特征可在图片别的地方重复）</li>
+<li>有的教材里会说每个滑窗一个特征，然后引入<strong>参数共享</strong>才讲到一个特征其实可以用在所有滑窗</li>
+</ul>
+</li>
+<li>They can learn spatial hierarchies of patterns(低级特征堆叠成高级特征)</li>
+<li>depth axis no longer stand for specific colors as in RGB input; rather, they stand for filters(表示图片时，3个通道有原始含义，卷积开始后通道只表示filter了)</li>
+<li><code>valid</code> and <code>same</code> convolution（加不加padding让filter在最后一个像素时也能计算）</li>
+<li><code>stride</code>，滑窗步长</li>
+<li><code>max-pooling</code> or <code>average-pooling</code><ul>
+<li>usually 2x2 windows by stride 2 -&gt; 下采样(downsample)</li>
+<li>更大的感受野</li>
+<li>更小的输出</li>
+<li>不是唯一的下采样方式（比如在卷积中使用stride也可以）</li>
+<li>一般用max而不是average(寻找最强的表现)</li>
+</ul>
+</li>
+<li>小数据集<ul>
+<li>data augmenetation(旋转平衡缩放shear翻转等)<ul>
+<li>不能产生当前数据集不存在的信息</li>
+<li>所以仍需要dropout</li>
+</ul>
+</li>
+<li>pretrained network(适用通用物体)<ul>
+<li>feature extraction</li>
+<li>fine-tuneing</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Using a pretrained convnet</h3>
+<p>A pretrained network is a saved network that was previously trained <strong>on a large dataset</strong> typically on a large-scale image-classification task.</p><h3>Feature extraction</h3>
+<p>Feature extraction consists of using the representations learned by a previous network to extract interesting features from new samples. These features are then run through a <em>new classifier</em>, which is trained from scratch.</p><ol>
+<li>即只使用别的大型模型提取的representations（特征），来构建自己的分类器。</li>
+<li>原本模型的分类器不但是为特定任务写的，而且基本上丧失了位置和空间信息，只保留了对该任务上的presence probability.</li>
+<li>最初的层一般只能提取到线，边缘，颜色等低级特征，再往后会聚合出一些纹理，更高的层就可能会叠加出一些眼，耳等抽象的特征，所以你的识别对象与pretrained数据源差别很大的时候，就需要考虑把最尾巴的几层layer也舍弃掉。（e.g. VGG16最后一层提取了512个feature map）</li>
+<li>两种用法：<ul>
+<li>跑一次预训练模型你选中的部分，把参数存起来（$\leftarrow$错），把输出当作dataset作为自己构建的分类器的input。<ul>
+<li>快，省资源，但是需要把数据集固定住，等于没法做data augmentation</li>
+<li>跑预训练模型时不需要计算梯度(freeze)</li>
+<li>其实应用预训练模型就等于别人的预处理数据集，而真实的模型只有一个小分类器</li>
+</ul>
+</li>
+<li>合并到自定义的网络中当成普通网络训练<ul>
+<li>慢，但是能做数据增广了</li>
+<li>需手动设置来自预训练模型的梯度不需要计算梯度</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>注：这里为什么单独跑预训练模型不能数据增广呢？</p></blockquote>
+<blockquote>
+<p>教材用的是keras, 它处理数据的方式是做一个generaotr，只要你给定数据增广的规则（参数），哪怕只有一张图，它也是可以无穷无尽地给你生成下一张的。所以每一次训练都能有新的数据喂到网络里。这是出于内存考虑，不需要真的把数据全部加载到内存里。</p></blockquote>
+<blockquote>
+<p>而如果你是一个固定的数据集，比如几万条，那么你把所有的数据跑一遍把这个结果当成数据集（全放在内存里），那也不是不可以在这一步用数据增广。</p></blockquote>
+<h3>Fine-tuning</h3>
+<p>Fine-tuning consists of unfreezing a few of the top layers of a frozen model base used for feature extraction, and jointly training both the newly added part of the model (in this case, the fully connected classifier) and these top layers. This is called fine-tuning because it slightly adjusts the more abstract representations of the model being reused, in order to make them more relevant for the problem at hand.</p><p>前面的feature extraction方式，会把预训练的模型你选中的layers给freeze掉，即不计算梯度。这里之所以叫fine-tuning，意思就是会把最后几层(top-layers)给<code>unfreezing</code>掉，这样的好处是保留低级特征，重新训练高级特征，还保留了原来大型模型的结构，不需要自行构建。</p><figure class="vertical-figure" style="flex: 15.321375186846039" ><img width="410" height="1338" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/705011af7667b591af29afe03230ecc5.png" alt=""/></figure><blockquote>
+<p>但是： it’s only possible to fine-tune the top layers of the convolutional base once the classifier on <code>top has already been trained</code>. 预训练模型没有frezze住的话loss将会很大，所以变成了先train一个大体差不多的classifier，再联合起来train一遍高级特征和classifier:</p></blockquote>
+<ol>
+<li>Add your custom network on top of an already-trained base network.</li>
+<li>Freeze the base network.</li>
+<li>Train the part you added. (第一次train)</li>
+<li>Unfreeze some layers in the base network.</li>
+<li>Jointly train both these layers and the part you added.（第二次train）</li>
+</ol>
+<p>但千万别把所有层都unfrezze来训练了</p><ol>
+<li>低级特征都为边缘和颜色，无需重新训练</li>
+<li>小数据量训练大型模型，model capacity相当大，非常容易过拟合</li>
+</ol>
+<h3>Visualizing what convents learn</h3>
+<p>并不是所有的深度学习都是黑盒子，至少对图像的卷积网络不是 -&gt; <code>representations of visual concepts</code>, 下面介绍<strong>三种</strong>视觉化和可解释性的representations的方法。</p><h4>Visualizing intermediate activations</h4>
+<p>就是把每个中间层(基本上是&quot;卷积+池化+激活“)可视化出来，This gives a view into how an input is <code>decomposed</code> into the different filters learned by the network.</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="n">layer_outputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">layer</span><span class="o">.</span><span class="n">output</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[:</span><span class="mi">8</span><span class="p">]]</span> <span class="n">activation_model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">layer_outputs</span><span class="p">)</span>
+
+<span class="n">activations</span> <span class="o">=</span> <span class="n">activation_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">img_tensor</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">matshow</span><span class="p">(</span><span class="n">first_layer_activation</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
+
+<span class="c1"># 注意使用的是matshow而不是show</span>
+</pre></div>
+<figure  style="flex: 101.9047619047619" ><img width="856" height="420" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e5088f559521b7cc9c7b0cb129d275fe.png" alt=""/></figure><p>以上代码是利用了keras的Model特性，将所有layers的输出<strong>摊平</strong>（就是做了一个多头的模型），然后再顺便取了第4和第7个feature map画出来，可以看到，图一感兴趣的是<code>对角线</code>，图二提取的是<code>蓝色的亮点</code>。</p><p>结构化这些输出，可以确信初始layer确实提取的是简单特征，越往后越高级（抽象）。</p><p>A deep neural network effectively acts as an <code>information distillation</code>(信息蒸馏) pipeline, with raw data going in (in this case, RGB pictures) and being repeatedly transformed so that irrelevant information is filtered out (for example, the specific visual appearance of the image), and useful information is <code>magnified and refined</code> (for example, the class of the image).</p><blockquote>
+<p>关键词：有用的信息被不断<strong>放大和强化</strong></p></blockquote>
+<p>书里举了个有趣的例子，要你画一辆自行车。你画出来的并不是一辆充满细节的单车，而往往是你抽象出来的单车，你会用基本的线条勾勒出你对单车特征的理解，比如龙头，轮子等关键部件，以及相对位置。画家为什么能画得又真实又好看？那就是他们真的仔细观察了单车，他们绘画的时候用的并不是特征，而是一切细节，然而对于没有受过训练的普通人来说，往往只能用简单几笔勾勒出脑海中的单车的样子（其实并不是样子，而是特征的组合）</p><h4>Visualizing convnet filters</h4>
+<p>通过强化filter对输出的反应并绘制出来，这是从数学方法上直接观察filter，看什么最能“刺激”一个filter，用”梯度上升“最能体现这种思路：</p><p>把output当成loss，用梯度上升（每次修改input_image）训练出来的output就是这个filter的极端情况，可以认为这个filter其实是在提取什么（responsive to）：</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras.applications</span> <span class="kn">import</span> <span class="n">VGG16</span>
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">backend</span> <span class="k">as</span> <span class="n">K</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">VGG16</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="s1">&#39;imagenet&#39;</span><span class="p">,</span> <span class="n">include_top</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">layer_name</span> <span class="o">=</span> <span class="s1">&#39;block3_conv1&#39;</span>
+<span class="n">filter_index</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">layer_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">layer_name</span><span class="p">)</span><span class="o">.</span><span class="n">output</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">layer_output</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">filter_index</span><span class="p">])</span>  <span class="c1"># output就是loss</span>
+
+<span class="n">grads</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">gradients</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">input</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># 对input求微分</span>
+<span class="n">grads</span> <span class="o">/=</span> <span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">grads</span><span class="p">)))</span> <span class="o">+</span> <span class="mf">1e-5</span><span class="p">)</span>
+
+<span class="n">iterate</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">input</span><span class="p">],</span> <span class="p">[</span><span class="n">loss</span><span class="p">,</span> <span class="n">grads</span><span class="p">])</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># 理解静态图的用法</span>
+<span class="n">loss_value</span><span class="p">,</span> <span class="n">grads_value</span> <span class="o">=</span> <span class="n">iterate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">3</span><span class="p">))])</span>
+
+<span class="n">input_img_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">*</span> <span class="mi">20</span> <span class="o">+</span> <span class="mf">128.</span>
+<span class="n">step</span> <span class="o">=</span> <span class="mf">1.</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">40</span><span class="p">):</span>
+    <span class="n">loss_value</span><span class="p">,</span> <span class="n">grads_value</span> <span class="o">=</span> <span class="n">iterate</span><span class="p">([</span><span class="n">input_img_data</span><span class="p">])</span>
+    <span class="n">input_img_data</span> <span class="o">+=</span> <span class="n">grads_value</span> <span class="o">*</span> <span class="n">step</span>  <span class="c1"># 梯度上升</span>
+</pre></div>
+<p>按上述代码的思路结构化输出并绘图：</p><figure class="vertical-figure" style="flex: 47.148288973384034" ><img width="1240" height="1315" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d3df8099cd6c93450e84a4cd01b67d19.png" alt=""/></figure><p>从线条到纹理到物件（眼睛，毛皮，叶子）</p><blockquote>
+<p>each layer in a convnet learns a collection of filters such that their inputs can be expressed as a <code>combination of the filters</code>.</p></blockquote>
+<blockquote>
+<p>This is similar to how the Fourier transform decomposes signals onto a bank of cosine functions.</p></blockquote>
+<p>用傅里叶变换来类比卷积网络每一层就是把input表示成一系列特征的组合。</p><h4>Visualizing heatmaps of class activation</h4>
+<p>which parts of a given image led a convnet to its final classification decision. 即图像有哪一部分对最终的决策起了作用。</p><ul>
+<li><code>class activation map</code> (CAM) visualization,</li>
+<li><code>Grad-CAM</code>: Visual Explanations from Deep Networks via Gradient-based Localization.”</li>
+</ul>
+<blockquote>
+<p>you’re weighting a spatial map of “how intensely the input image activates different channels” by “how important each channel is with regard to the class,” resulting in a spatial map of “how intensely the input image activates the class.</p></blockquote>
+<p>解读上面这句话：</p><p>不同channels（特征）对图像的激活的强度<br />
++<br />
+每个特征对(鉴定为）该类别的重要程度<br />
+=<br />
+该“类别”对图像的激活的强度</p><p>一张两只亚洲象的例图，使用VGG16来做分类，得到92.5%的置信度的亚洲象的判断，为了visualize哪个部分才是“最像亚洲象”的，使用<code>Grad-CAM</code>处理：</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">keras.applications.vgg16</span> <span class="kn">import</span> <span class="n">VGG16</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">VGG16</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="s1">&#39;imagenet&#39;</span><span class="p">)</span>
+<span class="n">african_e66lephant_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">output</span><span class="p">[:,</span> <span class="mi">386</span><span class="p">]</span>  <span class="c1"># 亚洲象在IMGNET的类别是386</span>
+<span class="n">last_conv_layer</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s1">&#39;block5_conv3&#39;</span><span class="p">)</span> <span class="c1"># top conv layer</span>
+
+<span class="n">grads</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">gradients</span><span class="p">(</span><span class="n">african_elephant_output</span><span class="p">,</span> <span class="n">last_conv_layer</span><span class="o">.</span><span class="n">output</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> 
+<span class="n">pooled_grads</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">iterate</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">function</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">input</span><span class="p">],</span>
+                     <span class="p">[</span><span class="n">pooled_grads</span><span class="p">,</span> <span class="n">last_conv_layer</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">pooled_grads_value</span><span class="p">,</span> <span class="n">conv_layer_output_value</span> <span class="o">=</span> <span class="n">iterate</span><span class="p">([</span><span class="n">x</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">512</span><span class="p">):</span>
+    <span class="n">conv_layer_output_value</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">pooled_grads_value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="n">heatmap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">conv_layer_output_value</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+<figure  style="flex: 77.77777777777777" ><img width="1036" height="666" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9020d228898abcf96e2855b7e028374b.png" alt=""/></figure><p>叠加到原图上去（用cv2融合两张图片，即相同维度的数组以不同权重逐像素相加）：</p><figure  style="flex: 75.97402597402598" ><img width="702" height="462" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9261ae2a67e61c26e078db210f218d11.png" alt=""/></figure>
+            </div>
+        </article>
+        <div class="prism-post-meta col-md-8 offset-md-2">
+    <span>walker</span>
+    
+    <span>/</span>
+    <span>
+        <a class="category no-link" href="/category/posts/" target="_self">
+        posts
+        </a>
+    </span>
+    
+    
+    <span>/</span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/deep%20learning/" target="_self">#deep learning</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" target="_self">#深度学习</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/keras/" target="_self">#keras</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/cv/" target="_self">#cv</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/nlp/" target="_self">#nlp</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/tensorflow/" target="_self">#tensorflow</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/gan/" target="_self">#gan</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/lstm/" target="_self">#lstm</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/language%20mode/" target="_self">#language mode</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/rnn/" target="_self">#rnn</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/heatmap/" target="_self">#heatmap</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/dropout/" target="_self">#dropout</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/machine%20learning/" target="_self">#machine learning</a>
+    </span>
+    
+    
+    
+    <span>/</span>
+    <span class="leancloud_visitors" id="/archives/Deep-Learning-with-Python-Notes-4/" data-flag-title="《Deep Learning with Python》笔记[4]"><span class="leancloud-visitors-count"></span> Views</span>
+    
+</div>
+    </section>
+
+    
+<section id="prism__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+    <ul>
+        
+        <li class="next">
+            <a class="no-link" href="/archives/%E4%B8%80%E5%BC%A0%E5%9B%BE%E8%AF%B4%E6%B8%85%E5%8C%88%E7%89%99%E5%88%A9%E7%AE%97%E6%B3%95%EF%BC%88Hungarian-Algorithm%EF%BC%89/" target="_self" title="一张图说清匈牙利算法（Hungarian-Algorithm）"><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</a>
+        </li>
+        
+        
+        <li class="prev">
+            <a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-3/" target="_self" title="《Deep Learning with Python》笔记[3]">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    
+    <script>
+        var initValine = function() {
+            new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+        }
+
+    </script>
+    <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+    <div class="prism-comment-section container" id="prism__comment">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div id="vcomments"></div>
+            </div>
+        </div>
+    </div>
+    
+
+</main>
+
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
+                    </section>
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
+                            <span>Copyright © 2022 AlanDecode</span>
+                        </p>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+            </footer>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    
+</body>
+
+</html>

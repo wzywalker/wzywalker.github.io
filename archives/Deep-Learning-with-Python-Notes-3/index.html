@@ -1,0 +1,441 @@
+<!DOCTYPE HTML>
+<html lang="english">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Prism" />
+    <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/e83a979bdfe76b3eb88998ea61cf43ad.json"
+        }
+
+    </script>
+    
+<title>《Deep Learning with Python》笔记[3] - walker's code blog</title>
+<meta name="author" content="walker" />
+<meta name="description" content="Fundamentals of machine learning" />
+<meta property="og:title" content="《Deep Learning with Python》笔记[3] - walker's code blog" />
+<meta property="og:description" content="Fundamentals of machine learning" />
+<meta property="og:site_name" content="walker's code blog" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/Deep-Learning-with-Python-Notes-3/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2021-09-18T17:25:00-00.00" />
+<meta name="twitter:title" content="《Deep Learning with Python》笔记[3] - walker's code blog" />
+<meta name="twitter:description" content="Fundamentals of machine learning" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
+<main>
+    <section class="prism-section row" id="prism__content">
+        <article class="yue col-md-8 offset-md-2">
+            <h1 class="prism-post-title">《Deep Learning with Python》笔记[3]</h1>
+            <div class="prism-post-time">
+                <time class="text-uppercase">
+                    September 18 2021
+                </time>
+            </div>
+            <div class="prism-content-body">
+                <h1>Fundamentals of machine learning</h1>
+<ul>
+<li>Supervised learning<ul>
+<li>binary classification</li>
+<li>multiclass classificaiton</li>
+<li>scalar regression</li>
+<li>vector regression（比如bounding-box)</li>
+<li>Sequence generation (摘要，翻译...)</li>
+<li>Syntax tree prediction</li>
+<li>Object detection (一般bounding-box的坐标仍然是回归出来的)</li>
+<li>Image segmentation</li>
+</ul>
+</li>
+<li>Unsupervised learing<ul>
+<li>是数据分析的基础，在监督学习前也常常需要用无监督学习来更好地“理解”数据集</li>
+<li>主要有降维(<code>Dimensionality reduction</code>)和聚类(<code>clustering</code>)</li>
+</ul>
+</li>
+<li>Self-supervised learning<ul>
+<li>其实还是监督学习，因为它仍需要与某个target做比较</li>
+<li>往往半监督（自监督）学习仍然有小量有标签数据集，在此基础上训练的不完善的model用来对无标签的数据进行打标，循环中对无标签数据打标的可靠度就越来越高，这样总体数据集的可靠度也越来越高了。有点像生成对抗网络里生成器和辨别器一同在训练过程中完善。</li>
+<li><code>autoencoders</code></li>
+</ul>
+</li>
+<li>Reinforcement learning<ul>
+<li>an <code>agent</code> receives information about its <code>environment</code> and learns to choose <code>actions</code> that will maximize some <code>reward</code>.</li>
+<li>可以用训练狗来理解</li>
+<li>工业界的应用除了游戏就是机器人了</li>
+</ul>
+</li>
+</ul>
+<h2>Data preprocessing</h2>
+<ul>
+<li>vectorization</li>
+<li>normalization (small, homogenous)</li>
+<li>handling missing values<ol>
+<li>除非0有特别的含义，不然一般可以对缺失值补0</li>
+<li>你不能保证测试集没有缺失值，如果训练集没看到过缺失值，那么将不会学到忽略缺失值<ul>
+<li><em>复制</em>一些训练数据并且随机drop掉一些特征</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>feature extraction<ul>
+<li>making a problem easier by expressing it in a simpler way. It usually requires understanding the problem <strong>in depth</strong>.</li>
+<li><strong>Before</strong> deep learning, feature engineering used to be <code>critical</code>, because classical <strong>shallow algorithms</strong> didn’t have <code>hypothesis spaces</code> rich enough to learn useful features by themselves. (又见假设空间)</li>
+<li>但是好的特征仍然能让你在处理问题上更优雅、更省资源，也能减小对数据集规模的依赖。</li>
+</ul>
+</li>
+</ul>
+<h2>Overfitting and underfitting</h2>
+<ul>
+<li>Machine learning is the tension between <code>optimization</code> and <code>generalization</code>.</li>
+<li>optimization要求你在训练过的数据集上能达到最好的效果</li>
+<li>generalization则希望你在没见过的数据上有好的效果</li>
+<li>如果训练集上loss小，测试集上也小，说明还有优化(optimize)的余地 -&gt; <code>underfitting</code>看loss<ul>
+<li>just keep training</li>
+</ul>
+</li>
+<li>如果验证集上generalization stop improving(泛化不再进步，一般看衡量指标，比如准确率) -&gt; <code>overfitting</code></li>
+</ul>
+<p>解决overfitting的思路：</p><ul>
+<li><strong>the best solution</strong> is get more trainging data</li>
+<li><strong>the simple way</strong> is to reduce the size of the model<ul>
+<li>模型容量(<code>capacity</code>)足够大，就足够容易<em>记住</em>input和target的映射，没推理什么事了</li>
+</ul>
+</li>
+<li>add constraints -&gt; weight <code>regularization</code></li>
+<li>add dropout</li>
+</ul>
+<h2>Regularization</h2>
+<p><strong>Occam’s razor</strong></p><blockquote>
+<p>given <em>two explanations</em> for something, the explanation most likely to be correct is the <strong>simplest one</strong>—the one that makes <strong>fewer assumptions</strong>.</p></blockquote>
+<p>即为传说中<em>如无必要，勿增实体</em>的<code>奥卡姆剃刀原理</code>，这是在艺术创作领域的翻译，我们这里还是直译的好，即能解释一件事的各种理解中，越简单的，假设条件越少的，往往是最正确的，引申到机器学习，就是如何定义一个<code>simple model</code></p><p>A simple model in this context is:</p><ul>
+<li>a model where the distribution of parameter values has <code>less entropy</code></li>
+<li>or a model with fewer parameters</li>
+</ul>
+<p>实操就是，就是迫使选择那些值比较小的weights，which makes the distribution of weight values more regular. This is called weight <code>regularization</code>。这个解释是我目前看到的最<code>regularization</code>这个名字最好的解释，“正则化”三个字都认识，根本没人知道这三个字是什么意思，翻译了跟没番一样，而使分布更“常规化，正规化”，好像更有解释性。</p><p>别的教材里还会告诉你这里是对大的权重的<strong>惩罚</strong>（设计损失函数加上自身权重后，权重越大，loss也就越大，这就是对大权重的惩罚）</p><ul>
+<li>L1 regularization—The cost added is proportional to the absolute value of the weight coefficients (the L1 norm of the weights).</li>
+<li>L2 regularization—The cost added is proportional to the square of the value of the weight coefficients (the L2 norm of the weights).</li>
+</ul>
+<p>L2 regularization is also called <code>weight decay</code>in the context of neural networks. Don’t let the different name confuse you: weight decay is mathematically <strong>the same as</strong> L2 regularization.</p><blockquote>
+<p>只需要在训练时添加正则化</p></blockquote>
+<h2>Dropout</h2>
+<p>randomly dropping out (setting to zero) a number of output features of the layer during training.</p><p>dropout的作者Geoff Hinton解释dropout的灵感来源于银行办事出纳的不停更换和移动的防欺诈机制，可能认为一次欺诈的成功实施需要员工的配合，所以就尽量降低这种配合的可能性。于是他为了防止神经元也能聚在一起”密谋”，尝试随机去掉一些神经元。以及对输出添加噪声，让模型更难记住某些patten。</p><h2>The universal workflow of machine learning</h2>
+<ol>
+<li>Defining the problem and assembling a dataset<ul>
+<li>What will your input data be?</li>
+<li>What are you trying to predict?</li>
+<li>What type of problem are you facing?</li>
+<li>You hypothesize that your outputs can be predicted given your inputs.</li>
+<li>You hypothesize that your available data is sufficiently informative to learn the relationship between inputs and outputs.</li>
+<li>Just because you’ve assembled exam- ples of inputs X and targets Y doesn’t mean X contains enough information to predict Y.</li>
+</ul>
+</li>
+<li>Choosing a measure of success<ul>
+<li>accuracy? Precision and recall? Customer-retention rate?</li>
+<li>balanced-classification problems,<ul>
+<li>accuracy and area under the <code>receiver operating characteristic curve</code> (ROC AUC)</li>
+</ul>
+</li>
+<li>class-imbalanced problems<ul>
+<li>precision and recall.</li>
+</ul>
+</li>
+<li>ranking problems or multilabel classification<ul>
+<li>mean average precision</li>
+</ul>
+</li>
+<li>...</li>
+</ul>
+</li>
+<li>Deciding on an evaluation protocol<ul>
+<li>Maintaining a hold-out validation set—The way to go when you have plenty of data</li>
+<li>Doing <code>K-fold</code> cross-validation—The right choice when you have too few samples for hold-out validation to be reliable</li>
+<li>Doing <code>iterated K-fold</code> validation—For performing highly accurate model evaluation when <em>little data</em> is available</li>
+</ul>
+</li>
+<li>Preparing your data<ul>
+<li>tensor化，向量化，归一化等</li>
+<li>may do some feature engineering</li>
+</ul>
+</li>
+<li>Developing a model that does better than a baseline<ul>
+<li>baseline:<ul>
+<li>基本上是用纯随机(比如手写数字识别，随机猜测为10%)，和纯相关性推理（比如用前几天的温度预测今天的温度，因为温度变化是连续的），不用任何机器学习做出baseline</li>
+</ul>
+</li>
+<li>model:<ul>
+<li>Last-layer activation<ul>
+<li>sigmoid, relu系列， 等等</li>
+</ul>
+</li>
+<li>Loss function<ul>
+<li>直接的预测值真值的差，如MSE</li>
+<li>度量代理，如crossentropy是ROC AUC的proxy metric</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Optimization configuration<ul>
+<li>What optimizer will you use? What will its learning rate be? In most cases, it’s safe to go with rmsprop and its default learning rate.</li>
+</ul>
+</li>
+<li>Scaling up: developing a model that overfits<ul>
+<li>通过增加layers, 增加capacity，增加training epoch来加速overfitting，从而再通过减模型和加约束等优化</li>
+</ul>
+</li>
+<li>Regularizing your model and tuning your hyperparameters<ul>
+<li>Add dropout.</li>
+<li>Try different architectures: add or remove layers.</li>
+<li>Add L1 and/or L2 regularization.</li>
+<li>Try different hyperparameters (such as the number of units per layer or the learning rate of the optimizer) to find the optimal configuration.</li>
+<li>Optionally, iterate on feature engineering: add new features, or remove features that don’t seem to be informative.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+  <th>Problem type</th>
+  <th>Last-layer activation</th>
+  <th>Loss function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Binary classification</td>
+  <td>sigmoid</td>
+  <td>binary_crossentropy</td>
+</tr>
+<tr>
+  <td>Multiclass, single-label classification</td>
+  <td>softmax</td>
+  <td>categorical_crossentropy</td>
+</tr>
+<tr>
+  <td>Multiclass, multilabel classification</td>
+  <td>sigmoid</td>
+  <td>binary_crossentropy</td>
+</tr>
+<tr>
+  <td>Regression to arbitrary values</td>
+  <td>None</td>
+  <td>mse</td>
+</tr>
+<tr>
+  <td>Regression to values between 0 and 1</td>
+  <td>sigmoi</td>
+  <td>mse or binary_crossentropy</td>
+</tr>
+</tbody>
+</table>
+
+            </div>
+        </article>
+        <div class="prism-post-meta col-md-8 offset-md-2">
+    <span>walker</span>
+    
+    <span>/</span>
+    <span>
+        <a class="category no-link" href="/category/posts/" target="_self">
+        posts
+        </a>
+    </span>
+    
+    
+    <span>/</span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/deep%20learning/" target="_self">#deep learning</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" target="_self">#深度学习</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/keras/" target="_self">#keras</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/cv/" target="_self">#cv</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/nlp/" target="_self">#nlp</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/tensorflow/" target="_self">#tensorflow</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/gan/" target="_self">#gan</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/lstm/" target="_self">#lstm</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/language%20mode/" target="_self">#language mode</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/rnn/" target="_self">#rnn</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/heatmap/" target="_self">#heatmap</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/dropout/" target="_self">#dropout</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/machine%20learning/" target="_self">#machine learning</a>
+    </span>
+    
+    
+    
+    <span>/</span>
+    <span class="leancloud_visitors" id="/archives/Deep-Learning-with-Python-Notes-3/" data-flag-title="《Deep Learning with Python》笔记[3]"><span class="leancloud-visitors-count"></span> Views</span>
+    
+</div>
+    </section>
+
+    
+<section id="prism__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+    <ul>
+        
+        <li class="next">
+            <a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-4/" target="_self" title="《Deep Learning with Python》笔记[4]"><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</a>
+        </li>
+        
+        
+        <li class="prev">
+            <a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-2/" target="_self" title="《Deep Learning with Python》笔记[2]">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    
+    <script>
+        var initValine = function() {
+            new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+        }
+
+    </script>
+    <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+    <div class="prism-comment-section container" id="prism__comment">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div id="vcomments"></div>
+            </div>
+        </div>
+    </div>
+    
+
+</main>
+
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
+                    </section>
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
+                            <span>Copyright © 2022 AlanDecode</span>
+                        </p>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+            </footer>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    
+</body>
+
+</html>
