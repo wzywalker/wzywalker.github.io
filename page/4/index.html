@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/46c4ce6a93d100412abf26f8110fcfe0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/827e9617557ff021517a683161d3114d.json"
         }
 
     </script>
@@ -55,6 +55,233 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-7/" target="_self">《Deep Learning with Python》笔记[7]</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-7/" target="_self">
+                <time class="text-uppercase">
+                    October 12 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><h1>Generative deep learning</h1>
+<p>Our perceptual modalities, our language, and our artwork all have <code>statistical structure</code>. Learning this structure is what deep-learning algorithms excel at.</p><p>Machine-learning models can learn the <code>statistical latent space</code> of images, music, and stories, and they can then<code>sample from this space</code>, <strong>creating new artworks</strong> with characteristics similar to those the model has seen in its training data.</p><h2>Text generation with LSTM</h2>
+<h3>Language model</h3>
+<p>很多地方都在按自己的理解定义<code>language model</code>，这本书定义很明确，能为根据前文预测下一个或多个token建立概率模型的网络。</p><blockquote>
+<p>any network that can model the probability of the next token given the previous ones is called a language model.</p></blockquote>
+<ol>
+<li>所以首先，它是一个network</li>
+<li>它做的事是model一个probability</li>
+<li>内容是the next token</li>
+<li>条件是previous tokens</li>
+</ol>
+<p>一旦你有了这样一个language model，你就能<code>sample from it</code>，这就是前面笔记里的sample from lantent space, 然后generate了。</p><h3>greedy sampling and stochastic sampling</h3>
+<p>如果根据概率模型每次都选“最可能”的输出，在连贯性上被证明是不好的，而且也丧失了创造性，所以还是给了一定的随机性能选到“不那么可能”的输出。</p><p>因为人类思维本身也是<code>跳跃</code>的。</p><p>考虑两个输出下一个token时的极端情况：</p><!-- --> | <!-- --> | <!-- --> | <!-- -->
+<p>------- | ------- | ------- | -------
+纯随机，所有可选词的概率是均等的 | 毫无意义 | <code>max entropy</code> | 创造性高
+greedy sampling | 毫无生趣 | <code>minimum entropy</code> | 可预测性高</p><p>实现方式：<code>softmax temperature</code></p><p>除一个<code>温度</code>，如果温度大于1，那么温度越大，被除数缩幅度就越大（这样温差就越小，分布会更平均）-&gt; 偏向了纯随机的概率结构（均等）</p><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="k">def</span> <span class="nf">reweight_distribution</span><span class="p">(</span><span class="n">original_distribution</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="n">distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">original_distribution</span><span class="p">)</span> <span class="o">/</span> <span class="n">temperature</span>
+    <span class="n">distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">distribution</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">distribution</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">distribution</span><span class="p">)</span>
+</pre></div>
+<p>写成公式
+$
+\frac{e^{\frac{log(d)}{T}}}{\sum e^{\frac{log(d)}{T}}}
+$
+这是对温度和sigmoid做了融合：</p><ol>
+<li>一个是对目标分布取自然对数后除温度再当成e的指数给幂回去（如果不除温度，那就是先log再e，等于是原数）</li>
+<li>标准的sigmoid方程</li>
+</ol>
+<blockquote>
+<p>这里回顾一个概念：Sampling from a space</p></blockquote>
+<p>书里大量用了这个概念，结合代码，其实就是一个predict函数，也就是说，一般人理解的“<code>预测，推理</code>”，是从业务逻辑方面来理解，作者更愿意从统计学和线性代数角度来理解。</p><p>两种训练方法：</p><ol>
+<li>每次用N个字，来预测第N+1个字，即output只有1个(voc_size, 1)，训练的是language model</li>
+<li>每次用N个字(a, b), 来预测(a+1, b+1)， output有N个(voc_size, N)，训练的是特定的任务，比如写诗，作音乐</li>
+</ol>
+<p>过程：</p><ol>
+<li>准备数据，X为一组句子，Y为每一个句子对应的下一个字（全部向量化）</li>
+<li>搭建一个LSTM + Dense 的网络，输出根据具体情况要么为1，要么为N</li>
+<li>每一个epoch里均进行预测（如果不是为了看过程，有必要吗？我们要最后一轮的预测不就行了？）<ul>
+<li>进行一次fit(就是train)，得到优化后的参数</li>
+<li>随机取一段文本，用作种子（用来生成第一个字）</li>
+<li>计算生成多少个字，就开始for循环<ul>
+<li>向量化当前的种子（会越来越长）</li>
+<li>predict，得到每个字的概率</li>
+<li>softmax temperature，平滑概率，取出next_token</li>
+<li>next_token转回文本，附加到seed后面</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3>DeepDream</h3>
+<p>看了一遍，不感兴趣。核心思路跟视觉化filter的思路是一样的：<code>gradient ascent</code></p><ol>
+<li>从对每个layer里的单个filter做梯度上升变成了对整个layer做梯度上升</li>
+<li>不再从随机噪声开始，而是从一张真实图片开始，实现这些layer里对图片影响最大的patterns的distorting</li>
+</ol>
+<h3>Neural style transfer</h3>
+<p>Neural style transfer consists of applying the <code>style</code> of a reference image to a target image while conserving the <code>content</code> of the target image.</p><ul>
+<li>两个对象：<code>reference</code>, <code>target</code> image</li>
+<li>两个概念：<code>style</code>和<code>content</code></li>
+</ul>
+<p>对<code>B</code>的content应用<code>A</code>的style，我们可以理解为“笔刷”，或者用前些年的流行应用来解释：把一副画水彩化，或油画化。</p><p>把style分解为不同spatial scales上的：纹理，颜色，和visual pattern</p><p>想用深度学习来尝试解决这个问题，首先至少得定义损失函数是什么样的。</p><p>If we were able to mathematically define <code>content</code> and <code>style</code>, then an appropriate loss function to minimize would be the following:</p><div class="highlight"><pre><span></span><span class="n">loss</span> <span class="o">=</span> <span class="n">distance</span><span class="p">(</span><span class="n">style</span><span class="p">(</span><span class="n">reference_image</span><span class="p">)</span> <span class="o">-</span> <span class="n">style</span><span class="p">(</span><span class="n">generated_image</span><span class="p">))</span> <span class="o">+</span>
+        <span class="n">distance</span><span class="p">(</span><span class="n">content</span><span class="p">(</span><span class="n">original_image</span><span class="p">)</span> <span class="o">-</span> <span class="n">content</span><span class="p">(</span><span class="n">generated_image</span><span class="p">))</span>
+</pre></div>
+<p>即对新图而言，<code>纹理要无限靠近A，内容要无限靠近B</code>。</p><ul>
+<li>the content loss<ul>
+<li>图像内容属于高级抽象，因此只需要top layers参与就行了，实际应用中只取了最顶层</li>
+</ul>
+</li>
+<li>the style loss<ul>
+<li>应用<code>Gram matrix</code><ul>
+<li>the inner product of the feature maps of a given layer</li>
+<li>correlations between the layer's feature</li>
+<li>需要生成图和参考图的每一个对应的layer拥有相同的纹理(same <code>textures</code> at different <code>spatial scales</code>)，因此需要所有的layer参与</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>从这里应该也能判断出要搭建网络的话，input至少由三部分（三张图片）构成了。</p><p><strong>demo</strong></p><ul>
+<li>input为参考图，目标图，和生成图（占位），concatenate成一个tensor</li>
+<li>用VGG19来做特征提取</li>
+<li>计算loss<ol>
+<li>用生成图和<code>目标图</code>的<code>top_layer</code>以L2 norm距离做loss</li>
+<li>用生成图和<code>参考图</code>的<code>every</code> layer以L2 Norm做loss并累加</li>
+<li>对生成图偏移1像素做regularization loss（具体看书）</li>
+<li>上述三组loss累加，为一轮的loss</li>
+</ol>
+</li>
+<li>用loss计算对input(即三联图)的梯度</li>
+</ul>
+<h2>Generating images</h2>
+<blockquote>
+<p>Sampling from a latent space of images to create entirely new images</p></blockquote>
+<p>熟悉的句式又来了。</p><p>核心思想：</p><ol>
+<li>low-dimensional <code>latent space</code> of representations<ul>
+<li>一般是个vector space</li>
+<li>any point can be mapped to a realistic-looking image</li>
+</ul>
+</li>
+<li>the module capable of <code>realizing this mapping</code>, can take point as input, then output an image, this called:<ul>
+<li>generator -&gt; GAN</li>
+<li>decoder -&gt; VAE</li>
+</ul>
+</li>
+</ol>
+<p>VAE v.s. GAN</p><ul>
+<li>VAEs are great for learning latent spaces that are <code>well structured</code></li>
+<li>GANs generate images that can potentially be <code>highly realistic</code>, but the latent space they come from may not have as much structure and continuity.</li>
+</ul>
+<h3>VAE（variational autoencoders）</h3>
+<p>given a <code>latent space</code> of representations, or an embedding space, <code>certain directions</code> in the space <strong>may</strong> encode interesting axes of variation in the original data. -&gt; inspired by <code>concept space</code></p><p>比如包含人脸的数据集的latent space里，是否会存在<code>smile vectors</code>，定位这样的vector，就可以修改图片，让它projecting到这个latent space里去。</p><p><strong>Variational autoencoders</strong></p><p>Variational autoencoders are a kind of <em>generative model</em> that’s especially appropriate for the task of <strong>image editing</strong> via concept vectors.</p><p>They’re a modern take on <code>autoencoders</code> (a type of network that aims to <code>encode</code>an input to a <code>low-dimensional</code> latent space and then decode it back) that mixes ideas from deep learning with <strong>Bayesian inference</strong>.</p><ul>
+<li>VAE把图片视作隐藏空间的参数进行统计过程的结果。</li>
+<li>参数就是表示一种正态分布的mean和variance（实际取的log_variance)</li>
+<li>用这个分布可以进行采样(sample)</li>
+<li>映射回original image</li>
+</ul>
+<ol>
+<li>An encoder module turns the input samples <em>input_img</em> into two parameters in a latent space of representations, <code>z_mean</code> and <code>z_log_variance</code>.</li>
+<li>You randomly sample a point z from the latent normal distribution that’s assumed to generate the input image, via $z = z_mean + e^{z_log_variance} \times \epsilon$, where $\epsilon$ is a random tensor of small values.</li>
+<li>A decoder module maps <em>this point</em> in the latent space back to the original input image.</li>
+</ol>
+<blockquote>
+<p>Because epsilon is random, the process ensures that every point that’s <strong>close to the latent location</strong> where you encoded input_img (z-mean) can be decoded to something <strong>similar</strong> to input_img, thus forcing the latent space to be continuously meaningful.</p></blockquote>
+<ol>
+<li>所以VAE生成的图片是可解释的，比如在latent space中距离相近的两点，decode出来的图片相似度也就很高。</li>
+<li>多用于编辑图片，并且能生成动画过程（因为是连续的）</li>
+</ol>
+<p>伪代码(不算，可以说是骨干代码）：</p><div class="highlight"><pre><span></span><span class="n">z_mean</span><span class="p">,</span> <span class="n">z_log_variance</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">input_img</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">z_mean</span> <span class="o">+</span> <span class="n">exp</span><span class="p">(</span><span class="n">z_log_variance</span><span class="p">)</span> <span class="o">*</span> <span class="n">epsilon</span>  <span class="c1"># sampling</span>
+<span class="n">reconstructed_img</span> <span class="o">=</span> <span class="n">decoder</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">input_img</span><span class="p">,</span> <span class="n">reconstructed_img</span><span class="p">)</span>
+</pre></div>
+<p>VAE encoder network</p><div class="highlight"><pre><span></span><span class="n">img_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">latent_dim</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">input_img</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">shape_before_flattening</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">int_shape</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Flatten</span><span class="p">()(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">z_mean</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">latent_dim</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">z_log_var</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">latent_dim</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+<ol>
+<li>可见是一个标准的multi-head的网络</li>
+<li>可见所谓的latent space，其实就是transforming后的结果</li>
+<li>encode的目的是回归出两个参数（本例是两个2维参数）</li>
+<li>两个参数一个理解为mean, 一个理解为log_variance</li>
+</ol>
+<p>decoder过程就是对mean和var随机采样（得到z)，然后不断上采样(<code>Conv2DTranspose</code>)得到形状与源图一致的输出(得到z_decode)的过程。</p><ol>
+<li>z_decode跟z做BCE loss</li>
+<li>还要加一个regularization loss防止overfitting</li>
+</ol>
+<blockquote>
+<p>此处请看书，演示了自定义的loss。因为keras高度封装，所以各种在封装之外的自定义的用法尤其值得关注。比如这里，自定义了loss之后，Model和fit里就不需要传Y，compile时也不需要传loss了。</p></blockquote>
+<blockquote>
+<p>loss是在最后一层layer里计算的，并且通过一个layer方法<code>add_loss</code>，把loss和input通知给了network（如果你想知道注入点的话）</p></blockquote>
+<p>使用模型的话，就是生成两组随机数，当成mean和log_variance，观察decode之后的结果。</p><h3>GAN</h3>
+<p><code>Generative adversarial network</code>可以创作以假乱真的图片。通过训练最好的造假和和最好的鉴别者来达到“创造”越来越逼近人类创作的作品。</p><ul>
+<li><strong>Generator</strong> network: Takes as input a random vector (a random point in the latent space), and decodes it into a synthetic image</li>
+<li><strong>Discriminator</strong> network (or adversary): Takes as input an image (real or synthetic), and predicts whether the image came from the training set or was created by the generator network.</li>
+</ul>
+<p><strong>deep convolutional GAN (DCGAN)</strong></p><ul>
+<li>a GAN where the generator and discriminator are deep convnets.</li>
+<li>In particular, it uses a <code>Conv2DTranspose</code> layer for image upsampling in the generator.</li>
+</ul>
+<p>训练生成器是冲着能让鉴别器尽可能鉴别为真的方向的：the generator is trained to <code>fool</code> the discriminator。</p><blockquote>
+<p>这句话其实暗含了一个前提，下面会说，就是此时discriminator是确定的。即在确定的鉴别能力下，尽可能去拟合generator的输出，让它能通过当前鉴别器的测试。</p></blockquote>
+<p>书中说训练DCGAN很复杂，而且很多trick, 超参靠的是经验而不是理论支撑，摘抄并笔记a bag of tricks如下：</p><ul>
+<li>We use <code>tanh</code> as the last activation in the generator, instead of sigmoid, which is more commonly found in other types of models.</li>
+<li>We sample points from the latent space using a <code>normal distribution</code> (Gaussian distribution), not a uniform distribution.</li>
+<li>Stochasticity is good to induce robustness. Because GAN training results in a dynamic equilibrium, GANs are likely to get stuck in all sorts of ways. Introducing randomness during training helps prevent this. We introduce randomness in two ways:<ul>
+<li>by using <code>dropout</code> in the discriminator</li>
+<li>and by adding <code>random noise</code> to the labels for the discriminator.</li>
+</ul>
+</li>
+<li>Sparse gradients can hinder GAN training. In deep learning, sparsity is often a desirable property, <strong>but not in GANs</strong>. Two things can induce gradient sparsity: <code>max pooling</code> operations and <code>ReLU</code> activations.<ul>
+<li>Instead of max pooling, we recommend using <code>strided convolutions</code> for downsampling(用步长卷积代替pooling),</li>
+<li>and we recommend using a <code>LeakyReLU</code> layer instead of a ReLU activation. It’s similar to ReLU, but it relaxes sparsity constraints by allowing small negative activation values.</li>
+</ul>
+</li>
+<li>In generated images, it’s common to see <code>checkerboard artifacts</code>(stirde和kernel size不匹配千万的) caused by unequal coverage of the pixel space in the generator.<ul>
+<li>To fix this, we use a kernel size that’s divisible by the stride size whenever we use a strided <code>Conv2DTranpose</code> or Conv2D in both the generator and the discriminator.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Train</strong></p><ol>
+<li>Draw random points in the latent space (random noise).</li>
+<li>Generate images with generator using this random noise.</li>
+<li>Mix the generated images with real ones.</li>
+<li>Train discriminator using these mixed images, with corresponding targets:<ul>
+<li>either “real” (for the real images) or “fake” (for the generated images).</li>
+<li>所以鉴别器是<code>单独训练的</code>（前面笔记铺垫过了）</li>
+<li>下面就是train整个DCGAN了：</li>
+</ul>
+</li>
+<li>Draw new random points in the latent space.</li>
+<li>Train gan using these random vectors, with targets that all say “these are real images.” This updates the weights of the generator (only, because the discriminator is frozen inside gan) to move them toward getting the discriminator to predict “these are real images” for generated images: this trains the generator to fool the discriminator.<ul>
+<li>只train网络里的generator</li>
+<li>discriminator不训练，因为是要用“已经训练到目前程度的”discriminator来做下面的任务</li>
+<li>任务就是只送入伪造图，并声明所有图都是真的，去让generator生成能逼近这个声明的图</li>
+<li>generator就是这么训练出来的。</li>
+<li>所以实际代码是一次epoch是由train一个<code>discriminator</code>和train一个<code>GAN</code>组成.</li>
+</ul>
+</li>
+</ol>
+<p>因为鉴别器和生成器是一起训练的，因此前几轮生成的肯定是噪音，但前几轮鉴别器也是瞎鉴别的。</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Deep-Learning-with-Python-Notes-7/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-6/" target="_self">《Deep Learning with Python》笔记[6]</a></h1>
@@ -1909,31 +2136,6 @@ $$</p>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/HMM%E3%80%81NER%E3%80%81PoS%E3%80%81Viterbi%E7%AC%94%E8%AE%B0/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/Mac%E8%BF%9C%E7%A8%8BWindows-10%E9%87%8C%E7%94%A8Anaconda%E8%A3%85%E7%9A%84Jupyter-lab/" target="_self">Mac远程Windows-10里用Anaconda装的Jupyter-lab</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/Mac%E8%BF%9C%E7%A8%8BWindows-10%E9%87%8C%E7%94%A8Anaconda%E8%A3%85%E7%9A%84Jupyter-lab/" target="_self">
-                <time class="text-uppercase">
-                    June 13 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>家里台式机配置比笔记本好多了，但又习惯了苹果本，怎么在小本本上直接跑windows上的jupyter呢？</p><p>首先，给Windows 10 装上<a href="https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse">OpenSSH</a></p><p>如果你不是用的Anaconda等虚拟环境而是把python和jupyter lab装在了本机以及写在了path里，理论上你用ssh连上windows后在shell里直接<code>jupyter lab</code>就好了，可是我是用了Anaconda的，ssh进去以及windows自身的命令行环境里都是执行不了conda和jupyter的</p><blockquote>
-<p>可能仅仅只是path的原因，但应该没这么简单，考虑到端口转发已经能实现我的目的了，就不深究了。</p></blockquote>
-<p>这时使用<code>ssh</code>的本地端口转发功能可以达到目的：</p><div class="highlight"><pre><span></span>$ ssh -L <span class="m">2121</span>:host2:21 host3
-</pre></div>
-<p>即把<code>host3</code>的端口<code>21</code>转发到<code>host2</code>的2121上去，当然，大多数情况下<code>host2</code>就是本机，那么<code>localhost</code>就好了：</p><div class="highlight"><pre><span></span>$ ssh -L <span class="m">8000</span>:localhost:8889 windows-server
-</pre></div>
-<p>当然，<code>8889</code>是你在windows上运行<code>--no-browser</code>的jupyter lab设定的端口：</p><div class="highlight"><pre><span></span>jupyter lab --no-browser --post<span class="o">=</span><span class="m">8889</span>
-</pre></div>
-</div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Mac%E8%BF%9C%E7%A8%8BWindows-10%E9%87%8C%E7%94%A8Anaconda%E8%A3%85%E7%9A%84Jupyter-lab/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

@@ -1,0 +1,516 @@
+<!DOCTYPE HTML>
+<html lang="english">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Prism" />
+    <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/827e9617557ff021517a683161d3114d.json"
+        }
+
+    </script>
+    
+<title>Programming iOS 14 - Layer - walker's code blog</title>
+<meta name="author" content="walker" />
+<meta name="description" content="《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第3章" />
+<meta property="og:title" content="Programming iOS 14 - Layer - walker's code blog" />
+<meta property="og:description" content="《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第3章" />
+<meta property="og:site_name" content="walker's code blog" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/Layer/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-02-18T00:00:00-00.00" />
+<meta name="twitter:title" content="Programming iOS 14 - Layer - walker's code blog" />
+<meta name="twitter:description" content="《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第3章" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
+<main>
+    <section class="prism-section row" id="prism__content">
+        <article class="yue col-md-8 offset-md-2">
+            <h1 class="prism-post-title">Programming iOS 14 - Layer</h1>
+            <div class="prism-post-time">
+                <time class="text-uppercase">
+                    February 18 2022
+                </time>
+            </div>
+            <div class="prism-content-body">
+                <p>《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第3章</p><hr />
+<h1>Layers</h1>
+<ul>
+<li>A UIView does not actually <strong>draw itself</strong> onto the screen; it draws itself <strong>into its layer</strong>, and it is the layer that is portrayed on the screen.</li>
+<li>a view is not <strong>redrawn</strong> frequently;</li>
+<li>instead, its drawing is cached, and the cached version of the drawing (<code>the bitmap backing store</code>) is used where possible.</li>
+<li>The cached version is, in fact, the <code>layer</code>.</li>
+<li>the view’s graphics context is <code>actually</code> the layer’s graphics context.</li>
+<li>a layer is the <code>recipient</code> and <code>presenter</code> of a view’s drawing</li>
+<li>Layers are <code>made to be animated</code></li>
+<li>View持有layer，是layer的代理（<code>CALayerDeletgate</code>）<ul>
+<li>但layer不能找到View</li>
+</ul>
+</li>
+<li>View的大部分属性都只是其<code>underlying layer</code>的便捷方法</li>
+<li>layer能操控和改变view的表现，而无需ask the view to redraw itself</li>
+</ul>
+<p>自定义underlaying layer的方法</p><div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">CompassView</span> <span class="p">:</span> <span class="bp">UIView</span> <span class="p">{</span>
+    <span class="kr">override</span> <span class="kd">class</span> <span class="nc">var</span> <span class="n">layerClass</span> <span class="p">:</span> <span class="nb">AnyClass</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">CompassLayer</span><span class="p">.</span><span class="kc">self</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<h2>Layers and Sublayers</h2>
+<ul>
+<li><p>layer的继承树跟view的继承树几乎一致</p></li>
+<li><p>layer的<code>masksToBounds</code>属性决定了能否显示sublayer超出了其bounds的部分，这也是view的<code>clipsToBounds</code>的平行属性</p></li>
+<li><p><code>sublayers</code>是可写的，而<code>subviews</code>不是</p><ul>
+<li>所以设为nil可以移除所有子层，但subview却需要一个个<code>removeFromSuperview</code></li>
+</ul>
+</li>
+<li><p><code>zPostion</code>决定了层级（order），默认值都是0.0</p></li>
+<li><p>a layer does not have a center靠<code>position</code>和<code>anchorPoint</code>定位</p><ul>
+<li>position: 在superLayer中的位置</li>
+<li>anchorPoint: 用小数表示的bound(宽/高)位置，左上(0, 0), 右下(1, 1)， default:(0.5, 0.5)</li>
+<li>所以(0.5, 0.5)的anchorPoint，对应的<code>poosition</code>就等同于center了，理解一下<ul>
+<li>其实就是说你的“锚点”在superLayer的什么位置的意思</li>
+</ul>
+</li>
+<li>When you get the frame, it is calculated from the <code>bounds size</code> along with the <code>position</code> and <code>anchorPoint</code>.<ul>
+<li>When you set the frame, you set the <code>bounds</code> size and <code>position</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1">// demo, 把一个80x40的layer，左上角放到(130, 120的位置）</span>
+<span class="n">let</span><span class="w"> </span><span class="n">layer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">CALayer</span><span class="p">()</span><span class="w"></span>
+<span class="n">layer</span><span class="p">.</span><span class="n">bounds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRect</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="o">:</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="o">:</span><span class="w"> </span><span class="mi">40</span><span class="p">)</span><span class="w"></span>
+<span class="n">layer</span><span class="p">.</span><span class="n">backgroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">UIColor</span><span class="p">.</span><span class="n">yellow</span><span class="p">.</span><span class="n">cgColor</span><span class="w"></span>
+<span class="n">layer</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPoint</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="w"> </span><span class="mi">130</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">:</span><span class="w"> </span><span class="mi">120</span><span class="p">)</span><span class="w"></span>
+<span class="n">layer</span><span class="p">.</span><span class="n">anchorPoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPoint</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+<blockquote>
+<p>如果一个layer的position是(0, 0)，锚点是(0,0)，刚好显示在左上角
+而（0.5，0.5)则只能显示右下角的1/4了
+即(0.5, 0.5)到了原来(0,0)的位置。所以说其实就是把自身bounds度量下的哪个位置移到(0,0)</p></blockquote>
+<p>这么说来，对锚点的最正确理解其实是，</p><ul>
+<li>我把自身坐标系里的哪个点定义为原点，</li>
+<li>并且，这个点移到原本“左上角”的位置（想象0.5,0.5)</li>
+<li>并且，所有的旋转之类的动画本来是对“左上角”<strong>的位置</strong>进行的，不管现在这个位置是layer上的哪个部分<ul>
+<li>或者说，旋转永远是发生在<code>position</code>上的，你把哪个点放到position上它不管</li>
+</ul>
+</li>
+</ul>
+<p>理解frame的小练习</p><div class="highlight"><pre><span></span><span class="c1">// 如果我设了layer的frame:</span>
+<span class="n">circle</span><span class="p">.</span><span class="n">frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRect</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="o">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="o">:</span><span class="w"> </span><span class="mi">200</span><span class="p">)</span><span class="w"></span>
+
+<span class="c1">// 实际上是通过size, position, anchorPoint来实现的：</span>
+<span class="n">circle</span><span class="p">.</span><span class="n">bounds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRect</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="o">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="o">:</span><span class="w"> </span><span class="mi">200</span><span class="p">)</span><span class="w"></span>
+
+<span class="c1">// 以左上角为anchorPoint</span>
+<span class="n">circle</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">:</span><span class="mi">50</span><span class="p">)</span><span class="w"></span>
+<span class="n">circle</span><span class="p">.</span><span class="n">anchorPoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">:</span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="c1">// 或者，以中心为anchorPoint</span>
+<span class="n">circle</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="mi">150</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">:</span><span class="mi">150</span><span class="p">)</span><span class="w"></span>
+<span class="n">circle</span><span class="p">.</span><span class="n">anchorPoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">:</span><span class="mf">0.5</span><span class="p">)</span><span class="w"></span>
+<span class="c1">// 或者其它任意anchorPoint，前提是自己换算</span>
+<span class="c1">// 而且，虽然位置是一样的，但会影响transform</span>
+</pre></div>
+<p><strong>CAScrollLayer</strong></p><ul>
+<li>你想通过移动layer的bounds来重定位sublayers，可以使用<code>CAScrollLayer</code></li>
+<li>但是它并不能通过拖拽来移动里面的内容（记得它没有响应链）</li>
+<li>而是理解为一个<code>masksToBounds</code>的窗口，你只能看到它bounds里面的内容</li>
+<li>能通过本身的<code>scroll(to:)</code>方法，和sublayers的<code>scroll(_:)</code>和<code>scrollRectToVisible(_:)</code>方法来改变scroll layer的bounds，达到显示sublayer指定区域的目的</li>
+</ul>
+<p><strong>Layer and Delegate</strong></p><ul>
+<li>对一个不是UIView的undrelying layer的layer，让（任意）一个对象成为其delegate，可以由它来操控它的layout和drawing</li>
+<li>但千万不要让UIView成为不是其underlying的layer的代理，反之亦然</li>
+</ul>
+<p><strong>Layout of Lyaers</strong></p><ul>
+<li>When a layer needs layout, either because its <em>bounds have changed</em> or because you called <code>setNeedsLayout</code></li>
+</ul>
+<h2>Drawing in a Layer</h2>
+<ul>
+<li>set <code>contents</code> is the simplest way to draw in a layer -&gt; <code>CGImage</code><ul>
+<li>但<code>contents</code>能接受任何类型，所以不正确的content只会<strong>fail silently</strong></li>
+</ul>
+</li>
+<li>layer也有一个<code>draw(_:)方法，它被(自动)调用的时候通常表示要</code>redisplay itself`，什么时候需要redisplay itself?<ul>
+<li>如果<code>needsDisplayOnBoundsChange</code>是false，那么就只有在<code>sefNeedDisplay</code>方法（及其<code>inRect</code>衍生方法）里会触发<ul>
+<li>如果是非常重要的重绘，那么需要再显式调用一次<code>displayIfNeeded</code></li>
+</ul>
+</li>
+<li>是true的话就如其名，在bounds变化的时候也会重绘</li>
+</ul>
+</li>
+<li>有四个方法能在redisplay的时候调用:<ol>
+<li>subclass的<code>display</code>重载，它没有<code>graphics context</code>，所以只能提供图片</li>
+<li>delegate的<code>display(in:)</code>方法，同样，只能提供图片</li>
+<li>subclass的<code>draw(in:)</code>方法，有context，所以能直接在里面绘图，但不会<code>make current context</code></li>
+<li>delegate的<code>draw(_:in)</code>方法，限制也同上</li>
+</ol>
+</li>
+<li>underlaying layer不应调用上面的方法，而交由view的<code>draw(_:)</code>方法<ul>
+<li>一定要调也可以，但要显式实现view的<code>draw(_:)</code>方法，方法体为空就行了</li>
+</ul>
+</li>
+</ul>
+<p><strong>Drawing-Related Layer Properties</strong></p><ul>
+<li>contentsScale: 像素对高分屏的映射，Cocoa管理的layer会自动设置，自定义的类需要注意这个scale</li>
+<li>opacity: 就是view的<code>alpha</code><ul>
+<li>Changing the isOpaque property has no effect until the layer redisplays itself.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Content Resizing and Positioning</strong></p><ul>
+<li>A layer’s content is stored (cached) as a bitmap which is then treated like an image:<ul>
+<li>如果content来自一张图片，那么缓存的就是图片（CGImage），大小就是图片的point size</li>
+<li>如果来自绘图，那么存的是graphics context</li>
+</ul>
+</li>
+<li><code>ContentGravity</code>，类似UIView’s contentMode property，即缩放拉伸<ul>
+<li>因为坐标系不同的历史原因，top, bottom是相反的</li>
+<li>如果是自己绘制，则这个属性无意义，但结合下面的rect属性又有用了，因为截取了rect大小的绘制</li>
+</ul>
+</li>
+<li><code>contentsRect</code>，结合上一个属性，做购物网站那种截取一小块，绘制到一个大图上去。这里是绘制到view上<ul>
+<li>默认是全图(0,0,1,1)</li>
+</ul>
+</li>
+<li><code>contentsCenter</code> ?? 好像是对上述rect属性划成9宫格，不同位置的格子缩放规则不一样，比如四个角落的格子，不会缩放<ul>
+<li>所以给了一个center region（rect)，把它的四条边延长，就有9个格子了</li>
+</ul>
+</li>
+</ul>
+<p><strong>Layers that Draw Themselves</strong></p><p>系统内置了一些能自我绘制的layer:</p><ul>
+<li>CATextLayer，轻量版的UILabel。通过<code>string</code>属性存取，与<code>contenta</code>会冲突，不要同时设。</li>
+<li>CAShapeLayer, 有path属性，可以与<code>contents</code>共存，path绘制于content之上，并且不能设融合模式</li>
+<li>CAGradientLayer，通过背景色做的渐变，去了解下clip和mask</li>
+</ul>
+<h2>Transforms</h2>
+<ul>
+<li>view的transform是根据其<strong>center</strong>来应用的，layer的是根据<code>anchorPoint</code><ul>
+<li>所以<code>anchorPoint</code>就两个作用，把它移动到<code>position</code>的位置，和以它为中心进行旋转</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>画刻度，核心是把文字先往上挪到圆圈的位置，所以anchorPoint只动y不动x (center, midY/textHeight)</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="n">let</span><span class="w"> </span><span class="n">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ABCD&quot;</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">str</span><span class="p">.</span><span class="n">enumerated</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">let</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">CATextLayer</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">bounds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRect</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="o">:</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="o">:</span><span class="w"> </span><span class="mi">40</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">center</span><span class="w"> </span><span class="c1">// 这才是核心，一切定位和旋转的基准</span>
+<span class="w">    </span><span class="n">let</span><span class="w"> </span><span class="n">vert</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">circle</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">midY</span><span class="o">/</span><span class="n">t</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">height</span><span class="w"></span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">anchorPoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPoint</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">:</span><span class="w"> </span><span class="n">vert</span><span class="p">)</span><span class="w"> </span><span class="c1">// 半圆是文字调蓄的多少倍，就上移多少，但隐形的脚（即高跷的支点）仍在position处</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">foregroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">UIColor</span><span class="p">.</span><span class="n">red</span><span class="p">.</span><span class="n">cgColor</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">setAffineTransform</span><span class="p">(</span><span class="bp">CGAffineTransform</span><span class="p">(</span><span class="n">rotationAngle</span><span class="o">:</span><span class="w"> </span><span class="p">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">CGFloat</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span><span class="w"></span>
+<span class="w">    </span><span class="n">circle</span><span class="p">.</span><span class="n">addSublayer</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<p>结果如图：
+<figure   size-undefined><img width="-1" height="-1" src="../assets/images/2022-02-13-17-11-59.png" alt=""/></figure></p><ol start="2">
+<li>画箭头，演示了复杂的绘制怎么把它代理出去，并且什么时机让它产生绘制：</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="c1">// the arrow</span>
+<span class="n">let</span><span class="w"> </span><span class="n">arrow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">CALayer</span><span class="p">()</span><span class="w"></span>
+<span class="n">arrow</span><span class="p">.</span><span class="n">contentsScale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">UIScreen</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">scale</span><span class="w"></span>
+<span class="n">arrow</span><span class="p">.</span><span class="n">bounds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w"></span>
+<span class="n">arrow</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span><span class="w"></span>
+<span class="n">arrow</span><span class="p">.</span><span class="n">anchorPoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPoint</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.8</span><span class="p">)</span><span class="w"> </span><span class="c1">// 箭尾凹进去的位置（所以不可能是1.0）</span>
+<span class="n">arrow</span><span class="p">.</span><span class="n">delegate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">self</span><span class="w"> </span><span class="c1">// we will draw the arrow in the delegate method</span>
+<span class="n">arrow</span><span class="p">.</span><span class="n">setAffineTransform</span><span class="p">(</span><span class="bp">CGAffineTransform</span><span class="p">(</span><span class="n">rotationAngle</span><span class="o">:</span><span class="p">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">5.0</span><span class="p">))</span><span class="w"></span>
+<span class="nb">self</span><span class="p">.</span><span class="n">addSublayer</span><span class="p">(</span><span class="n">arrow</span><span class="p">)</span><span class="w"></span>
+<span class="n">arrow</span><span class="p">.</span><span class="n">setNeedsDisplay</span><span class="p">()</span><span class="w"> </span><span class="c1">// draw, please</span>
+</pre></div>
+<p>** 3D Transforms</p><ul>
+<li>A layer’s <code>affineTransform</code> is merely a façade for accessing its <code>transform</code>.</li>
+<li>A layer’s <code>transform</code> is a three-dimensional transform, a <code>CATransform3D</code></li>
+</ul>
+<p>绕Y轴镜像的示例：</p><div class="highlight"><pre><span></span><span class="n">someLayer</span><span class="p">.</span><span class="n">transform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CATransform3DMakeRotation</span><span class="p">(.</span><span class="n">pi</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+<p>一般而言，在Z轴没有分量的平面图，那就只剩旋转的效果了（没有翻转)
+<figure   size-undefined><img width="-1" height="-1" src="../assets/images/2022-02-13-17-28-45.png" alt=""/></figure></p><p>这是把anchorPoint设在了圆心，如果设在(0,0):
+<figure   size-undefined><img width="-1" height="-1" src="../assets/images/2022-02-14-00-19-27.png" alt=""/></figure></p><ul>
+<li>layer不是为了3D建模而诞生的（考虑<code>Metal</code>），它是2D对象，为<code>speed</code>和<code>simplicity</code>而设计</li>
+</ul>
+<p><strong>depth</strong></p><p>现实世界<code>z-component</code>的加入会近大远小，layer绘制没有表现出这种距离，而是压平到一个面：<code>orthographic projection</code>，但是使用了一些技巧来制造这种视觉效果。</p><p>[waiting for demo]</p><h2>Futher Layer Features</h2>
+<p><strong>shadows</strong></p><ul>
+<li>The shadow is normally based on the shape of the layer’s <code>nontransparent</code> region<ul>
+<li>所以完全透明的视图是没有阴影的</li>
+</ul>
+</li>
+<li>clip和shadow是不可能同时存在的，技巧是用另一个view叠到底层，让它实现阴影。</li>
+</ul>
+<p><strong>Borders and Rounded Corners</strong></p><ul>
+<li>想要圆角，就必须用<code>masksToBounds</code>来实现clip，同时还要阴影的话，又得借助上图的技巧了。</li>
+<li>从iOS 11起，可以单独设置圆角了：<code>maskedCorners</code>，它由minx, miny, maxx, maxy这种风格的描述进行组合，而不是我们期望的top-left之类的。</li>
+</ul>
+<p><strong>Masks</strong></p><ul>
+<li>A CALayer can have a mask. This is itself a <strong>layer</strong>, whose content must be provided somehow.</li>
+<li>只有透明部分有作用<ul>
+<li>透明的位置，对应的layer位置也是透明的</li>
+<li>反过来想不透明的部分，还是被应用mask的layer能显示的部分</li>
+<li>这就是photoshop里图层蒙板”涂黑就是显示“的意思</li>
+</ul>
+</li>
+<li>there is no built-in mechanism for <strong>automatically resizing the mask</strong> as the layer is resized.</li>
+<li>把一个view当作另一个view的mask属性，底层就是相应的layer</li>
+</ul>
+<p>下例用mask来制作自己的圆角矩形，注意里面context和path的关系。在context里面，新建的path都是能直接绘制的，而不需要这个path设为谁的属性（drawRect:方法里也是一样，只要新建path，再自行去stoke, fill都行，</p><p>而context上也可以直接绘制</p><div class="highlight"><pre><span></span><span class="n">func</span><span class="w"> </span><span class="nf">mask</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="n">sz</span><span class="o">:</span><span class="n">CGSize</span><span class="p">,</span><span class="w"> </span><span class="n">roundingCorners</span><span class="w"> </span><span class="n">rad</span><span class="o">:</span><span class="n">CGFloat</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="bp">CALayer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">let</span><span class="w"> </span><span class="n">rect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRect</span><span class="p">(</span><span class="n">origin</span><span class="o">:</span><span class="p">.</span><span class="n">zero</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="o">:</span><span class="n">sz</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">let</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">UIGraphicsImageRenderer</span><span class="p">(</span><span class="n">bounds</span><span class="o">:</span><span class="n">rect</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">let</span><span class="w"> </span><span class="n">im</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">image</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="k">in</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// context绘制</span>
+<span class="w">        </span><span class="n">let</span><span class="w"> </span><span class="n">con</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">cgContext</span><span class="w"></span>
+<span class="w">        </span><span class="n">con</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">(</span><span class="n">white</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="o">:</span><span class="mi">0</span><span class="p">).</span><span class="n">cgColor</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">con</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">con</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">(</span><span class="n">white</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="o">:</span><span class="mi">1</span><span class="p">).</span><span class="n">cgColor</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// path绘制</span>
+<span class="w">        </span><span class="n">let</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">UIBezierPath</span><span class="p">(</span><span class="n">roundedRect</span><span class="o">:</span><span class="n">rect</span><span class="p">,</span><span class="w"> </span><span class="n">cornerRadius</span><span class="o">:</span><span class="n">rad</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">p</span><span class="p">.</span><span class="n">fill</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">let</span><span class="w"> </span><span class="n">mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">CALayer</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="n">mask</span><span class="p">.</span><span class="n">frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rect</span><span class="w"></span>
+<span class="w">    </span><span class="n">mask</span><span class="p">.</span><span class="n">contents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">im</span><span class="p">.</span><span class="n">cgImage</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mask</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<h2>Layer Efficiency</h2>
+<p>由于移动设备算力的影响，大量叠加的半透明图层的渲染是一件很消耗且低效的事，特别是动画的时候。</p><p>debug：</p><ol>
+<li>Core Animation template in <strong>Instruments</strong></li>
+<li>New in Xcode 12, animation “hitches” can be measured with <code>XCTMetrics</code> during performance testing.</li>
+<li>the Simulator’s <code>Debug</code> menu lets you summon <code>colored overlays</code> that provide clues as to possible sources of <strong>inefficient drawing</strong><ul>
+<li>真机：Debug → View Debugging → Rendering</li>
+</ul>
+</li>
+<li>New in Xcode 12, the view debugger (“View Debugger” on page 75) can display layers — choose Editor → Show Layers — and can offer suggestions for improving layer rendering efficiency.</li>
+</ol>
+<p>tips:</p><ol>
+<li><strong>opaque drawing</strong> is most efficient.<ul>
+<li>Nonopaque drawing is what the Simulator marks when you check Debug → Color Blended Layers.</li>
+</ul>
+</li>
+<li>“freezing” the entirety of the layer’s drawing as a <strong>bitmap</strong>.<ul>
+<li>直接绘制效率确实比缓存效率高</li>
+<li>但是过深过复杂的继承树，没必要每次都实时计算渲染</li>
+<li>by <code>shouldRasterize = true</code> and <code>rasterizationScale = UIScreen.main.scale</code></li>
+</ul>
+</li>
+<li><code>drawsAsynchronously = true</code></li>
+</ol>
+<h2>Layers and Key-Value Coding</h2>
+<div class="highlight"><pre><span></span><span class="n">layer</span><span class="p">.</span><span class="n">mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mask</span><span class="w"></span>
+<span class="c1">// or:</span>
+<span class="n">layer</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="n">forKey</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;mask&quot;</span><span class="p">)</span><span class="w"></span>
+
+<span class="nb">self</span><span class="p">.</span><span class="n">rotationLayer</span><span class="p">.</span><span class="n">transform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CATransform3DMakeRotation</span><span class="p">(.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="c1">// or:</span>
+<span class="nb">self</span><span class="p">.</span><span class="n">rotationLayer</span><span class="p">.</span><span class="n">setValue</span><span class="p">(.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.0</span><span class="p">,</span><span class="w"> </span><span class="n">forKeyPath</span><span class="o">:</span><span class="s">&quot;transform.rotation.y&quot;</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+<ul>
+<li><p>不代表<code>CATransform3D</code>有<code>rotation</code>属性</p><ul>
+<li>它没有任何属性</li>
+<li>它甚至不是一个对象</li>
+<li><code>self.rotationLayer.transform.rotation.y = //... no, sorry</code></li>
+</ul>
+</li>
+<li><p>some transform key:</p></li>
+</ul>
+<p>• &quot;rotation.x&quot;,&quot;rotation.y&quot;,&quot;rotation.z&quot;
+• &quot;rotation&quot; (same as &quot;rotation.z&quot;)
+• &quot;scale.x&quot;,&quot;scale.y&quot;,&quot;scale.z&quot;
+• &quot;translation.x&quot;,&quot;translation.y&quot;,&quot;translation.z&quot; • &quot;translation&quot; (two-dimensional, a CGSize)</p><ul>
+<li>The<code>Quartz Core</code> framework also injects key–value coding compliance into <code>CGPoint</code>, <code>CGSize</code>, and <code>CGRect</code>, allowing you to use keys and key paths matching their <code>struct component names</code>.</li>
+</ul>
+<blockquote>
+<p>see “Core Animation Extensions to Key-Value Coding” in Apple’s Core Animation Programming Guide</p></blockquote>
+<ul>
+<li>you can treat a <code>CALayer</code> as a kind of <code>dictionary</code>, and get and set the value for any key.<ul>
+<li>view有tag，layer就有任意key</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+        </article>
+        <div class="prism-post-meta col-md-8 offset-md-2">
+    <span>walker</span>
+    
+    <span>/</span>
+    <span>
+        <a class="category no-link" href="/category/posts/" target="_self">
+        posts
+        </a>
+    </span>
+    
+    
+    <span>/</span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/drawing/" target="_self">#drawing</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/layer/" target="_self">#layer</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/mask/" target="_self">#mask</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/shadow/" target="_self">#shadow</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/transforms/" target="_self">#transforms</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/anchorpoint/" target="_self">#anchorpoint</a>
+    </span>
+    
+    
+    
+    <span>/</span>
+    <span class="leancloud_visitors" id="/archives/Layer/" data-flag-title="Programming iOS 14 - Layer"><span class="leancloud-visitors-count"></span> Views</span>
+    
+</div>
+    </section>
+
+    
+<section id="prism__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+    <ul>
+        
+        <li class="next text-muted">
+            <span title="Viewing the newest one."><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</span>
+        </li>
+        
+        
+        <li class="prev">
+            <a class="no-link" href="/archives/%E3%80%8AEffective-Objective-C-2.0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/" target="_self" title="《Effective Objective-C 2.0》笔记第1-2章">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    
+    <script>
+        var initValine = function() {
+            new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+        }
+
+    </script>
+    <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+    <div class="prism-comment-section container" id="prism__comment">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div id="vcomments"></div>
+            </div>
+        </div>
+    </div>
+    
+
+</main>
+
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
+                    </section>
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
+                            <span>Copyright © 2022 AlanDecode</span>
+                        </p>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+            </footer>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    
+</body>
+
+</html>

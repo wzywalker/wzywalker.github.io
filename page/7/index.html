@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/46c4ce6a93d100412abf26f8110fcfe0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/827e9617557ff021517a683161d3114d.json"
         }
 
     </script>
@@ -55,6 +55,28 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/apple-store%E9%93%BE%E6%8E%A5%E6%A0%BC%E5%BC%8F%E6%96%87%E6%A1%A3/" target="_self">apple-store链接格式文档</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/apple-store%E9%93%BE%E6%8E%A5%E6%A0%BC%E5%BC%8F%E6%96%87%E6%A1%A3/" target="_self">
+                <time class="text-uppercase">
+                    March 12 2020
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>The app on Appstore has specific URL format <code>http://itunes.apple.com/[country-code]/app/[app-name]/id+[id_value]?mt=[1...12]</code>
+country-code can be <em>us</em> for <em>united states</em>, <em>in</em> for <em>india</em> etc
+<em>mt stands for Media Type</em>
+<em>Value for mt can be anything from 1 to 12 and each assigned to specific category</em>
+i. <strong>8 for iOS apps</strong>
+ii. <strong>12 for Mac apps</strong></p><p>来源: <a href="http://stackoverflow.com/questions/1781427/what-is-mt-8-in-itunes-links-for-the-appstore">stackoverflow</a></p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/apple-store%E9%93%BE%E6%8E%A5%E6%A0%BC%E5%BC%8F%E6%96%87%E6%A1%A3/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/Fixing-Chrome-58%2B-%5Bmissing_subjectAltName%5D-with-openssl-when-using-sel/" target="_self">Fixing-Chrome-58+-[missing_subjectAltName]-with-openssl-when-using-sel</a></h1>
@@ -549,132 +571,6 @@ git push origin master
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E8%AE%A9%E4%BD%A0fork%E4%B8%8B%E6%9D%A5%E7%9A%84%E9%A1%B9%E7%9B%AE%E4%B8%8E%E6%BA%90%E9%A1%B9%E7%9B%AE%E4%BF%9D%E6%8C%81%E5%90%8C%E6%AD%A5/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/Windows%E4%B8%8B%E7%94%A8AHK%E6%9D%A5%E6%98%A0%E5%B0%84Mac%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE/" target="_self">Windows下用AHK来映射Mac常用快捷键</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/Windows%E4%B8%8B%E7%94%A8AHK%E6%9D%A5%E6%98%A0%E5%B0%84Mac%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE/" target="_self">
-                <time class="text-uppercase">
-                    March 17 2019
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>最近用Windows做了一段主力机, 别的问题倒没啥, Windows下有啥干不了的呢, 哪怕鼠标滚轮方向相反, 大量快捷键不同等问题都能在非常短的适应后就不会对自己造成什么困找, 问题是我还得在Windows和Mac环境切来切去, 这样频繁地按错快捷键再纠正也挺烦人的, 决定一劳永逸地解决这个问题, 经过反复搜索和比较, 还是一个以前用Windows的时候就一直敬而远之的软件成了我的首选:AutoHotKey(AHK).</p><p>以前不想用它就是因为要写脚本, 没有大量的需求的情况下我并不想去通读一遍那并不算短的文档, 这次不同了, 需要定制一堆快捷键, 感觉这个付出是值得的, 一番文档和实验之后, 初步得到如下脚本:
-(特别惊喜的是, 之前要改变鼠标滚轮的方向要改注册表, 这样你每次换了个usb口插鼠标还得再改一次, 而在ahk下都是一句话的事...是不是有点佩服这个才百来k的软件了?)</p><div class="highlight"><pre><span></span><span class="p">;</span><span class="o">----------</span><span class="n">Application</span><span class="w"></span>
-
-<span class="p">;</span><span class="w"> </span><span class="n">hyper</span><span class="w"></span>
-<span class="o">^</span><span class="err">`</span><span class="o">::</span><span class="n">send</span><span class="w"> </span><span class="err">#</span><span class="mi">4</span><span class="w"></span>
-
-<span class="p">;</span><span class="o">----------</span><span class="n">Mac</span><span class="w"> </span><span class="n">Key</span><span class="w"> </span><span class="n">Remap</span><span class="w"></span>
-
-<span class="p">;</span><span class="w"> </span><span class="n">nature</span><span class="w"> </span><span class="n">scroll</span><span class="w"></span>
-<span class="p">;</span><span class="n">WheelUp</span><span class="o">::</span><span class="n">send</span><span class="w"> </span><span class="p">{</span><span class="n">WheelDown</span><span class="p">}</span><span class="w"></span>
-<span class="p">;</span><span class="n">WheelDown</span><span class="o">::</span><span class="n">send</span><span class="w"> </span><span class="p">{</span><span class="n">WheelUp</span><span class="p">}</span><span class="w"></span>
-
-<span class="p">;</span><span class="w"> </span><span class="n">cmd</span><span class="o">+</span><span class="n">c</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">x</span><span class="w"></span>
-<span class="cp">#c::send ^c</span>
-<span class="cp">#v::send ^v</span>
-<span class="cp">#x::send ^x</span>
-<span class="p">;</span><span class="w"> </span><span class="n">用win</span><span class="o">+</span><span class="n">shift</span><span class="o">+</span><span class="n">x来替换原来的win</span><span class="o">+</span><span class="n">x</span><span class="w"></span>
-<span class="cp">#+x::send #x</span>
-
-<span class="p">;</span><span class="w"> </span><span class="n">clipboard</span><span class="w"> </span><span class="n">history</span><span class="w"></span>
-<span class="p">;</span><span class="w"> </span><span class="n">用win</span><span class="o">+</span><span class="n">shift</span><span class="o">+</span><span class="n">v来替换原来的win</span><span class="o">+</span><span class="n">v</span><span class="p">(</span><span class="n">剪贴板历史记录</span><span class="p">)</span><span class="w"></span>
-<span class="cp">#+v::send #v</span>
-
-<span class="p">;</span><span class="w"> </span><span class="n">save</span><span class="w"></span>
-<span class="cp">#s::send ^s</span>
-
-<span class="p">;</span><span class="w"> </span><span class="n">undo</span><span class="p">,</span><span class="w"> </span><span class="n">redo</span><span class="w"></span>
-<span class="cp">#z::send ^z</span>
-<span class="cp">#+z::send ^+z</span>
-
-<span class="p">;</span><span class="w"> </span><span class="n">selection</span><span class="w"></span>
-<span class="cp">#+Left::send +{Home}</span>
-<span class="cp">#+Right::send +{End}</span>
-<span class="cp">#+Up::send +{Up}</span>
-<span class="cp">#+Down::send +{Down}</span>
-
-<span class="p">;</span><span class="w"> </span><span class="n">skip</span><span class="w"> </span><span class="n">word</span><span class="w"> </span><span class="n">using</span><span class="w"> </span><span class="n">alt</span><span class="o">+</span><span class="n">Arrow</span><span class="w"></span>
-<span class="o">!</span><span class="n">Left</span><span class="o">::</span><span class="n">send</span><span class="w"> </span><span class="o">^</span><span class="p">{</span><span class="n">Left</span><span class="p">}</span><span class="w"></span>
-<span class="o">!</span><span class="n">Right</span><span class="o">::</span><span class="n">send</span><span class="w"> </span><span class="o">^</span><span class="p">{</span><span class="n">Right</span><span class="p">}</span><span class="w"></span>
-
-<span class="p">;</span><span class="w"> </span><span class="k">switch</span><span class="w"> </span><span class="n">win</span><span class="o">+</span><span class="n">tab</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">alt</span><span class="o">+</span><span class="n">tab</span><span class="w"></span>
-<span class="n">releaseAltKey</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">GetKeyState</span><span class="p">(</span><span class="s">&quot;LWin&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">sleep</span><span class="w"> </span><span class="mi">100</span><span class="w"></span>
-<span class="w">    </span><span class="n">releaseAltKey</span><span class="p">()</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="k">else</span><span class="w"></span>
-<span class="w">    </span><span class="n">send</span><span class="w"> </span><span class="p">{</span><span class="n">alt</span><span class="w"> </span><span class="n">up</span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-<span class="cp">#Tab::</span>
-<span class="n">send</span><span class="w"> </span><span class="p">{</span><span class="n">alt</span><span class="w"> </span><span class="n">down</span><span class="p">}{</span><span class="n">Tab</span><span class="p">}</span><span class="w"></span>
-<span class="n">releaseAltKey</span><span class="p">()</span><span class="w"></span>
-<span class="k">return</span><span class="w"></span>
-
-<span class="o">!</span><span class="n">Tab</span><span class="o">::</span><span class="n">send</span><span class="w"> </span><span class="err">#</span><span class="p">{</span><span class="n">Tab</span><span class="p">}</span><span class="w"></span>
-
-<span class="p">;</span><span class="w"> </span><span class="k">switch</span><span class="w"> </span><span class="n">ctrl</span><span class="o">+</span><span class="n">w</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">cmd</span><span class="o">+</span><span class="n">w</span><span class="w"></span>
-<span class="cp">#w::send ^{w}</span>
-<span class="p">;</span><span class="w"> </span><span class="n">用win</span><span class="o">+</span><span class="n">shift</span><span class="o">+</span><span class="n">w替换win</span><span class="o">+</span><span class="n">w</span><span class="w"></span>
-<span class="cp">#+w::send #{w}</span>
-
-<span class="p">;</span><span class="w"> </span><span class="n">new</span><span class="w"> </span><span class="n">tab</span><span class="w"></span>
-<span class="cp">#t::send ^t</span>
-<span class="cp">#+t::send ^+t</span>
-
-<span class="p">;</span><span class="w"> </span><span class="n">search</span><span class="w"></span>
-<span class="cp">#f::send ^f</span>
-
-<span class="p">;</span><span class="w"> </span><span class="n">cmd</span><span class="o">+</span><span class="n">a</span><span class="w"></span>
-<span class="cp">#a::send ^a</span>
-
-<span class="p">;</span><span class="w"> </span><span class="n">cmd</span><span class="o">+</span><span class="n">n</span><span class="w"></span>
-<span class="cp">#n::send ^n</span>
-</pre></div>
-<p>我这里不是教程, 就不解释每一行的原理了, 就我个人而言最最最常用的复制粘贴切换程序等等都映射了, 唯一不完美的地方就在于把热键对换我没研究透(比如ctrl+x 和 win+x对换), 有三处热键对换, 但只有一处成功(alt+tab 和 win+tab互换), 其它两处只能把其中一个热键换成别的, 而不能互相替换, 在官方论坛发贴目前还没人答复我.</p><p>多说一句, 最前面的<code>Application</code>部分我贴代码的时候没删, 也是为了介绍一种打开程序的快捷方法的思路, 一般人会用脚本检测程序是否打开, 比如<code>邮件</code>应用, 如果打开, 则将窗口激活, 如果没有, 则打开程序, 如果当然已是激活状态, 则把它最小化. 而我发现如果一个程序在底部状态栏里的话, 用win+数字键激活它也可以达到上述三个目的, 比如我的<code>hyper</code>应用排在第四个, 那么我只要反复按<code>win+4</code>就能在上述三种状态间切换, 比写代码完成检测, 打开, 激活, 最小化等要来得简单的多.</p><p>期间还有一个收获, mac下多桌面的切换非常简单, ctrl+左右方向键即可, 或者用四根手势轻扫触摸板, 而windows下则点taskview图标, 或者用win+tab激活, 然后再用鼠标选择(总的来说是 Win + Ctrl + D / F4 / ← / → 这些组合), 怎样都没有mac的方案来得优雅(就像mac下没有一个窗口管理程序有windows自带的优雅一样^_^), 发现有人写了一个脚本检测鼠标位置, 如果到了最右侧或最左侧, 就直接把下一个桌面拉出来, 原本没打算分享只是自己用用, 因此出处没保存, 抱歉, 不过类似的脚本网上很多, 还有很多很精细的, 这一个已经算很简单粗暴了, 可以抱着学习的目的了解下, 毕竟这个脚本是以毫秒级别在时刻监视鼠标位置, 这是没必要的性能消耗吧:</p><div class="highlight"><pre><span></span><span class="p">;</span><span class="o">----------------</span><span class="n">屏幕热区</span><span class="w"></span>
-<span class="p">;</span><span class="n">这个是设置鼠标坐标的相对位置</span><span class="err">，</span><span class="n">本例是相对雨整个桌面</span><span class="w"></span>
-<span class="n">CoordMode</span><span class="p">,</span><span class="w"> </span><span class="n">Mouse</span><span class="w"> </span><span class="p">,</span><span class="n">Screen</span><span class="w"></span>
-
-<span class="cp">#Persistent</span>
-<span class="p">;</span><span class="n">这个设置了获取鼠标信息的频率</span><span class="err">，</span><span class="n">数值越小边缘热区越灵敏</span><span class="w"></span>
-<span class="n">SetTimer</span><span class="p">,</span><span class="w"> </span><span class="n">WatchCursor</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="w"></span>
-<span class="k">return</span><span class="w"></span>
-
-<span class="nl">WatchCursor</span><span class="p">:</span><span class="w"></span>
-<span class="n">GetKeyState</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">LButton</span><span class="w"> </span>
-<span class="n">MouseGetPos</span><span class="p">,</span><span class="w"> </span><span class="n">xpos</span><span class="p">,</span><span class="w"> </span><span class="n">ypos</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="w"> </span>
-<span class="p">;</span><span class="n">若要重设边缘热区的范围请</span><span class="err">，</span><span class="n">把下一行的</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="n">号去掉</span><span class="err">，</span><span class="n">就会在鼠标位置显示鼠标的坐标</span><span class="err">，</span><span class="n">根据坐标修改以下数值</span><span class="w"></span>
-<span class="p">;</span><span class="n">ToolTip</span><span class="p">,</span><span class="n">x</span><span class="o">:%</span><span class="n">xpos</span><span class="o">%</span><span class="w"> </span><span class="n">y</span><span class="o">:%</span><span class="n">ypos</span><span class="o">%</span><span class="w"> </span><span class="n">state</span><span class="o">:%</span><span class="n">state</span><span class="o">%</span><span class="w"></span>
-<span class="k">if</span><span class="p">(</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;U&quot;</span><span class="w"> </span><span class="p">){</span><span class="w"></span>
-<span class="w">    </span><span class="p">;</span><span class="n">y方向的范围</span><span class="w"></span>
-<span class="w">    </span><span class="nf">if</span><span class="p">(</span><span class="n">ypos</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">150</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">ypos</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1000</span><span class="p">){</span><span class="w"></span>
-<span class="w">        </span><span class="p">;</span><span class="n">x方向的范围</span><span class="w"></span>
-<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">xpos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2879</span><span class="p">){</span><span class="w"></span>
-<span class="w">            </span><span class="n">sleep</span><span class="w"> </span><span class="mi">650</span><span class="w"></span>
-<span class="w">            </span><span class="n">Send</span><span class="w"> </span><span class="o">^</span><span class="err">#</span><span class="p">{</span><span class="n">Right</span><span class="p">}</span><span class="w"></span>
-<span class="w">            </span><span class="n">MouseMove</span><span class="p">,</span><span class="w"> </span><span class="mi">2870</span><span class="p">,</span><span class="w"> </span><span class="n">ypos</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">xpos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">){</span><span class="w"></span>
-<span class="w">            </span><span class="n">sleep</span><span class="w"> </span><span class="mi">650</span><span class="w"></span>
-<span class="w">            </span><span class="n">Send</span><span class="w"> </span><span class="o">^</span><span class="err">#</span><span class="p">{</span><span class="n">Left</span><span class="p">}</span><span class="w"></span>
-<span class="w">            </span><span class="n">MouseMove</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="n">ypos</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">;</span><span class="n">显示所有虚拟桌面的热区</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">xpos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">ypos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">){</span><span class="w"></span>
-<span class="w">        </span><span class="n">Send</span><span class="w"> </span><span class="err">#</span><span class="p">{</span><span class="n">Tab</span><span class="p">}</span><span class="w"></span>
-<span class="w">        </span><span class="n">MouseMove</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-<span class="k">return</span><span class="w"></span>
-</pre></div>
-<p>注释很明确了, 自己读, 鼠标检测的热区是代码写死的, 解除显示鼠标位置的注释, 然后你把代码改成适合你的屏幕分辨率的数值即可</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Windows%E4%B8%8B%E7%94%A8AHK%E6%9D%A5%E6%98%A0%E5%B0%84Mac%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

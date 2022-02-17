@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/46c4ce6a93d100412abf26f8110fcfe0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/827e9617557ff021517a683161d3114d.json"
         }
 
     </script>
@@ -55,6 +55,35 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/Xcode%E8%87%AA%E5%A2%9Ebuild%E5%8F%B7/" target="_self">Xcode自增build号</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/Xcode%E8%87%AA%E5%A2%9Ebuild%E5%8F%B7/" target="_self">
+                <time class="text-uppercase">
+                    March 22 2018
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>脚本:</p><div class="highlight"><pre><span></span><span class="nv">buildNumber</span><span class="o">=</span><span class="k">$(</span>/usr/libexec/PlistBuddy -c <span class="s2">&quot;Print CFBundleVersion&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">PROJECT_DIR</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">INFOPLIST_FILE</span><span class="si">}</span><span class="s2">&quot;</span><span class="k">)</span>  
+<span class="nv">buildNumber</span><span class="o">=</span><span class="k">$((</span><span class="nv">$buildNumber</span> <span class="o">+</span> <span class="m">1</span><span class="k">))</span>  
+/usr/libexec/PlistBuddy -c <span class="s2">&quot;Set :CFBundleVersion </span><span class="nv">$buildNumber</span><span class="s2">&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">PROJECT_DIR</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">INFOPLIST_FILE</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+<p>To use this script, follow these steps:</p><ol>
+<li>Select your app target in the project overview.</li>
+<li>Select <strong>Build Phases</strong>.</li>
+<li>Add a new build phase (&quot;<strong>New Run Script Phase</strong>&quot;).</li>
+<li>Enter the above script in the appropriate field.</li>
+<li>In your <code>Info.plist</code>, ensure the current build number is numeric (是的, 主要是保证你原来填写的确实是数字就行了)</li>
+</ol>
+<figure  style="flex: 128.73900293255133" ><img width="878" height="341" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/570876b958f1bb0eba6fe0aea0ec353c.png" alt=""/></figure><p>来源: <a href="http://crunchybagel.com/auto-incrementing-build-numbers-in-xcode/">http://crunchybagel.com/auto-incrementing-build-numbers-in-xcode/</a></p><p>或者一些别的思考: 
+<a href="http://stackoverflow.com/questions/9258344/better-way-of-incrementing-build-number">http://stackoverflow.com/questions/9258344/better-way-of-incrementing-build-number</a></p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Xcode%E8%87%AA%E5%A2%9Ebuild%E5%8F%B7/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/UIMenuController%E7%9A%84%E4%BD%BF%E7%94%A8/" target="_self">UIMenuController的使用</a></h1>

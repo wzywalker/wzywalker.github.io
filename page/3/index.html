@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/46c4ce6a93d100412abf26f8110fcfe0.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/827e9617557ff021517a683161d3114d.json"
         }
 
     </script>
@@ -55,6 +55,247 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B5%5D_Property-Wrapper/" target="_self">cs193p_2021笔记[5]_Property-Wrapper</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B5%5D_Property-Wrapper/" target="_self">
+                <time class="text-uppercase">
+                    October 24 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p><a href="https://www.jianshu.com/p/998b0ef4a2cd">cs193p_2021_笔记_1</a>
+<a href="https://www.jianshu.com/p/af0ad1bead34">cs193p_2021_笔记_2</a>
+<a href="https://www.jianshu.com/p/d103f8d12052">cs193p_2021_笔记_3_Animation_Transition</a>
+<a href="https://www.jianshu.com/p/41e7309c7f55">cs193p_2021_笔记_4_Color_Image_Gesture</a>
+cs193p_2021_笔记_5_Property Wrapper
+<a href="https://www.jianshu.com/p/a315274a4fd2">cs193p_2021_笔记_6_Persistence</a>
+<a href="https://www.jianshu.com/p/f4ae879eef9c">cs193p_2021_笔记_7_Document Architecture</a>
+<a href="https://www.jianshu.com/p/2136bdc2c6f6">cs193p_2021_笔记_8</a></p><hr />
+<h1>Property Wrappers</h1>
+<p>C#中的<code>Attributes</code>，python中的<code>Decorators</code>, Java的<code>Annonations</code>，类似的设计模式。</p><ul>
+<li>A property wrapper is actually a <code>struct</code>.</li>
+<li>这个特殊的<code>struct</code>封装了一些模板行为应用到它们wrap的vars上：<ol>
+<li>Making a var live in the heap (<code>@State</code>)</li>
+<li>Making a var publish its changes (<code>@Published</code>)</li>
+<li>Causing a View to redraw when a published change is detected (<code>@ObservedObject</code>)</li>
+</ol>
+</li>
+</ul>
+<p>即能够分配到堆上，能够通知状态变化和能重绘等，可以理解为<code>语法糖</code>。</p><div class="highlight"><pre><span></span><span class="p">@</span><span class="n">Published</span> <span class="kd">var</span> <span class="nv">emojiArt</span><span class="p">:</span> <span class="n">EmojiArt</span> <span class="p">=</span> <span class="n">EmojiArt</span><span class="p">()</span>
+
+<span class="c1">// ... is really just this struct ...</span>
+<span class="kd">struct</span> <span class="nc">Published</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">wrappedValue</span><span class="p">:</span> <span class="n">EmojiArt</span>
+    <span class="kd">var</span> <span class="nv">projectedValue</span><span class="p">:</span> <span class="n">Publisher</span><span class="p">&lt;</span><span class="n">EmojiArt</span><span class="p">,</span> <span class="n">Never</span><span class="p">&gt;</span>  <span class="c1">// i.e. $</span>
+<span class="p">}</span>
+
+<span class="c1">// `projected value`的类型取决于wrapper自己，比如本例就是一个`Publisher`</span>
+
+<span class="c1">// 我理解为一个属性和一个广播器</span>
+
+<span class="c1">// ... and Swift (approximately) makes these vars available to you ...</span>
+<span class="kd">var</span> <span class="nv">_emojiArt</span><span class="p">:</span> <span class="n">Published</span> <span class="p">=</span> <span class="n">Published</span><span class="p">(</span><span class="n">wrappedValue</span><span class="p">:</span> <span class="n">EmojiArt</span><span class="p">())</span> 
+<span class="kd">var</span> <span class="nv">emojiArt</span><span class="p">:</span> <span class="n">EmojiArt</span> <span class="p">{</span>
+     <span class="kr">get</span> <span class="p">{</span> <span class="n">_emojiArt</span><span class="p">.</span><span class="n">wrappedValue</span> <span class="p">}</span>
+     <span class="kr">set</span> <span class="p">{</span> <span class="n">_emojiArt</span><span class="p">.</span><span class="n">wrappedValue</span> <span class="p">=</span> <span class="n">newValue</span> <span class="p">}</span>
+ <span class="p">}</span>
+</pre></div>
+<p>把get,set直接通过<code>$emojiArt</code>(即projectedValue)来使用</p><p>当一个<code>Published</code>值发生变化：</p><ul>
+<li>It publishes the change through its <em>projectedValue</em> (<code>$emojiArt</code>) which is a <code>Publisher</code>.</li>
+<li>It also invokes <code>objectWillChange.send()</code> in its enclosing <code>ObservableObject</code>.</li>
+</ul>
+<p>下面列的几种<code>Property wrapper</code>，我们主要关心最核心的两个概念，<code>wrappedValue</code>和<code>projectedValue</code>是什么就行了:</p><h2>@State</h2>
+<p>这是第二次提到了，在<code>Property Observers</code>一节里预告过，基本上点<code>@</code>的，大都为<code>Property Wrapper</code>的内容。</p><ul>
+<li>The wrappedValue is: <code>anything</code> (but almost certainly a value type).</li>
+<li>What it does:<ul>
+<li>stores the wrappedValue in the heap;</li>
+<li>when it changes, <code>invalidates</code> the <code>View</code>.</li>
+</ul>
+</li>
+<li>Projected value (i.e. $): a <code>Binding</code> (to that <em>value in the heap</em>).</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="p">@</span><span class="n">State</span> <span class="kd">private</span> <span class="kd">var</span> <span class="nv">foo</span><span class="p">:</span> <span class="nb">Int</span>
+<span class="kd">init</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">_foo</span> <span class="p">=</span> <span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">initiaValue</span><span class="p">:</span> <span class="mi">5</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<p>注意<code>_</code>和<code>$</code>的区别。</p><h2>@StateObject &amp; @ObservedObject</h2>
+<ul>
+<li>The wrappedValue is: <code>anything</code> that implements the <code>ObservableObject</code> protocol (ViewModels).</li>
+<li>What it does:<ul>
+<li><code>invalidates</code> the <code>View</code> when wrappedValue does <em>objectWillChange.send()</em>.</li>
+</ul>
+</li>
+<li>Projected value (i.e. $): a <code>Binding</code> (to the vars of the wrappedValue (a <em>ViewModel</em>)).</li>
+</ul>
+<blockquote>
+<p><strong>@StateObject V.S. @State</strong></p></blockquote>
+<ul>
+<li>一个类型是<code>ObservableObject</code>s， 一个是value type</li>
+</ul>
+<blockquote>
+<p><strong>@StateObject V.S. @ObservedObject</strong></p></blockquote>
+<ul>
+<li>@StateObject is a &quot;source of truth&quot;，也就是说可以直接赋值：<code>@StateObject var foo = SomeObservableObject()</code></li>
+<li>能用在<em>View, APP, Scene</em>等场景</li>
+<li>如果用在View里，生命周期与View一致</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="p">@</span><span class="n">main</span>
+<span class="kd">struct</span> <span class="nc">EmojiArtApp</span><span class="p">:</span> <span class="n">App</span> <span class="p">{</span>
+    <span class="c1">// stateObject, source of truth</span>
+    <span class="c1">// defined in the app</span>
+    <span class="p">@</span><span class="n">StateObject</span> <span class="kd">var</span> <span class="nv">paletteStore</span> <span class="p">=</span> <span class="n">PaletteStore</span><span class="p">(</span><span class="n">named</span><span class="p">:</span> <span class="s">&quot;default&quot;</span><span class="p">)</span>
+
+    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">Scene</span> <span class="p">{</span>
+    <span class="n">DocumentGroup</span><span class="p">(</span><span class="n">newDocument</span><span class="p">:</span> <span class="p">{</span> <span class="n">EmojiArtDocument</span><span class="p">()</span> <span class="p">})</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span>
+        <span class="n">EmojiArtDocumentView</span><span class="p">(</span><span class="n">document</span><span class="p">:</span> <span class="n">config</span><span class="p">.</span><span class="n">document</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">environmentObject</span><span class="p">(</span><span class="n">paletteStore</span><span class="p">)</span>  <span class="c1">// passed by environment</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<h2>@Binding</h2>
+<ul>
+<li>The wrappedValue is: <code>a value</code> that is bound to something else.</li>
+<li>What it does:<ul>
+<li>gets/sets the value of the wrappedValue from <code>some other source</code>.</li>
+<li>when the bound-to value changes, it <code>invalidates</code> the <code>View</code>.</li>
+<li>Form表单典型应用场景，有UI变化的控件</li>
+<li>手势过程中的State, 或drag时是否targted</li>
+<li>模态窗口的状态</li>
+<li>分割view后共享状态</li>
+<li>总之，数据源只有一个(source of the truth)的场景，就不需要用两个@State而用@Binding,</li>
+</ul>
+</li>
+<li>Projected value (i.e. $): a Binding (self; i.e. the Binding itself)</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">MyView</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+      <span class="p">@</span><span class="n">State</span> <span class="kd">var</span> <span class="nv">myString</span> <span class="p">=</span> <span class="err">“</span><span class="n">Hello</span><span class="err">”</span>               <span class="c1">// 1</span>
+      <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+          <span class="n">OtherView</span><span class="p">(</span><span class="n">sharedText</span><span class="p">:</span> <span class="err">$</span><span class="n">myString</span><span class="p">)</span>        <span class="c1">// 2</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="kd">struct</span> <span class="nc">OtherView</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+      <span class="p">@</span><span class="n">Binding</span> <span class="kd">var</span> <span class="nv">sharedText</span><span class="p">:</span> <span class="n">string</span>             <span class="c1">// 3</span>
+      <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+          <span class="n">Text</span><span class="p">(</span><span class="n">sharedText</span><span class="p">)</span>                        <span class="c1">// 4</span>
+          <span class="n">TextField</span><span class="p">(</span><span class="s">&quot;shared&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="err">$</span><span class="n">sharedText</span><span class="p">)</span>  <span class="c1">// 5 _myString.projectValue.projectValue</span>
+      <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<ol>
+<li><code>_myString</code>是实际变量，包含一个<code>wrappedValue</code>，一个<code>projectedValue</code></li>
+<li><code>myString</code>就是<code>_myString.wrappedValue</code></li>
+<li><code>$myString</code>是<code>_myString.projectedValue</code>，<ul>
+<li>是一个<code>Binding&lt;String&gt;</code>，传值和接值用的就是它</li>
+<li>所以传<code>$myString</code>的地方也可以用<code>_myString.projectedValue</code>代替，学习阶段的话</li>
+</ul>
+</li>
+<li>要把<code>projectedValue</code>层层传递下去，并不是用同一个<code>projectedValue</code>，而是设计成了<code>Binding&lt;T&gt;</code><ul>
+<li>参考上面代码块的第5条</li>
+</ul>
+</li>
+</ol>
+<p>其它</p><ul>
+<li>也可以绑定一个常量：<code>OtherView(sharedText: .constant(“Howdy”))</code></li>
+<li>computed binding: <code>Binding(get:, set:).</code></li>
+</ul>
+<p>比如你的view是一个小组件，里面有一个<code>Binding var user: User</code>，那么在preview里面怎么传入这个User呢？用常量：</p><div class="highlight"><pre><span></span><span class="kd">static</span> <span class="kd">var</span> <span class="nv">preview</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+    <span class="n">myView</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="p">.</span><span class="n">constant</span><span class="p">(</span><span class="n">User</span><span class="p">(...)))</span>
+<span class="p">}</span>
+</pre></div>
+<h2>@EnvironmenetObject</h2>
+<ul>
+<li>The wrappedValue is: <code>ObservableObject</code> obtained via .environmentObject() sent to the View.</li>
+<li>What it does: <code>invalidates</code> the View when wrappedValue does objectWillChange.send().</li>
+<li>Projected value (i.e. $): a <code>Binding</code> (to the vars of the wrappedValue (a ViewModel)).</li>
+</ul>
+<p>与<code>@ObservedObject</code>用法稍有点不同，有单独的赋值接口：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">myView</span> <span class="p">=</span> <span class="n">MyView</span><span class="p">().</span><span class="n">environmentObject</span><span class="p">(</span><span class="n">theViewModel</span><span class="p">)</span>
+<span class="c1">// 而@ObservedObject是一个普通的属性</span>
+<span class="kd">let</span> <span class="nv">myView</span> <span class="p">=</span> <span class="n">MyView</span><span class="p">(</span><span class="n">viewModel</span><span class="p">:</span> <span class="n">theViewModel</span><span class="p">)</span>
+
+<span class="c1">// Inside the View ...</span>
+<span class="p">@</span><span class="n">EnvironmentObject</span> <span class="kd">var</span> <span class="nv">viewModel</span><span class="p">:</span> <span class="n">ViewModelClass</span> 
+<span class="c1">// ... vs ...</span>
+<span class="p">@</span><span class="n">ObservedObject</span> <span class="kd">var</span> <span class="nv">viewModel</span><span class="p">:</span> <span class="n">ViewModelClass</span>
+</pre></div>
+<ul>
+<li>visible to all views in your body (except modallay presented ones)</li>
+<li>多用于多个view共享ViewModel的时候</li>
+</ul>
+<h2>@Environment</h2>
+<ul>
+<li>与<code>@EnvironmentObject</code>完全不是同一个东西</li>
+<li>这是<code>Property Wrapper</code>不只有两个变量（warped..., projected...）的的一个应用</li>
+<li>通过<code>keyPath</code>来使用：<code>@Environment(\.colorScheme) var colorScheme</code></li>
+<li>wrappedValue的类型是通过<code>keyPath</code>声明时设置的</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">view</span><span class="p">.</span><span class="n">environment</span><span class="p">(</span><span class="err">\</span><span class="p">.</span><span class="n">colorScheme</span><span class="p">,</span> <span class="p">.</span><span class="n">dark</span><span class="p">)</span>
+</pre></div>
+<p>so:</p><ul>
+<li>The wrappedValue is: the value of some var in <code>EnvironmentValues</code>.</li>
+<li>What it does: gets/sets a value of some var in <code>EnvironmentValues</code>.</li>
+<li>Projected value (i.e. $): none.</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1">// someView pop 一个 modal 的 myView,传递 environment</span>
+<span class="n">someView</span><span class="p">.</span><span class="n">sheet</span><span class="p">(</span><span class="n">isPresented</span><span class="p">:</span> <span class="n">myCondition</span><span class="p">){</span>
+    <span class="n">myView</span><span class="p">(...</span><span class="kd">init</span><span class="p">...)</span>
+    <span class="p">.</span><span class="n">enviroment</span><span class="p">(</span><span class="err">\</span><span class="p">.</span><span class="n">colorScheme</span><span class="p">,</span> <span class="n">colorScheme</span><span class="p">)</span> 
+<span class="p">}</span>
+</pre></div>
+<p>除了深色模式，还有一个典型的应用场景就是编辑模式<code>\.editMode</code>，比如点了编辑按钮后。</p><blockquote>
+<p><code>EditButton</code>是一个封装了UI和行为的控件，它只做一件事，就是更改<code>\.editmode</code>这个环境变量(的<code>isEditing</code>)</p></blockquote>
+<h2>@Publisher</h2>
+<p>It is an object that <code>emits values</code> and possibly a <code>failure object</code> if it fails while doing so.</p><div class="highlight"><pre><span></span><span class="n">Publisher</span><span class="p">&lt;</span><span class="n">Output</span><span class="p">,</span> <span class="n">Failure</span><span class="p">&gt;</span>
+</pre></div>
+<ul>
+<li>Failure需要实现<code>Error</code>，如果没有，可以传<code>Never</code></li>
+</ul>
+<h3>订阅</h3>
+<p>一种简单用法，<code>sink</code>:</p><div class="highlight"><pre><span></span><span class="n">cancellable</span> <span class="p">=</span> <span class="n">myPublisher</span><span class="p">.</span><span class="n">sink</span><span class="p">(</span>
+    <span class="n">receiveCompletion</span><span class="p">:{</span><span class="n">resultin</span><span class="p">...},</span> <span class="c1">//result is a Completion&lt;Failure&gt; enum</span>
+        <span class="n">receiveValue</span><span class="p">:</span> <span class="p">{</span> <span class="n">thingThePublisherPublishes</span> <span class="k">in</span> <span class="p">.</span> <span class="p">.</span> <span class="p">.</span> <span class="p">}</span>
+  <span class="p">)</span>
+</pre></div>
+<p>返回一个<code>Cancellable</code>，可以随时<code>.cancel()</code>，只要你持有这个<code>cancellable</code>，就能随时用这个sink</p><p>View有自己的订阅方式：</p><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">onReceive</span><span class="p">(</span><span class="n">publisher</span><span class="p">)</span> <span class="p">{</span> <span class="n">thingThePublisherPublishes</span> <span class="k">in</span>
+    <span class="c1">// do whatever you want with thingThePublisherPublishes </span>
+<span class="p">}</span>
+</pre></div>
+<ol>
+<li><code>.onReceive</code> will automatically <code>invalidate</code> your View (causing a redraw).</li>
+<li>既然参数是publisher，所以是一个binding的变量，即带<code>$</code>使用：</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="p">.</span><span class="n">onReceive</span><span class="p">(</span><span class="err">$</span><span class="n">aBindData</span><span class="p">)</span> <span class="p">{</span> <span class="n">bind_data</span> <span class="k">in</span> 
+    <span class="c1">// my code</span>
+<span class="p">}</span>
+</pre></div>
+<p>publisher来源：</p><ol>
+<li><code>$</code> in front of vars marked <code>@Published</code><ul>
+<li>还记得$就是取的projectedValue吗？</li>
+<li>一般的projectedValue是一个<em>Binding</em>，Published的是是个<em>Publisher</em></li>
+</ul>
+</li>
+<li>URLSession’s <code>dataTaskPublisher</code> (publishes the Data obtained from a URL)</li>
+<li><code>Timer</code>’s publish(every:) (periodically publishes the current date and time as a Date)</li>
+<li><code>NotificationCenter</code>’s publisher(for:) (publishes notifications when system events happen)</li>
+</ol>
+<blockquote>
+<p>如果你有一个<code>ObservedObject</code>(Document)，它里面有一个<code>@Publisher</code>(background)，那么注意以下两者的区别：</p></blockquote>
+<ul>
+<li>document.<code>$</code>background: 是一个publisher</li>
+<li><code>$</code>document.background: 是一个binding</li>
+</ul>
+<blockquote>
+<p><code>.onReceive</code>只能接收<code>Publisher</code>的推送，而事实上，<code>onChange</code>（一般用于接收ObservedObject或State)同样也能接收Publisher。</p></blockquote>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B5%5D_Property-Wrapper/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B4%5D_Color_Image_Gesture/" target="_self">cs193p_2021笔记[4]_Color_Image_Gesture</a></h1>
@@ -1847,233 +2088,6 @@ $$</p><h3>adaptive learning rate</h3>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85MACHINE-LEARNING-2021-SPRING%E7%AC%94%E8%AE%B0-1/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-7/" target="_self">《Deep Learning with Python》笔记[7]</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-7/" target="_self">
-                <time class="text-uppercase">
-                    October 12 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><h1>Generative deep learning</h1>
-<p>Our perceptual modalities, our language, and our artwork all have <code>statistical structure</code>. Learning this structure is what deep-learning algorithms excel at.</p><p>Machine-learning models can learn the <code>statistical latent space</code> of images, music, and stories, and they can then<code>sample from this space</code>, <strong>creating new artworks</strong> with characteristics similar to those the model has seen in its training data.</p><h2>Text generation with LSTM</h2>
-<h3>Language model</h3>
-<p>很多地方都在按自己的理解定义<code>language model</code>，这本书定义很明确，能为根据前文预测下一个或多个token建立概率模型的网络。</p><blockquote>
-<p>any network that can model the probability of the next token given the previous ones is called a language model.</p></blockquote>
-<ol>
-<li>所以首先，它是一个network</li>
-<li>它做的事是model一个probability</li>
-<li>内容是the next token</li>
-<li>条件是previous tokens</li>
-</ol>
-<p>一旦你有了这样一个language model，你就能<code>sample from it</code>，这就是前面笔记里的sample from lantent space, 然后generate了。</p><h3>greedy sampling and stochastic sampling</h3>
-<p>如果根据概率模型每次都选“最可能”的输出，在连贯性上被证明是不好的，而且也丧失了创造性，所以还是给了一定的随机性能选到“不那么可能”的输出。</p><p>因为人类思维本身也是<code>跳跃</code>的。</p><p>考虑两个输出下一个token时的极端情况：</p><!-- --> | <!-- --> | <!-- --> | <!-- -->
-<p>------- | ------- | ------- | -------
-纯随机，所有可选词的概率是均等的 | 毫无意义 | <code>max entropy</code> | 创造性高
-greedy sampling | 毫无生趣 | <code>minimum entropy</code> | 可预测性高</p><p>实现方式：<code>softmax temperature</code></p><p>除一个<code>温度</code>，如果温度大于1，那么温度越大，被除数缩幅度就越大（这样温差就越小，分布会更平均）-&gt; 偏向了纯随机的概率结构（均等）</p><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="k">def</span> <span class="nf">reweight_distribution</span><span class="p">(</span><span class="n">original_distribution</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
-    <span class="n">distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">original_distribution</span><span class="p">)</span> <span class="o">/</span> <span class="n">temperature</span>
-    <span class="n">distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">distribution</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">distribution</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">distribution</span><span class="p">)</span>
-</pre></div>
-<p>写成公式
-$
-\frac{e^{\frac{log(d)}{T}}}{\sum e^{\frac{log(d)}{T}}}
-$
-这是对温度和sigmoid做了融合：</p><ol>
-<li>一个是对目标分布取自然对数后除温度再当成e的指数给幂回去（如果不除温度，那就是先log再e，等于是原数）</li>
-<li>标准的sigmoid方程</li>
-</ol>
-<blockquote>
-<p>这里回顾一个概念：Sampling from a space</p></blockquote>
-<p>书里大量用了这个概念，结合代码，其实就是一个predict函数，也就是说，一般人理解的“<code>预测，推理</code>”，是从业务逻辑方面来理解，作者更愿意从统计学和线性代数角度来理解。</p><p>两种训练方法：</p><ol>
-<li>每次用N个字，来预测第N+1个字，即output只有1个(voc_size, 1)，训练的是language model</li>
-<li>每次用N个字(a, b), 来预测(a+1, b+1)， output有N个(voc_size, N)，训练的是特定的任务，比如写诗，作音乐</li>
-</ol>
-<p>过程：</p><ol>
-<li>准备数据，X为一组句子，Y为每一个句子对应的下一个字（全部向量化）</li>
-<li>搭建一个LSTM + Dense 的网络，输出根据具体情况要么为1，要么为N</li>
-<li>每一个epoch里均进行预测（如果不是为了看过程，有必要吗？我们要最后一轮的预测不就行了？）<ul>
-<li>进行一次fit(就是train)，得到优化后的参数</li>
-<li>随机取一段文本，用作种子（用来生成第一个字）</li>
-<li>计算生成多少个字，就开始for循环<ul>
-<li>向量化当前的种子（会越来越长）</li>
-<li>predict，得到每个字的概率</li>
-<li>softmax temperature，平滑概率，取出next_token</li>
-<li>next_token转回文本，附加到seed后面</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<h3>DeepDream</h3>
-<p>看了一遍，不感兴趣。核心思路跟视觉化filter的思路是一样的：<code>gradient ascent</code></p><ol>
-<li>从对每个layer里的单个filter做梯度上升变成了对整个layer做梯度上升</li>
-<li>不再从随机噪声开始，而是从一张真实图片开始，实现这些layer里对图片影响最大的patterns的distorting</li>
-</ol>
-<h3>Neural style transfer</h3>
-<p>Neural style transfer consists of applying the <code>style</code> of a reference image to a target image while conserving the <code>content</code> of the target image.</p><ul>
-<li>两个对象：<code>reference</code>, <code>target</code> image</li>
-<li>两个概念：<code>style</code>和<code>content</code></li>
-</ul>
-<p>对<code>B</code>的content应用<code>A</code>的style，我们可以理解为“笔刷”，或者用前些年的流行应用来解释：把一副画水彩化，或油画化。</p><p>把style分解为不同spatial scales上的：纹理，颜色，和visual pattern</p><p>想用深度学习来尝试解决这个问题，首先至少得定义损失函数是什么样的。</p><p>If we were able to mathematically define <code>content</code> and <code>style</code>, then an appropriate loss function to minimize would be the following:</p><div class="highlight"><pre><span></span><span class="n">loss</span> <span class="o">=</span> <span class="n">distance</span><span class="p">(</span><span class="n">style</span><span class="p">(</span><span class="n">reference_image</span><span class="p">)</span> <span class="o">-</span> <span class="n">style</span><span class="p">(</span><span class="n">generated_image</span><span class="p">))</span> <span class="o">+</span>
-        <span class="n">distance</span><span class="p">(</span><span class="n">content</span><span class="p">(</span><span class="n">original_image</span><span class="p">)</span> <span class="o">-</span> <span class="n">content</span><span class="p">(</span><span class="n">generated_image</span><span class="p">))</span>
-</pre></div>
-<p>即对新图而言，<code>纹理要无限靠近A，内容要无限靠近B</code>。</p><ul>
-<li>the content loss<ul>
-<li>图像内容属于高级抽象，因此只需要top layers参与就行了，实际应用中只取了最顶层</li>
-</ul>
-</li>
-<li>the style loss<ul>
-<li>应用<code>Gram matrix</code><ul>
-<li>the inner product of the feature maps of a given layer</li>
-<li>correlations between the layer's feature</li>
-<li>需要生成图和参考图的每一个对应的layer拥有相同的纹理(same <code>textures</code> at different <code>spatial scales</code>)，因此需要所有的layer参与</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>从这里应该也能判断出要搭建网络的话，input至少由三部分（三张图片）构成了。</p><p><strong>demo</strong></p><ul>
-<li>input为参考图，目标图，和生成图（占位），concatenate成一个tensor</li>
-<li>用VGG19来做特征提取</li>
-<li>计算loss<ol>
-<li>用生成图和<code>目标图</code>的<code>top_layer</code>以L2 norm距离做loss</li>
-<li>用生成图和<code>参考图</code>的<code>every</code> layer以L2 Norm做loss并累加</li>
-<li>对生成图偏移1像素做regularization loss（具体看书）</li>
-<li>上述三组loss累加，为一轮的loss</li>
-</ol>
-</li>
-<li>用loss计算对input(即三联图)的梯度</li>
-</ul>
-<h2>Generating images</h2>
-<blockquote>
-<p>Sampling from a latent space of images to create entirely new images</p></blockquote>
-<p>熟悉的句式又来了。</p><p>核心思想：</p><ol>
-<li>low-dimensional <code>latent space</code> of representations<ul>
-<li>一般是个vector space</li>
-<li>any point can be mapped to a realistic-looking image</li>
-</ul>
-</li>
-<li>the module capable of <code>realizing this mapping</code>, can take point as input, then output an image, this called:<ul>
-<li>generator -&gt; GAN</li>
-<li>decoder -&gt; VAE</li>
-</ul>
-</li>
-</ol>
-<p>VAE v.s. GAN</p><ul>
-<li>VAEs are great for learning latent spaces that are <code>well structured</code></li>
-<li>GANs generate images that can potentially be <code>highly realistic</code>, but the latent space they come from may not have as much structure and continuity.</li>
-</ul>
-<h3>VAE（variational autoencoders）</h3>
-<p>given a <code>latent space</code> of representations, or an embedding space, <code>certain directions</code> in the space <strong>may</strong> encode interesting axes of variation in the original data. -&gt; inspired by <code>concept space</code></p><p>比如包含人脸的数据集的latent space里，是否会存在<code>smile vectors</code>，定位这样的vector，就可以修改图片，让它projecting到这个latent space里去。</p><p><strong>Variational autoencoders</strong></p><p>Variational autoencoders are a kind of <em>generative model</em> that’s especially appropriate for the task of <strong>image editing</strong> via concept vectors.</p><p>They’re a modern take on <code>autoencoders</code> (a type of network that aims to <code>encode</code>an input to a <code>low-dimensional</code> latent space and then decode it back) that mixes ideas from deep learning with <strong>Bayesian inference</strong>.</p><ul>
-<li>VAE把图片视作隐藏空间的参数进行统计过程的结果。</li>
-<li>参数就是表示一种正态分布的mean和variance（实际取的log_variance)</li>
-<li>用这个分布可以进行采样(sample)</li>
-<li>映射回original image</li>
-</ul>
-<ol>
-<li>An encoder module turns the input samples <em>input_img</em> into two parameters in a latent space of representations, <code>z_mean</code> and <code>z_log_variance</code>.</li>
-<li>You randomly sample a point z from the latent normal distribution that’s assumed to generate the input image, via $z = z_mean + e^{z_log_variance} \times \epsilon$, where $\epsilon$ is a random tensor of small values.</li>
-<li>A decoder module maps <em>this point</em> in the latent space back to the original input image.</li>
-</ol>
-<blockquote>
-<p>Because epsilon is random, the process ensures that every point that’s <strong>close to the latent location</strong> where you encoded input_img (z-mean) can be decoded to something <strong>similar</strong> to input_img, thus forcing the latent space to be continuously meaningful.</p></blockquote>
-<ol>
-<li>所以VAE生成的图片是可解释的，比如在latent space中距离相近的两点，decode出来的图片相似度也就很高。</li>
-<li>多用于编辑图片，并且能生成动画过程（因为是连续的）</li>
-</ol>
-<p>伪代码(不算，可以说是骨干代码）：</p><div class="highlight"><pre><span></span><span class="n">z_mean</span><span class="p">,</span> <span class="n">z_log_variance</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">input_img</span><span class="p">)</span>
-<span class="n">z</span> <span class="o">=</span> <span class="n">z_mean</span> <span class="o">+</span> <span class="n">exp</span><span class="p">(</span><span class="n">z_log_variance</span><span class="p">)</span> <span class="o">*</span> <span class="n">epsilon</span>  <span class="c1"># sampling</span>
-<span class="n">reconstructed_img</span> <span class="o">=</span> <span class="n">decoder</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">input_img</span><span class="p">,</span> <span class="n">reconstructed_img</span><span class="p">)</span>
-</pre></div>
-<p>VAE encoder network</p><div class="highlight"><pre><span></span><span class="n">img_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
-<span class="n">latent_dim</span> <span class="o">=</span> <span class="mi">2</span>
-
-<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">input_img</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">shape_before_flattening</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">int_shape</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Flatten</span><span class="p">()(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">z_mean</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">latent_dim</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">z_log_var</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">latent_dim</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</pre></div>
-<ol>
-<li>可见是一个标准的multi-head的网络</li>
-<li>可见所谓的latent space，其实就是transforming后的结果</li>
-<li>encode的目的是回归出两个参数（本例是两个2维参数）</li>
-<li>两个参数一个理解为mean, 一个理解为log_variance</li>
-</ol>
-<p>decoder过程就是对mean和var随机采样（得到z)，然后不断上采样(<code>Conv2DTranspose</code>)得到形状与源图一致的输出(得到z_decode)的过程。</p><ol>
-<li>z_decode跟z做BCE loss</li>
-<li>还要加一个regularization loss防止overfitting</li>
-</ol>
-<blockquote>
-<p>此处请看书，演示了自定义的loss。因为keras高度封装，所以各种在封装之外的自定义的用法尤其值得关注。比如这里，自定义了loss之后，Model和fit里就不需要传Y，compile时也不需要传loss了。</p></blockquote>
-<blockquote>
-<p>loss是在最后一层layer里计算的，并且通过一个layer方法<code>add_loss</code>，把loss和input通知给了network（如果你想知道注入点的话）</p></blockquote>
-<p>使用模型的话，就是生成两组随机数，当成mean和log_variance，观察decode之后的结果。</p><h3>GAN</h3>
-<p><code>Generative adversarial network</code>可以创作以假乱真的图片。通过训练最好的造假和和最好的鉴别者来达到“创造”越来越逼近人类创作的作品。</p><ul>
-<li><strong>Generator</strong> network: Takes as input a random vector (a random point in the latent space), and decodes it into a synthetic image</li>
-<li><strong>Discriminator</strong> network (or adversary): Takes as input an image (real or synthetic), and predicts whether the image came from the training set or was created by the generator network.</li>
-</ul>
-<p><strong>deep convolutional GAN (DCGAN)</strong></p><ul>
-<li>a GAN where the generator and discriminator are deep convnets.</li>
-<li>In particular, it uses a <code>Conv2DTranspose</code> layer for image upsampling in the generator.</li>
-</ul>
-<p>训练生成器是冲着能让鉴别器尽可能鉴别为真的方向的：the generator is trained to <code>fool</code> the discriminator。</p><blockquote>
-<p>这句话其实暗含了一个前提，下面会说，就是此时discriminator是确定的。即在确定的鉴别能力下，尽可能去拟合generator的输出，让它能通过当前鉴别器的测试。</p></blockquote>
-<p>书中说训练DCGAN很复杂，而且很多trick, 超参靠的是经验而不是理论支撑，摘抄并笔记a bag of tricks如下：</p><ul>
-<li>We use <code>tanh</code> as the last activation in the generator, instead of sigmoid, which is more commonly found in other types of models.</li>
-<li>We sample points from the latent space using a <code>normal distribution</code> (Gaussian distribution), not a uniform distribution.</li>
-<li>Stochasticity is good to induce robustness. Because GAN training results in a dynamic equilibrium, GANs are likely to get stuck in all sorts of ways. Introducing randomness during training helps prevent this. We introduce randomness in two ways:<ul>
-<li>by using <code>dropout</code> in the discriminator</li>
-<li>and by adding <code>random noise</code> to the labels for the discriminator.</li>
-</ul>
-</li>
-<li>Sparse gradients can hinder GAN training. In deep learning, sparsity is often a desirable property, <strong>but not in GANs</strong>. Two things can induce gradient sparsity: <code>max pooling</code> operations and <code>ReLU</code> activations.<ul>
-<li>Instead of max pooling, we recommend using <code>strided convolutions</code> for downsampling(用步长卷积代替pooling),</li>
-<li>and we recommend using a <code>LeakyReLU</code> layer instead of a ReLU activation. It’s similar to ReLU, but it relaxes sparsity constraints by allowing small negative activation values.</li>
-</ul>
-</li>
-<li>In generated images, it’s common to see <code>checkerboard artifacts</code>(stirde和kernel size不匹配千万的) caused by unequal coverage of the pixel space in the generator.<ul>
-<li>To fix this, we use a kernel size that’s divisible by the stride size whenever we use a strided <code>Conv2DTranpose</code> or Conv2D in both the generator and the discriminator.</li>
-</ul>
-</li>
-</ul>
-<p><strong>Train</strong></p><ol>
-<li>Draw random points in the latent space (random noise).</li>
-<li>Generate images with generator using this random noise.</li>
-<li>Mix the generated images with real ones.</li>
-<li>Train discriminator using these mixed images, with corresponding targets:<ul>
-<li>either “real” (for the real images) or “fake” (for the generated images).</li>
-<li>所以鉴别器是<code>单独训练的</code>（前面笔记铺垫过了）</li>
-<li>下面就是train整个DCGAN了：</li>
-</ul>
-</li>
-<li>Draw new random points in the latent space.</li>
-<li>Train gan using these random vectors, with targets that all say “these are real images.” This updates the weights of the generator (only, because the discriminator is frozen inside gan) to move them toward getting the discriminator to predict “these are real images” for generated images: this trains the generator to fool the discriminator.<ul>
-<li>只train网络里的generator</li>
-<li>discriminator不训练，因为是要用“已经训练到目前程度的”discriminator来做下面的任务</li>
-<li>任务就是只送入伪造图，并声明所有图都是真的，去让generator生成能逼近这个声明的图</li>
-<li>generator就是这么训练出来的。</li>
-<li>所以实际代码是一次epoch是由train一个<code>discriminator</code>和train一个<code>GAN</code>组成.</li>
-</ul>
-</li>
-</ol>
-<p>因为鉴别器和生成器是一起训练的，因此前几轮生成的肯定是噪音，但前几轮鉴别器也是瞎鉴别的。</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Deep-Learning-with-Python-Notes-7/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>
