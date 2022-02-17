@@ -175,7 +175,7 @@ for (i, s) in str.enumerated() {
 }
 ```
 结果如图：
-![](../assets/images/2022-02-13-17-11-59.png)
+![](../assets/2022-02-13-17-11-59.png)
 
 
 2. 画箭头，演示了复杂的绘制怎么把它代理出去，并且什么时机让它产生绘制：
@@ -202,10 +202,10 @@ arrow.setNeedsDisplay() // draw, please
 someLayer.transform = CATransform3DMakeRotation(.pi, 0, 1, 0)
 ```
 一般而言，在Z轴没有分量的平面图，那就只剩旋转的效果了（没有翻转)
-![](../assets/images/2022-02-13-17-28-45.png)
+![](../assets/2022-02-13-17-28-45.png)
 
 这是把anchorPoint设在了圆心，如果设在(0,0):
-![](../assets/images/2022-02-14-00-19-27.png)
+![](../assets/2022-02-14-00-19-27.png)
 
 * layer不是为了3D建模而诞生的（考虑`Metal`），它是2D对象，为`speed`和`simplicity`而设计
 
