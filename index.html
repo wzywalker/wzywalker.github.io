@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/827e9617557ff021517a683161d3114d.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/ba419cfddbfa904545039cbb7d0b6c9f.json"
         }
 
     </script>
@@ -364,6 +364,155 @@
 </li>
 </ul>
 </div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Layer/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/Layer/" target="_self">Programming iOS 14 - Layer</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/Layer/" target="_self">
+                <time class="text-uppercase">
+                    February 18 2022
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><h1>hitTest简单二例</h1>
+<p>的不多说，先看一个例子，往窗口里添加两个自定义的view，这样每个view的<code>hitTest</code>方法被访问的时候我们就能log一下：</p><div class="highlight"><pre><span></span><span class="kd">import</span> <span class="nc">UIKit</span>
+
+<span class="kd">class</span> <span class="nc">ViewController</span><span class="p">:</span> <span class="bp">UIViewController</span> <span class="p">{</span>
+
+    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kc">super</span><span class="p">.</span><span class="n">viewDidLoad</span><span class="p">()</span>
+
+        <span class="kd">let</span> <span class="nv">view1</span> <span class="p">=</span> <span class="n">View1</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="mi">110</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="mi">110</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">150</span><span class="p">))</span>
+        <span class="kd">let</span> <span class="nv">view2</span> <span class="p">=</span> <span class="n">View2</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="mi">170</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="mi">170</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">150</span><span class="p">))</span>
+        <span class="n">view1</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="p">=</span> <span class="p">.</span><span class="n">yellow</span>
+        <span class="n">view2</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="p">=</span> <span class="p">.</span><span class="n">red</span>
+
+        <span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">view1</span><span class="p">)</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">view2</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">View1</span> <span class="p">:</span> <span class="bp">UIView</span> <span class="p">{</span>
+    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">hitTest</span><span class="p">(</span><span class="kc">_</span> <span class="n">point</span><span class="p">:</span> <span class="n">CGPoint</span><span class="p">,</span> <span class="n">with</span> <span class="n">event</span><span class="p">:</span> <span class="bp">UIEvent</span><span class="p">?)</span> <span class="p">-&gt;</span> <span class="bp">UIView</span><span class="p">?</span> <span class="p">{</span>
+        <span class="bp">print</span><span class="p">(</span><span class="s">&quot;enter v1 </span><span class="si">\(</span><span class="n">point</span><span class="si">)</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">super</span><span class="p">.</span><span class="n">hitTest</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">with</span><span class="p">:</span> <span class="n">event</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">View2</span> <span class="p">:</span> <span class="bp">UIView</span> <span class="p">{</span>
+    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">hitTest</span><span class="p">(</span><span class="kc">_</span> <span class="n">point</span><span class="p">:</span> <span class="n">CGPoint</span><span class="p">,</span> <span class="n">with</span> <span class="n">event</span><span class="p">:</span> <span class="bp">UIEvent</span><span class="p">?)</span> <span class="p">-&gt;</span> <span class="bp">UIView</span><span class="p">?</span> <span class="p">{</span>
+        <span class="bp">print</span><span class="p">(</span><span class="s">&quot;enter v2, </span><span class="si">\(</span><span class="n">point</span><span class="si">)</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">super</span><span class="p">.</span><span class="n">hitTest</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">with</span><span class="p">:</span> <span class="n">event</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>运行：</p><figure class="vertical-figure" style="flex: 46.42857142857143" ><img width="650" height="700" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5b4c2daa70dc2e8941de89fdb19c2bfa.png" alt="image-20220219014246803"/></figure><p>在空白处(<strong>bottom view</strong>)点了一下，输出：</p><div class="highlight"><pre><span></span>enter v2, <span class="o">(</span>-48.66007995605469, <span class="m">306</span>.0133361816406<span class="o">)</span>
+enter v1, <span class="o">(</span><span class="m">11</span>.339920043945312, <span class="m">366</span>.0133361816406<span class="o">)</span>
+enter v2, <span class="o">(</span>-48.66007995605469, <span class="m">306</span>.0133361816406<span class="o">)</span>
+enter v1, <span class="o">(</span><span class="m">11</span>.339920043945312, <span class="m">366</span>.0133361816406<span class="o">)</span>
+enter v2, <span class="o">(</span>-43.33333333333334, <span class="m">325</span>.3333333333333<span class="o">)</span>
+enter v1, <span class="o">(</span><span class="m">16</span>.666666666666657, <span class="m">385</span>.3333333333333<span class="o">)</span>
+enter v2, <span class="o">(</span>-43.33333333333334, <span class="m">325</span>.3333333333333<span class="o">)</span>
+enter v1, <span class="o">(</span><span class="m">16</span>.666666666666657, <span class="m">385</span>.3333333333333<span class="o">)</span>
+</pre></div>
+<p>在红框上(<strong>top view</strong>)点一下，输出：</p><div class="highlight"><pre><span></span>enter v2, <span class="o">(</span><span class="m">38</span>.66666666666666, <span class="m">48</span>.66666666666666<span class="o">)</span>
+enter v2, <span class="o">(</span><span class="m">38</span>.66666666666666, <span class="m">48</span>.66666666666666<span class="o">)</span>
+</pre></div>
+<p>在黄框(<strong>middle view</strong>)点一下，输出：</p><div class="highlight"><pre><span></span>enter v2, <span class="o">(</span>-31.210678100585938, -27.8685302734375<span class="o">)</span>
+enter v2, <span class="o">(</span>-31.210678100585938, -27.8685302734375<span class="o">)</span>
+enter v2, <span class="o">(</span>-25.0, -22.333333333333343<span class="o">)</span>
+enter v1, <span class="o">(</span><span class="m">35</span>.0, <span class="m">37</span>.66666666666666<span class="o">)</span>
+enter v2, <span class="o">(</span>-25.0, -22.333333333333343<span class="o">)</span>
+enter v1, <span class="o">(</span><span class="m">35</span>.0, <span class="m">37</span>.66666666666666<span class="o">)</span>
+</pre></div>
+<ul>
+<li>我们知道<code>hitTest</code>机制是事件传递链由底向上，响应链由上到下，</li>
+<li>所以最底层的<strong>bottom view</strong>最先接到事件就开始找响应者</li>
+<li>它开始从它的最顶层subview开始找响应者(<code>v2</code>)，然后再往下(<code>v1</code>)，均没找到，所以就是自己了</li>
+<li>为何调了四次呢？（未深究）<blockquote>
+Yes, it’s normal. The system may tweak the point being hit tested between the calls. Since hitTest should be a pure function with no side-effects, this should be fine.</blockquote>
+</li>
+<li>第二次测试，直接在最顶层view就找到了（所谓的找到，就是点击的位置在这个view的bounds内，后面说）</li>
+<li>至于为什么坐标会变？（未深究）</li>
+<li>第三次测试，点了v1，可以看到日志，在v2那里跑了3次，再跑了v1，不知道为什么还是没返回，还跑了一次v2后才认定v1</li>
+</ul>
+<p>大体可以知道hitTest的机制了吧？以传递链的终点那个view为基础，在subviews逆向遍历（自顶向下），一直到自己。</p><h2>应用1</h2>
+<p>来个简单场景，如果黄色的view是有触摸事件的，并且要求被覆盖的区域也能响应，该怎么做呢？</p><p>思考：</p><ul>
+<li>我们知道点击的位置，肯定是在黄框范围内的，所以要的就是一个入口，用来判断这个点与黄框的关系，一旦确认点的范围是在黄框里，就把认为黄框是事件响应者。</li>
+<li>因此改下demo，加了事件，还加了一个parent view（这样才能在用属性的方式把黄框引用出来）</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">ViewController</span><span class="p">:</span> <span class="bp">UIViewController</span> <span class="p">{</span>
+
+    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kc">super</span><span class="p">.</span><span class="n">viewDidLoad</span><span class="p">()</span>
+
+
+        <span class="kd">let</span> <span class="nv">view1</span> <span class="p">=</span> <span class="bp">UIView</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="mi">110</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="mi">110</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">150</span><span class="p">))</span>
+        <span class="kd">let</span> <span class="nv">view2</span> <span class="p">=</span> <span class="bp">UIView</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="mi">170</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="mi">170</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">150</span><span class="p">))</span>
+        <span class="n">view1</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="p">=</span> <span class="p">.</span><span class="n">yellow</span>
+        <span class="n">view2</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="p">=</span> <span class="p">.</span><span class="n">red</span>
+
+        <span class="kd">let</span> <span class="nv">tap</span> <span class="p">=</span> <span class="bp">UITapGestureRecognizer</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="kc">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="k">#selector</span><span class="p">(</span><span class="n">tap</span><span class="p">(</span><span class="kc">_</span><span class="p">:)))</span>
+        <span class="n">view1</span><span class="p">.</span><span class="n">addGestureRecognizer</span><span class="p">(</span><span class="n">tap</span><span class="p">)</span>
+        <span class="n">view1</span><span class="p">.</span><span class="n">isUserInteractionEnabled</span> <span class="p">=</span> <span class="kc">true</span>
+
+        <span class="kd">let</span> <span class="nv">view</span> <span class="p">=</span> <span class="n">View</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">view1</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">view2</span><span class="p">)</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kr">@objc</span> <span class="kd">func</span> <span class="nf">tap</span><span class="p">(</span><span class="kc">_</span> <span class="n">sender</span><span class="p">:</span> <span class="bp">UIGestureRecognizer</span><span class="p">)</span> <span class="p">{</span>
+        <span class="bp">print</span><span class="p">(</span><span class="s">&quot;view1 taped&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">View</span><span class="p">:</span> <span class="bp">UIView</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">view1</span><span class="p">:</span> <span class="bp">UIView</span>
+    <span class="kd">var</span> <span class="nv">view2</span><span class="p">:</span> <span class="bp">UIView</span>
+    <span class="kd">init</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="bp">UIView</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="bp">UIView</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">view1</span> <span class="p">=</span> <span class="n">a</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">view2</span> <span class="p">=</span> <span class="n">b</span>
+        <span class="kc">super</span><span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="bp">UIScreen</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">bounds</span><span class="p">)</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="kr">required</span> <span class="kd">init</span><span class="p">?(</span><span class="n">coder</span><span class="p">:</span> <span class="bp">NSCoder</span><span class="p">)</span> <span class="p">{</span>
+        <span class="bp">fatalError</span><span class="p">(</span><span class="s">&quot;init(coder:) has not been implemented&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">hitTest</span><span class="p">(</span><span class="kc">_</span> <span class="n">point</span><span class="p">:</span> <span class="n">CGPoint</span><span class="p">,</span> <span class="n">with</span> <span class="n">event</span><span class="p">:</span> <span class="bp">UIEvent</span><span class="p">?)</span> <span class="p">-&gt;</span> <span class="bp">UIView</span><span class="p">?</span> <span class="p">{</span>
+      <span class="kd">let</span> <span class="nv">loc_v1</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">convert</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="kc">self</span><span class="p">.</span><span class="n">view1</span><span class="p">)</span>
+          <span class="c1">// 主要就是这一句</span>
+        <span class="k">if</span><span class="p">(</span><span class="kc">self</span><span class="p">.</span><span class="n">view1</span><span class="p">.</span><span class="n">point</span><span class="p">(</span><span class="n">inside</span><span class="p">:</span> <span class="n">loc_v1</span><span class="p">,</span> <span class="n">with</span><span class="p">:</span> <span class="n">event</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">self</span><span class="p">.</span><span class="n">view1</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="kc">super</span><span class="p">.</span><span class="n">hitTest</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">with</span><span class="p">:</span> <span class="n">event</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<ul>
+<li><code>let loc_v1 = self.convert(point, to: self.view1)</code>意思是这个点以view1为坐标系的位置</li>
+<li><code>if(self.view1.point(inside: loc_v1, with: event))</code> 这就是判断这个点在不在view1的bounds里面了</li>
+</ul>
+<p>简单来说，就是简单粗暴地“逮住每一个机会”，问是不是你，是不是你。</p><h2>应用2</h2>
+<p>如果一个按钮很小，你要扩大他的点击区域怎么做？网上有很多方法，关联属性啊，交换方法啊，可以去搜搜，我们这里继续上面的例子，知道有一个<code>point(inside:with)</code>方法，顾名思义，就是这个点在不在我的视图区域内</p><p>它当然也是可以被重写，自定义在什么样的范围内，都算<code>inside</code>，下面是网上抄的一段代码</p>
+<pre><code>- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent*)event {
+   //获取当前button的实际大小
+    CGRect bounds = self.bounds;
+    //若原热区小于44x44，则放大热区，否则保持原大小不变
+    CGFloat widthDelta = MAX(44.0 - bounds.size.width, 0);
+    CGFloat heightDelta = MAX(44.0 - bounds.size.height, 0);
+    //扩大bounds
+    bounds = CGRectInset(bounds, -0.5 * widthDelta, -0.5 * heightDelta);
+    //如果点击的点 在 新的bounds里，就返回YES
+    return CGRectContainsPoint(bounds, point);
+}
+</code></pre>
+<p>这个例子主要就是利用底层的<code>CGRectContainsPoint</code>方法，传入了新的<code>bounds</code>，可以理解为人为修改入参吧。代码也很明确了，自己根据当前的bounds合理做一个大一点的bounds，交给系统去做就行了。</p></div>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Layer/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
@@ -2341,85 +2490,6 @@ constraint(lessThanOrEqualToSystemSpacingBelow:multiplier:)
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AB%EF%BC%9ABalanced-Binary-Search-Trees%28BBST%29/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%83%EF%BC%9ASuffix-Array%2C-Longest-Common-Prefix-%28LCP%29-array/" target="_self">数据结构篇七：Suffix Array, Longest Common Prefix (LCP) array</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%83%EF%BC%9ASuffix-Array%2C-Longest-Common-Prefix-%28LCP%29-array/" target="_self">
-                <time class="text-uppercase">
-                    November 16 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><hr />
-<h1>Suffix Array</h1>
-<ul>
-<li>字符串的所有子字符串后缀组成数组</li>
-<li>对子串根据首字母进行排序</li>
-<li>排序后原有的index就被打乱了</li>
-<li>这个乱序的indices就是<code>Suffix Array</code></li>
-</ul>
-<p>做尾缀子串的时候通常是从单个字母开始越找越多，这就有了一个原生顺序，然后用首字母排序后，这个顺序就被打乱了</p><p>提供了一种<code>compressd representation</code> of sorted suffixes而无需真的把这些子串存起来。</p><ul>
-<li>A space efficient alternative to a <code>suffix tree</code><ul>
-<li>a compressd version of a <code>trie</code>?</li>
-</ul>
-</li>
-</ul>
-<p>能做所有<code>suffix tree</code>能做的事，并加添加了<code>Longest Common Prefix</code>(LCP) array</p><h1>Longest Common Prefix (LCP) array</h1>
-<p>继续上面的Suffix Array，字母排序后，我们一个个地用每一个元素同上一个元素比，标记相同前缀的字母个数，这个数字序列就是<code>LCP</code></p><p>比如adc, adfgadc, 前缀<code>ab</code>是相同的，那就是2。</p><p>第一个元素没有“上一个”去比，所以LCP数组第1位永远是0？（是的，其实是undefined，但一般设0）</p><p>衡量的是相邻的suffix array元素的前缀间有多少个字母相同。</p><p>当前也可以和下一个元素比（这样最后一个元素的LCP肯定是0了，原理同上）</p><h2>Find unique substrings</h2>
-<p>找到（或计数）一个数组的所有（不重复的）子元素。可以逐个substring遍历，$O(n^2)$，下面看看更快也更省空间的LCP方案。</p><p>找“AZAZA”的不重复子串:
-A,AZ,AZA,AZAZ,AZAZA,Z,ZA,ZAZ,ZAZA,<code>A,AZ,AZA,Z,AZ,A</code>，把重复的标注了出来。
-LCP是这样的：
-LCP|Sorted Suffixes|
--|-
-0|A
-1|AZA
-3|AZAZA
-0|ZA
-2|ZAZA</p><p>我们知道第一列指的是“重复个数”，也就是说，如果按我们手写的那样去遍历，至少有这么多重复的子串，重复的既是“个数”，也是“组合方式”。</p><p>所以如果我们只需要计数的话，把右边的数出来就知道有会有多少个重复的了，此例为6.</p><p>$$\tt unique\ count = \underbrace{\frac{n(n+1)}{2}}_{substr\ count} - \underbrace{\sum_{i=1}^n LCP[i]}_{duplicates}$$</p>
-<p>这是LCP的应用之一，利用了LCP本身就是在数重复次数的特征。</p><h2>K common substring problem</h2>
-<p>n个字符串，找出一个子串，它至少是k个字符串的子串，求最大子串。$2\leq k \leq n$</p><p>即如果有k=2，那么这个子串只需要是其中两个的子串就行了，如果k=n，那么就需要是每一个字符串的子串。</p><p>直接上图
-<figure  style="flex: 50.4885993485342" ><img width="1240" height="1228" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b7cb01449aa00a46b95ca35f28751a33.png" alt=""/></figure></p><ul>
-<li>图1演示k=3时，找到了<code>ca</code>，即3个串里都有的是<code>ca</code></li>
-<li>图2演示k=2时，找到了<code>bca</code>，即<code>bca</code>存在2个串里</li>
-<li>图3演示的是用了size=4的滑窗才包含了3个字符串，以及最大匹配是<code>AG</code></li>
-</ul>
-<p>步骤：</p><ol>
-<li>首先，用几个分隔符把字符串拼接起来<ul>
-<li>分隔符字符串里不会出现</li>
-<li>分隔符的排序要小于所有字符</li>
-</ul>
-</li>
-<li>图中染色的依据是prefix是哪个串里的就染成什么颜色</li>
-<li>开始滑窗比较<ul>
-<li>滑窗必须要能包含k种颜色</li>
-<li>所以滑窗大小不是固定的，有时候相邻几个都是来自同一个字符串</li>
-<li>滑窗里除0外的最小值，就是符合条件的最大共同长度，如图3，最大匹配长度是2</li>
-<li>课程里动画演示滑窗其实不是用滑的，而是用的爬行<ul>
-<li>即下界往下，包含了所有颜色之后，上界也往下，这样蠕行前进，每一步判断滑窗里的内容</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>额外需要一个hash table来保存切片与颜色的映射关系。<ul>
-<li>如果是例子这么简单，我可以直接检查第一个出现的分隔符，是#就是绿色，出现$就是蓝色，%就是红色</li>
-</ul>
-</li>
-</ol>
-<p>核心就是：</p><ul>
-<li>取子串是从后向前取的</li>
-<li>但比较是从前向后比的</li>
-<li>前面的元素可能来自任何一个子串（只要足够长）</li>
-<li>从前面排序，客观上就把来自不同字符串的相同字母打头的子串给排到一起了</li>
-</ul>
-<p>这就是为什么在<code>Suffix</code> Array的内容里面出现Longest Common <code>Prefix</code>的内容的原因了.</p><p>聪明。</p><h2>Longest Repeated Substring (LRS)</h2>
-<figure  style="flex: 72.68464243845251" ><img width="1240" height="853" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/ef47276f994f76ccabc2c60900227916.png" alt=""/></figure><p>这个比暴力遍历要简单太多，直接找LCP最大值即可</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%83%EF%BC%9ASuffix-Array%2C-Longest-Common-Prefix-%28LCP%29-array/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

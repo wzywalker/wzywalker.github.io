@@ -1,67 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>walker's code blog</title><link>/</link><description>coder, reader</description><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png</url><title>walker's code blog</title><link>/</link></image><language>english</language><lastBuildDate>Thu, 17 Feb 2022 17:33:56 +0806</lastBuildDate><pubDate>Thu, 17 Feb 2022 17:33:56 +0806</pubDate><item><title>数据结构篇七：Suffix Array, Longest Common Prefix (LCP) array</title><link>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%83%EF%BC%9ASuffix-Array%2C-Longest-Common-Prefix-%28LCP%29-array/</link><description>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
-&lt;h1&gt;Suffix Array&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;字符串的所有子字符串后缀组成数组&lt;/li&gt;
-&lt;li&gt;对子串根据首字母进行排序&lt;/li&gt;
-&lt;li&gt;排序后原有的index就被打乱了&lt;/li&gt;
-&lt;li&gt;这个乱序的indices就是&lt;code&gt;Suffix Array&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;做尾缀子串的时候通常是从单个字母开始越找越多，这就有了一个原生顺序，然后用首字母排序后，这个顺序就被打乱了&lt;/p&gt;&lt;p&gt;提供了一种&lt;code&gt;compressd representation&lt;/code&gt; of sorted suffixes而无需真的把这些子串存起来。&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;A space efficient alternative to a &lt;code&gt;suffix tree&lt;/code&gt;&lt;ul&gt;
-&lt;li&gt;a compressd version of a &lt;code&gt;trie&lt;/code&gt;?&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;能做所有&lt;code&gt;suffix tree&lt;/code&gt;能做的事，并加添加了&lt;code&gt;Longest Common Prefix&lt;/code&gt;(LCP) array&lt;/p&gt;&lt;h1&gt;Longest Common Prefix (LCP) array&lt;/h1&gt;
-&lt;p&gt;继续上面的Suffix Array，字母排序后，我们一个个地用每一个元素同上一个元素比，标记相同前缀的字母个数，这个数字序列就是&lt;code&gt;LCP&lt;/code&gt;&lt;/p&gt;&lt;p&gt;比如adc, adfgadc, 前缀&lt;code&gt;ab&lt;/code&gt;是相同的，那就是2。&lt;/p&gt;&lt;p&gt;第一个元素没有“上一个”去比，所以LCP数组第1位永远是0？（是的，其实是undefined，但一般设0）&lt;/p&gt;&lt;p&gt;衡量的是相邻的suffix array元素的前缀间有多少个字母相同。&lt;/p&gt;&lt;p&gt;当前也可以和下一个元素比（这样最后一个元素的LCP肯定是0了，原理同上）&lt;/p&gt;&lt;h2&gt;Find unique substrings&lt;/h2&gt;
-&lt;p&gt;找到（或计数）一个数组的所有（不重复的）子元素。可以逐个substring遍历，$O(n^2)$，下面看看更快也更省空间的LCP方案。&lt;/p&gt;&lt;p&gt;找“AZAZA”的不重复子串:
-A,AZ,AZA,AZAZ,AZAZA,Z,ZA,ZAZ,ZAZA,&lt;code&gt;A,AZ,AZA,Z,AZ,A&lt;/code&gt;，把重复的标注了出来。
-LCP是这样的：
-LCP|Sorted Suffixes|
--|-
-0|A
-1|AZA
-3|AZAZA
-0|ZA
-2|ZAZA&lt;/p&gt;&lt;p&gt;我们知道第一列指的是“重复个数”，也就是说，如果按我们手写的那样去遍历，至少有这么多重复的子串，重复的既是“个数”，也是“组合方式”。&lt;/p&gt;&lt;p&gt;所以如果我们只需要计数的话，把右边的数出来就知道有会有多少个重复的了，此例为6.&lt;/p&gt;&lt;p&gt;$$\tt unique\ count = \underbrace{\frac{n(n+1)}{2}}_{substr\ count} - \underbrace{\sum_{i=1}^n LCP[i]}_{duplicates}$$&lt;/p&gt;
-&lt;p&gt;这是LCP的应用之一，利用了LCP本身就是在数重复次数的特征。&lt;/p&gt;&lt;h2&gt;K common substring problem&lt;/h2&gt;
-&lt;p&gt;n个字符串，找出一个子串，它至少是k个字符串的子串，求最大子串。$2\leq k \leq n$&lt;/p&gt;&lt;p&gt;即如果有k=2，那么这个子串只需要是其中两个的子串就行了，如果k=n，那么就需要是每一个字符串的子串。&lt;/p&gt;&lt;p&gt;直接上图
-&lt;figure  style="flex: 50.4885993485342" &gt;&lt;img width="1240" height="1228" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b7cb01449aa00a46b95ca35f28751a33.png" alt=""/&gt;&lt;/figure&gt;&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;图1演示k=3时，找到了&lt;code&gt;ca&lt;/code&gt;，即3个串里都有的是&lt;code&gt;ca&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;图2演示k=2时，找到了&lt;code&gt;bca&lt;/code&gt;，即&lt;code&gt;bca&lt;/code&gt;存在2个串里&lt;/li&gt;
-&lt;li&gt;图3演示的是用了size=4的滑窗才包含了3个字符串，以及最大匹配是&lt;code&gt;AG&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;步骤：&lt;/p&gt;&lt;ol&gt;
-&lt;li&gt;首先，用几个分隔符把字符串拼接起来&lt;ul&gt;
-&lt;li&gt;分隔符字符串里不会出现&lt;/li&gt;
-&lt;li&gt;分隔符的排序要小于所有字符&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;图中染色的依据是prefix是哪个串里的就染成什么颜色&lt;/li&gt;
-&lt;li&gt;开始滑窗比较&lt;ul&gt;
-&lt;li&gt;滑窗必须要能包含k种颜色&lt;/li&gt;
-&lt;li&gt;所以滑窗大小不是固定的，有时候相邻几个都是来自同一个字符串&lt;/li&gt;
-&lt;li&gt;滑窗里除0外的最小值，就是符合条件的最大共同长度，如图3，最大匹配长度是2&lt;/li&gt;
-&lt;li&gt;课程里动画演示滑窗其实不是用滑的，而是用的爬行&lt;ul&gt;
-&lt;li&gt;即下界往下，包含了所有颜色之后，上界也往下，这样蠕行前进，每一步判断滑窗里的内容&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;额外需要一个hash table来保存切片与颜色的映射关系。&lt;ul&gt;
-&lt;li&gt;如果是例子这么简单，我可以直接检查第一个出现的分隔符，是#就是绿色，出现$就是蓝色，%就是红色&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;核心就是：&lt;/p&gt;&lt;ul&gt;
-&lt;li&gt;取子串是从后向前取的&lt;/li&gt;
-&lt;li&gt;但比较是从前向后比的&lt;/li&gt;
-&lt;li&gt;前面的元素可能来自任何一个子串（只要足够长）&lt;/li&gt;
-&lt;li&gt;从前面排序，客观上就把来自不同字符串的相同字母打头的子串给排到一起了&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;这就是为什么在&lt;code&gt;Suffix&lt;/code&gt; Array的内容里面出现Longest Common &lt;code&gt;Prefix&lt;/code&gt;的内容的原因了.&lt;/p&gt;&lt;p&gt;聪明。&lt;/p&gt;&lt;h2&gt;Longest Repeated Substring (LRS)&lt;/h2&gt;
-&lt;figure  style="flex: 72.68464243845251" &gt;&lt;img width="1240" height="853" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/ef47276f994f76ccabc2c60900227916.png" alt=""/&gt;&lt;/figure&gt;&lt;p&gt;这个比暴力遍历要简单太多，直接找LCP最大值即可&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%83%EF%BC%9ASuffix-Array%2C-Longest-Common-Prefix-%28LCP%29-array/</guid><pubDate>Tue, 16 Nov 2021 16:05:00 +0806</pubDate></item><item><title>数据结构篇八：Balanced Binary Search Trees(BBST)</title><link>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AB%EF%BC%9ABalanced-Binary-Search-Trees%28BBST%29/</link><description>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>walker's code blog</title><link>/</link><description>coder, reader</description><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png</url><title>walker's code blog</title><link>/</link></image><language>english</language><lastBuildDate>Sat, 19 Feb 2022 13:52:19 +0806</lastBuildDate><pubDate>Sat, 19 Feb 2022 13:52:19 +0806</pubDate><item><title>数据结构篇八：Balanced Binary Search Trees(BBST)</title><link>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AB%EF%BC%9ABalanced-Binary-Search-Trees%28BBST%29/</link><description>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
 &lt;h1&gt;Balanced Binary Search Trees (BBST)&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;满足low (logarithmic) height for fast insertions and deletions&lt;/li&gt;
@@ -1899,7 +1837,139 @@ CIImage 不是一个&lt;code&gt;displayaable image&lt;/code&gt;&lt;/p&gt;&lt;ul&
 &lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;objc_removeAssociatedObjects&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;id&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;书中写了一个例子，alertView的代理方法来处理按了什么键，而一个页面中如果有多个alertView，且用同一个代理对象，那么处理需要更精细（比如需要知道是哪个警告框弹的，我一般用tag）。
-而如果把处理方法定义为一个block，并把它关联到UIAlertView类，那么处理逻辑就可以跟定义alertView写在一起了。&lt;/p&gt;&lt;p&gt;todo, item 11-14&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E3%80%8AEffective-Objective-C-2.0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>Programming iOS 14 - Layer</title><link>/archives/Layer/</link><description>&lt;p&gt;《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第3章&lt;/p&gt;&lt;hr /&gt;
+而如果把处理方法定义为一个block，并把它关联到UIAlertView类，那么处理逻辑就可以跟定义alertView写在一起了。&lt;/p&gt;&lt;p&gt;todo, item 11-14&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/%E3%80%8AEffective-Objective-C-2.0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/</guid><pubDate>Fri, 14 Jan 2022 00:00:00 +0806</pubDate></item><item><title>Programming iOS 14 - Layer</title><link>/archives/Layer/</link><description>&lt;h1&gt;hitTest简单二例&lt;/h1&gt;
+&lt;p&gt;的不多说，先看一个例子，往窗口里添加两个自定义的view，这样每个view的&lt;code&gt;hitTest&lt;/code&gt;方法被访问的时候我们就能log一下：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;import&lt;/span&gt; &lt;span class="nc"&gt;UIKit&lt;/span&gt;
+
+&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ViewController&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIViewController&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+
+    &lt;span class="kr"&gt;override&lt;/span&gt; &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;viewDidLoad&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="kc"&gt;super&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;viewDidLoad&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+        &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;view1&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;View1&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;frame&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;CGRect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;110&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;110&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;150&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;150&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+        &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;view2&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;View2&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;frame&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;CGRect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;170&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;170&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;150&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;150&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+        &lt;span class="n"&gt;view1&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;backgroundColor&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;yellow&lt;/span&gt;
+        &lt;span class="n"&gt;view2&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;backgroundColor&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;red&lt;/span&gt;
+
+        &lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;view&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;addSubview&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;view1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;view&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;addSubview&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;view2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;View1&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIView&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kr"&gt;override&lt;/span&gt; &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;hitTest&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kc"&gt;_&lt;/span&gt; &lt;span class="n"&gt;point&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;CGPoint&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;event&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIEvent&lt;/span&gt;&lt;span class="p"&gt;?)&lt;/span&gt; &lt;span class="p"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="bp"&gt;UIView&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="bp"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;enter v1 &lt;/span&gt;&lt;span class="si"&gt;\(&lt;/span&gt;&lt;span class="n"&gt;point&lt;/span&gt;&lt;span class="si"&gt;)&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;super&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;hitTest&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;point&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;event&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;View2&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIView&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kr"&gt;override&lt;/span&gt; &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;hitTest&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kc"&gt;_&lt;/span&gt; &lt;span class="n"&gt;point&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;CGPoint&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;event&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIEvent&lt;/span&gt;&lt;span class="p"&gt;?)&lt;/span&gt; &lt;span class="p"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="bp"&gt;UIView&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="bp"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;enter v2, &lt;/span&gt;&lt;span class="si"&gt;\(&lt;/span&gt;&lt;span class="n"&gt;point&lt;/span&gt;&lt;span class="si"&gt;)&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;super&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;hitTest&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;point&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;event&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;运行：&lt;/p&gt;&lt;figure class="vertical-figure" style="flex: 46.42857142857143" &gt;&lt;img width="650" height="700" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5b4c2daa70dc2e8941de89fdb19c2bfa.png" alt="image-20220219014246803"/&gt;&lt;/figure&gt;&lt;p&gt;在空白处(&lt;strong&gt;bottom view&lt;/strong&gt;)点了一下，输出：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;enter v2, &lt;span class="o"&gt;(&lt;/span&gt;-48.66007995605469, &lt;span class="m"&gt;306&lt;/span&gt;.0133361816406&lt;span class="o"&gt;)&lt;/span&gt;
+enter v1, &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;11&lt;/span&gt;.339920043945312, &lt;span class="m"&gt;366&lt;/span&gt;.0133361816406&lt;span class="o"&gt;)&lt;/span&gt;
+enter v2, &lt;span class="o"&gt;(&lt;/span&gt;-48.66007995605469, &lt;span class="m"&gt;306&lt;/span&gt;.0133361816406&lt;span class="o"&gt;)&lt;/span&gt;
+enter v1, &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;11&lt;/span&gt;.339920043945312, &lt;span class="m"&gt;366&lt;/span&gt;.0133361816406&lt;span class="o"&gt;)&lt;/span&gt;
+enter v2, &lt;span class="o"&gt;(&lt;/span&gt;-43.33333333333334, &lt;span class="m"&gt;325&lt;/span&gt;.3333333333333&lt;span class="o"&gt;)&lt;/span&gt;
+enter v1, &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;16&lt;/span&gt;.666666666666657, &lt;span class="m"&gt;385&lt;/span&gt;.3333333333333&lt;span class="o"&gt;)&lt;/span&gt;
+enter v2, &lt;span class="o"&gt;(&lt;/span&gt;-43.33333333333334, &lt;span class="m"&gt;325&lt;/span&gt;.3333333333333&lt;span class="o"&gt;)&lt;/span&gt;
+enter v1, &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;16&lt;/span&gt;.666666666666657, &lt;span class="m"&gt;385&lt;/span&gt;.3333333333333&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;在红框上(&lt;strong&gt;top view&lt;/strong&gt;)点一下，输出：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;enter v2, &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;38&lt;/span&gt;.66666666666666, &lt;span class="m"&gt;48&lt;/span&gt;.66666666666666&lt;span class="o"&gt;)&lt;/span&gt;
+enter v2, &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;38&lt;/span&gt;.66666666666666, &lt;span class="m"&gt;48&lt;/span&gt;.66666666666666&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;在黄框(&lt;strong&gt;middle view&lt;/strong&gt;)点一下，输出：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;enter v2, &lt;span class="o"&gt;(&lt;/span&gt;-31.210678100585938, -27.8685302734375&lt;span class="o"&gt;)&lt;/span&gt;
+enter v2, &lt;span class="o"&gt;(&lt;/span&gt;-31.210678100585938, -27.8685302734375&lt;span class="o"&gt;)&lt;/span&gt;
+enter v2, &lt;span class="o"&gt;(&lt;/span&gt;-25.0, -22.333333333333343&lt;span class="o"&gt;)&lt;/span&gt;
+enter v1, &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;35&lt;/span&gt;.0, &lt;span class="m"&gt;37&lt;/span&gt;.66666666666666&lt;span class="o"&gt;)&lt;/span&gt;
+enter v2, &lt;span class="o"&gt;(&lt;/span&gt;-25.0, -22.333333333333343&lt;span class="o"&gt;)&lt;/span&gt;
+enter v1, &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;35&lt;/span&gt;.0, &lt;span class="m"&gt;37&lt;/span&gt;.66666666666666&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;我们知道&lt;code&gt;hitTest&lt;/code&gt;机制是事件传递链由底向上，响应链由上到下，&lt;/li&gt;
+&lt;li&gt;所以最底层的&lt;strong&gt;bottom view&lt;/strong&gt;最先接到事件就开始找响应者&lt;/li&gt;
+&lt;li&gt;它开始从它的最顶层subview开始找响应者(&lt;code&gt;v2&lt;/code&gt;)，然后再往下(&lt;code&gt;v1&lt;/code&gt;)，均没找到，所以就是自己了&lt;/li&gt;
+&lt;li&gt;为何调了四次呢？（未深究）&lt;blockquote&gt;
+Yes, it’s normal. The system may tweak the point being hit tested between the calls. Since hitTest should be a pure function with no side-effects, this should be fine.&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;第二次测试，直接在最顶层view就找到了（所谓的找到，就是点击的位置在这个view的bounds内，后面说）&lt;/li&gt;
+&lt;li&gt;至于为什么坐标会变？（未深究）&lt;/li&gt;
+&lt;li&gt;第三次测试，点了v1，可以看到日志，在v2那里跑了3次，再跑了v1，不知道为什么还是没返回，还跑了一次v2后才认定v1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;大体可以知道hitTest的机制了吧？以传递链的终点那个view为基础，在subviews逆向遍历（自顶向下），一直到自己。&lt;/p&gt;&lt;h2&gt;应用1&lt;/h2&gt;
+&lt;p&gt;来个简单场景，如果黄色的view是有触摸事件的，并且要求被覆盖的区域也能响应，该怎么做呢？&lt;/p&gt;&lt;p&gt;思考：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;我们知道点击的位置，肯定是在黄框范围内的，所以要的就是一个入口，用来判断这个点与黄框的关系，一旦确认点的范围是在黄框里，就把认为黄框是事件响应者。&lt;/li&gt;
+&lt;li&gt;因此改下demo，加了事件，还加了一个parent view（这样才能在用属性的方式把黄框引用出来）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ViewController&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIViewController&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+
+    &lt;span class="kr"&gt;override&lt;/span&gt; &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;viewDidLoad&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="kc"&gt;super&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;viewDidLoad&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+
+        &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;view1&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;UIView&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;frame&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;CGRect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;110&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;110&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;150&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;150&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+        &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;view2&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;UIView&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;frame&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;CGRect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;170&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;170&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;150&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;150&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+        &lt;span class="n"&gt;view1&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;backgroundColor&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;yellow&lt;/span&gt;
+        &lt;span class="n"&gt;view2&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;backgroundColor&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;red&lt;/span&gt;
+
+        &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;tap&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;UITapGestureRecognizer&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;target&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;action&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="k"&gt;#selector&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kc"&gt;_&lt;/span&gt;&lt;span class="p"&gt;:)))&lt;/span&gt;
+        &lt;span class="n"&gt;view1&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;addGestureRecognizer&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tap&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;view1&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isUserInteractionEnabled&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;
+
+        &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;view&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;View&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;view1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;view2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;view&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;addSubview&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;view&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+
+    &lt;span class="kr"&gt;@objc&lt;/span&gt; &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;tap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kc"&gt;_&lt;/span&gt; &lt;span class="n"&gt;sender&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIGestureRecognizer&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="bp"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;view1 taped&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;View&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIView&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;view1&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIView&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;view2&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIView&lt;/span&gt;
+    &lt;span class="kd"&gt;init&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIView&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIView&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;view1&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;
+        &lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;view2&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;
+        &lt;span class="kc"&gt;super&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kd"&gt;init&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;frame&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIScreen&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bounds&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;addSubview&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;addSubview&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="kr"&gt;required&lt;/span&gt; &lt;span class="kd"&gt;init&lt;/span&gt;&lt;span class="p"&gt;?(&lt;/span&gt;&lt;span class="n"&gt;coder&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;NSCoder&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="bp"&gt;fatalError&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;init(coder:) has not been implemented&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="kr"&gt;override&lt;/span&gt; &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;hitTest&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kc"&gt;_&lt;/span&gt; &lt;span class="n"&gt;point&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;CGPoint&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;event&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIEvent&lt;/span&gt;&lt;span class="p"&gt;?)&lt;/span&gt; &lt;span class="p"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="bp"&gt;UIView&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;loc_v1&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;convert&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;point&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;view1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+          &lt;span class="c1"&gt;// 主要就是这一句&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;view1&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;point&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;inside&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;loc_v1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;event&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;view1&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;super&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;hitTest&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;point&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;event&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;let loc_v1 = self.convert(point, to: self.view1)&lt;/code&gt;意思是这个点以view1为坐标系的位置&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;if(self.view1.point(inside: loc_v1, with: event))&lt;/code&gt; 这就是判断这个点在不在view1的bounds里面了&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;简单来说，就是简单粗暴地“逮住每一个机会”，问是不是你，是不是你。&lt;/p&gt;&lt;h2&gt;应用2&lt;/h2&gt;
+&lt;p&gt;如果一个按钮很小，你要扩大他的点击区域怎么做？网上有很多方法，关联属性啊，交换方法啊，可以去搜搜，我们这里继续上面的例子，知道有一个&lt;code&gt;point(inside:with)&lt;/code&gt;方法，顾名思义，就是这个点在不在我的视图区域内&lt;/p&gt;&lt;p&gt;它当然也是可以被重写，自定义在什么样的范围内，都算&lt;code&gt;inside&lt;/code&gt;，下面是网上抄的一段代码&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent*)event {
+   //获取当前button的实际大小
+    CGRect bounds = self.bounds;
+    //若原热区小于44x44，则放大热区，否则保持原大小不变
+    CGFloat widthDelta = MAX(44.0 - bounds.size.width, 0);
+    CGFloat heightDelta = MAX(44.0 - bounds.size.height, 0);
+    //扩大bounds
+    bounds = CGRectInset(bounds, -0.5 * widthDelta, -0.5 * heightDelta);
+    //如果点击的点 在 新的bounds里，就返回YES
+    return CGRectContainsPoint(bounds, point);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这个例子主要就是利用底层的&lt;code&gt;CGRectContainsPoint&lt;/code&gt;方法，传入了新的&lt;code&gt;bounds&lt;/code&gt;，可以理解为人为修改入参吧。代码也很明确了，自己根据当前的bounds合理做一个大一点的bounds，交给系统去做就行了。&lt;/p&gt;</description><author>hi@imalan.cn (walker)</author><guid isPermaLink="true">/archives/Layer/</guid><pubDate>Fri, 18 Feb 2022 00:00:00 +0806</pubDate></item><item><title>Programming iOS 14 - Layer</title><link>/archives/Layer/</link><description>&lt;p&gt;《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第3章&lt;/p&gt;&lt;hr /&gt;
 &lt;h1&gt;Layers&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;A UIView does not actually &lt;strong&gt;draw itself&lt;/strong&gt; onto the screen; it draws itself &lt;strong&gt;into its layer&lt;/strong&gt;, and it is the layer that is portrayed on the screen.&lt;/li&gt;
