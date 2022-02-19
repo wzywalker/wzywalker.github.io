@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/ba419cfddbfa904545039cbb7d0b6c9f.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/0f9a2920a84c8d7e74fd4a8160ca82e8.json"
         }
 
     </script>
@@ -372,15 +372,15 @@
     </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/Layer/" target="_self">Programming iOS 14 - Layer</a></h1>
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/hittest/" target="_self">hitTest示例</a></h1>
         <div class="prism-post-time">
-            <a class="no-link" href="/archives/Layer/" target="_self">
+            <a class="no-link" href="/archives/hittest/" target="_self">
                 <time class="text-uppercase">
                     February 18 2022
                 </time>
             </a>
         </div>
-        <div class="prism-content"><h1>hitTest简单二例</h1>
+        <div class="prism-content"><h1>hitTest示例</h1>
 <p>的不多说，先看一个例子，往窗口里添加两个自定义的view，这样每个view的<code>hitTest</code>方法被访问的时候我们就能log一下：</p><div class="highlight"><pre><span></span><span class="kd">import</span> <span class="nc">UIKit</span>
 
 <span class="kd">class</span> <span class="nc">ViewController</span><span class="p">:</span> <span class="bp">UIViewController</span> <span class="p">{</span>
@@ -515,7 +515,7 @@ Yes, it’s normal. The system may tweak the point being hit tested between the 
 <p>这个例子主要就是利用底层的<code>CGRectContainsPoint</code>方法，传入了新的<code>bounds</code>，可以理解为人为修改入参吧。代码也很明确了，自己根据当前的bounds合理做一个大一点的bounds，交给系统去做就行了。</p></div>
         
         <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Layer/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/hittest/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

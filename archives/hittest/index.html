@@ -1,0 +1,330 @@
+<!DOCTYPE HTML>
+<html lang="english">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Prism" />
+    <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/0f9a2920a84c8d7e74fd4a8160ca82e8.json"
+        }
+
+    </script>
+    
+<title>hitTest示例 - walker's code blog</title>
+<meta name="author" content="walker" />
+<meta name="description" content="hitTest示例" />
+<meta property="og:title" content="hitTest示例 - walker's code blog" />
+<meta property="og:description" content="hitTest示例" />
+<meta property="og:site_name" content="walker's code blog" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/hittest/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-02-18T00:00:00-00.00" />
+<meta name="twitter:title" content="hitTest示例 - walker's code blog" />
+<meta name="twitter:description" content="hitTest示例" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
+<main>
+    <section class="prism-section row" id="prism__content">
+        <article class="yue col-md-8 offset-md-2">
+            <h1 class="prism-post-title">hitTest示例</h1>
+            <div class="prism-post-time">
+                <time class="text-uppercase">
+                    February 18 2022
+                </time>
+            </div>
+            <div class="prism-content-body">
+                <h1>hitTest示例</h1>
+<p>的不多说，先看一个例子，往窗口里添加两个自定义的view，这样每个view的<code>hitTest</code>方法被访问的时候我们就能log一下：</p><div class="highlight"><pre><span></span><span class="kd">import</span> <span class="nc">UIKit</span>
+
+<span class="kd">class</span> <span class="nc">ViewController</span><span class="p">:</span> <span class="bp">UIViewController</span> <span class="p">{</span>
+
+    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kc">super</span><span class="p">.</span><span class="n">viewDidLoad</span><span class="p">()</span>
+
+        <span class="kd">let</span> <span class="nv">view1</span> <span class="p">=</span> <span class="n">View1</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="mi">110</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="mi">110</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">150</span><span class="p">))</span>
+        <span class="kd">let</span> <span class="nv">view2</span> <span class="p">=</span> <span class="n">View2</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="mi">170</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="mi">170</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">150</span><span class="p">))</span>
+        <span class="n">view1</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="p">=</span> <span class="p">.</span><span class="n">yellow</span>
+        <span class="n">view2</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="p">=</span> <span class="p">.</span><span class="n">red</span>
+
+        <span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">view1</span><span class="p">)</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">view2</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">View1</span> <span class="p">:</span> <span class="bp">UIView</span> <span class="p">{</span>
+    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">hitTest</span><span class="p">(</span><span class="kc">_</span> <span class="n">point</span><span class="p">:</span> <span class="n">CGPoint</span><span class="p">,</span> <span class="n">with</span> <span class="n">event</span><span class="p">:</span> <span class="bp">UIEvent</span><span class="p">?)</span> <span class="p">-&gt;</span> <span class="bp">UIView</span><span class="p">?</span> <span class="p">{</span>
+        <span class="bp">print</span><span class="p">(</span><span class="s">&quot;enter v1 </span><span class="si">\(</span><span class="n">point</span><span class="si">)</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">super</span><span class="p">.</span><span class="n">hitTest</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">with</span><span class="p">:</span> <span class="n">event</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">View2</span> <span class="p">:</span> <span class="bp">UIView</span> <span class="p">{</span>
+    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">hitTest</span><span class="p">(</span><span class="kc">_</span> <span class="n">point</span><span class="p">:</span> <span class="n">CGPoint</span><span class="p">,</span> <span class="n">with</span> <span class="n">event</span><span class="p">:</span> <span class="bp">UIEvent</span><span class="p">?)</span> <span class="p">-&gt;</span> <span class="bp">UIView</span><span class="p">?</span> <span class="p">{</span>
+        <span class="bp">print</span><span class="p">(</span><span class="s">&quot;enter v2, </span><span class="si">\(</span><span class="n">point</span><span class="si">)</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">super</span><span class="p">.</span><span class="n">hitTest</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">with</span><span class="p">:</span> <span class="n">event</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>运行：</p><figure class="vertical-figure" style="flex: 46.42857142857143" ><img width="650" height="700" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5b4c2daa70dc2e8941de89fdb19c2bfa.png" alt="image-20220219014246803"/></figure><p>在空白处(<strong>bottom view</strong>)点了一下，输出：</p><div class="highlight"><pre><span></span>enter v2, <span class="o">(</span>-48.66007995605469, <span class="m">306</span>.0133361816406<span class="o">)</span>
+enter v1, <span class="o">(</span><span class="m">11</span>.339920043945312, <span class="m">366</span>.0133361816406<span class="o">)</span>
+enter v2, <span class="o">(</span>-48.66007995605469, <span class="m">306</span>.0133361816406<span class="o">)</span>
+enter v1, <span class="o">(</span><span class="m">11</span>.339920043945312, <span class="m">366</span>.0133361816406<span class="o">)</span>
+enter v2, <span class="o">(</span>-43.33333333333334, <span class="m">325</span>.3333333333333<span class="o">)</span>
+enter v1, <span class="o">(</span><span class="m">16</span>.666666666666657, <span class="m">385</span>.3333333333333<span class="o">)</span>
+enter v2, <span class="o">(</span>-43.33333333333334, <span class="m">325</span>.3333333333333<span class="o">)</span>
+enter v1, <span class="o">(</span><span class="m">16</span>.666666666666657, <span class="m">385</span>.3333333333333<span class="o">)</span>
+</pre></div>
+<p>在红框上(<strong>top view</strong>)点一下，输出：</p><div class="highlight"><pre><span></span>enter v2, <span class="o">(</span><span class="m">38</span>.66666666666666, <span class="m">48</span>.66666666666666<span class="o">)</span>
+enter v2, <span class="o">(</span><span class="m">38</span>.66666666666666, <span class="m">48</span>.66666666666666<span class="o">)</span>
+</pre></div>
+<p>在黄框(<strong>middle view</strong>)点一下，输出：</p><div class="highlight"><pre><span></span>enter v2, <span class="o">(</span>-31.210678100585938, -27.8685302734375<span class="o">)</span>
+enter v2, <span class="o">(</span>-31.210678100585938, -27.8685302734375<span class="o">)</span>
+enter v2, <span class="o">(</span>-25.0, -22.333333333333343<span class="o">)</span>
+enter v1, <span class="o">(</span><span class="m">35</span>.0, <span class="m">37</span>.66666666666666<span class="o">)</span>
+enter v2, <span class="o">(</span>-25.0, -22.333333333333343<span class="o">)</span>
+enter v1, <span class="o">(</span><span class="m">35</span>.0, <span class="m">37</span>.66666666666666<span class="o">)</span>
+</pre></div>
+<ul>
+<li>我们知道<code>hitTest</code>机制是事件传递链由底向上，响应链由上到下，</li>
+<li>所以最底层的<strong>bottom view</strong>最先接到事件就开始找响应者</li>
+<li>它开始从它的最顶层subview开始找响应者(<code>v2</code>)，然后再往下(<code>v1</code>)，均没找到，所以就是自己了</li>
+<li>为何调了四次呢？（未深究）<blockquote>
+Yes, it’s normal. The system may tweak the point being hit tested between the calls. Since hitTest should be a pure function with no side-effects, this should be fine.</blockquote>
+</li>
+<li>第二次测试，直接在最顶层view就找到了（所谓的找到，就是点击的位置在这个view的bounds内，后面说）</li>
+<li>至于为什么坐标会变？（未深究）</li>
+<li>第三次测试，点了v1，可以看到日志，在v2那里跑了3次，再跑了v1，不知道为什么还是没返回，还跑了一次v2后才认定v1</li>
+</ul>
+<p>大体可以知道hitTest的机制了吧？以传递链的终点那个view为基础，在subviews逆向遍历（自顶向下），一直到自己。</p><h2>应用1</h2>
+<p>来个简单场景，如果黄色的view是有触摸事件的，并且要求被覆盖的区域也能响应，该怎么做呢？</p><p>思考：</p><ul>
+<li>我们知道点击的位置，肯定是在黄框范围内的，所以要的就是一个入口，用来判断这个点与黄框的关系，一旦确认点的范围是在黄框里，就把认为黄框是事件响应者。</li>
+<li>因此改下demo，加了事件，还加了一个parent view（这样才能在用属性的方式把黄框引用出来）</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">ViewController</span><span class="p">:</span> <span class="bp">UIViewController</span> <span class="p">{</span>
+
+    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kc">super</span><span class="p">.</span><span class="n">viewDidLoad</span><span class="p">()</span>
+
+
+        <span class="kd">let</span> <span class="nv">view1</span> <span class="p">=</span> <span class="bp">UIView</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="mi">110</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="mi">110</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">150</span><span class="p">))</span>
+        <span class="kd">let</span> <span class="nv">view2</span> <span class="p">=</span> <span class="bp">UIView</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="mi">170</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="mi">170</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">150</span><span class="p">))</span>
+        <span class="n">view1</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="p">=</span> <span class="p">.</span><span class="n">yellow</span>
+        <span class="n">view2</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="p">=</span> <span class="p">.</span><span class="n">red</span>
+
+        <span class="kd">let</span> <span class="nv">tap</span> <span class="p">=</span> <span class="bp">UITapGestureRecognizer</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="kc">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="k">#selector</span><span class="p">(</span><span class="n">tap</span><span class="p">(</span><span class="kc">_</span><span class="p">:)))</span>
+        <span class="n">view1</span><span class="p">.</span><span class="n">addGestureRecognizer</span><span class="p">(</span><span class="n">tap</span><span class="p">)</span>
+        <span class="n">view1</span><span class="p">.</span><span class="n">isUserInteractionEnabled</span> <span class="p">=</span> <span class="kc">true</span>
+
+        <span class="kd">let</span> <span class="nv">view</span> <span class="p">=</span> <span class="n">View</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">view1</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">view2</span><span class="p">)</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kr">@objc</span> <span class="kd">func</span> <span class="nf">tap</span><span class="p">(</span><span class="kc">_</span> <span class="n">sender</span><span class="p">:</span> <span class="bp">UIGestureRecognizer</span><span class="p">)</span> <span class="p">{</span>
+        <span class="bp">print</span><span class="p">(</span><span class="s">&quot;view1 taped&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">View</span><span class="p">:</span> <span class="bp">UIView</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">view1</span><span class="p">:</span> <span class="bp">UIView</span>
+    <span class="kd">var</span> <span class="nv">view2</span><span class="p">:</span> <span class="bp">UIView</span>
+    <span class="kd">init</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="bp">UIView</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="bp">UIView</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">view1</span> <span class="p">=</span> <span class="n">a</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">view2</span> <span class="p">=</span> <span class="n">b</span>
+        <span class="kc">super</span><span class="p">.</span><span class="kd">init</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="bp">UIScreen</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">bounds</span><span class="p">)</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="kr">required</span> <span class="kd">init</span><span class="p">?(</span><span class="n">coder</span><span class="p">:</span> <span class="bp">NSCoder</span><span class="p">)</span> <span class="p">{</span>
+        <span class="bp">fatalError</span><span class="p">(</span><span class="s">&quot;init(coder:) has not been implemented&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">hitTest</span><span class="p">(</span><span class="kc">_</span> <span class="n">point</span><span class="p">:</span> <span class="n">CGPoint</span><span class="p">,</span> <span class="n">with</span> <span class="n">event</span><span class="p">:</span> <span class="bp">UIEvent</span><span class="p">?)</span> <span class="p">-&gt;</span> <span class="bp">UIView</span><span class="p">?</span> <span class="p">{</span>
+      <span class="kd">let</span> <span class="nv">loc_v1</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">convert</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="kc">self</span><span class="p">.</span><span class="n">view1</span><span class="p">)</span>
+          <span class="c1">// 主要就是这一句</span>
+        <span class="k">if</span><span class="p">(</span><span class="kc">self</span><span class="p">.</span><span class="n">view1</span><span class="p">.</span><span class="n">point</span><span class="p">(</span><span class="n">inside</span><span class="p">:</span> <span class="n">loc_v1</span><span class="p">,</span> <span class="n">with</span><span class="p">:</span> <span class="n">event</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">self</span><span class="p">.</span><span class="n">view1</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="kc">super</span><span class="p">.</span><span class="n">hitTest</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">with</span><span class="p">:</span> <span class="n">event</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<ul>
+<li><code>let loc_v1 = self.convert(point, to: self.view1)</code>意思是这个点以view1为坐标系的位置</li>
+<li><code>if(self.view1.point(inside: loc_v1, with: event))</code> 这就是判断这个点在不在view1的bounds里面了</li>
+</ul>
+<p>简单来说，就是简单粗暴地“逮住每一个机会”，问是不是你，是不是你。</p><h2>应用2</h2>
+<p>如果一个按钮很小，你要扩大他的点击区域怎么做？网上有很多方法，关联属性啊，交换方法啊，可以去搜搜，我们这里继续上面的例子，知道有一个<code>point(inside:with)</code>方法，顾名思义，就是这个点在不在我的视图区域内</p><p>它当然也是可以被重写，自定义在什么样的范围内，都算<code>inside</code>，下面是网上抄的一段代码</p>
+<pre><code>- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent*)event {
+   //获取当前button的实际大小
+    CGRect bounds = self.bounds;
+    //若原热区小于44x44，则放大热区，否则保持原大小不变
+    CGFloat widthDelta = MAX(44.0 - bounds.size.width, 0);
+    CGFloat heightDelta = MAX(44.0 - bounds.size.height, 0);
+    //扩大bounds
+    bounds = CGRectInset(bounds, -0.5 * widthDelta, -0.5 * heightDelta);
+    //如果点击的点 在 新的bounds里，就返回YES
+    return CGRectContainsPoint(bounds, point);
+}
+</code></pre>
+<p>这个例子主要就是利用底层的<code>CGRectContainsPoint</code>方法，传入了新的<code>bounds</code>，可以理解为人为修改入参吧。代码也很明确了，自己根据当前的bounds合理做一个大一点的bounds，交给系统去做就行了。</p>
+            </div>
+        </article>
+        <div class="prism-post-meta col-md-8 offset-md-2">
+    <span>walker</span>
+    
+    <span>/</span>
+    <span>
+        <a class="category no-link" href="/category/posts/" target="_self">
+        posts
+        </a>
+    </span>
+    
+    
+    <span>/</span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/hitTest/" target="_self">#hitTest</a>
+    </span>
+    
+    
+    
+    <span>/</span>
+    <span class="leancloud_visitors" id="/archives/hittest/" data-flag-title="hitTest示例"><span class="leancloud-visitors-count"></span> Views</span>
+    
+</div>
+    </section>
+
+    
+<section id="prism__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+    <ul>
+        
+        <li class="next">
+            <a class="no-link" href="/archives/Layer/" target="_self" title="Programming iOS 14 - Layer"><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</a>
+        </li>
+        
+        
+        <li class="prev">
+            <a class="no-link" href="/archives/%E3%80%8AEffective-Objective-C-2.0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/" target="_self" title="《Effective Objective-C 2.0》笔记第1-2章">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    
+    <script>
+        var initValine = function() {
+            new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+        }
+
+    </script>
+    <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+    <div class="prism-comment-section container" id="prism__comment">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div id="vcomments"></div>
+            </div>
+        </div>
+    </div>
+    
+
+</main>
+
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
+                    </section>
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
+                            <span>Copyright © 2022 AlanDecode</span>
+                        </p>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+            </footer>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    
+</body>
+
+</html>
