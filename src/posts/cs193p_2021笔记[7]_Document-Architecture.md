@@ -12,15 +12,6 @@ tags:
   - document
 ---
 
-[cs193p_2021_笔记_1](https://www.jianshu.com/p/998b0ef4a2cd)
-[cs193p_2021_笔记_2](https://www.jianshu.com/p/af0ad1bead34)
-[cs193p_2021_笔记_3_Animation_Transition](https://www.jianshu.com/p/d103f8d12052)
-[cs193p_2021_笔记_4_Color_Image_Gesture](https://www.jianshu.com/p/41e7309c7f55)
-[cs193p_2021_笔记_5_Property Wrapper](https://www.jianshu.com/p/e3c2ee1628c6)
-[cs193p_2021_笔记_6_Persistence](https://www.jianshu.com/p/a315274a4fd2)
-cs193p_2021_笔记_7_Document Architecture
-[cs193p_2021_笔记_8](https://www.jianshu.com/p/2136bdc2c6f6)
-
 # Document Architecture
 
 所谓的Dopcument Architecture，其实就是支持把用app产生的作品保存起来，比如你创作的一幅图片，可以保存为`.jpg`，你用photoshop做的文件是`.psd`，下次用自己的app加载这个文件，能认出所有组件和模型，比如我们想为document取个名字叫`.emojiart`。

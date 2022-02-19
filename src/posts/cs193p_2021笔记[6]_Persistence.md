@@ -15,17 +15,6 @@ tags:
   - cloudkit
 ---
 
-[cs193p_2021_笔记_1](https://www.jianshu.com/p/998b0ef4a2cd)
-[cs193p_2021_笔记_2](https://www.jianshu.com/p/af0ad1bead34)
-[cs193p_2021_笔记_3_Animation_Transition](https://www.jianshu.com/p/d103f8d12052)
-[cs193p_2021_笔记_4_Color_Image_Gesture](https://www.jianshu.com/p/41e7309c7f55)
-[cs193p_2021_笔记_5_Property Wrapper](https://www.jianshu.com/p/e3c2ee1628c6)
-cs193p_2021_笔记_6_Persistence
-[cs193p_2021_笔记_7_Document Architecture](https://www.jianshu.com/p/f4ae879eef9c)
-[cs193p_2021_笔记_8](https://www.jianshu.com/p/2136bdc2c6f6)
-
---
-
 # Persistence
 
 持久化数据的方式有
