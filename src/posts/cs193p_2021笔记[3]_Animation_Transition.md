@@ -173,4 +173,4 @@ Card()
 
 为了让不同的牌发出去时有立体效果，还以index为依据设置了`zIndex`，最终效果：
 
-![](../assets/strip.jpg)
+![](../assets/1859625-9d81d07faeddf5aa.gif)
