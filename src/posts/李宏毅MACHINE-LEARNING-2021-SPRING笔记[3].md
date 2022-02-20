@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 李宏毅MACHINE LEARNING 2021 SPRING笔记[3]
-slug: 李宏毅MACHINE-LEARNING-2021-SPRING笔记-3
+title: 李宏毅Machine Learning 2021 Spring笔记[3]
+slug: 李宏毅Machine-Learning-2021-Spring-3
 date: 2021-10-14 13:25
 status: publish
 author: walker
