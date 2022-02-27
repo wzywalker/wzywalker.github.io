@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>walker's code blog</title><link>/</link><description>coder, reader</description><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png</url><title>walker's code blog</title><link>/</link></image><language>english</language><lastBuildDate>Sun, 27 Feb 2022 10:08:05 +0806</lastBuildDate><pubDate>Sun, 27 Feb 2022 10:08:05 +0806</pubDate><item><title>数据结构篇九：Indexed Priority Queue</title><link>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/</link><description>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>walker's code blog</title><link>/</link><description>coder, reader</description><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png</url><title>walker's code blog</title><link>/</link></image><language>english</language><lastBuildDate>Sun, 27 Feb 2022 10:09:13 +0806</lastBuildDate><pubDate>Sun, 27 Feb 2022 10:09:13 +0806</pubDate><item><title>数据结构篇九：Indexed Priority Queue</title><link>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/</link><description>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
 &lt;h1&gt;Indexed Priority Queue&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;a traditional priority queue variant&lt;/li&gt;
@@ -2235,7 +2235,7 @@ Yes, it’s normal. The system may tweak the point being hit tested between the 
 &lt;p&gt;完整教程网上很多，我这里是曲曲折折弄好后的一些要点记录，里面的一些路径和库共同自&lt;a href="http://blog.wtlucky.com/blog/2015/02/26/create-private-podspec/"&gt;某篇教程&lt;/a&gt;，可以直接看他们的教程。&lt;/p&gt;&lt;p&gt;想看极简的骨架过程可以参考我下面的笔记，当然肯定缺少很多细节，主要是记录一下核心思路，里面的一些库地址出于隐私我就使用了他们公布在网上的而不是自己的真实地址。&lt;/p&gt;&lt;p&gt;首先，涉及两个仓库，一个放代码，一个放spec，放spec的就是私有库&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# 创建私有库 （就是host podspec文件的容器）&lt;/span&gt;
 pod repo add WTSpecs https://coding.net/wtlucky/WTSpecs.git  &lt;span class="c1"&gt;#（这是spec仓库）&lt;/span&gt;
 
-&lt;span class="c1"&gt;## 删除和添加已有的：&lt;/span&gt;
+&lt;span class="c1"&gt;## 如果不是新建，删除和添加已有的语法：&lt;/span&gt;
 pod repo remove WTSpecs
 pod repo add WTSpecs git@coding.net:wtlucky/WTSpecs.git
 

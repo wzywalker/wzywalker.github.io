@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/0580defaee8ea1d43e0366a6550267a1.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/479b892166b3ff057522cb4cf49ec406.json"
         }
 
     </script>
@@ -69,7 +69,7 @@
 <p>完整教程网上很多，我这里是曲曲折折弄好后的一些要点记录，里面的一些路径和库共同自<a href="http://blog.wtlucky.com/blog/2015/02/26/create-private-podspec/">某篇教程</a>，可以直接看他们的教程。</p><p>想看极简的骨架过程可以参考我下面的笔记，当然肯定缺少很多细节，主要是记录一下核心思路，里面的一些库地址出于隐私我就使用了他们公布在网上的而不是自己的真实地址。</p><p>首先，涉及两个仓库，一个放代码，一个放spec，放spec的就是私有库</p><div class="highlight"><pre><span></span><span class="c1"># 创建私有库 （就是host podspec文件的容器）</span>
 pod repo add WTSpecs https://coding.net/wtlucky/WTSpecs.git  <span class="c1">#（这是spec仓库）</span>
 
-<span class="c1">## 删除和添加已有的：</span>
+<span class="c1">## 如果不是新建，删除和添加已有的语法：</span>
 pod repo remove WTSpecs
 pod repo add WTSpecs git@coding.net:wtlucky/WTSpecs.git
 
