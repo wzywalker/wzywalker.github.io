@@ -25,7 +25,7 @@ tags:
 # 创建私有库 （就是host podspec文件的容器）
 pod repo add WTSpecs https://coding.net/wtlucky/WTSpecs.git  #（这是spec仓库）
 
-## 删除和添加已有的：
+## 如果不是新建，删除和添加已有的语法：
 pod repo remove WTSpecs
 pod repo add WTSpecs git@coding.net:wtlucky/WTSpecs.git
 
