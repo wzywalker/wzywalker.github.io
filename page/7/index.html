@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/d69e93fb6d600dd3092b98eaebaa4bce.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/6e53c79433de0ec045f11212c742d55c.json"
         }
 
     </script>
@@ -55,6 +55,111 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/iOS%E5%B1%8F%E5%B9%95%E6%BB%9A%E5%8A%A8%E6%97%B6Timer%E4%BF%9D%E6%8C%81%E5%B7%A5%E4%BD%9C%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/" target="_self">iOS屏幕滚动时Timer保持工作的几种方式</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/iOS%E5%B1%8F%E5%B9%95%E6%BB%9A%E5%8A%A8%E6%97%B6Timer%E4%BF%9D%E6%8C%81%E5%B7%A5%E4%BD%9C%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/" target="_self">
+                <time class="text-uppercase">
+                    March 22 2020
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>iOS当前线程的RunLoop在TableView等scrollView滑动时将DefaultMode切换到了<code>TrackingRunLoopMode</code>。因为Timer默认是添加在RunLoop上的<code>DefaultMode</code>上的，当Mode切换后Timer就停止了运行。
+如这样:</p><div class="highlight"><pre><span></span><span class="n">Timer</span><span class="p">.</span><span class="n">scheduledTimer</span><span class="p">(</span><span class="n">withTimeInterval</span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">repeats</span><span class="o">:</span><span class="w"> </span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">(</span><span class="n">timer</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"></span>
+<span class="w">    </span><span class="n">let</span><span class="w"> </span><span class="n">dateFormatter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateFormatter</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="n">dateFormatter</span><span class="p">.</span><span class="n">dateFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;HH:mm:ss&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">timeLabel</span><span class="p">.</span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;\(dateFormatter.string(from: Date()))&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<p>本文记录如下四种方式:</p><ul>
+<li>将NSTimer添加到当前线程所对应的RunLoop中的<code>commonModes</code>中。</li>
+<li>通过Dispatch中的<code>TimerSource</code>来实现定时器。</li>
+<li>是开启一个新的子线程，将NSTimer添加到这个子线程中的RunLoop中，并使用<code>DefaultRunLoopModes</code>来执行。</li>
+<li>使用<code>CADisplayLink</code>来实现。</li>
+</ul>
+<h2>CommonModes</h2>
+<div class="highlight"><pre><span></span><span class="n">override</span><span class="w"> </span><span class="n">func</span><span class="w"> </span><span class="n">awakeFromNib</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nb">super</span><span class="p">.</span><span class="n">awakeFromNib</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">let</span><span class="w"> </span><span class="n">timer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Timer</span><span class="p">.</span><span class="n">scheduledTimer</span><span class="p">(</span><span class="n">withTimeInterval</span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">repeats</span><span class="o">:</span><span class="w"> </span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">(</span><span class="n">timer</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"></span>
+<span class="w">        </span><span class="n">let</span><span class="w"> </span><span class="n">dateFormatter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateFormatter</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="n">dateFormatter</span><span class="p">.</span><span class="n">dateFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;HH:mm:ss&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nb">self</span><span class="p">.</span><span class="n">timeLabel</span><span class="p">.</span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;\(dateFormatter.string(from: Date()))&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">RunLoop</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">timer</span><span class="p">,</span><span class="w"> </span><span class="n">forMode</span><span class="o">:</span><span class="w"> </span><span class="p">.</span><span class="n">commonModes</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<h2>子线程/异步 + DefaultMode</h2>
+<div class="highlight"><pre><span></span><span class="n">override</span><span class="w"> </span><span class="n">func</span><span class="w"> </span><span class="n">awakeFromNib</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nb">super</span><span class="p">.</span><span class="n">awakeFromNib</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="n">DispatchQueue</span><span class="p">.</span><span class="n">global</span><span class="p">().</span><span class="n">async</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">let</span><span class="w"> </span><span class="n">timer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Timer</span><span class="p">.</span><span class="n">scheduledTimer</span><span class="p">(</span><span class="n">withTimeInterval</span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">repeats</span><span class="o">:</span><span class="w"> </span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">(</span><span class="n">timer</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"></span>
+<span class="w">            </span><span class="n">let</span><span class="w"> </span><span class="n">dateFormatter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateFormatter</span><span class="p">()</span><span class="w"></span>
+<span class="w">            </span><span class="n">dateFormatter</span><span class="p">.</span><span class="n">dateFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;HH:mm:ss&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">async</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nb">self</span><span class="p">.</span><span class="n">timeLabel</span><span class="p">.</span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;\(dateFormatter.string(from: Date()))&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">RunLoop</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">timer</span><span class="p">,</span><span class="w"> </span><span class="n">forMode</span><span class="o">:</span><span class="w"> </span><span class="p">.</span><span class="n">defaultRunLoopMode</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">RunLoop</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">run</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<h2>DispatchTimerSource</h2>
+<p>GCD的知识点</p><div class="highlight"><pre><span></span><span class="n">override</span><span class="w"> </span><span class="n">func</span><span class="w"> </span><span class="n">awakeFromNib</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">let</span><span class="w"> </span><span class="n">queue</span><span class="o">:</span><span class="w"> </span><span class="n">DispatchQueue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DispatchQueue</span><span class="p">.</span><span class="n">global</span><span class="p">()</span><span class="w">   </span><span class="c1">//也可以用mainQueue来实现</span>
+<span class="w">    </span><span class="n">let</span><span class="w"> </span><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DispatchSource</span><span class="p">.</span><span class="n">makeTimerSource</span><span class="p">(</span><span class="n">flags</span><span class="o">:</span><span class="w"> </span><span class="n">DispatchSource</span><span class="p">.</span><span class="n">TimerFlags</span><span class="p">(</span><span class="n">rawValue</span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">queue</span><span class="o">:</span><span class="w"> </span><span class="n">queue</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">let</span><span class="w"> </span><span class="n">timer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UInt64</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">NSEC_PER_SEC</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">source</span><span class="p">.</span><span class="n">scheduleRepeating</span><span class="p">(</span><span class="n">deadline</span><span class="o">:</span><span class="w"> </span><span class="n">DispatchTime</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="n">uptimeNanoseconds</span><span class="o">:</span><span class="w"> </span><span class="n">UInt64</span><span class="p">(</span><span class="n">timer</span><span class="p">)),</span><span class="w"> </span><span class="n">interval</span><span class="o">:</span><span class="w"> </span><span class="n">DispatchTimeInterval</span><span class="p">.</span><span class="n">seconds</span><span class="p">(</span><span class="n">Int</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span><span class="w"> </span><span class="n">leeway</span><span class="o">:</span><span class="w"> </span><span class="n">DispatchTimeInterval</span><span class="p">.</span><span class="n">seconds</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">let</span><span class="w"> </span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="n">let</span><span class="w"> </span><span class="n">dateFormatter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateFormatter</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="n">dateFormatter</span><span class="p">.</span><span class="n">dateFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;HH:mm:ss&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="n">source</span><span class="p">.</span><span class="n">setEventHandler</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">timeout</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">source</span><span class="p">.</span><span class="n">cancel</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">async</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nb">self</span><span class="p">.</span><span class="n">timeLabel</span><span class="p">.</span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;\(dateFormatter.string(from: Date()))&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">source</span><span class="p">.</span><span class="n">resume</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<h2>CADisplayLink</h2>
+<p>CADisplayLink可以添加到RunLoop中，RunLoop的每一次循环都会触发CADisplayLink所关联的方法。在屏幕不卡顿的情况下，每次循环的时间时1/60秒。</p><div class="highlight"><pre><span></span><span class="n">override</span><span class="w"> </span><span class="n">func</span><span class="w"> </span><span class="n">awakeFromNib</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nb">super</span><span class="p">.</span><span class="n">awakeFromNib</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="n">DispatchQueue</span><span class="p">.</span><span class="n">global</span><span class="p">().</span><span class="n">async</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">let</span><span class="w"> </span><span class="n">displayLink</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">CADisplayLink</span><span class="p">(</span><span class="n">target</span><span class="o">:</span><span class="w"> </span><span class="nb">self</span><span class="p">,</span><span class="w"> </span><span class="n">selector</span><span class="o">:</span><span class="w"> </span><span class="err">#</span><span class="n">selector</span><span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="n">update</span><span class="p">))</span><span class="w"></span>
+<span class="w">        </span><span class="n">displayLink</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">to</span><span class="o">:</span><span class="w"> </span><span class="n">RunLoop</span><span class="p">.</span><span class="n">current</span><span class="p">,</span><span class="w"> </span><span class="n">forMode</span><span class="o">:</span><span class="w"> </span><span class="p">.</span><span class="n">defaultRunLoopMode</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">RunLoop</span><span class="p">.</span><span class="n">current</span><span class="p">.</span><span class="n">run</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="n">func</span><span class="w"> </span><span class="n">update</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">let</span><span class="w"> </span><span class="n">dateFormatter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateFormatter</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="n">dateFormatter</span><span class="p">.</span><span class="n">dateFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;HH:mm:ss&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="n">let</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;\(dateFormatter.string(from: Date()))&quot;</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">currentTime</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">currentTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">time</span><span class="w"></span>
+<span class="w">        </span><span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">async</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nb">self</span><span class="p">.</span><span class="n">timeLabel</span><span class="p">.</span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">self</span><span class="p">.</span><span class="n">currentTime</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<p>详细内容请<a href="https://mp.weixin.qq.com/s/amgKKHhOCJ10Mr-OBEQyjw">阅读原文</a></p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/iOS%E5%B1%8F%E5%B9%95%E6%BB%9A%E5%8A%A8%E6%97%B6Timer%E4%BF%9D%E6%8C%81%E5%B7%A5%E4%BD%9C%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/MacOS%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC/" target="_self">MacOS添加自启动脚本</a></h1>
@@ -535,83 +640,6 @@ Permission denied (publickey).
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%A4%87%E4%BB%BDNginx%E8%AE%BE%E7%BD%AEphp%E7%9A%84%E6%96%B9%E6%B3%95/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E8%AE%A9Objective-C%E4%B9%9F%E6%9C%89map%E5%8A%9F%E8%83%BD/" target="_self">让Objective-C也有map功能</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E8%AE%A9Objective-C%E4%B9%9F%E6%9C%89map%E5%8A%9F%E8%83%BD/" target="_self">
-                <time class="text-uppercase">
-                    July 30 2019
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>map一个数组是大部分高级语言都有的, OC 没有, 有几个方案让它实现, 我优选出三个:</p><h2>原生实现</h2>
-<p>其实就是<code>valueForKeyPath</code>的活用:</p><div class="highlight"><pre><span></span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">allEmployees</span><span class="w"> </span><span class="n">valueForKeyPath</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;[collect].{daysOff&lt;10}.name&quot;</span><span class="p">];</span><span class="w"></span>
-<span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">albumCovers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">records</span><span class="w"> </span><span class="n">valueForKeyPath</span><span class="o">:</span><span class="s">@&quot;[collect].{artist like &#39;Bon Iver&#39;}.&lt;NSUnarchiveFromDataTransformerName&gt;.albumCoverImageData&quot;</span><span class="p">];</span><span class="w"></span>
-</pre></div>
-<h2>category</h2>
-<p>这个大家肯定早想到过了, 你没有, 我给你扩展出来一个:</p><p>定义:</p><div class="highlight"><pre><span></span><span class="k">@interface</span> <span class="bp">NSArray</span> <span class="nl">(Map)</span><span class="w"></span>
-
-<span class="p">-</span> <span class="p">(</span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nf">mapObjectsUsingBlock:</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">))</span><span class="nv">block</span><span class="p">;</span><span class="w"></span>
-
-<span class="k">@end</span><span class="w"></span>
-
-<span class="k">@implementation</span> <span class="bp">NSArray</span> <span class="nl">(Map)</span><span class="w"></span>
-
-<span class="p">-</span> <span class="p">(</span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nf">mapObjectsUsingBlock:</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">))</span><span class="nv">block</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="n">arrayWithCapacity</span><span class="o">:</span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">count</span><span class="p">]];</span><span class="w"></span>
-<span class="w">    </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">enumerateObjectsUsingBlock</span><span class="o">:^</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">,</span><span class="w"> </span><span class="kt">BOOL</span><span class="w"> </span><span class="o">*</span><span class="n">stop</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="p">[</span><span class="n">result</span><span class="w"> </span><span class="n">addObject</span><span class="o">:</span><span class="n">block</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">idx</span><span class="p">)];</span><span class="w"></span>
-<span class="w">    </span><span class="p">}];</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span><span class="n">o</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="k">@end</span><span class="w"></span>
-</pre></div>
-<p>使用:</p><div class="highlight"><pre><span></span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">people</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="l">@[</span><span class="w"></span>
-<span class="w">                     </span><span class="l">@{</span><span class="w"> </span><span class="s">@&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Bob&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">@&quot;city&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Boston&quot;</span><span class="w"> </span><span class="l">}</span><span class="p">,</span><span class="w"></span>
-<span class="w">                     </span><span class="l">@{</span><span class="w"> </span><span class="s">@&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Rob&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">@&quot;city&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Cambridge&quot;</span><span class="w"> </span><span class="l">}</span><span class="p">,</span><span class="w"></span>
-<span class="w">                     </span><span class="l">@{</span><span class="w"> </span><span class="s">@&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Robert&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">@&quot;city&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Somerville&quot;</span><span class="w"> </span><span class="l">}</span><span class="w"></span>
-<span class="w">                  </span><span class="l">]</span><span class="p">;</span><span class="w"></span>
-<span class="c1">// per the original question</span>
-<span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">people</span><span class="w"> </span><span class="n">mapObjectsUsingBlock</span><span class="o">:^</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">obj</span><span class="p">[</span><span class="s">@&quot;name&quot;</span><span class="p">];</span><span class="w"></span>
-<span class="p">}];</span><span class="w"></span>
-<span class="c1">// (Bob, Rob, Robert)</span>
-
-<span class="c1">// you can do just about anything in a block</span>
-<span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">fancyNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">people</span><span class="w"> </span><span class="n">mapObjectsUsingBlock</span><span class="o">:^</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="bp">NSString</span><span class="w"> </span><span class="n">stringWithFormat</span><span class="o">:</span><span class="s">@&quot;%@ of %@&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">obj</span><span class="p">[</span><span class="s">@&quot;name&quot;</span><span class="p">],</span><span class="w"> </span><span class="n">obj</span><span class="p">[</span><span class="s">@&quot;city&quot;</span><span class="p">]];</span><span class="w"></span>
-<span class="p">}];</span><span class="w"></span>
-<span class="c1">// (Bob of Boston, Rob of Cambridge, Robert of Somerville)</span>
-</pre></div>
-<h2>三方库</h2>
-<p>是的, 一般简单功能能自己实现就自己实现, xcode 项目还是不能像 <code>nodejs</code>项目一样, 哪怕有的包里也只有一句话, 我也要从用第三方的...ddddd</p><p>js 的世界里, <code>underscore</code>用来处理数组可算神器, 自然, 我也挑中了同样名字的 OC 库: <a href="http://underscorem.org/">Underscore</a></p><div class="highlight"><pre><span></span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">tweets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Underscore</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Let&#39;s make sure that we only operate on NSDictionaries, you never</span>
-<span class="w">    </span><span class="c1">// know with these APIs ;-)</span>
-<span class="w">    </span><span class="p">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Underscore</span><span class="p">.</span><span class="n">isDictionary</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Remove all tweets that are in English</span>
-<span class="w">    </span><span class="p">.</span><span class="n">reject</span><span class="p">(</span><span class="o">^</span><span class="kt">BOOL</span><span class="w"> </span><span class="p">(</span><span class="bp">NSDictionary</span><span class="w"> </span><span class="o">*</span><span class="n">tweet</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="n">tweet</span><span class="p">[</span><span class="s">@&quot;iso_language_code&quot;</span><span class="p">]</span><span class="w"> </span><span class="n">isEqualToString</span><span class="o">:</span><span class="s">@&quot;en&quot;</span><span class="p">];</span><span class="w"></span>
-<span class="w">    </span><span class="p">})</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Create a simple string representation for every tweet</span>
-<span class="w">    </span><span class="p">.</span><span class="n">map</span><span class="p">(</span><span class="o">^</span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="bp">NSDictionary</span><span class="w"> </span><span class="o">*</span><span class="n">tweet</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tweet</span><span class="p">[</span><span class="s">@&quot;from_user_name&quot;</span><span class="p">];</span><span class="w"></span>
-<span class="w">        </span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tweet</span><span class="p">[</span><span class="s">@&quot;text&quot;</span><span class="p">];</span><span class="w"></span>
-
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="bp">NSString</span><span class="w"> </span><span class="n">stringWithFormat</span><span class="o">:</span><span class="s">@&quot;%@: %@&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">];</span><span class="w"></span>
-<span class="w">    </span><span class="p">})</span><span class="w"></span>
-<span class="w">    </span><span class="p">.</span><span class="n">unwrap</span><span class="p">;</span><span class="w"></span>
-</pre></div>
-<blockquote>
-<p>当然, 所有方案来源于<a href="http://stackoverflow.com/questions/6127638/nsarray-equivalent-of-map">StackOverflow</a> 上的答案, 一些其它方案, 其它库(如<a href="http://cocoadocs.org/docsets/BlocksKit/2.2.3/Categories/NSArray+BlocksKit.html#//api/name/bk_map:">BlocksKit</a>), 都可以试试, 也挺简洁的</p></blockquote>
-</div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E8%AE%A9Objective-C%E4%B9%9F%E6%9C%89map%E5%8A%9F%E8%83%BD/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

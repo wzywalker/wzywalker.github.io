@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/d69e93fb6d600dd3092b98eaebaa4bce.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/6e53c79433de0ec045f11212c742d55c.json"
         }
 
     </script>
@@ -55,6 +55,83 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E8%AE%A9Objective-C%E4%B9%9F%E6%9C%89map%E5%8A%9F%E8%83%BD/" target="_self">让Objective-C也有map功能</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E8%AE%A9Objective-C%E4%B9%9F%E6%9C%89map%E5%8A%9F%E8%83%BD/" target="_self">
+                <time class="text-uppercase">
+                    July 30 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>map一个数组是大部分高级语言都有的, OC 没有, 有几个方案让它实现, 我优选出三个:</p><h2>原生实现</h2>
+<p>其实就是<code>valueForKeyPath</code>的活用:</p><div class="highlight"><pre><span></span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">allEmployees</span><span class="w"> </span><span class="n">valueForKeyPath</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;[collect].{daysOff&lt;10}.name&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">albumCovers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">records</span><span class="w"> </span><span class="n">valueForKeyPath</span><span class="o">:</span><span class="s">@&quot;[collect].{artist like &#39;Bon Iver&#39;}.&lt;NSUnarchiveFromDataTransformerName&gt;.albumCoverImageData&quot;</span><span class="p">];</span><span class="w"></span>
+</pre></div>
+<h2>category</h2>
+<p>这个大家肯定早想到过了, 你没有, 我给你扩展出来一个:</p><p>定义:</p><div class="highlight"><pre><span></span><span class="k">@interface</span> <span class="bp">NSArray</span> <span class="nl">(Map)</span><span class="w"></span>
+
+<span class="p">-</span> <span class="p">(</span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nf">mapObjectsUsingBlock:</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">))</span><span class="nv">block</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">@end</span><span class="w"></span>
+
+<span class="k">@implementation</span> <span class="bp">NSArray</span> <span class="nl">(Map)</span><span class="w"></span>
+
+<span class="p">-</span> <span class="p">(</span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nf">mapObjectsUsingBlock:</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">))</span><span class="nv">block</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="n">arrayWithCapacity</span><span class="o">:</span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">count</span><span class="p">]];</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">enumerateObjectsUsingBlock</span><span class="o">:^</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">,</span><span class="w"> </span><span class="kt">BOOL</span><span class="w"> </span><span class="o">*</span><span class="n">stop</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="p">[</span><span class="n">result</span><span class="w"> </span><span class="n">addObject</span><span class="o">:</span><span class="n">block</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">idx</span><span class="p">)];</span><span class="w"></span>
+<span class="w">    </span><span class="p">}];</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span><span class="n">o</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">@end</span><span class="w"></span>
+</pre></div>
+<p>使用:</p><div class="highlight"><pre><span></span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">people</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="l">@[</span><span class="w"></span>
+<span class="w">                     </span><span class="l">@{</span><span class="w"> </span><span class="s">@&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Bob&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">@&quot;city&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Boston&quot;</span><span class="w"> </span><span class="l">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                     </span><span class="l">@{</span><span class="w"> </span><span class="s">@&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Rob&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">@&quot;city&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Cambridge&quot;</span><span class="w"> </span><span class="l">}</span><span class="p">,</span><span class="w"></span>
+<span class="w">                     </span><span class="l">@{</span><span class="w"> </span><span class="s">@&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Robert&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">@&quot;city&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">@&quot;Somerville&quot;</span><span class="w"> </span><span class="l">}</span><span class="w"></span>
+<span class="w">                  </span><span class="l">]</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// per the original question</span>
+<span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">people</span><span class="w"> </span><span class="n">mapObjectsUsingBlock</span><span class="o">:^</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">obj</span><span class="p">[</span><span class="s">@&quot;name&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="p">}];</span><span class="w"></span>
+<span class="c1">// (Bob, Rob, Robert)</span>
+
+<span class="c1">// you can do just about anything in a block</span>
+<span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">fancyNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">people</span><span class="w"> </span><span class="n">mapObjectsUsingBlock</span><span class="o">:^</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="n">NSUInteger</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="bp">NSString</span><span class="w"> </span><span class="n">stringWithFormat</span><span class="o">:</span><span class="s">@&quot;%@ of %@&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">obj</span><span class="p">[</span><span class="s">@&quot;name&quot;</span><span class="p">],</span><span class="w"> </span><span class="n">obj</span><span class="p">[</span><span class="s">@&quot;city&quot;</span><span class="p">]];</span><span class="w"></span>
+<span class="p">}];</span><span class="w"></span>
+<span class="c1">// (Bob of Boston, Rob of Cambridge, Robert of Somerville)</span>
+</pre></div>
+<h2>三方库</h2>
+<p>是的, 一般简单功能能自己实现就自己实现, xcode 项目还是不能像 <code>nodejs</code>项目一样, 哪怕有的包里也只有一句话, 我也要从用第三方的...ddddd</p><p>js 的世界里, <code>underscore</code>用来处理数组可算神器, 自然, 我也挑中了同样名字的 OC 库: <a href="http://underscorem.org/">Underscore</a></p><div class="highlight"><pre><span></span><span class="bp">NSArray</span><span class="w"> </span><span class="o">*</span><span class="n">tweets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Underscore</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Let&#39;s make sure that we only operate on NSDictionaries, you never</span>
+<span class="w">    </span><span class="c1">// know with these APIs ;-)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Underscore</span><span class="p">.</span><span class="n">isDictionary</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Remove all tweets that are in English</span>
+<span class="w">    </span><span class="p">.</span><span class="n">reject</span><span class="p">(</span><span class="o">^</span><span class="kt">BOOL</span><span class="w"> </span><span class="p">(</span><span class="bp">NSDictionary</span><span class="w"> </span><span class="o">*</span><span class="n">tweet</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="n">tweet</span><span class="p">[</span><span class="s">@&quot;iso_language_code&quot;</span><span class="p">]</span><span class="w"> </span><span class="n">isEqualToString</span><span class="o">:</span><span class="s">@&quot;en&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Create a simple string representation for every tweet</span>
+<span class="w">    </span><span class="p">.</span><span class="n">map</span><span class="p">(</span><span class="o">^</span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="bp">NSDictionary</span><span class="w"> </span><span class="o">*</span><span class="n">tweet</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tweet</span><span class="p">[</span><span class="s">@&quot;from_user_name&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tweet</span><span class="p">[</span><span class="s">@&quot;text&quot;</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="bp">NSString</span><span class="w"> </span><span class="n">stringWithFormat</span><span class="o">:</span><span class="s">@&quot;%@: %@&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">unwrap</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+<blockquote>
+<p>当然, 所有方案来源于<a href="http://stackoverflow.com/questions/6127638/nsarray-equivalent-of-map">StackOverflow</a> 上的答案, 一些其它方案, 其它库(如<a href="http://cocoadocs.org/docsets/BlocksKit/2.2.3/Categories/NSArray+BlocksKit.html#//api/name/bk_map:">BlocksKit</a>), 都可以试试, 也挺简洁的</p></blockquote>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E8%AE%A9Objective-C%E4%B9%9F%E6%9C%89map%E5%8A%9F%E8%83%BD/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E8%AE%A9%E4%BD%A0fork%E4%B8%8B%E6%9D%A5%E7%9A%84%E9%A1%B9%E7%9B%AE%E4%B8%8E%E6%BA%90%E9%A1%B9%E7%9B%AE%E4%BF%9D%E6%8C%81%E5%90%8C%E6%AD%A5/" target="_self">让你fork下来的项目与源项目保持同步</a></h1>
@@ -651,44 +728,6 @@ IIS导入证书需要转化为pkcs12格式(X509格式?), 中间会询问一次�
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%A4%87%E4%BB%BD%E7%AF%87%E7%BB%98%E5%88%B6%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E7%9A%84%E6%96%87%E7%AB%A0/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/UIImage%E8%BD%ACNSData%E6%9C%89%E6%97%B6%E4%B8%BAnil/" target="_self">UIImage转NSData有时为nil</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/UIImage%E8%BD%ACNSData%E6%9C%89%E6%97%B6%E4%B8%BAnil/" target="_self">
-                <time class="text-uppercase">
-                    July 14 2018
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>一般, 我们会用<code>UIImagePNGRepresentation</code>, <code>UIImagePNGRepresentation</code>来达到目的, 但有时候, 发现它的返回值为<code>nil</code>...</p><p>不需要怀疑这么简单处理有什么问题, <a href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIKitFunctionReference/#//apple_ref/c/func/UIImagePNGRepresentation">文档</a> 就是如此:</p><blockquote>
-<p><strong>Return Value</strong></p><p>A data object containing the PNG data, or nil if there was a problem generating the data. <strong>This function may return nil if the image has no data</strong> or if the underlying CGImageRef contains data in an unsupported bitmap format.</p></blockquote>
-<p>也就是说, 没有<code>data</code>的情况还是挺多的, 我们还是放弃这个方法吧, 换别的吧, 提供三种思路</p><h2>复制一张图片</h2>
-<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nv">imageName</span><span class="p">:</span> <span class="nb">String</span> <span class="p">=</span> <span class="s">&quot;MyImageName.png&quot;</span>
-<span class="kd">var</span> <span class="nv">image</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">named</span><span class="p">:</span> <span class="n">imageName</span><span class="p">)</span>
-<span class="kd">var</span> <span class="nv">rep</span> <span class="p">=</span> <span class="n">UIImagePNGRepresentation</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-</pre></div>
-<p>当然, 这不能保证什么</p><h2>重绘一张图片</h2>
-<div class="highlight"><pre><span></span><span class="n">UIGraphicsBeginImageContext</span><span class="p">(</span><span class="n">originalImage</span><span class="p">.</span><span class="n">size</span><span class="p">);</span><span class="w"></span>
-<span class="p">[</span><span class="n">originalImage</span><span class="w"> </span><span class="n">drawInRect</span><span class="o">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">originalImage</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">originalImage</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">)];</span><span class="w"></span>
-<span class="bp">UIImage</span><span class="w"> </span><span class="o">*</span><span class="n">newImage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UIGraphicsGetImageFromCurrentImageContext</span><span class="p">();</span><span class="w"></span>
-<span class="n">UIGraphicsEndImageContext</span><span class="p">();</span><span class="w"></span>
-</pre></div>
-<p>或</p><div class="highlight"><pre><span></span><span class="n">UIGraphicsBeginImageContext</span><span class="p">(</span><span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-<span class="kd">let</span> <span class="nv">image</span> <span class="p">=</span> <span class="n">UIGraphicsGetImageFromCurrentImageContext</span><span class="p">()</span>
-<span class="n">UIGraphicsEndImageContext</span><span class="p">()</span>
-</pre></div>
-<h2>不用 UIImage</h2>
-<p>1和2都没验证过, 但都是在StackOverflow上别人贴出的答案, 我之所以不验证了, 因为我是这么做的</p><div class="highlight"><pre><span></span><span class="n">CGDataProviderRef</span><span class="w"> </span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGImageGetDataProvider</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">CGImage</span><span class="p">);</span><span class="w"></span>
-<span class="bp">NSData</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="n">CFBridgingRelease</span><span class="p">(</span><span class="n">CGDataProviderCopyData</span><span class="p">(</span><span class="n">provider</span><span class="p">));</span><span class="w"></span>
-</pre></div>
-<p>通了就没动力继续试啦, 而且本身已经很简洁了, 此外方法名也非常直白&quot;<code>DataProvider</code>&quot;, 还想怎样!</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/UIImage%E8%BD%ACNSData%E6%9C%89%E6%97%B6%E4%B8%BAnil/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

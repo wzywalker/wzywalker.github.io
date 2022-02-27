@@ -1,0 +1,321 @@
+<!DOCTYPE HTML>
+<html lang="english">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Prism" />
+    <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/6e53c79433de0ec045f11212c742d55c.json"
+        }
+
+    </script>
+    
+<title>CocoaPods创建私有库过程携带遗 - walker's code blog</title>
+<meta name="author" content="walker" />
+<meta name="description" content="完整教程网上很多，我这里是曲曲折折弄好后的一些要点记录，里面的一些路径和库共同自某篇教程，可以直接看他们的教程。想看极简的骨架过程可以参考我下面的笔记，当然肯定缺少很多细节，主要是记录一下核心思路，里面的一些库地址出于隐私我就使用了他们公布在网上的而不是自己的真实地址。首先，涉及两个仓库，一个放代码，一个放spec，放spec的就是私有库# 创建私有库 （就是host podspec文件的容器）" />
+<meta property="og:title" content="CocoaPods创建私有库过程携带遗 - walker's code blog" />
+<meta property="og:description" content="完整教程网上很多，我这里是曲曲折折弄好后的一些要点记录，里面的一些路径和库共同自某篇教程，可以直接看他们的教程。想看极简的骨架过程可以参考我下面的笔记，当然肯定缺少很多细节，主要是记录一下核心思路，里面的一些库地址出于隐私我就使用了他们公布在网上的而不是自己的真实地址。首先，涉及两个仓库，一个放代码，一个放spec，放spec的就是私有库# 创建私有库 （就是host podspec文件的容器）" />
+<meta property="og:site_name" content="walker's code blog" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/cocoapods_private_library/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-02-27T17:44:00-00.00" />
+<meta name="twitter:title" content="CocoaPods创建私有库过程携带遗 - walker's code blog" />
+<meta name="twitter:description" content="完整教程网上很多，我这里是曲曲折折弄好后的一些要点记录，里面的一些路径和库共同自某篇教程，可以直接看他们的教程。想看极简的骨架过程可以参考我下面的笔记，当然肯定缺少很多细节，主要是记录一下核心思路，里面的一些库地址出于隐私我就使用了他们公布在网上的而不是自己的真实地址。首先，涉及两个仓库，一个放代码，一个放spec，放spec的就是私有库# 创建私有库 （就是host podspec文件的容器）" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
+<main>
+    <section class="prism-section row" id="prism__content">
+        <article class="yue col-md-8 offset-md-2">
+            <h1 class="prism-post-title">CocoaPods创建私有库过程携带遗</h1>
+            <div class="prism-post-time">
+                <time class="text-uppercase">
+                    February 27 2022
+                </time>
+            </div>
+            <div class="prism-content-body">
+                <p>完整教程网上很多，我这里是曲曲折折弄好后的一些要点记录，里面的一些路径和库共同自<a href="http://blog.wtlucky.com/blog/2015/02/26/create-private-podspec/">某篇教程</a>，可以直接看他们的教程。</p><p>想看极简的骨架过程可以参考我下面的笔记，当然肯定缺少很多细节，主要是记录一下核心思路，里面的一些库地址出于隐私我就使用了他们公布在网上的而不是自己的真实地址。</p><p>首先，涉及两个仓库，一个放代码，一个放spec，放spec的就是私有库</p><div class="highlight"><pre><span></span><span class="c1"># 创建私有库 （就是host podspec文件的容器）</span>
+pod repo add WTSpecs https://coding.net/wtlucky/WTSpecs.git  <span class="c1">#（这是spec仓库）</span>
+
+<span class="c1">## 删除和添加已有的：</span>
+pod repo remove WTSpecs
+pod repo add WTSpecs git@coding.net:wtlucky/WTSpecs.git
+
+<span class="c1"># 创建pod lib（就是普通项目文件）</span>
+pod lib create podTestLibrary
+<span class="c1">### 可以选择尝试编辑一个组件放入Pod/Classes中，然后进入Example文件夹执行pod update命令，再打开项目工程可以看到，刚刚添加的组件已经在Pods子工程下</span>
+
+<span class="c1"># 推送lib到remote</span>
+git add .
+git commit -s -m <span class="s2">&quot;Initial Commit of Library&quot;</span>
+git remote add origin git@coding.net:wtlucky/podTestLibrary.git  <span class="c1"># 添加远端仓库（这是代码仓库）</span>
+git push origin master     <span class="c1"># 提交到远端仓库</span>
+
+<span class="c1"># 打rag，推tag</span>
+git tag -m <span class="s2">&quot;first release&quot;</span> <span class="m">0</span>.1.0
+git push --tags     <span class="c1">#推送tag到远端仓库</span>
+
+<span class="c1"># 编辑podspec</span>
+<span class="c1">### 请查阅相关字段文档，注意编辑tag号与你推的tag号一致</span>
+<span class="c1">### 特别注意</span>
+<span class="c1">### source_files(源码路径，一般在在libNmae/Classes/**/*), </span>
+<span class="c1">### resource_bundles(比如.bundle, .xcassets等)， </span>
+<span class="c1">### public_header_files(可以理解为Umbrella Header), </span>
+<span class="c1">### prefix_header_file(就是.pch文件)</span>
+
+<span class="c1"># lint podspec（注意allow-warnings)</span>
+pod lib lint  --allow-warnings 
+<span class="c1">## 如果有私有源：</span>
+pod lib lint --sources<span class="o">=</span><span class="s1">&#39;YourSource,https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git&#39;</span>
+<span class="c1">### 前面是私有源，逗号后是官方源，当然，因为我电脑用的是清华源，这里干脆也了往成一致了（不是必要）</span>
+
+<span class="c1"># 如果不是用pod创建的项目，自行创建podspec文件：</span>
+ pod spec create PodTestLibrary git@coding.net:wtlucky/podTestLibrary.git  <span class="c1"># 注意仓库名和仓库地址</span>
+</pre></div>
+<p>本地测试podspec, in podfile:</p><div class="highlight"><pre><span></span><span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">&#39;9.0&#39;</span>
+
+<span class="c1"># 几种方式</span>
+<span class="n">pod</span> <span class="s1">&#39;PodTestLibrary&#39;</span><span class="p">,</span> <span class="ss">:path</span> <span class="o">=&gt;</span> <span class="s1">&#39;~/code/Cocoapods/podTest/PodTestLibrary&#39;</span>      <span class="c1"># 指定路径</span>
+<span class="n">pod</span> <span class="s1">&#39;PodTestLibrary&#39;</span><span class="p">,</span> <span class="ss">:podspec</span> <span class="o">=&gt;</span> <span class="s1">&#39;~/code/Cocoapods/podTest/PodTestLibrary/PodTestLibrary.podspec&#39;</span>  <span class="c1"># 指定podspec文件</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="c1"># 向Spec Repo提交podspec(后面的参数是在消警告和错误的过程中加的，你可以尝试无参数先跑，碰到问题再逐个解决)</span>
+pod repo push WTSpecs PodTestLibrary.podspec --allow-warnings --use-libraries --skip-import-validation --verbose
+<span class="c1">### 完了后本地~/.cocoapods/repos和远端spec仓库都应该出现PodTextLibrary/0.1.0这个文件夹(对应你刚打的tag），里面有（且只有）刚才创建的podspec文件</span>
+</pre></div>
+<p>使用</p><div class="highlight"><pre><span></span><span class="n">pod</span> <span class="s1">&#39;PodTestLibrary&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 0.1.0&#39;</span>
+</pre></div>
+<ul>
+<li><p><code>--allow-warnings</code>, <code>--use-libraries</code>, <code>--skip-import-validation</code> 等参数灵活使用，目标就是为了通过验证</p></li>
+<li><p><code>--no-clean</code> 可以在出错时打印更详细的信息（我加了<code>--verbose</code>后在build失败时会提示你加这个)</p></li>
+<li><p>碰到有模块不支持i386什么的架构时，添加这个(<a href="https://blog.nowcoder.net/n/68dac16078184973ac061027817a2d9a?from=nowcoder_improve">更多看这篇文章</a>)：</p></li>
+<li>
+<pre><code>s.xcconfig = {
+    'VALID_ARCHS' =&gt;  'x86_64 armv7 arm64',
+  }
+  s.pod_target_xcconfig = { 'ARCHS[sdk=iphonesimulator*]' =&gt; '$(ARCHS_STANDARD_64_BIT)' }
+</code></pre>
+</li>
+<li><p><code>pod lint implicit declaration of function 'XXXX' is invalid in C99 [-Werror,-Wimplicit-function-declaration]</code> <a href="https://blog.csdn.net/cnwyt/article/details/105073749">看这里</a></p><ul>
+<li>很奇怪的问题，我前面的依赖确实添加了该宏定义的模块`s.dependency 'xxxx' 我目前是在问题文件里重新define一次这个宏解决的，</li>
+</ul>
+</li>
+</ul>
+<h1>podspec 进阶</h1>
+<div class="highlight"><pre><span></span><span class="c1"># [如果]每个子模块有自己的dependency, public headerfile, pchfile等</span>
+<span class="n">s</span><span class="o">.</span><span class="n">subspec</span> <span class="s1">&#39;NetWorkEngine&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">networkEngine</span><span class="o">|</span>
+    <span class="n">networkEngine</span><span class="o">.</span><span class="n">source_files</span> <span class="o">=</span> <span class="s1">&#39;Pod/Classes/NetworkEngine/**/*&#39;</span>
+    <span class="n">networkEngine</span><span class="o">.</span><span class="n">public_header_files</span> <span class="o">=</span> <span class="s1">&#39;Pod/Classes/NetworkEngine/**/*.h&#39;</span>
+    <span class="n">networkEngine</span><span class="o">.</span><span class="n">dependency</span> <span class="s1">&#39;AFNetworking&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 2.3&#39;</span>
+<span class="k">end</span>
+
+<span class="n">s</span><span class="o">.</span><span class="n">subspec</span> <span class="s1">&#39;DataModel&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">dataModel</span><span class="o">|</span>
+    <span class="n">dataModel</span><span class="o">.</span><span class="n">source_files</span> <span class="o">=</span> <span class="s1">&#39;Pod/Classes/DataModel/**/*&#39;</span>
+    <span class="n">dataModel</span><span class="o">.</span><span class="n">public_header_files</span> <span class="o">=</span> <span class="s1">&#39;Pod/Classes/DataModel/**/*.h&#39;</span>
+<span class="k">end</span>
+
+<span class="n">s</span><span class="o">.</span><span class="n">subspec</span> <span class="s1">&#39;CommonTools&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">commonTools</span><span class="o">|</span>
+    <span class="n">commonTools</span><span class="o">.</span><span class="n">source_files</span> <span class="o">=</span> <span class="s1">&#39;Pod/Classes/CommonTools/**/*&#39;</span>
+    <span class="n">commonTools</span><span class="o">.</span><span class="n">public_header_files</span> <span class="o">=</span> <span class="s1">&#39;Pod/Classes/CommonTools/**/*.h&#39;</span>
+    <span class="n">commonTools</span><span class="o">.</span><span class="n">dependency</span> <span class="s1">&#39;OpenUDID&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 1.0.0&#39;</span>
+<span class="k">end</span>
+
+<span class="n">s</span><span class="o">.</span><span class="n">subspec</span> <span class="s1">&#39;UIKitAddition&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">ui</span><span class="o">|</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">source_files</span> <span class="o">=</span> <span class="s1">&#39;Pod/Classes/UIKitAddition/**/*&#39;</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">public_header_files</span> <span class="o">=</span> <span class="s1">&#39;Pod/Classes/UIKitAddition/**/*.h&#39;</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">resource</span> <span class="o">=</span> <span class="s2">&quot;Pod/Assets/MLSUIKitResource.bundle&quot;</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">dependency</span> <span class="s1">&#39;PodTestLibrary/CommonTools&#39;</span>
+<span class="k">end</span>
+</pre></div>
+<p>体现为：</p><div class="highlight"><pre><span></span>$ pod search PodTestLibrary
+
+-&gt; PodTestLibrary <span class="o">(</span><span class="m">1</span>.0.0<span class="o">)</span>
+   Just Testing.
+   pod <span class="s1">&#39;PodTestLibrary&#39;</span>, <span class="s1">&#39;~&gt; 1.0.0&#39;</span>
+   - Homepage: https://coding.net/u/wtlucky/p/podTestLibrary
+   - Source:   https://coding.net/wtlucky/podTestLibrary.git
+   - Versions: <span class="m">1</span>.0.0, <span class="m">0</span>.1.0 <span class="o">[</span>WTSpecs repo<span class="o">]</span>
+   - Sub specs:
+     - PodTestLibrary/NetWorkEngine <span class="o">(</span><span class="m">1</span>.0.0<span class="o">)</span>
+     - PodTestLibrary/DataModel <span class="o">(</span><span class="m">1</span>.0.0<span class="o">)</span>
+     - PodTestLibrary/CommonTools <span class="o">(</span><span class="m">1</span>.0.0<span class="o">)</span>
+     - PodTestLibrary/UIKitAddition <span class="o">(</span><span class="m">1</span>.0.0<span class="o">)</span>
+</pre></div>
+<p>使用：</p><div class="highlight"><pre><span></span><span class="n">source</span> <span class="s1">&#39;https://github.com/CocoaPods/Specs.git&#39;</span>  <span class="c1"># 官方库</span>
+<span class="n">source</span> <span class="s1">&#39;https://git.coding.net/wtlucky/WTSpecs.git&#39;</span>   <span class="c1"># 私有库</span>
+<span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">&#39;9.0&#39;</span>
+
+<span class="n">pod</span> <span class="s1">&#39;PodTestLibrary/NetWorkEngine&#39;</span><span class="p">,</span> <span class="s1">&#39;1.0.0&#39;</span>  <span class="c1">#使用某一个部分</span>
+<span class="n">pod</span> <span class="s1">&#39;PodTestLibrary/UIKitAddition&#39;</span><span class="p">,</span> <span class="s1">&#39;1.0.0&#39;</span>
+
+<span class="n">pod</span> <span class="s1">&#39;PodTestLibrary&#39;</span><span class="p">,</span> <span class="s1">&#39;1.0.0&#39;</span>   <span class="c1">#使用整个库</span>
+</pre></div>
+
+            </div>
+        </article>
+        <div class="prism-post-meta col-md-8 offset-md-2">
+    <span>walker</span>
+    
+    <span>/</span>
+    <span>
+        <a class="category no-link" href="/category/posts/" target="_self">
+        posts
+        </a>
+    </span>
+    
+    
+    <span>/</span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/cocoapods/" target="_self">#cocoapods</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/%E7%A7%81%E6%9C%89%E5%BA%93/" target="_self">#私有库</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/podspec/" target="_self">#podspec</a>
+    </span>
+    
+    
+    
+    <span>/</span>
+    <span class="leancloud_visitors" id="/archives/cocoapods_private_library/" data-flag-title="CocoaPods创建私有库过程携带遗"><span class="leancloud-visitors-count"></span> Views</span>
+    
+</div>
+    </section>
+
+    
+<section id="prism__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+    <ul>
+        
+        <li class="next text-muted">
+            <span title="Viewing the newest one."><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</span>
+        </li>
+        
+        
+        <li class="prev">
+            <a class="no-link" href="/archives/hittest/" target="_self" title="hitTest示例">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    
+    <script>
+        var initValine = function() {
+            new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+        }
+
+    </script>
+    <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+    <div class="prism-comment-section container" id="prism__comment">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div id="vcomments"></div>
+            </div>
+        </div>
+    </div>
+    
+
+</main>
+
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
+                    </section>
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
+                            <span>Copyright © 2022 AlanDecode</span>
+                        </p>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+            </footer>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    
+</body>
+
+</html>

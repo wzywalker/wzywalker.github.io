@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/d69e93fb6d600dd3092b98eaebaa4bce.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/6e53c79433de0ec045f11212c742d55c.json"
         }
 
     </script>
@@ -55,6 +55,211 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%88%91%E7%9A%84%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/" target="_self">我的知识图谱入门笔记</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E6%88%91%E7%9A%84%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/" target="_self">
+                <time class="text-uppercase">
+                    June 17 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><h1>Knowledge Graph</h1>
+<ul>
+<li>信息是指外部的客观事实。举例：这里有一瓶水，它现在是7°。</li>
+<li>知识是对外部客观规律的归纳和总结。举例：水在零度的时候会结冰。</li>
+</ul>
+<p>换句话说，知识图谱是由一条条知识组成，每条知识表示为一个SPO三元组(Subject-Predicate-Object)。</p><p>$\boxed{Subject} \xrightarrow{Predicate} \boxed{Object}$</p><h1>语义网络(Semantic Network)</h1>
+<p>语义网络由相互连接的节点和边组成，节点表示概念或者对象，边表示他们之间的关系(is-a关系，比如：猫是一种哺乳动物；part-of关系，比如：脊椎是哺乳动物的一部分)</p><p>。在表现形式上，语义网络和知识图谱相似，但语义网络更侧重于描述概念与概念之间的关系，（有点像生物的层次分类体系——界门纲目科属种），而知识图谱则更偏重于描述实体之间的关联。</p><h1>RDF(Resoure Description Framework)</h1>
+<p>RDF(Resource Description Framework)，即资源描述框架，是W3C制定的，用于描述实体/资源的标准数据模型。RDF图中一共有三种类型，International Resource Identifiers(IRIs)，blank nodes 和 literals。下面是SPO每个部分的类型约束：</p><ul>
+<li>Subject可以是IRI或blank node。可以理解为<code>URI</code></li>
+<li>Predicate是IRI。</li>
+<li>Object三种类型都可以。</li>
+</ul>
+<p>也就是说字面量不能做主语？</p><p>将罗纳尔多的原名与中文名关联起来的RDF表示：</p><p>$\boxed{www.kg.com/person/1} \xrightarrow{kg:chineseName} \boxed{罗纳尔多·路易斯·纳扎里奥·达·利马}$</p><blockquote>
+<p>可见，主语的指代性要强很多，所以字面量（宾语）用作主语会丧失这种精确性（唯一性）。</p></blockquote>
+<ul>
+<li>&quot;<code>www.kg.com/person/1</code>&quot;是一个IRI，用来唯一的表示“罗纳尔多”这个实体。&quot;kg:chineseName&quot;也是一个IRI，用来表示“中文名”这样一个属性。&quot;kg:&quot;是RDF文件中所定义的prefix，如下所示。</li>
+<li>@<code>prefix kg</code>: <a href="http://www.kg.com/ontology/">http://www.kg.com/ontology/</a> 即，kg:chineseName其实就是&quot;http:// www.kg.com/ontology/chineseName&quot;的缩写。</li>
+</ul>
+<p>这样知识图谱的正确表示其实是：</p><figure  style="flex: 81.6618911174785" ><img width="1140" height="698" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/055b61a7e0a74762f15ece471ec22ee8.png" alt=""/></figure><p>而不是网传的简单的画几个对象连几根线，也就是说，能用URI表示的，尽量都用URI表示。</p><h1>Identifying graph-shaped problems(应用场景)</h1>
+<ul>
+<li><p>does our problem involve understanding <code>relationships</code> between entities?</p><ul>
+<li>Recommendations</li>
+<li>Next best action</li>
+<li>Fraud detection</li>
+<li>Identity resolution</li>
+<li>Data lineage</li>
+</ul>
+</li>
+<li><p>does our problem involve a lot of <code>self-referencing</code> to the same type of entity?</p><ul>
+<li>Organisational hierachies</li>
+<li>Social influencers</li>
+<li>Friends of friends</li>
+<li>Churn detection</li>
+</ul>
+</li>
+<li><p>does the problem explore <code>relationships of varying or unknown depth</code>?</p><ul>
+<li>Supply chain visibility</li>
+<li>Bill of  Materials(BOM)</li>
+<li>Network management</li>
+</ul>
+</li>
+<li><p>does our problem involve discovering lots of <code>different routers or paths</code>?</p><ul>
+<li>Logistics and routing</li>
+<li>Infrastructure management</li>
+<li>Dependency tracing</li>
+</ul>
+</li>
+</ul>
+<h1>Neo4j</h1>
+<figure  style="flex: 88.44507845934379" ><img width="1240" height="701" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1da110e1163eb31331ea2c21528a4ae2.png" alt=""/></figure><ol>
+<li><code>:person</code>, <code>:Car</code>, <code>:Vehicle</code> are <code>Label</code></li>
+<li>even <code>relationship</code> can also have(own) properties</li>
+</ol>
+<h2>AsciiArt</h2>
+<h3>for Nodes</h3>
+<p><code>(p:Person:Mammal{name:'walker'})</code></p><h3>for Relationships</h3>
+<p><code>- [:HIRED {type: 'fulltime'}] -&gt;</code></p><h2>CRUD</h2>
+<h3>Create</h3>
+<figure  style="flex: 87.94326241134752" ><img width="1240" height="705" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1664c809c2f78ab7dc14392c1ef00ac9.png" alt=""/></figure><h4>Constraints</h4>
+
+<pre><code>CREATE  CONSTRAINT ON (p:Person)
+ASSERT p.name IS UNIQUE
+</code></pre>
+<p>所以如下语句会报错：</p>
+<pre><code>CREATE (a:Person {name: &quot;Ann&quot;})
+CREATE (a) - [:HAS_PET] -&gt; (:Dog {name: &quot;Sam&quot;})
+</code></pre>
+<p>要用<code>merge</code></p>
+<pre><code>MERGE (a:Person {name: &quot;Ann&quot;})
+CREATE (a) - [:HAS_PET] -&gt; (:Dog {name: &quot;Sam&quot;})
+</code></pre>
+<h4>Set</h4>
+<p>属性可以用<code>JSON</code>格式写，也可以用<code>SET</code>语法（下面的查询语句也是一样）</p>
+<pre><code>MERGE (a:Person {name: &quot;Ann&quot;})
+ON CREATE SET
+    a.twitter = &quot;@ann&quot;
+MERGE (a) - [:HAS_PET] -&gt; (:Dog {name: &quot;Sam&quot;})
+</code></pre>
+<p>同时，看到了吗？<code>create</code>只能出现一次（同一个对象的话）</p><h3>Read</h3>
+<blockquote>
+<p>who drives a car owned by a lover?</p></blockquote>
+<div class="highlight"><pre><span></span><span class="k">MATCH</span><span class="w"></span>
+<span class="p">(</span><span class="n">p1</span><span class="p">:</span><span class="n">Person</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">[:</span><span class="n">DRIVES</span><span class="p">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="k">c</span><span class="p">:</span><span class="n">Car</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">[:</span><span class="n">OWNED_BY</span><span class="p">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">p2</span><span class="p">:</span><span class="n">Person</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">[:</span><span class="n">LOVES</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">P1</span><span class="p">)</span><span class="w"></span>
+<span class="k">RETURN</span><span class="w"></span>
+<span class="n">p1</span><span class="w"></span>
+</pre></div>
+<p>其中，因为问的是lover，没有指向性，所以如果是两个互相相爱，后半截也可以是p2指向p1</p>
+<pre><code>match p = (n) -[*1..2] -&gt; (m) where n.name='特朗普' return p
+match p =  ({name: '特朗普'}) - [*1..2] -&gt; () return p # 简化
+match p = (n)-[m]-&gt;(q) where m.name = '丈夫' return n,q skip 10 limit 5
+match p = (n)-[:丈夫]-&gt;(q) return n,q skip 10 limit 5 # 简化
+</code></pre>
+<p>解读：</p><ol>
+<li>上面写法很简略，注意观察一下</li>
+<li>又一次演示了直接用json来做where和单独用<code>where</code>关键字的写法区别（要多命名一个变量）</li>
+<li>p跟n的区别，p是返了整个网络，如果<code>return n</code>，那么就是n自身(一个节点）。</li>
+</ol>
+<p>4, 但是如果<code>return n, m</code>，那么又把一层网络给select出来了 
+5. [*1..2]表示跟踪两层
+6. 如果不需要对n,m进行where,set操作，可以不设置变量
+7. <code>relationship</code>也可以过滤，也有name等属性
+8. <code>limit</code>, <code>skip</code> 等用法</p><h4>Tabular Results</h4>
+<div class="highlight"><pre><span></span><span class="k">MATCH</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="p">:</span><span class="n">Person</span><span class="w"> </span><span class="err">{</span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="ss">&quot;Tom Hanks&quot;</span><span class="err">}</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="p">:</span><span class="n">ACTED_IN</span><span class="o">|</span><span class="n">DIRECTED</span><span class="p">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="p">:</span><span class="n">Movie</span><span class="p">)</span><span class="w"></span>
+<span class="k">RETURN</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">m</span><span class="w"></span>
+<span class="k">RETURN</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">type</span><span class="p">(</span><span class="n">r</span><span class="p">),</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">title</span><span class="w"></span>
+</pre></div>
+<p>前者返回Graph，后者返回表格数据</p><h3>Update</h3>
+<blockquote>
+<p>P.S. <code>where</code>是对属性做限制，所以查询条件既可以写在属性里，也可以用<code>where</code>语句来做过滤.</p></blockquote>
+<p>要对查询结果进行修改，用<code>set</code>（有则改，无则加）</p>
+<pre><code>MATCH
+(:Person {name: &quot;张三&quot;}) - [:LOVES] -&gt; (p:Person)
+RETURN
+p
+
+MATCH
+(p1:Person) - [:LOVES] -&gt; (p2:Person)
+WHERE
+p1.name = &quot;张三&quot;
+SET
+p2.age = 33  # set by property
+# or
+p2 += {age: 33, height: 180}  # set by JSON
+RETURN
+p2
+</code></pre>
+<p>可以把<code>Neo4j</code>理解为命名实体识别(<code>NER</code>)，即你创造一句话，为句子里的每个实体打上标签，然后你想要谁就用实体标签把它取出来。</p><p>比如“张三爱李四”：</p>
+<pre><code>step1: 写框架
+CREATE () - [] -&gt; ()
+step2: 填节点和关联
+CREATE (:Person {name: &quot;张三&quot;}) - [:LOVES] -&gt; (:Person {name: &quot;李四&quot;})
+</code></pre>
+<p>而你要问张三爱谁:</p>
+<pre><code>MATCH
+(:Person {name: &quot;张三&quot;}) - [:LOVES] -&gt; (p:Person)
+RETURN
+p
+</code></pre>
+<p>看到查询语句了吗？除了<code>CREATE</code>, <code>MATCH</code>等关键词，句子顺序是完全一样的，也就是说，一直是在“<strong>陈述</strong>”一件事。</p><p>而事实上，这个<code>NER</code>在知识图谱中表示为<code>RDF</code>。</p><h3>Delete</h3>
+<div class="highlight"><pre><span></span><span class="k">match</span><span class="w"> </span><span class="n">p</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;小明&#39;</span><span class="w"> </span><span class="n">detach</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
+</pre></div>
+<h2>Query</h2>
+<h3>最短距离</h3>
+<div class="highlight"><pre><span></span><span class="k">MATCH</span><span class="w"></span>
+<span class="w">  </span><span class="p">(</span><span class="n">martin</span><span class="p">:</span><span class="n">Person</span><span class="w"> </span><span class="err">{</span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;Martin Sheen&#39;</span><span class="err">}</span><span class="p">),</span><span class="w"></span>
+<span class="w">  </span><span class="p">(</span><span class="n">oliver</span><span class="p">:</span><span class="n">Person</span><span class="w"> </span><span class="err">{</span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;Oliver Stone&#39;</span><span class="err">}</span><span class="p">),</span><span class="w"></span>
+<span class="w">  </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shortestPath</span><span class="p">((</span><span class="n">martin</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">*</span><span class="p">..</span><span class="mi">15</span><span class="p">]</span><span class="o">-</span><span class="p">(</span><span class="n">oliver</span><span class="p">))</span><span class="w"> </span><span class="o">#</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">  </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">allShortestPath</span><span class="p">(....)</span><span class="w"> </span><span class="o">#</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
+<span class="w">  </span><span class="k">WHERE</span><span class="w"> </span><span class="k">none</span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">relationships</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">type</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;FATHER&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">#</span><span class="w"> </span><span class="mi">3</span><span class="w"></span>
+<span class="k">RETURN</span><span class="w"> </span><span class="n">p</span><span class="w"></span>
+</pre></div>
+<ol>
+<li>限定了15层</li>
+<li>Finds <code>all</code> the shortest paths between two nodes.</li>
+<li>排除了关系<code>type</code>为<strong>FATHER</strong>的</li>
+</ol>
+<p>给你们看一下一个<code>relationships</code>长啥样：</p><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;identity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">36629</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;start&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">31343</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;end&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">33922</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;author-&gt;title&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;author-&gt;title&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<h3>模糊匹配(%)</h3>
+<div class="highlight"><pre><span></span><span class="k">match</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">*</span><span class="mi">1</span><span class="p">..</span><span class="mi">2</span><span class="p">]</span><span class="o">-&gt;</span><span class="p">(</span><span class="n">b</span><span class="p">:</span><span class="n">content</span><span class="p">)</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;李白&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="s1">&#39;.*明月.*&#39;</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="w"></span>
+</pre></div>
+<p><code>.*</code>就相当于sql里的<code>%</code>吧</p><h3>get by id</h3>
+
+<pre><code>MATCH (n)
+WHERE id(n) IN [0, 3, 5]
+RETURN n
+</code></pre>
+<ol>
+<li>id(n) -&gt; search with id</li>
+<li>multiple id use <code>in</code></li>
+</ol>
+<h3>outer join (optional relationships)</h3>
+<div class="highlight"><pre><span></span><span class="k">match</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="p">:</span><span class="n">author</span><span class="w"> </span><span class="err">{</span><span class="n">name</span><span class="p">:</span><span class="s1">&#39;李白&#39;</span><span class="err">}</span><span class="p">)</span><span class="w"></span>
+<span class="n">optional</span><span class="w"> </span><span class="k">match</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="c1">--&gt;(b)</span>
+<span class="k">return</span><span class="w"> </span><span class="n">b</span><span class="w"></span>
+</pre></div>
+<p>在实例中，b包含了两种实例：</p><ol>
+<li>title</li>
+<li>introduce</li>
+</ol>
+<p>等同于sql中user表outer join了两个表(title, introduce)</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%88%91%E7%9A%84%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/HMM%E3%80%81NER%E3%80%81PoS%E3%80%81Viterbi%E7%AC%94%E8%AE%B0/" target="_self">HMM、NER、PoS、Viterbi笔记</a></h1>
@@ -1683,218 +1888,6 @@ $$</p>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E7%9F%A9%E9%98%B5%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E6%B1%82%E8%A7%A3%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E4%BA%8C%E5%88%86%E6%B3%95%E3%80%81%E7%89%9B%E9%A1%BF%E6%B3%95%E5%92%8C%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E5%BC%80%E6%A0%B9%E5%8F%B7%E5%92%8C%E8%A7%A3%E6%96%B9%E7%A8%8B/" target="_self">二分法、牛顿法和梯度下降法开根号和解方程</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E4%BA%8C%E5%88%86%E6%B3%95%E3%80%81%E7%89%9B%E9%A1%BF%E6%B3%95%E5%92%8C%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E5%BC%80%E6%A0%B9%E5%8F%B7%E5%92%8C%E8%A7%A3%E6%96%B9%E7%A8%8B/" target="_self">
-                <time class="text-uppercase">
-                    January 14 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><h2>二分法</h2>
-<p>二分法的思路是每次排除一半样本的试错方法，把样本一分为二（A和B），那么目标值不在A就在B里，不断缩小范围。</p><p>就像在玩一个猜价格的游戏，通过告诉你猜高了还是低了，你总能猜到正确价格一样，设计好一个计算差值的函数能大体上判断出你下一轮尝试的值应该在前一半还是后一半，总能迭代到足够接近的结果。</p><p>对于求平方根来说，我们没什么过多的设计，直接对中值取平方，高了就取小的一半，低了就取大的一半，实测小的数字是没问题的，这里仅仅用来演示思路。</p><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
-
-<span class="k">def</span> <span class="nf">binary_sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-10</span>         <span class="c1"># quit flag</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">end</span> <span class="o">=</span> <span class="n">n</span>
-    <span class="n">mid</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-    <span class="n">diff</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">n</span>
-    <span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">epsilon</span><span class="p">:</span>
-        <span class="c1"># 值过大则尝试小的一半，否则就尝试大的一半，修改边界值即可</span>
-        <span class="k">if</span> <span class="n">diff</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">end</span> <span class="o">=</span> <span class="n">mid</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">start</span> <span class="o">=</span> <span class="n">mid</span>
-        <span class="n">mid</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="n">diff</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">n</span>
-    <span class="k">return</span> <span class="n">mid</span>
-
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;estimated:</span><span class="se">\t</span><span class="si">{</span><span class="n">binary_sqrt</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="si">}</span><span class="s1">, </span><span class="se">\t</span><span class="s1"> sqrt(</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">): </span><span class="se">\t</span><span class="s1"> </span><span class="si">{</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-</pre></div>
-<p>output:</p>
-<pre><code>estimated:	0.9999999999708962, 	 sqrt(1): 	 1.0
-estimated:	1.4142135623842478, 	 sqrt(2): 	 1.4142135623730951
-estimated:	1.7320508075645193, 	 sqrt(3): 	 1.7320508075688772
-estimated:	2.0000000000000000, 	 sqrt(4): 	 2.0
-estimated:	2.2360679775010794, 	 sqrt(5): 	 2.23606797749979
-estimated:	2.4494897427794060, 	 sqrt(6): 	 2.449489742783178
-estimated:	2.6457513110653963, 	 sqrt(7): 	 2.6457513110645907
-estimated:	2.8284271247393917, 	 sqrt(8): 	 2.8284271247461903
-estimated:	2.9999999999890860, 	 sqrt(9): 	 3.0
-estimated:	3.1622776601579970, 	 sqrt(10): 	 3.1622776601683795
-</code></pre>
-<h2>牛顿法</h2>
-<p>我就算不画图也能把这事说清楚。</p><p>牛顿法用的是斜率的思想，对$f(x)=0$，选一个足够接近目标值($x$)的点($x_0$)，计算其切线与X轴的交点($x_1$），这个交点$x_1$往往比$x_0$更接近$x$，数次迭代后肯定越来越接近目标值$x$。</p><ol>
-<li>问题转化成一个求函数上任一点($x_n$)的切线与X轴的交点($x_{n+1}$)的问题(我们假设<code>n+1</code>在<code>n</code>的左边，即向左来逼近$x_0$)</li>
-<li>令$\Delta x = x_n - x_{n+1}, \Delta y = f(x_n) - f(x_{n+1})$，则$f'(x_n) = 该点斜率 = \frac{\Delta y}{\Delta x}$</li>
-<li>展开:$f'(x_n) = \frac{f(x_n) - f(x_{n +1})}{x_n - x_{n+1}}$</li>
-<li>$\because f(x_{n+1})=0\ \Rightarrow x_{n +1} = x_n - \frac{f(x_n)}{f'(x_n)}$</li>
-<li>至此，我们用$x_n$推出了一个离$x_0$更近的点：$x_{n+1}$</li>
-<li>如此往复则可以推出足够精度的解。</li>
-</ol>
-<p>而求任意正整数$a$的平方根，</p><ol>
-<li>函数就变成了 $g(x) = a, \Rightarrow g(x) = x^2$，</li>
-<li>那么我们有: $f(x) = g(x) - a = 0 = x^2 - a = 0$</li>
-<li>$f'(x) = 2x$</li>
-<li>$f(x),f'(x)$都有了，就能代入上面得到的公式：$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$了</li>
-<li>得到$x_{n+1} = x_n - \frac{x_n^2-a}{2x_n}$</li>
-</ol>
-<p>现在可以写代码了，不断去迭代，求下一个$x_{n+1}$:</p><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">newton_sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="n">x_n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span>
-    <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-10</span>             <span class="c1"># quit flag</span>
-
-    <span class="n">f_x</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span> <span class="p">:</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">n</span>   <span class="c1"># f(x)=x^2 - a</span>
-    <span class="n">df_x</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span> <span class="p">:</span> <span class="mi">2</span><span class="o">*</span><span class="n">a</span>       <span class="c1"># derivative of f(x)</span>
-    <span class="n">x_next</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span> <span class="p">:</span> <span class="n">a</span> <span class="o">-</span> <span class="n">f_x</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="n">df_x</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-
-    <span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x_n</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">n</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span class="p">:</span>
-        <span class="n">x_n</span> <span class="o">=</span> <span class="n">x_next</span><span class="p">(</span><span class="n">x_n</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">x_n</span>
-
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;sqrt(</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">)</span><span class="se">\t</span><span class="si">{</span><span class="n">newton_sqrt</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-</pre></div>
-<p>output</p>
-<pre><code>sqrt(1)	1.000000000000001
-sqrt(2)	1.4142135623746899
-sqrt(3)	1.7320508075688772
-sqrt(4)	2.0
-sqrt(5)	2.23606797749979
-sqrt(6)	2.4494897427831788
-sqrt(7)	2.6457513110646933
-sqrt(8)	2.8284271247493797
-sqrt(9)	3.0
-</code></pre>
-<h2>梯度下降法</h2>
-<p>梯度下降法的数学原理是$f(x_1,x_2,\dots$)的gradient（$\nabla f$）就是其最陡爬升方向（<code>steepest ascent</code>）。</p><p>可以拿这个当成结论，也可以去感性认识，而要去证明的话，网上有数不清的教程，在花书(《Deep Learning深度学习》)和可汗学院里，都是用的<code>directional derivate</code>来解释（证明）的，即”<strong>自定义方向</strong>上的瞬时变化率“，也是我认为在如果有多变量微积分的基础下，比较容易让人接受且简单直白的解释：
-<figure class="vertical-figure" style="flex: 34.96774193548387" ><img width="1084" height="1550" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e7889d3178ce0131e3ac9dcc816d03c3.png" alt=""/></figure></p><ul>
-<li>$\overset{\rightarrow}{v} \cdot \nabla f = |\overset{\rightarrow}{v}|\cdot|\nabla f|\cdot cos\theta$</li>
-<li>$\overset{\rightarrow}{v}$ 就是指的任意方向，如果是x, y等方向，那就是普通的偏导了。</li>
-<li>显然上式当$\theta = 0$时拥有最大值，即$\overset{\rightarrow}{v}$指向的是$\nabla f$的方向，那就是梯度的方向了</li>
-<li>所以梯度方向就是<code>爬升最陡峭</code>的方向</li>
-</ul>
-<p>在一元方程里，”梯度“就是过某点的斜率（<code>slope</code>)，或者说函数的导数（<code>derivative</code>）。</p><p>我们要到局部最小值，显然就应该向相向的方向走。并且由于越接近目标值（谷底），斜率越小，所以即使我们选择一个固定的步长（<code>learning rate</code>），也是会有一个越来越小的步进值去逼近极值，而无需刻意去调整步长。</p><p>以上是思路，只是要注意它$\color{red}{并不是作用到要求的函数本身}$上去的，而是精心设计的<code>loss</code>，或者说<code>diff</code>、<code>error</code>函数。</p><p>其实它跟前面的<code>二分法</code>很类似，就是不断指导里应该在哪个区间里去尝试下一个x值，再来结果与真值的差异（而<code>牛顿法</code>则是直接朝着直值去逼近，并不是在“尝试“）。</p><p>二分法里我随便设计了一个判断loss的函数（即中值的平方减真值），而梯度下降里不能那么随便了，它需要是一个连续的函数（即可微分），还要至少拥有局部极小值：</p><p>我们令$e(x)$表示不同的x取值下与目标值$Y$的差的平方（损失函数<em>loss</em>），既然是一个简单二次函数，就能求极值，且它的最小值意味着当x值为该值时估算原函数$f(x)=Y$的<strong>误差最小</strong>，有：</p><p>$e(x) = \frac{1}{2}(f(x) - Y)^2$  (1/2的作用仅仅是为了取导数时消除常数项，简化计算)<br />
-$e'(x) = (f(x) - Y) \cdot f'(x) = \Delta y \cdot f'(x)\quad \color{green}{\Leftarrow Chain\ Rule}$<br />
-$\Delta x = e'(x) \cdot lr = \Delta y \cdot f'(x) \cdot lr\ \color{red}{\Leftarrow这里得到了更新x的依据}$<br />
-$x_{n+1} = x_n - \Delta x = x_n - \Delta y \cdot f'(x) \cdot lr \Leftarrow 公式有了$</p><p>这时可以写代码了</p><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gradient_sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="n">x</span>       <span class="o">=</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span>       <span class="c1"># first try</span>
-    <span class="n">lr</span>      <span class="o">=</span> <span class="mf">0.01</span>        <span class="c1"># learning rate</span>
-    <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-10</span>       <span class="c1"># quit flag</span>
-
-    <span class="n">f_x</span>     <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span> <span class="p">:</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span>
-    <span class="n">df_dx</span>   <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span> <span class="p">:</span> <span class="mi">2</span><span class="o">*</span><span class="n">a</span>
-    <span class="n">delta_y</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span> <span class="p">:</span> <span class="n">f_x</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">-</span><span class="n">n</span>
-    <span class="n">e_x</span>     <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span> <span class="p">:</span> <span class="n">delta_y</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="mf">0.5</span>     <span class="c1"># funcon of loss</span>
-    <span class="n">de_dx</span>   <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span> <span class="p">:</span> <span class="n">delta_y</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">df_dx</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>   <span class="c1"># derivative of loss</span>
-    <span class="n">delta_x</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span> <span class="p">:</span> <span class="n">de_dx</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">lr</span>
-
-    <span class="n">count</span>   <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">n</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span class="p">:</span>
-        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">delta_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">count</span>
-
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;sqrt(</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">): </span><span class="si">{</span><span class="n">gradient_sqrt</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="si">}</span><span class="s1">次&#39;</span><span class="p">)</span>
-</pre></div>
-<p>output</p>
-<pre><code>sqrt(1): (0.9999999999519603, 593)次
-sqrt(2): (1.4142135623377403, 285)次
-sqrt(3): (1.7320508075423036, 181)次
-sqrt(4): (2.0, 0)次
-sqrt(5): (2.236067977522142, 103)次
-sqrt(6): (2.449489742798969, 87)次
-sqrt(7): (2.645751311082885, 73)次
-sqrt(8): (2.828427124761154, 63)次
-sqrt(9): (3.00000000001166, 55)次
-</code></pre>
-<hr />
-<p><strong>Bonus</strong></p><h2>梯度下降解二次方程</h2>
-<ul>
-<li>求解方程：$(x_1 - 3)^2 + (x_2 + 4)^2 = 0$的根</li>
-</ul>
-<p>$f(x) = (x_1 - 3)^2 + (x_2 + 4)^2 = 0$</p><p>$e(x) = \frac{1}{2}(f(x)-Y)^2$</p><p>$\frac{\partial}{\partial x_1}e(x)=(f(x)-Y)\cdot(f(x) -Y)'
-= (f(x)-Y)\cdot\frac{\partial}{\partial x_1}((x_1 - 3)^2 + (x_2 + 4)^2-Y)$</p><p>$\therefore
-\begin{cases}
-\frac{\partial}{\partial x_1}e(x)=\Delta y \cdot 2(x_1 - 3) \
-\frac{\partial}{\partial x_2}e(x)=\Delta y \cdot 2(x_2 + 4)
-\end{cases}
-$</p><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gradient_f</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span>  <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>        <span class="c1"># first try</span>
-    <span class="n">lr</span>      <span class="o">=</span> <span class="mf">0.01</span>        <span class="c1"># learning rate</span>
-    <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-4</span>        <span class="c1"># quit flag</span>
-
-    <span class="n">f_x</span>     <span class="o">=</span> <span class="k">lambda</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="p">:</span> <span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">x2</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-    <span class="n">dfx1</span>    <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span>
-    <span class="n">dfx2</span>    <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="n">delta_y</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="p">:</span> <span class="n">f_x</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span> <span class="o">-</span> <span class="n">n</span>
-    <span class="n">e_x</span>     <span class="o">=</span> <span class="k">lambda</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="p">:</span> <span class="n">delta_y</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="mf">0.5</span>     <span class="c1"># cost function</span>
-    <span class="n">dedx1</span>   <span class="o">=</span> <span class="k">lambda</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="p">:</span> <span class="n">delta_y</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span> <span class="o">*</span> <span class="n">dfx1</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span>   <span class="c1"># partial derivative of loss \</span>
-    <span class="n">dedx2</span>   <span class="o">=</span> <span class="k">lambda</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="p">:</span> <span class="n">delta_y</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span> <span class="o">*</span> <span class="n">dfx2</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>   <span class="c1"># with Chain Rule</span>
-    <span class="n">delt_x1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="p">:</span> <span class="n">dedx1</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span> <span class="o">*</span> <span class="n">lr</span>
-    <span class="n">delt_x2</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="p">:</span> <span class="n">dedx2</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span> <span class="o">*</span> <span class="n">lr</span>
-
-    <span class="n">count</span>   <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">f_x</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span> <span class="o">-</span> <span class="n">n</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span class="p">:</span>
-        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">x1</span> <span class="o">-=</span> <span class="n">delt_x1</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
-        <span class="n">x2</span> <span class="o">-=</span> <span class="n">delt_x2</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">count</span>
-
-<span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">gradient_f</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">a </span><span class="se">\t</span><span class="s1">= </span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1"></span>
-<span class="s1">b </span><span class="se">\t</span><span class="s1">= </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s1"> </span>
-<span class="s1">f(a, b) = </span><span class="si">{</span><span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="si">}</span><span class="s1"></span>
-<span class="s1">count </span><span class="se">\t</span><span class="s1">= </span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
-</pre></div>
-<p>output</p>
-<pre><code>a 	= 2.9967765158140387
-b 	= -3.9905337923806563 
-f(a, b) = 9.999993698966316e-05
-count 	= 249990
-</code></pre>
-<p>之所以做两个练习， 就是因为第一个是故意把过程写得非常详细，如果直接套公式的话，而不是把每一步推导都写成代码，可以简单很多（其实就是最后一步的结果）:$\Delta x = \Delta y \cdot f'(x) \cdot lr$</p><h2>梯度下降解反三角函数</h2>
-<ul>
-<li>求解arcsin(x)，在$x = 0.5$和$x = \frac{\sqrt{3}}{2}$的值</li>
-</ul>
-<p>即估算两个x值，令$f(x)=sin(x)=0.5$和$f(x)=sin(x)=\frac{\sqrt{3}}{2}$<br />
-这次不推导了，套一次公式吧$\Delta x = \Delta y \cdot f'(x) \cdot lr$</p><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
-
-<span class="k">def</span> <span class="nf">arcsin</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="n">x</span>       <span class="o">=</span> <span class="mi">1</span>           <span class="c1"># first try</span>
-    <span class="n">lr</span>      <span class="o">=</span> <span class="mf">0.1</span>        <span class="c1"># learning rate</span>
-    <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-8</span>        <span class="c1"># quit flag</span>
-
-    <span class="n">f_x</span>     <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="n">delta_y</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">f_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">n</span>
-    <span class="n">delta_x</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">delta_y</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">lr</span>
-
-    <span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">f_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">n</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span class="p">:</span>
-        <span class="n">x</span> <span class="o">-=</span> <span class="n">delta_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&#39;&#39;sin(</span><span class="si">{</span><span class="n">arcsin</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="si">}</span><span class="s1">) ≈ 0.5</span>
-<span class="s1">sin(</span><span class="si">{</span><span class="n">arcsin</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s1">) ≈ sqrt(3)/2</span>
-<span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
-</pre></div>
-<p>output</p>
-<pre><code>sin(30.000000638736502) ≈ 0.5
-sin(59.999998857570986) ≈ sqrt(3)/2
-
-</code></pre>
-</div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E4%BA%8C%E5%88%86%E6%B3%95%E3%80%81%E7%89%9B%E9%A1%BF%E6%B3%95%E5%92%8C%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E5%BC%80%E6%A0%B9%E5%8F%B7%E5%92%8C%E8%A7%A3%E6%96%B9%E7%A8%8B/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

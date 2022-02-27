@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/d69e93fb6d600dd3092b98eaebaa4bce.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/6e53c79433de0ec045f11212c742d55c.json"
         }
 
     </script>
@@ -55,6 +55,58 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AB%EF%BC%9ABalanced-Binary-Search-Trees%28BBST%29/" target="_self">数据结构篇八：Balanced Binary Search Trees(BBST)</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AB%EF%BC%9ABalanced-Binary-Search-Trees%28BBST%29/" target="_self">
+                <time class="text-uppercase">
+                    November 17 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><hr />
+<h1>Balanced Binary Search Trees (BBST)</h1>
+<ul>
+<li>满足low (logarithmic) height for fast insertions and deletions</li>
+<li>clever usage of a <code>tree invairant</code> and <code>tree rotation</code></li>
+</ul>
+<h2>AVL Tree</h2>
+<p>一种BBST，满足O(log n)的插入删除和查找复杂度，也是第一种BBST，后续出现的更多的：2-3 tree, AA tree, scapegoat tree, red-black tree(avl的最主要竞争对手)</p><p>能保持平衡的因子：Balance Factor (<code>BF</code>)</p><ul>
+<li>BF(node) = H(node.right) - H(node.left)</li>
+<li>H(x) = height of node = # of edges between (x, furthest leaf)</li>
+<li>平衡就是左右平均分配，所以要么均分，要么某一边多一个，BF其实就是(-1, 0, 1)里的一个了 &lt;- avl tree invariant</li>
+</ul>
+<p>一个node需要存：</p><ul>
+<li>本身的(comparable) value</li>
+<li>balance factor</li>
+<li>the <code>height</code> of this node</li>
+<li>left/right pointer</li>
+</ul>
+<p>使树保持左右平衡主要是靠rotation，极简情况下（三个node），我们有两种基本情况（left-left, right-right），有其它情况就旋转一次变成这两种情况之一：
+<figure  style="flex: 87.44710860366713" ><img width="1240" height="709" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/3b702bd1d181c924971298b096c7c548.png" alt=""/></figure></p><h2>Insertion</h2>
+<p>一次插入需要考虑的是，插在哪边，以及插入后对bf, height和balance的破坏
+<figure  style="flex: 60.546875" ><img width="1240" height="1024" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/7aec7390101d933c2d50971e2733effe.png" alt=""/></figure></p><p>其中修复平衡就是上图中几个基本结构的转换</p><h2>Removal</h2>
+<p>avl树就是一棵BST，删除节点分两步：</p><ol>
+<li>按照bst的方法查找节点，即小的在左边找，大的在右边找</li>
+<li>也按bst的原则删除元素，即找到元素后，把左边的最大值或右边的最小值拿过来补上删除的位置</li>
+<li>这一步是多出来的，显然是要更新一下节点的bf和height，及重新balance一次了。</li>
+</ol>
+<p>前两部分参考BST一章，流程伪代码：</p><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">remove</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span> <span class="o">...</span>
+    <span class="c1"># Code for BST item removal here</span>
+    <span class="o">...</span>
+    <span class="c1"># Update balance factor</span>
+    <span class="n">update</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="c1"># Rebalance tree</span>
+    <span class="k">return</span> <span class="n">balance</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+</pre></div>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AB%EF%BC%9ABalanced-Binary-Search-Trees%28BBST%29/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%83%EF%BC%9ASuffix-Array%2C-Longest-Common-Prefix-%28LCP%29-array/" target="_self">数据结构篇七：Suffix Array, Longest Common Prefix (LCP) array</a></h1>
@@ -994,206 +1046,6 @@ D固定，同A，<span class="o">(</span><span class="m">6</span><span class="o"
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0_%5B%E5%AE%8C%E7%BB%93%5D_pdf%E4%B8%8B%E8%BD%BD/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B7%5D_Document-Architecture/" target="_self">cs193p_2021笔记[7]_Document-Architecture</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B7%5D_Document-Architecture/" target="_self">
-                <time class="text-uppercase">
-                    October 24 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><h1>Document Architecture</h1>
-<p>所谓的Dopcument Architecture，其实就是支持把用app产生的作品保存起来，比如你创作的一幅图片，可以保存为<code>.jpg</code>，你用photoshop做的文件是<code>.psd</code>，下次用自己的app加载这个文件，能认出所有组件和模型，比如我们想为document取个名字叫<code>.emojiart</code>。</p><h2>App Architecture</h2>
-<h3>App protocol</h3>
-<ul>
-<li>一个app里只能有一个struct服从<code>App Protocol</code></li>
-<li>mark it with <code>@main</code></li>
-<li>it's <code>var body</code> is <code>some Scene</code></li>
-</ul>
-<h3>Scene protocol</h3>
-<ul>
-<li>A <code>Scene</code> is a container fo a <code>top-lever</code> View that you want to show in your UI</li>
-<li><code>@Environment(\.scenePhase)</code></li>
-<li>three main types of Scenes:</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="n">WindowGroup</span> <span class="p">{</span><span class="k">return</span> <span class="n">aTopLevelView</span><span class="p">}</span>
-<span class="n">DocumentGroup</span><span class="p">(</span><span class="n">newDocument</span><span class="p">:)</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span> <span class="p">...</span> <span class="k">return</span> <span class="n">aTopLevelView</span><span class="p">}</span>
-<span class="n">DocumentGroup</span><span class="p">(</span><span class="n">viewing</span><span class="p">:</span> <span class="n">viewer</span><span class="p">:)</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span> <span class="p">...</span> <span class="k">return</span> <span class="n">aTopLevelView</span><span class="p">}</span>  <span class="c1">// 只读</span>
-</pre></div>
-<ul>
-<li>后两个类似view里面的<code>ForEach</code>但不完全相同：<ul>
-<li>而是：&quot;<strong>new window</strong>&quot; on Mac, &quot;<strong>splitting the screen</strong>&quot; on iPad -&gt; for create new Scene</li>
-</ul>
-</li>
-<li><code>content</code>参数是一个返回some View的方法<ul>
-<li>返回的是top-level view</li>
-<li>每当新建一个窗口或窗口被分割时都会被调用</li>
-</ul>
-</li>
-</ul>
-<p>当你在iPad上分屏，且两个打开同一应用，就是<code>WindowGroup</code>在管理，为每一个windows生成一个Scene(share the same parameter e.g. view model, 因为代码是同一份，除非额外为每个scene设置自己的viewmodel之类的).</p><p><code>config</code>里保存了document(即viewModel)，也保存了文件位置。</p><h3>SceneStorage</h3>
-<ul>
-<li>能持久化数据</li>
-<li>以窗口/分屏为单位 -&gt; per-Scene basis</li>
-<li>也会invalidate view</li>
-<li>数据类型有严格限制，最通用的是<code>RawRepresentable</code></li>
-</ul>
-<p>[图片上传失败...(image-66d359-1636448439942)]</p><p>一个View里的<code>@State</code>改为<code>@SceneStorage(uniq_id)</code>后，app退出或crash了，仍然能找回原来的值。</p><p>这个时候每个Scene里的值就已经不一样了。</p><h3>AppStorage</h3>
-<ul>
-<li>application-wide basis</li>
-<li>存在UserDefaults里</li>
-<li>服从<code>@SceneStorage</code>的数据才能被存储</li>
-<li>invalidate view</li>
-</ul>
-<h2>DocumentGroup</h2>
-<p><code>DocumentGroup</code> is the document-oriented Scene-building Scene.</p><div class="highlight"><pre><span></span><span class="p">@</span><span class="n">main</span>
-<span class="kd">struct</span> <span class="nc">MyDemoApp</span><span class="p">:</span> <span class="n">App</span> <span class="p">{</span>
-    <span class="p">@</span><span class="n">StateObject</span> <span class="kd">var</span> <span class="nv">paletteStore</span> <span class="p">=</span> <span class="n">PaletteStore</span><span class="p">(</span><span class="n">named</span><span class="p">:</span> <span class="s">&quot;Default&quot;</span><span class="p">)</span>
-    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">Scene</span> <span class="p">{</span>
-        <span class="n">WindowGroup</span> <span class="p">{</span>
-            <span class="n">MyDemoView</span><span class="p">()</span>
-            <span class="p">.</span><span class="n">environmentObject</span><span class="p">(</span><span class="n">paletteStore</span><span class="p">)</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="c1">// V.S.</span>
-
-<span class="kd">struct</span> <span class="nc">MyDemoApp</span><span class="p">:</span> <span class="n">App</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">Scene</span> <span class="p">{</span>
-        <span class="n">DocumentGroup</span><span class="p">(</span><span class="n">newDocument</span><span class="p">:</span> <span class="p">{</span><span class="n">myDocument</span><span class="p">()})</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span>
-            <span class="n">MyDemoView</span><span class="p">(</span><span class="n">document</span><span class="p">:</span> <span class="n">config</span><span class="p">.</span><span class="n">document</span><span class="p">)</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-<ul>
-<li>不再用<code>@StateObject</code>传递ViewModel，每新建一个Document都会有一个独立的ViewModel<ul>
-<li>必须要服从<code>ReferenceFileDocument</code>(这样能存到文件系统以及从文件系统读取了)</li>
-<li><code>config</code>参数包含了这个ViewModel（就是document)，以及document的url</li>
-<li>很好理解，每一个document肯定有自己的数据（想象一个“最近打开”的功能，每一个文档都是独立的）</li>
-</ul>
-</li>
-<li><code>newDocument</code>里自行提供一个新建document的方法</li>
-<li>封装了关联的（选择document的）UI和行为</li>
-<li>you <strong>MUST</strong> implement <code>Undo</code> in your application</li>
-</ul>
-<p>如果不去实现<code>Undo</code>，也可以直接把model存到document文件里：</p><ol>
-<li>你的ViewModel要能init itself from a <code>Binding&lt;Type&gt;</code><ul>
-<li>如<code>config.$document</code></li>
-</ul>
-</li>
-<li>ViewModel由一个<code>ObservedObject</code>变成一个<code>StateObject</code><ul>
-<li>这次必须服从<code>FileDocument</code></li>
-</ul>
-</li>
-</ol>
-<div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">MyDemoApp</span><span class="p">:</span> <span class="n">App</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">Scene</span> <span class="p">{</span>
-        <span class="n">DocumentGroup</span><span class="p">(</span><span class="n">newDocument</span><span class="p">:</span> <span class="p">{</span><span class="n">myDocument</span><span class="p">()})</span> <span class="p">{</span> <span class="n">config</span> <span class="k">in</span>
-            <span class="c1">// MyDemoView(document: config.document) // 之前的</span>
-            <span class="n">MyDemoView</span><span class="p">(</span><span class="n">document</span><span class="p">:</span> <span class="n">viewModel</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">config</span><span class="p">.</span><span class="err">$</span><span class="n">document</span><span class="p">))</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-<p>把<code>newDocument: {myDocument()}</code>改为<code>viewer: myDocument.self</code>，就成了一个只读的model，（你甚至不需要传入实例），如果你要开发的是一个查看别人文档的应用，这个特性就比较有用了。</p><h3>FileDocument protocol</h3>
-<p>This protocol gets/puts the contents of a document from/to a file. 即提供你的document读到文件系统的能力。</p><div class="highlight"><pre><span></span><span class="c1">// create from a file</span>
-<span class="kd">init</span><span class="p">(</span><span class="n">configuration</span><span class="p">:</span> <span class="n">ReadConfiguration</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="kd">let</span> <span class="nv">data</span> <span class="p">=</span> <span class="n">configuration</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">regularFileContents</span> <span class="p">{</span>
-        <span class="c1">// init yourself from data</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="k">throw</span> <span class="n">CocoaError</span><span class="p">(.</span><span class="n">fileReadCorruptFile</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="c1">// write</span>
-<span class="kd">func</span> <span class="nf">fileWrapper</span><span class="p">(</span><span class="n">configuration</span><span class="p">:</span> <span class="n">WriteConfiguration</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="n">FileWrapper</span> <span class="p">{</span>
-    <span class="n">FileWrapper</span><span class="p">(</span><span class="n">regularFileWithContents</span><span class="p">:</span> <span class="cm">/*my data*/</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></div>
-<h3>ReferenceFileDocument</h3>
-<ul>
-<li>几乎和<code>FileDocument</code>一致</li>
-<li>继承自<code>ObservableObject</code> -&gt; ViewModel only</li>
-<li>唯一的区别是通过后台线程的一个<code>snapshot</code>来写入</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="c1">// 先snapshot</span>
-<span class="kd">func</span> <span class="nf">snapshot</span><span class="p">(</span><span class="n">contentType</span><span class="p">:</span> <span class="bp">UTType</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="n">Snapshot</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="c1">// my data or something</span>
-<span class="p">}</span>
-<span class="c1">// then write</span>
-<span class="kd">func</span> <span class="nf">fileWrapper</span><span class="p">(</span><span class="n">snapshot</span><span class="p">:</span> <span class="n">Snapshot</span><span class="p">,</span> <span class="n">configuration</span><span class="p">:</span> <span class="n">WriteConfiguration</span><span class="p">)</span> <span class="kr">throws</span> <span class="p">-&gt;</span> <span class="n">FileWrapper</span> <span class="p">{</span>
-    <span class="n">FileWrapper</span><span class="p">(</span><span class="n">regularFileWithContents</span><span class="p">:</span> <span class="cm">/* snapshpt converted to a Data */</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></div>
-<p>流程大概是，你的model有变化之后，会先找<code>snapshot</code>方法创建一份镜像，然后再要求你给出一个<code>fileWrapper</code>来写文件。</p><h3>自定义文件类型</h3>
-<p>声明能打开什么类型的文件，通过：UTType(<code>Uniform Type Identifier</code>)</p><p>可以理解为怎么定义并注册（关联）自己的扩展名，就像photoshop关联.psd一样。</p><ol>
-<li>声明(Info tab)，设置<code>Exported/Imported Type Identifier</code>，所以表面上的扩展名，内里还对应了一个唯一的标识符，一般用反域名的格式</li>
-</ol>
-<figure  style="flex: 322.98850574712645" ><img width="1124" height="174" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/6b64ff3f0d28f9e054f79ae65e4eada0.png" alt=""/></figure><ol start="2">
-<li>声明拥有权，用的就是上一步标识符，而不是扩展名</li>
-</ol>
-<figure  style="flex: 400.0" ><img width="1136" height="142" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/86264dc076782270e53b2ea22b2eb60f.png" alt=""/></figure><ol start="3">
-<li>告知系统能在<code>Files</code> app里打开这种文档<ul>
-<li>info.plist &gt; Supports Document Browser &gt; YES</li>
-</ul>
-</li>
-<li>代码里添加枚举：</li>
-</ol>
-<div class="highlight"><pre><span></span><span class="kd">extension</span> <span class="bp">UTType</span> <span class="p">{</span>
-    <span class="kd">static</span> <span class="kd">let</span> <span class="nv">emojiart</span> <span class="p">=</span> <span class="bp">UTType</span><span class="p">(</span><span class="n">exportedAs</span><span class="p">:</span> <span class="s">&quot;edu.bla.bla.emojimart&quot;</span><span class="p">)</span>
-<span class="p">}</span>
-
-<span class="kd">static</span> <span class="kd">let</span> <span class="nv">readableContentTypes</span> <span class="p">=</span> <span class="p">[</span><span class="bp">UTType</span><span class="p">.</span><span class="n">emojiart</span><span class="p">]</span>
-</pre></div>
-<h2>Undo</h2>
-<ul>
-<li>use <code>ReferenceFileDocument</code> must implement Undo</li>
-<li>这也是SwiftUI能自动保存的时间节点</li>
-<li>by <code>UndoManager</code> -&gt; <code>@Environment(\.undoManager) var undoManager</code></li>
-<li>and by register an <code>Undo</code> for it: <code>func registerUndo(withTarget: self, howToUndo: (target) -&gt; Void)</code></li>
-</ul>
-<div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nf">undoablePerform</span><span class="p">(</span><span class="n">operation</span><span class="p">:</span> <span class="nb">String</span><span class="p">,</span> <span class="n">with</span> <span class="n">undoManager</span><span class="p">:</span> <span class="n">UndoManager</span><span class="p">?,</span> <span class="n">doit</span><span class="p">:</span> <span class="p">()</span> <span class="p">-&gt;</span> <span class="nb">Void</span><span class="p">){</span>
-    <span class="kd">let</span> <span class="nv">oldModel</span> <span class="p">=</span> <span class="n">model</span>
-    <span class="n">doit</span><span class="p">()</span>
-    <span class="n">undoManager</span><span class="p">?.</span><span class="n">registerUndo</span><span class="p">(</span><span class="n">withTarget</span><span class="p">:</span> <span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">myself</span> <span class="k">in</span>
-        <span class="n">myself</span><span class="p">.</span><span class="n">model</span> <span class="p">=</span> <span class="n">model</span>
-    <span class="p">}</span>
-    <span class="n">undoManager</span><span class="p">?.</span><span class="n">setActionName</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span> <span class="c1">// 给操作一个名字，如&quot;undo paste&quot;， 非必需</span>
-<span class="p">}</span>
-</pre></div>
-<p>用`undoablyPerform(with:){} 包住的任何改变model的操作就都支持了undo</p><h2>Review</h2>
-<p>回顾一下，我们把应用改造为<code>Document Architechture</code>的步骤：</p><ol>
-<li>应用入口，将<code>WindowGroup</code>改为了<code>DocumentGroup</code>，并修改了相应的传递document的方式</li>
-<li>实现document(即view model) comform to <code>ReferenceFileDocument</code><ul>
-<li>实现snapshot, write to file (<code>FileWrapper</code>), and read from file</li>
-</ul>
-</li>
-<li>自定义一个文件类别（扩展名，标识符，声明拥有者等）</li>
-<li>此时启动应用，入口UI已经是文档选择界面了，所以我说它封装了UI和行为<ul>
-<li>但此时不具备保存的功能，需要进一步实现<code>Undo</code>'</li>
-</ul>
-</li>
-<li>通过<code>undoManager</code>把改动model的行为都包进去实现undo/redo<ul>
-<li>此时document已能自动保存</li>
-</ul>
-</li>
-<li>增加toolbar, 实现手动undo/redo</li>
-<li>顺便注册文档类型，以便在Files应用内能用本app打开<ul>
-<li><code>Info.plist</code> &gt; <code>Supports Document Browser</code> &gt; YES</li>
-</ul>
-</li>
-</ol>
-</div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B7%5D_Document-Architecture/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

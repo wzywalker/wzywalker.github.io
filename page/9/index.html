@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/d69e93fb6d600dd3092b98eaebaa4bce.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/6e53c79433de0ec045f11212c742d55c.json"
         }
 
     </script>
@@ -55,6 +55,44 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/UIImage%E8%BD%ACNSData%E6%9C%89%E6%97%B6%E4%B8%BAnil/" target="_self">UIImage转NSData有时为nil</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/UIImage%E8%BD%ACNSData%E6%9C%89%E6%97%B6%E4%B8%BAnil/" target="_self">
+                <time class="text-uppercase">
+                    July 14 2018
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>一般, 我们会用<code>UIImagePNGRepresentation</code>, <code>UIImagePNGRepresentation</code>来达到目的, 但有时候, 发现它的返回值为<code>nil</code>...</p><p>不需要怀疑这么简单处理有什么问题, <a href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIKitFunctionReference/#//apple_ref/c/func/UIImagePNGRepresentation">文档</a> 就是如此:</p><blockquote>
+<p><strong>Return Value</strong></p><p>A data object containing the PNG data, or nil if there was a problem generating the data. <strong>This function may return nil if the image has no data</strong> or if the underlying CGImageRef contains data in an unsupported bitmap format.</p></blockquote>
+<p>也就是说, 没有<code>data</code>的情况还是挺多的, 我们还是放弃这个方法吧, 换别的吧, 提供三种思路</p><h2>复制一张图片</h2>
+<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nv">imageName</span><span class="p">:</span> <span class="nb">String</span> <span class="p">=</span> <span class="s">&quot;MyImageName.png&quot;</span>
+<span class="kd">var</span> <span class="nv">image</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">named</span><span class="p">:</span> <span class="n">imageName</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nv">rep</span> <span class="p">=</span> <span class="n">UIImagePNGRepresentation</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+</pre></div>
+<p>当然, 这不能保证什么</p><h2>重绘一张图片</h2>
+<div class="highlight"><pre><span></span><span class="n">UIGraphicsBeginImageContext</span><span class="p">(</span><span class="n">originalImage</span><span class="p">.</span><span class="n">size</span><span class="p">);</span><span class="w"></span>
+<span class="p">[</span><span class="n">originalImage</span><span class="w"> </span><span class="n">drawInRect</span><span class="o">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">originalImage</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">originalImage</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">)];</span><span class="w"></span>
+<span class="bp">UIImage</span><span class="w"> </span><span class="o">*</span><span class="n">newImage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UIGraphicsGetImageFromCurrentImageContext</span><span class="p">();</span><span class="w"></span>
+<span class="n">UIGraphicsEndImageContext</span><span class="p">();</span><span class="w"></span>
+</pre></div>
+<p>或</p><div class="highlight"><pre><span></span><span class="n">UIGraphicsBeginImageContext</span><span class="p">(</span><span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="kd">let</span> <span class="nv">image</span> <span class="p">=</span> <span class="n">UIGraphicsGetImageFromCurrentImageContext</span><span class="p">()</span>
+<span class="n">UIGraphicsEndImageContext</span><span class="p">()</span>
+</pre></div>
+<h2>不用 UIImage</h2>
+<p>1和2都没验证过, 但都是在StackOverflow上别人贴出的答案, 我之所以不验证了, 因为我是这么做的</p><div class="highlight"><pre><span></span><span class="n">CGDataProviderRef</span><span class="w"> </span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGImageGetDataProvider</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">CGImage</span><span class="p">);</span><span class="w"></span>
+<span class="bp">NSData</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="n">CFBridgingRelease</span><span class="p">(</span><span class="n">CGDataProviderCopyData</span><span class="p">(</span><span class="n">provider</span><span class="p">));</span><span class="w"></span>
+</pre></div>
+<p>通了就没动力继续试啦, 而且本身已经很简洁了, 此外方法名也非常直白&quot;<code>DataProvider</code>&quot;, 还想怎样!</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/UIImage%E8%BD%ACNSData%E6%9C%89%E6%97%B6%E4%B8%BAnil/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E7%90%86%E8%A7%A3__bridge/" target="_self">理解__bridge</a></h1>
