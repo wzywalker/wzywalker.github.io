@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/441335f7e7e8b1a57347c22777194ad1.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/f936562262a4e7a521f97d6cbfa2ba93.json"
         }
 
     </script>
@@ -113,7 +113,7 @@ pod repo push WTSpecs PodTestLibrary.podspec --allow-warnings --use-libraries --
 </pre></div>
 <p>使用</p><div class="highlight"><pre><span></span><span class="n">pod</span> <span class="s1">&#39;PodTestLibrary&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 0.1.0&#39;</span>
 </pre></div>
-<ul>
+<p><code>lib lint</code>和<code>repo push</code>过程中碰到一些问题导致validation失败的解决：</p><ul>
 <li><p><code>--allow-warnings</code>, <code>--use-libraries</code>, <code>--skip-import-validation</code> 等参数灵活使用，目标就是为了通过验证</p></li>
 <li><p><code>--no-clean</code> 可以在出错时打印更详细的信息（我加了<code>--verbose</code>后在build失败时会提示你加这个)</p></li>
 <li><p>碰到有模块不支持i386什么的架构时，添加这个(<a href="https://blog.nowcoder.net/n/68dac16078184973ac061027817a2d9a?from=nowcoder_improve">更多看这篇文章</a>)：</p></li>

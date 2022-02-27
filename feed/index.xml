@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>walker's code blog</title><link>/</link><description>coder, reader</description><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png</url><title>walker's code blog</title><link>/</link></image><language>english</language><lastBuildDate>Sun, 27 Feb 2022 10:10:51 +0806</lastBuildDate><pubDate>Sun, 27 Feb 2022 10:10:51 +0806</pubDate><item><title>数据结构篇九：Indexed Priority Queue</title><link>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/</link><description>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>walker's code blog</title><link>/</link><description>coder, reader</description><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png</url><title>walker's code blog</title><link>/</link></image><language>english</language><lastBuildDate>Sun, 27 Feb 2022 10:25:10 +0806</lastBuildDate><pubDate>Sun, 27 Feb 2022 10:25:10 +0806</pubDate><item><title>数据结构篇九：Indexed Priority Queue</title><link>/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/</link><description>&lt;p&gt;这是一位 google 工程师分享的8小时的&lt;a href="https://www.youtube.com/watch?v=RBSGKlAvoiM"&gt;数据结构&lt;/a&gt;的视频,我的笔记&lt;/p&gt;&lt;hr /&gt;
 &lt;h1&gt;Indexed Priority Queue&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;a traditional priority queue variant&lt;/li&gt;
@@ -2282,7 +2282,7 @@ pod repo push WTSpecs PodTestLibrary.podspec --allow-warnings --use-libraries --
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;使用&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;pod&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;PodTestLibrary&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;~&amp;gt; 0.1.0&amp;#39;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
+&lt;p&gt;&lt;code&gt;lib lint&lt;/code&gt;和&lt;code&gt;repo push&lt;/code&gt;过程中碰到一些问题导致validation失败的解决：&lt;/p&gt;&lt;ul&gt;
 &lt;li&gt;&lt;p&gt;&lt;code&gt;--allow-warnings&lt;/code&gt;, &lt;code&gt;--use-libraries&lt;/code&gt;, &lt;code&gt;--skip-import-validation&lt;/code&gt; 等参数灵活使用，目标就是为了通过验证&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;&lt;code&gt;--no-clean&lt;/code&gt; 可以在出错时打印更详细的信息（我加了&lt;code&gt;--verbose&lt;/code&gt;后在build失败时会提示你加这个)&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;碰到有模块不支持i386什么的架构时，添加这个(&lt;a href="https://blog.nowcoder.net/n/68dac16078184973ac061027817a2d9a?from=nowcoder_improve"&gt;更多看这篇文章&lt;/a&gt;)：&lt;/p&gt;&lt;/li&gt;
