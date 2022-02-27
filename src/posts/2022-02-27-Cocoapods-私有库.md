@@ -1,6 +1,6 @@
 ---
 layout: post
-title: CocoaPods创建私有库过程携带遗
+title: CocoaPods创建私有库过程拾遗
 slug: cocoapods_private_library
 date: 2022-02-27 17:44
 status: publish
