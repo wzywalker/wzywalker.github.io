@@ -55,7 +55,7 @@ git push --tags     #推送tag到远端仓库
 pod lib lint  --allow-warnings 
 ## 如果有私有源：
 pod lib lint --sources='YourSource,https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
-### 前面是私有源，逗号后是官方源，当然，因为我电脑用的是清华源，这里干脆也了往成一致了（不是必要）
+### 前面是私有源，逗号后是官方源，因为我电脑用的是清华源，这里干脆也了设成一致了（不是必要）
 
 # 如果不是用pod创建的项目，自行创建podspec文件：
  pod spec create PodTestLibrary git@coding.net:wtlucky/podTestLibrary.git  # 注意仓库名和仓库地址
