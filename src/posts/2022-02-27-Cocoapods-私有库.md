@@ -81,6 +81,7 @@ pod repo push WTSpecs PodTestLibrary.podspec --allow-warnings --use-libraries --
 pod 'PodTestLibrary', '~> 0.1.0'
 ```
 
+`lib lint`和`repo push`过程中碰到一些问题导致validation失败的解决：
 * `--allow-warnings`, `--use-libraries`, `--skip-import-validation` 等参数灵活使用，目标就是为了通过验证
 
 * `--no-clean` 可以在出错时打印更详细的信息（我加了`--verbose`后在build失败时会提示你加这个)
