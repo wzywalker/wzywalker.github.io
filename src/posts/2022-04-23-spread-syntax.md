@@ -10,9 +10,12 @@ categories:
 tags:
   - es6
   - spread syntax
+  - confluence
+  - yapi
+  - swagger
 ---
 
-前段用node.js写了个解析DOM的小功能，用到了不少展开语法(`...`)，特整理记录一下
+前段为这个解析api的dom元素生成的[小工具](https://github.com/walkerwzy/code_generator)继confluence, swagger之后又增加了yapi的支持，用到了不少展开语法(`...`)，特整理记录一下
 
 # Dictionary
 
