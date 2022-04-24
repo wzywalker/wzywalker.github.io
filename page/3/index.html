@@ -19,13 +19,13 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/f936562262a4e7a521f97d6cbfa2ba93.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/4996bd322f9a52abdd33589cf21a7dbf.json"
         }
 
     </script>
     
 <title>walker's code blog</title>
-<meta name="author" content="AlanDecode" />
+<meta name="author" content="walker" />
 <meta name="description" content="coder, reader" />
 <meta property="og:title" content="walker's code blog" />
 <meta property="og:description" content="coder, reader" />
@@ -55,6 +55,212 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0_%5B%E5%AE%8C%E7%BB%93%5D_pdf%E4%B8%8B%E8%BD%BD/" target="_self">cs193p_2021_笔记_[完结]_pdf下载</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0_%5B%E5%AE%8C%E7%BB%93%5D_pdf%E4%B8%8B%E8%BD%BD/" target="_self">
+                <time class="text-uppercase">
+                    October 24 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>所有笔记已导出成一篇pdf文档，已上传百度：
+链接: <a href="https://pan.baidu.com/s/1hgnzfxbE9l4zlcYBDsa-1g">https://pan.baidu.com/s/1hgnzfxbE9l4zlcYBDsa-1g</a> 提取码: 7w1f</p><hr />
+<p>本文内容：与UIKit的集成，以及学习过程中的一些tips，skills，与章节无章的notes</p><hr />
+<h1>MVVM</h1>
+<figure  style="flex: 89.08045977011494" ><img width="1240" height="696" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/da570de12fc64177b4e88c6429ae285b.png" alt=""/></figure><ul>
+<li>viewmodel要起到gete keeper的作用，它就要把model给private起来<ul>
+<li>或者private (set), 这样保护了写，但是能读</li>
+<li>或者用一个计算属性把需要的model 暴露出去</li>
+</ul>
+</li>
+<li>一个viewmodel通常要conform <code>ObservableObject</code><ul>
+<li>就隐含了一个<code>var objectWillChange: ObservableObjectPublisher</code></li>
+<li>model要改动前：<code>objectWillChange.send()</code></li>
+<li>或者，把model改为<code>@Publisher var model</code>，会自动广播</li>
+</ul>
+</li>
+<li>订阅者（通常就是View）就要把这个viewmodel打个可订阅的标识：<ul>
+<li><code>@ObservedObject var viewModel: MyViewModel</code></li>
+<li>只能是<code>var</code>，因为很明显是会变的</li>
+<li>View监听到是会自动invalicate view的，就会重绘</li>
+</ul>
+</li>
+</ul>
+<h1>UIKit Integration</h1>
+<p>UIKit并不是纯View的世界，大多数时候是跟ViewController一起出现的，还严重依赖<code>Delegate</code>这种机制进行跨View的事件传递（回调）。</p><h2>Representbles</h2>
+<p><code>UIViewRepresentable</code>，<code>UIViewContorllerRepresentable</code>都是SwiftUI的View了，包含几个组件：</p><ol>
+<li><code>makeUIView{Controller}(context: Context) -&gt; view/controller</code></li>
+<li><code>updateUIView{Controller}(view/controller, context: Context) -&gt;</code></li>
+<li><code>makeCoordiinator() -&gt; Coordinator</code> // handle delegate<ul>
+<li>调用该方法后, <code>context.coordinator</code>就有值了</li>
+</ul>
+</li>
+<li>a <code>Context</code> containn the coordinator, swiftui's env, animation transaction</li>
+<li><code>dismantleUIView{Controller}(view/controller, coordinator: Coordinator)</code> // clean up when disappears</li>
+</ol>
+<h1>Tips &amp; Skills</h1>
+<p>学习过程随笔记下来的一些技巧和知识点:</p><h2>basic</h2>
+<ul>
+<li>[0...6]是0到6，[0..&lt;6]是0到5</li>
+<li>var s = struct_a; s[&quot;a&quot;] = 3, 不会改变struct_a, 因为struct永远是复制</li>
+<li><code>arr.firstIndex(where: { item in item.id == myID})</code>，因为where需要的函数传递的是本身（类似map, filter)，所以可以简化为：<ul>
+<li><code>arr.firstIndex(where: { $0.id == myID})</code></li>
+</ul>
+</li>
+<li><code>typealias Card = MemoryGame&lt;String&gt;.Card</code> 别名</li>
+<li><code>var a_int_array = [Int]()</code> 一种初始化方式</li>
+<li>extension中的属性可以直接用，（当然也可以用<code>self.</code>）</li>
+<li><code>arr.filter { isGood($0)}</code> 因为参数就是自己，还可以继续简化： `arr.filter(isGood)``<ul>
+<li>同理：<code>[1...100].reduce(0, +)</code>，因为默认参数是两个，所以会自动填到+号两边，展开就是<code>{ $0 + $1 }</code></li>
+</ul>
+</li>
+<li><code>Collection</code> protocol is for <em>immutable</em> collections<ul>
+<li>mutalbe Collection protocol is <code>RangeReplaceableCollection</code></li>
+<li>所以要写一个扩展，在改变集合的元素，先选对正确的protocol</li>
+</ul>
+</li>
+<li>用<code>try</code>还是<code>try?</code>调用一个声明了<code>throw</code>的函数，取决于你是要忽略它还是处理它<ul>
+<li><code>try</code>就是不处理，结果就是包含了这段代码的函数也要标上<code>throw</code></li>
+<li><code>try?</code>就是忽略掉，承认<code>nil</code></li>
+</ul>
+</li>
+<li><code>String(describing: obj)</code>: 对象的字符串表示，或字符串描述</li>
+<li><code>#function</code> 程序名</li>
+<li><code>@ScaleMetric var fontSize: CGFloat = 40.0</code> 固定大小的字体，用<code>@ScaleMetric</code>也能按比例缩放</li>
+<li>剪贴板：<code>UIPasteboard.general.image?.jpegData(...)</code></li>
+<li>safe area: <code>UIAplication.shared.windows.first?.safeAreaInsets</code></li>
+<li><code>views.map{ UIHostingController(rootView: $0)}</code> 把一组View转为ViewController</li>
+<li><code>timer = Timer.publish(erery: 3, on: .current, in: .common).autoconnect()</code><ul>
+<li>view<code>.onReceive(timer, perform: {})</code></li>
+</ul>
+</li>
+<li><code>Texxt(Image(systemName: &quot;video.circle&quot;)) + Text(&quot;视频&quot;)</code>: 两个知识点<ul>
+<li>Text view重载了<code>+</code>操作符，省去了用<code>HStack</code></li>
+<li>Image也可以作为Text的内容</li>
+</ul>
+</li>
+<li><code>Circle + trim + stroke + rotation</code> 可以组合出一段任意角度的弧形</li>
+<li>一个<code>PreferenceKey</code>用来广播属性变化的例子：</li>
+</ul>
+<figure class="vertical-figure" style="flex: 38.9937106918239" ><img width="1240" height="1590" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e660e659aadcd624c62b1b9102d015d5.png" alt=""/></figure>
+<pre><code>* see more [https://swiftwithmajid.com/2020/01/15/the-magic-of-view-preferences-in-swiftui/](https://swiftwithmajid.com/2020/01/15/the-magic-of-view-preferences-in-swiftui/)
+</code></pre>
+<p>看一个简化的实例：
+<figure class="vertical-figure" style="flex: 43.13868613138686" ><img width="1182" height="1370" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/01b4f14b413613c6bd36ad5b2288df9d.png" alt=""/></figure>
+可以看到，其实化简化可读性更强，用for循环，再在里面做逻辑，会把直白的初衷绕进去：</p><ul>
+<li><p>返回唯一一个面朝上的卡片</p></li>
+<li><p>设置选定索引的卡片面朝上</p></li>
+<li><p>同样， <code>Button</code>的声明是：<code>(_ title: StringProtocol, action: () -&gt; Void)</code>,</p><ul>
+<li>简化后也更加直观了：<code>Button(&quot;text&quot;){ actions }</code></li>
+</ul>
+</li>
+<li><p>给class/struct添加和使用默认的<code>description</code>有点绕，等于原生并不支持，还理解成了<code>String</code>的方法</p></li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">abc</span><span class="p">:</span> <span class="n">CustomStringConvertible</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">a</span><span class="p">:</span><span class="nb">Int</span>
+    <span class="kd">var</span> <span class="nv">b</span><span class="p">:</span><span class="nb">Int</span>
+    <span class="kd">func</span> <span class="nf">de</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="nb">String</span><span class="p">{</span>
+        <span class="c1">// #function, file, filePaht, fileID, line, column</span>
+        <span class="s">&quot;</span><span class="si">\(</span><span class="nb">String</span><span class="si">(</span><span class="n">describing</span><span class="p">:</span> <span class="kc">self</span><span class="si">))</span><span class="se">\n</span><span class="si">\(</span><span class="kc">#function</span><span class="si">)</span><span class="se">\n</span><span class="si">\(</span><span class="p">#</span><span class="n">filePath</span><span class="si">)</span><span class="s">&quot;</span>
+
+        <span class="c1">// String(describing: obj)</span>
+        <span class="c1">// 理解为用obj对象的description属性来构造字符串</span>
+        <span class="c1">// 而一般人的设计思路会是：给obj对象增加一个description属性，这个属性是个string</span>
+        <span class="c1">// 并且这个对象要服务 CustomStringConvertible 协议</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nv">description</span><span class="p">:</span> <span class="nb">String</span> <span class="p">{</span>
+        <span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">a</span><span class="se">\&quot;</span><span class="s">:</span><span class="si">\(</span><span class="n">a</span><span class="si">)</span><span class="s">, </span><span class="se">\&quot;</span><span class="s">b</span><span class="se">\&quot;</span><span class="s">:</span><span class="si">\(</span><span class="n">b</span><span class="si">)</span><span class="s">}&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">abc</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="mi">77</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mi">88</span><span class="p">).</span><span class="n">de</span><span class="p">()</span> <span class="c1">// 输出： {&quot;a&quot;: 77, &quot;b&quot;: 88} \n de() \n myfile_path</span>
+</pre></div>
+<h2>view</h2>
+<ul>
+<li><code>var body : some View {...}</code> 意思是你自己不需要实现View，但你要返回some实现了View的（别的）对象<ul>
+<li>它是一个computed var，所以跟的{}就是一个function</li>
+<li>所以{}里隐含了一个return</li>
+</ul>
+</li>
+<li><code>Text(&quot;hello&quot;).padding()</code>返回的不再是Text</li>
+<li><code>ZStack(alignment: .center, content: {...})</code><ul>
+<li>简化为：<code>ZStack(alignment: .center) {...}</code>，提取了方法体</li>
+<li>如果<code>alignment</code>为空： <code>ZStack {...}</code></li>
+<li>所以它里面也可以有局部变量</li>
+</ul>
+</li>
+<li>多个函数参数也可以简化：<ul>
+<li><code>Button(action: {...}, label: {...})</code></li>
+<li><code>Button {...} label: {...}</code>省掉了第一个参数名，省掉了逗号</li>
+</ul>
+</li>
+<li><code>Button.contextMenu{ some View}</code> 上下文菜单，内容就是some View</li>
+<li><code>Menu{ some View} label: { Label }</code> 呈现为一个button，点击后会自动呈现some View组成的菜单<ul>
+<li>也就是说它自己帮你封装了UI和行为（点击弹出菜单），不需要写什么<code>onTap</code>事件</li>
+</ul>
+</li>
+<li><code>myView.sheet(isPresented: $flag) { some View}</code> 通过<code>$flag</code>就能根据<code>myView</code>的位置在合适的位置打开sheet，内容由@viewBuilder的closure提供</li>
+<li><code>popover</code>也同理，还有一种popover时把对象传进去的用法：<ul>
+<li><code>popover</code>与<code>sheet</code>的区别是<code>popover</code>在计算自身大小的时候是“尽可能小”，所以在包的对象里对好自己size一下</li>
+</ul>
+</li>
+<li>alert有点不同：<code>.alert(item: $flag) { alertToShow in return Alert}</code>， 就是要返回一个<code>Alert</code>对象</li>
+<li><code>myView.popover(item: $obj) {obj in ...}</code> 这一类传item做flag的用法也有广泛的使用场景</li>
+<li>弹出的页面查看自己的状态，用<code>presentationMode</code>环境变量<ul>
+<li><code>presentationMode.wrappedValue.isPresented</code></li>
+</ul>
+</li>
+<li><code>NavigationView</code>里的<code>NavigationLink</code>也是一样封装了UI和行为（点击跳转）</li>
+<li>toolbaritem的placement除了leading, trailing等直观表示，还有一些语义对应的(类似alert中有红色的销毁按钮），如<code>destructiveAction, cancellationAction, confirmationAction</code>等，甚至<code>automaic</code></li>
+<li>工具条放到底部：ToolbarItemGroup(placement: .bottmbar){}`</li>
+<li><code>.StackNavigationViewStyle</code>, 让大屏幕iPhone横屏时不去尝试左右分屏，直接铺满</li>
+<li><code>UIDevice.current.userInterfaceIdiom == .pad</code></li>
+<li>环境变量：<code>horizontalSizeClass</code>, <code>verticalSizeClass</code>等，根据是否compact来判断布局，而不是写死的大小，以实现跨机型适配</li>
+</ul>
+<h2>layout</h2>
+<ul>
+<li><code>lazyVGrid(columns: [GridItem(.fixed(200)), GridItem(.flexable()), GridItem())])</code><ul>
+<li>其实就是一个flex的排版</li>
+<li>横向利用所有空间，竖向尽可能小</li>
+<li>竖排，没定义，看效果是top</li>
+<li>横排，由每一个GridItem来定义</li>
+<li><code>Lazy</code>的意思是只有出现在屏幕上时，才会渲染<code>body</code></li>
+<li>如果横向元素也自由排列呢？比如横屏15个，竖屏6个<ul>
+<li><code>lazyVGrid(columns: GridItem(.adaptive(minimum: 80)))</code> 只要一个item, 然后指定一个最小宽度即可</li>
+</ul>
+</li>
+<li>同理应该有lazyHGrid</li>
+</ul>
+</li>
+</ul>
+<h2>static</h2>
+<ul>
+<li>.largeTitle, .white, 其实就是静态变量: <code>Font.largeTitle</code>, <code>Color.white</code>，所以不要觉得代码里用<code>static let xxx = xxx</code>很low<ul>
+<li>静态方法同理，只要不需要是实例变量的，都可以staic起来，跳出初始化流程</li>
+</ul>
+</li>
+</ul>
+<h2>XCode</h2>
+<ul>
+<li>设置 &gt; Behaviors &gt; Generates output 可以设置模拟器有output时的行为，比如拉出控制台看输出</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1">// 设置预览的设备</span>
+    <span class="p">.</span><span class="n">previewDevice</span><span class="p">(</span><span class="n">PreviewDevice</span><span class="p">(</span><span class="n">rawValue</span><span class="p">:</span> <span class="s">&quot;iPhone 12&quot;</span><span class="p">))</span>
+    <span class="p">.</span><span class="n">previewDisplayName</span><span class="p">(</span><span class="s">&quot;iPhone 12&quot;</span><span class="p">)</span>
+</pre></div>
+<ul>
+<li>preview里面你做两个<code>.preferredColorScheme(.dark/.light)</code>就可以同时预览两种颜色模式下的效果了</li>
+<li>其实以上在右侧面板设置会更简单，一样会在Preview里生成相应（跟手写一模一样）的代码</li>
+</ul>
+<p>...</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0_%5B%E5%AE%8C%E7%BB%93%5D_pdf%E4%B8%8B%E8%BD%BD/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B7%5D_Document-Architecture/" target="_self">cs193p_2021笔记[7]_Document-Architecture</a></h1>
@@ -1999,272 +2205,6 @@ $</p><p>O代表out_channel，大型网络里256，512比比皆是，所以它可
         
     </article>
     
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85Machine-Learning-2021-Spring-3/" target="_self">李宏毅Machine Learning 2021 Spring笔记[3]</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85Machine-Learning-2021-Spring-3/" target="_self">
-                <time class="text-uppercase">
-                    October 14 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><h1>CNN</h1>
-<ol>
-<li><strong>Receptive field</strong></li>
-</ol>
-<p>不管是计算机，还是人脑，去认一个物，都是去判断特定的patten（所以就会有错认的图片产生），这也说明，如果神经网络要去辨识物体，是不需要每个神经元都把整张图片看一次的，只需要关注一些特征区域就好了。（感受野, <code>Receptive field</code>)</p><p>如果你一直用3x3，会不会看不到大的patten呢？$\rightarrow$ 会也不会。</p><p>首先，小的filter当然是不可能看到它的感受野以外的部分，但是，神经网络是多层架构，你这层的输出再被卷一次，这时候每一个数字代表的就是之前的9个像素计算的结果，这一轮的9个数字就是上一层的81个像素（因为stride的原因，大部分是重复的）的计算结果，换言之，感受野大大增强了，也就是说，你只需要增加层数，就可以在小的filter上得到大的patten.</p><ol start="2">
-<li><strong>filter &amp; feature map</strong></li>
-</ol>
-<p>从神经元角度和全连接角度出发的话，每个框其实可以有自己的参数的（即你用了64步把整个图片扫描完的话，就有64组参数），而事实上为了简化模型，可以让某些框对应同样的参数（<strong>参数共享</strong>），原因就是同一特征可能出现在多个位置，比如人有两只脚。</p><p>再然后，实际上每一次都是用一组参数扫完全图的，意思是在每个角落都只搜索这<strong>一个特征</strong>。</p><p>我们把这种机制叫<code>filter</code>，一个filter只找一种特征，乘加出来的结果叫<code>feature map</code>，即这个filter提取出来的特征图。</p><p>因此，</p><ul>
-<li>你想提取多少个特征，就得有多少个filter</li>
-<li>表现出来就成了你这一层输出有多少个channel</li>
-<li>这就是为什么你的图片进来是3channel，出来就是N个channel了，取决于你设计了多少个filter</li>
-</ul>
-<ol start="3">
-<li><strong>Pooling &amp; subsampling</strong></li>
-</ol>
-<p>由于图像的视觉特征，你把它放大或缩小都能被人眼认出来，因此就产生了pooling这种机制，可以降低样本的大小，这主要是为了减小运算量吧（硬件性能足够就可以不考虑它）。</p><ol start="4">
-<li><strong>Data Augmentation</strong></li>
-</ol>
-<p>CNN并不能识别缩放、旋转、裁切、翻转过的图片，因此训练数据的增强也是必要的。</p><h2>AlphaGo</h2>
-<p><strong>layer 1</strong></p><ol>
-<li>能被影像化的问题就可以尝试CNN，围棋可以看成是一张19x19的图片</li>
-<li>每一个位置被总结出了48种可能的情况(超参1)</li>
-<li>所以输入就是19x19x48</li>
-<li>用0来padding成23x23</li>
-<li>很多patten、定式也是影像化的，可以被filter扫出来</li>
-<li>总结出5x5大小的filter就够用了（超参2）</li>
-<li>就用了192个fitler（即每一次output有48层channel)（超参3）</li>
-<li>stride = 1</li>
-<li>ReLU</li>
-</ol>
-<p><strong>layer 2-12</strong></p><ol>
-<li>padding成 21x21</li>
-<li>192个 3x3 filter with stride = 1</li>
-<li>ReLU</li>
-</ol>
-<p><strong>layer 13</strong></p><ol>
-<li>1x1 filter stride = 1</li>
-<li>bias</li>
-<li>softmax</li>
-</ol>
-<p>其中192(个filter)这个超参对比了128，256，384等，也就是说人类并不理解它每一次都提取了什么特征。</p><blockquote>
-<p>subsampling对围棋也有用吗？ 上面的结构看出并没有用，事实上，围棋你抽掉一行一列影响是很大的。</p></blockquote>
-<h1>Self-Attention</h1>
-<p>前面说的都是输入为一个向量（总会拉平成一维向量），如果是多个向量呢？有这样的场景吗？</p><ul>
-<li>一段文字，每一个文字都用one-hot或word-embedding来表示<ul>
-<li>不但是多个向量，而且还长短不齐</li>
-</ul>
-</li>
-<li>一段语音，每25ms采样形成一个向量，步长为每10ms重复采样，形成向量序列<ul>
-<li>400 sample points (16khz)</li>
-<li>39-dim MFCC</li>
-<li>80-dim filter bank output</li>
-<li>参考人类语言处理课程</li>
-</ul>
-</li>
-<li>一个Graph组向量（比如social network)<ul>
-<li>每个节点（每个人的profile）就是一个向量</li>
-</ul>
-</li>
-<li>一个分子结构<ul>
-<li>每个原子就是一个one-hot</li>
-</ul>
-</li>
-</ul>
-<p><strong>输出是什么样的？</strong></p><ol>
-<li>一个向量对应一个输出<ul>
-<li>文字 -&gt; POS tagging</li>
-<li>语音 -&gt; a, a, b, b(怎么去重也参考<a href="https://speech.ee.ntu.edu.tw/~hylee/dlhlp/2020-spring.html">人类语言处理</a>课程)</li>
-<li>graph -&gt; 每个节点输出特性（比如每个人的购买决策）</li>
-</ul>
-</li>
-<li>只有一个输出<ul>
-<li>文字 -&gt; 情绪分析，舆情分析</li>
-<li>语音 -&gt; 判断是谁说的</li>
-<li>graph -&gt; 输出整个graph的特性，比如亲水性如何</li>
-</ul>
-</li>
-<li>不定输出（由network自己决定）<ul>
-<li>这就叫seq2seq</li>
-<li>文字 -&gt; 翻译</li>
-<li>语音 -&gt; 真正的语音识别</li>
-</ul>
-</li>
-</ol>
-<p>self-attention</p><p>稍稍回顾一下self attention里最重要的q, k, v的部分：</p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/97e9b2e0e7ac0f115036ca6bd0c71849.png" alt=""/></figure><p>图示的是q2与所有的k相乘，再分别与对应的v相乘，然后相加，得到q2对应的输出：b2的过程。</p><p>下图则是矩阵化后的结论：
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/429312b4d209231715578ba2ba3a80dc.png" alt=""/></figure>
-具体细节看专题</p><p>真正要学的，就是图中的$W^q, W^k, W^v$</p><h2>Multi-head Self-attention</h2>
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/4ac2f963c12f8046cf93824b2a2c5f9f.png" alt=""/></figure><p>CNN是Self-attention的特例</p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9c914c0fa757448a64dfa2c88ae110e5.png" alt=""/></figure><h2>Self-attention for Graph</h2>
-<p>了解更多：<a href="https://youtu.be/eybCCtNKwzA">https://youtu.be/eybCCtNKwzA</a></p><h1>Transformer</h1>
-<p>Transformer是一个seq2seq的model</p><p>以下场景，不管看上去像不像是seq2seq的特征，都可以尝试用seq2seq（trnasformer）来“硬train一发”</p><ul>
-<li>QA类的问题，送进去question + context，输出answer<ul>
-<li>翻译，摘要，差别，情感分析，只要训练能套上上面的格式，就有可能</li>
-</ul>
-</li>
-<li>文法剖析，送入是句子，输出是树状的语法结构<ul>
-<li>把树状结构摊平（其实就是多层括号）</li>
-<li>然后就用这个对应关系来当成翻译来训练（即把语法当成翻译）</li>
-</ul>
-</li>
-<li>multi-label classification<ul>
-<li>你不能在做multi-class classification的时候取top-k,因为有的属于一个类，有的属于三个类，k不定</li>
-<li>所以你把每个输入和N个输出也丢到seq2seq里去硬train一发，网络会自己学到每个文章属于哪“些”类别（不定个数，也像翻译一样）</li>
-</ul>
-</li>
-<li>object dectection<ul>
-<li>这个更匪夷所思，感兴趣看论文：<a href="https://arxiv.org/abs/2005.12872(End-to-End">https://arxiv.org/abs/2005.12872(End-to-End</a> Object Detection with Transformers)</li>
-</ul>
-</li>
-</ul>
-<h2>Encoder</h2>
-<p>Q, K, V(relavant/similarity), zero padding mask, layer normalization, residual等, 具体看<code>self-attention</code>一节。</p><h2>Decoder</h2>
-<h3>AT v.s. NAT</h3>
-<p>我们之前用的decoder都是一个一个字地预测（输出的）</p><ul>
-<li>所以才有position-mask（用来屏蔽当前位置后面的字）</li>
-</ul>
-<p>这种叫<code>Auto Regressive</code>，简称<code>AT</code>,<code>NAT</code>即<code>Non Auto Regressive</code></p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a4e144ed0e5f9ad95a029f3224fc46e3.png" alt=""/></figure><p>它一次生成输出的句子。</p><p>至于seq2seq的输出是不定长的，它是怎么在一次输出里面确定长度的，上图已经给出了几种做法：</p><ol>
-<li>另做一个predictor来输出一个数字，表示应该输出的长度</li>
-<li>直接用一个足够长的<bos>做输入（比如300个），那输出也就有300个，取到第一个<eos>为止</li>
-</ol>
-<p>因为不是一个一个生成了，好处</p><ol>
-<li>可以平行运算。</li>
-<li>输出的长度更可控</li>
-</ol>
-<blockquote>
-<p>NAT通常表现不如AT好 (why? <strong>Multi-mmodality</strong>)</p></blockquote>
-<p>detail: <a href="https://youtu.be/jvyKmU4OM3c">https://youtu.be/jvyKmU4OM3c</a> (Non-Autoregressive Sequence Generation)</p><h3>AT</h3>
-<p>在decoder里最初有让人看不懂的三个箭头从encode的输出里指出来:</p><figure class="vertical-figure" style="flex: 41.08681245858184" ><img width="1240" height="1509" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/04bb017a6b7821b1f8e1f676a4e89c13.png" alt=""/></figure><p>其实这就是<code>cross attention</code></p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/943872fa064ed57098cf57694c851ace.png" alt=""/></figure><p>它就是把自己第一层(self-attention后)的输出乘一个$W^q$得到的<code>q</code>，去跟encoder的输出分别乘$W^k, W^v$得到的k和v运算($\sum q \times k \times v$)得到当前位置的输出的过程。</p><p>而且研究者也尝试过各种<code>cross attention</code>的方法，而不仅仅是本文中的无论哪一层都用<code>encoder</code>最后一层的输出做q和v这一种方案：</p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d1a0d2db75519d1eb4cd58bc9a0c65a5.png" alt=""/></figure><h2>Training Tips</h2>
-<h3>复制机制</h3>
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/637e1eace14b2504906690435792aa40.png" alt=""/></figure><p>一些场景，训练的时候没必要去“生成”阅读材料里提到的一些概念，只需要把它“复制”出来即可，比如上述的人名，专有名字，概念等，以及对文章做摘要等。</p><ul>
-<li>Pointer Network: <a href="https://youtu.be/VdOyqNQ9aww">https://youtu.be/VdOyqNQ9aww</a></li>
-<li>Copying Mechanism in Seq2Seq <a href="https://arxiv.org/abs/1603.06393">https://arxiv.org/abs/1603.06393</a></li>
-</ul>
-<h3>Guided Attention</h3>
-<p>像语音这种连续性的，需要强制指定(guide)它的attention顺序，相对而言，文字跳跃感可以更大，语音一旦不连续就失去了可听性了，一些关键字：</p><ul>
-<li>Monotonic Attention</li>
-<li>Location-aware attention</li>
-</ul>
-<h3>Beam Search</h3>
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/0068ee933dbbe3ab1f2fdc59431bc72b.png" alt=""/></figure><h3>Optimizing Evaluation Metrics / BLEU</h3>
-<ul>
-<li><p>训练的时候loss用的是cross entropy，要求loss越小越好，</p></li>
-<li><p>而在evaluation的时候，我们用的是预测值与真值的<code>BLEU score</code>，要求score越大越好</p></li>
-<li><p>那么越小的cross entropy loss真的能产生越高的BLEU score吗？ 未必</p></li>
-<li><p>那么能不能在训练的时候也用BLEU score呢？ 不行，它太复杂没法微分，就没法bp做梯度了。</p></li>
-</ul>
-<h3>Exposure bias</h3>
-<p>训练时候应用了<code>Teaching force</code>，用了全部或部分真值当作预测结果来训练（或防止一错到底），而eval的时候确实就是一错到底的模式了。</p><h1>Self-supervised Learning</h1>
-<ul>
-<li>芝麻街家庭：elmo, bert, erine...</li>
-<li>bert就是transformer的encoder</li>
-</ul>
-<h2>Bert</h2>
-<h3>GLUE</h3>
-<p>GLUE: General Language Understanding Evaluation</p><p>基本上就是看以下这九个模型的得分：</p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/bc43a4b9f8009e33413a2f5917c37fa2.png" alt=""/></figure><p>训练：</p><ol>
-<li>预测mask掉的词(masked token prediction)<ul>
-<li>为训练数据集添加部分掩码，预测可能的输出</li>
-<li>类似word2vec的C-Bow</li>
-</ul>
-</li>
-<li>预测下一个句子（分类，比如是否相关）(next sentence prediction)<ul>
-<li>在句首添加<cls>用来接分类结果</li>
-<li>用<sep>来表示句子分隔</li>
-</ul>
-</li>
-</ol>
-<p>下游任务（Downstream Task） &lt;- Fine Tune:</p><ol>
-<li>sequence -&gt; class: sentiment analysis<ul>
-<li>这是需要有label的</li>
-<li><cls>节点对的linear部分是随机初始化</li>
-<li>bert部分是pre-train的</li>
-</ul>
-</li>
-<li>sequence -&gt; sequence(等长): POS tagging</li>
-<li>2 sequences -&gt; class: NLI(从句子A能否推出句子B)(Natural Language Inferencee)<ul>
-<li>也比如文章下面的留言的立场分析</li>
-<li>用<cls>输出分类结果，用<sep>分隔句子</li>
-</ul>
-</li>
-<li>Extraction-based Question Answering: 基于已有文本的问答系统<ul>
-<li>答案一定是出现在文章里面的</li>
-<li>输入文章和问题的向量</li>
-<li>输出两个数字(start, end)，表示答案在文章中的索引</li>
-</ul>
-</li>
-</ol>
-<p>QA输出：</p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/af1aa0bae691c8837e101c1a4d97c30f.png" alt=""/></figure><p>思路：</p><ol>
-<li>用<cls>input<sep>document 的格式把输入摆好</li>
-<li>用pre-trained的bert模型输出同样个数的向量</li>
-<li>准备两个与bert模型等长的向量（比如768维）a, b（random initialized)</li>
-<li>a与document的每个向量相乘(inner product)</li>
-<li>softmax后，找到最大值，对应的位置(argmax)即为start index</li>
-<li>同样的事b再做一遍，得到end index</li>
-</ol>
-<figure  style="flex: 131.07822410147992" ><img width="1240" height="473" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5fb69b6f706227e3cc81eaa740c28606.png" alt=""/></figure><h3>Bert train seq2seq</h3>
-<p>也是可能的。就是你把输入“弄坏”，比如去掉一些字词，打乱词序，倒转，替换等任意方式，让一个decoder把它还原。 -&gt; <strong>BART</strong></p><h3>附加知识</h3>
-<p>有研究人员用bert去分类DNA，蛋白质，音乐。以DNA为例，元素为A,C,G,T,分别对应4个随机词汇，再用bert去分类（用一个英文的pre-trained model），同样的例子用在了蛋白质和音乐上，居然发现效果全部要好于“纯随机”。</p><p>如果之前的实验说明了bert看懂了我们的文章，那么这个荒诞的实验（用完全无关的随意的英文单词代替另一学科里面的类别）似乎证明了事情没有那么简单。</p><h3>More</h3>
-<ol>
-<li><a href="https://youtu.be/1_gRK9EIQpc">https://youtu.be/1_gRK9EIQpc</a></li>
-<li><a href="https://youtu.be/Bywo7m6ySlk">https://youtu.be/Bywo7m6ySlk</a></li>
-</ol>
-<h2>Multi-lingual Bert</h2>
-<p>略</p><h2>GPT-3</h2>
-<p>训练是predict next token...so it can do generation(能做生成)</p><blockquote>
-<p>Language Model 都能做generation</p></blockquote>
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a4687a3585d0e42cada14edb4d3d0890.png" alt=""/></figure><p><a href="https://youtu.be/DOG1L9lvsDY">https://youtu.be/DOG1L9lvsDY</a></p><p>别的模型是pre-train后，再fine-tune， GPT-3是想实现zero-shot，</p><h3>Image</h3>
-<p><strong>SimCLR</strong></p><ul>
-<li><a href="https://arxiv.org/abs/2002.05709">https://arxiv.org/abs/2002.05709</a></li>
-<li><a href="https://github.com/google-research/simclr">https://github.com/google-research/simclr</a></li>
-</ul>
-<p><strong>BYOL</strong></p><ul>
-<li><strong>B</strong>ootstrap <strong>y</strong>our <strong>o</strong>own <strong>l</strong>atent</li>
-<li><a href="https://arxiv.org/abs/2006.07733">https://arxiv.org/abs/2006.07733</a></li>
-</ul>
-<h3>Speech</h3>
-<p>在bert上有九个任务(GLUE)来差别效果好不好，在speech领域还缺乏这样的数据库。</p><h2>Auto Encoder</h2>
-<p>也是一种<code>self-supervised</code> Learning Framework -&gt; 也叫 pre-train, 回顾：
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/6d2689336625e12011479fa23633aa94.png" alt=""/></figure></p><p>在这个之前，其实有个更古老的任务，它就是<code>Auto Encoder</code></p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b5667c49d1673c62d5fdbb794fd32053.png" alt=""/></figure><ul>
-<li>用图像为例，通过一个网络encode成一个向量后，再通过一个网络解码(reconstrucion)回这张图像（哪怕有信息缺失）</li>
-<li>中间生成的那个向量可以理解为对原图进行的压缩</li>
-<li>或者说一种降维</li>
-</ul>
-<p>降维的课程：</p><ul>
-<li>PCA: <a href="https://youtu.be/iwh5o_M4BNU">https://youtu.be/iwh5o_M4BNU</a></li>
-<li>t-SNE: <a href="https://youtu.be/GBUEjkpoxXc">https://youtu.be/GBUEjkpoxXc</a></li>
-</ul>
-<p>有一个de-noising的Auto-encoder, 给入的是加了噪音的数据，经过encode-decode之后还原的是没有加噪音的数据</p><p>这就像加了噪音去训练bert</p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/db0ed507503f41304ead7808d285a7f8.png" alt=""/></figure><h3>Feature Disentangle</h3>
-<p>去解释auto-encoder压成的向量就叫<code>Feature Disentagle</code>，比如一段音频，哪些是内容，哪些是人物；一段文字，哪些表示语义，哪些是语法；一张图片，哪些表示物体，哪些表示纹理，等。</p><p>应用： voice conversion -&gt; 变声器</p><p>传统的做法应该是每一个语句，都有两种语音的资料，N种语言/语音的话，就需要N份。有Feature Disentangle的话，只要有两种语音的encoder，就能知道哪些是语音特征，哪些是内容特征，拼起来，就能用A的语音去读B的内容。所以<strong>前提</strong>就是能分析压缩出来的向量。</p><h3>Discrete Latent Representation</h3>
-<p>如果压缩成的向量不是实数，而是一个binary或one-hot</p><ul>
-<li>binary: 每一个维度几乎都有它的含义，我们只需要看它是0还是1</li>
-<li>one-hot: 直接变分类了。-&gt; <code>unsupervised classification</code></li>
-</ul>
-<p><strong>VQVAE</strong></p><figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/7d4061daabfdfcf415de004a69a1636b.png" alt=""/></figure><ul>
-<li>Vector Quantized Variational Auot-encoder <a href="https://arxiv.org/abs/1711.00937">https://arxiv.org/abs/1711.00937</a></li>
-</ul>
-<h3>Text as Representation</h3>
-<ul>
-<li><a href="https://arxiv.org/abs/1810.02851">https://arxiv.org/abs/1810.02851</a></li>
-</ul>
-<p>如果压缩成的不是一个向量，而也是一段<code>word sequence</code>，那么是不是就成了<code>summary</code>的任务？ 只要encoder和decoder都是seq2seq的model</p><p>-&gt; seq2seq2seq auto-encoder -&gt; <code>unsupervised summarization</code></p><p>事实上训练的时候encoder和decoder可能产生强关联，这个时候就引入一个额外的<code>discriminator</code>来作判别:
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e470d48770f1cee066eca5b76e49e983.png" alt=""/></figure></p><p>有点像cycle GAN，一个generator接一个discriminator，再接另一个generator</p><h3>abnormal detection</h3>
-<figure  style="flex: 66.66666666666667" ><img width="960" height="720" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d8a6da742b367ace4528d833cb8623fa.png" alt=""/></figure><ul>
-<li>Part 1: <a href="https://youtu.be/gDp2LXGnVLQ">https://youtu.be/gDp2LXGnVLQ</a></li>
-<li>Part 2: <a href="https://youtu.be/cYrNjLxkoXs">https://youtu.be/cYrNjLxkoXs</a></li>
-<li>Part 3: <a href="https://youtu.be/ueDlm2FkCnw">https://youtu.be/ueDlm2FkCnw</a></li>
-<li>Part 4: <a href="https://youtu.be/XwkHOUPbc0Q">https://youtu.be/XwkHOUPbc0Q</a></li>
-<li>Part 5: <a href="https://youtu.be/Fh1xFBktRLQ">https://youtu.be/Fh1xFBktRLQ</a></li>
-<li>Part 6: <a href="https://youtu.be/LmFWzmn2rFY">https://youtu.be/LmFWzmn2rFY</a></li>
-<li>Part 7: <a href="https://youtu.be/6W8FqUGYyDo">https://youtu.be/6W8FqUGYyDo</a></li>
-</ul>
-</div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%9D%8E%E5%AE%8F%E6%AF%85Machine-Learning-2021-Spring-3/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
 </section>
 
 <div class="container">
@@ -2314,7 +2254,7 @@ $</p><p>O代表out_channel，大型网络里256，512比比皆是，所以它可
                     <div class="copyright">
                         <p class="copyright-text">
                             <span class="brand">walker's code blog</span>
-                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Copyright © 2022 walker</span>
                         </p>
                         <p class="copyright-text powered-by">
                             | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>

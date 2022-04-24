@@ -19,13 +19,13 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/f936562262a4e7a521f97d6cbfa2ba93.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/4996bd322f9a52abdd33589cf21a7dbf.json"
         }
 
     </script>
     
 <title>walker's code blog</title>
-<meta name="author" content="AlanDecode" />
+<meta name="author" content="walker" />
 <meta name="description" content="coder, reader" />
 <meta property="og:title" content="walker's code blog" />
 <meta property="og:description" content="coder, reader" />
@@ -55,6 +55,30 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%A4%87%E4%BB%BDNginx%E8%AE%BE%E7%BD%AEphp%E7%9A%84%E6%96%B9%E6%B3%95/" target="_self">备份Nginx设置php的方法</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E5%A4%87%E4%BB%BDNginx%E8%AE%BE%E7%BD%AEphp%E7%9A%84%E6%96%B9%E6%B3%95/" target="_self">
+                <time class="text-uppercase">
+                    July 31 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>版本nginx/1.12.2</p>
+<pre><code>  location ~ \.php$ {
+    fastcgi_pass   unix:/run/php/php7.0-fpm.sock;
+    fastcgi_param  SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+    include        fastcgi_params;
+   }
+</code></pre>
+<p>我机器上的fastcgi_param值不对, 改成上图成功, 备份下</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%A4%87%E4%BB%BDNginx%E8%AE%BE%E7%BD%AEphp%E7%9A%84%E6%96%B9%E6%B3%95/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E8%AE%A9Objective-C%E4%B9%9F%E6%9C%89map%E5%8A%9F%E8%83%BD/" target="_self">让Objective-C也有map功能</a></h1>
@@ -614,124 +638,6 @@ IIS导入证书需要转化为pkcs12格式(X509格式?), 中间会询问一次�
         
     </article>
     
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%A4%87%E4%BB%BD%E7%AF%87%E7%BB%98%E5%88%B6%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E7%9A%84%E6%96%87%E7%AB%A0/" target="_self">备份篇绘制聊天气泡的文章</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E5%A4%87%E4%BB%BD%E7%AF%87%E7%BB%98%E5%88%B6%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E7%9A%84%E6%96%87%E7%AB%A0/" target="_self">
-                <time class="text-uppercase">
-                    September 06 2018
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>记记思路</p><div class="highlight"><pre><span></span><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">drawRect:</span><span class="p">(</span><span class="n">CGRect</span><span class="p">)</span><span class="nv">rect</span><span class="w"></span>
-<span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGContextRef</span><span class="w"> </span><span class="n">context</span><span class="o">=</span><span class="n">UIGraphicsGetCurrentContext</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGContextSetLineWidth</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="mf">.5f</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGContextSetStrokeColorWithColor</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">lightGrayColor</span><span class="p">].</span><span class="n">CGColor</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGContextSetRGBFillColor</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">    </span><span class="n">rect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGFloat</span><span class="w"> </span><span class="n">radius</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cornerRadius</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">    </span><span class="n">CGFloat</span><span class="w"> </span><span class="n">minx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRectGetMinX</span><span class="p">(</span><span class="n">rect</span><span class="p">),</span><span class="w"> </span><span class="n">midx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRectGetMidX</span><span class="p">(</span><span class="n">rect</span><span class="p">),</span><span class="w"> </span><span class="n">maxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRectGetMaxX</span><span class="p">(</span><span class="n">rect</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGFloat</span><span class="w"> </span><span class="n">miny</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRectGetMinY</span><span class="p">(</span><span class="n">rect</span><span class="p">),</span><span class="w"> </span><span class="n">midy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRectGetMidY</span><span class="p">(</span><span class="n">rect</span><span class="p">),</span><span class="w"> </span><span class="n">maxy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRectGetMaxY</span><span class="p">(</span><span class="n">rect</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">    </span><span class="n">CGMutablePathRef</span><span class="w"> </span><span class="n">outlinePath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPathCreateMutable</span><span class="p">();</span><span class="w"></span>
-
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="p">[</span><span class="n">User</span><span class="w"> </span><span class="n">isCurrentUser</span><span class="o">:</span><span class="n">message</span><span class="p">.</span><span class="n">user</span><span class="p">])</span><span class="w"></span>
-<span class="w">    </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">minx</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">        </span><span class="n">CGPathMoveToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">midx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">midy</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">maxy</span><span class="p">,</span><span class="w"> </span><span class="n">midx</span><span class="p">,</span><span class="w"> </span><span class="n">maxy</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">maxy</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">midy</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddLineToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">20</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddLineToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">15</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddLineToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">,</span><span class="w"> </span><span class="n">midx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathCloseSubpath</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">        </span><span class="n">CGContextSetShadowWithColor</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">lightGrayColor</span><span class="p">].</span><span class="n">CGColor</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextAddPath</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">outlinePath</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextFillPath</span><span class="p">(</span><span class="n">context</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">        </span><span class="n">CGContextAddPath</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">outlinePath</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextClip</span><span class="p">(</span><span class="n">context</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPoint</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPointMake</span><span class="p">(</span><span class="n">rect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">rect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPoint</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPointMake</span><span class="p">(</span><span class="n">rect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">rect</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextDrawLinearGradient</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">normalGradient</span><span class="p">],</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="k">else</span><span class="w"></span>
-<span class="w">    </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">maxx</span><span class="o">-=</span><span class="mi">5</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathMoveToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">midx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">midy</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">minx</span><span class="p">,</span><span class="w"> </span><span class="n">maxy</span><span class="p">,</span><span class="w"> </span><span class="n">midx</span><span class="p">,</span><span class="w"> </span><span class="n">maxy</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">maxy</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">midy</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddLineToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">20</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddLineToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">15</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddLineToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathAddArcToPoint</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">,</span><span class="w"> </span><span class="nb">nil</span><span class="p">,</span><span class="w"> </span><span class="n">maxx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">,</span><span class="w"> </span><span class="n">midx</span><span class="p">,</span><span class="w"> </span><span class="n">miny</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPathCloseSubpath</span><span class="p">(</span><span class="n">outlinePath</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">        </span><span class="n">CGContextSetShadowWithColor</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">lightGrayColor</span><span class="p">].</span><span class="n">CGColor</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextAddPath</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">outlinePath</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextFillPath</span><span class="p">(</span><span class="n">context</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">        </span><span class="n">CGContextAddPath</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">outlinePath</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextClip</span><span class="p">(</span><span class="n">context</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPoint</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPointMake</span><span class="p">(</span><span class="n">rect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">rect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGPoint</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGPointMake</span><span class="p">(</span><span class="n">rect</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">rect</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">CGContextDrawLinearGradient</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">greenGradient</span><span class="p">],</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-
-
-<span class="w">    </span><span class="n">CGContextDrawPath</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">kCGPathFillStroke</span><span class="p">);</span><span class="w"></span>
-
-<span class="p">}</span><span class="w"></span>
-
-<span class="p">-</span> <span class="p">(</span><span class="n">CGGradientRef</span><span class="p">)</span><span class="nf">normalGradient</span><span class="w"></span>
-<span class="p">{</span><span class="w"></span>
-
-<span class="w">    </span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="o">*</span><span class="n">normalGradientLocations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="n">arrayWithObjects</span><span class="o">:</span><span class="w"></span>
-<span class="w">                                               </span><span class="p">[</span><span class="bp">NSNumber</span><span class="w"> </span><span class="n">numberWithFloat</span><span class="o">:</span><span class="mf">0.0f</span><span class="p">],</span><span class="w"></span>
-<span class="w">                                               </span><span class="p">[</span><span class="bp">NSNumber</span><span class="w"> </span><span class="n">numberWithFloat</span><span class="o">:</span><span class="mf">1.0f</span><span class="p">],</span><span class="w"></span>
-<span class="w">                                               </span><span class="nb">nil</span><span class="p">];</span><span class="w"></span>
-
-
-<span class="w">    </span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="o">*</span><span class="n">colors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">NSMutableArray</span><span class="w"> </span><span class="n">arrayWithCapacity</span><span class="o">:</span><span class="mi">2</span><span class="p">];</span><span class="w"></span>
-
-<span class="w">    </span><span class="bp">UIColor</span><span class="w"> </span><span class="o">*</span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">whiteColor</span><span class="p">];</span><span class="w"></span>
-<span class="w">    </span><span class="p">[</span><span class="n">colors</span><span class="w"> </span><span class="n">addObject</span><span class="o">:</span><span class="p">(</span><span class="kt">id</span><span class="p">)[</span><span class="n">color</span><span class="w"> </span><span class="n">CGColor</span><span class="p">]];</span><span class="w"></span>
-<span class="w">    </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">StyleView</span><span class="w"> </span><span class="n">lightColorFromColor</span><span class="o">:</span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">cloudsColor</span><span class="p">]];</span><span class="w"></span>
-<span class="w">    </span><span class="p">[</span><span class="n">colors</span><span class="w"> </span><span class="n">addObject</span><span class="o">:</span><span class="p">(</span><span class="kt">id</span><span class="p">)[</span><span class="n">color</span><span class="w"> </span><span class="n">CGColor</span><span class="p">]];</span><span class="w"></span>
-<span class="w">    </span><span class="bp">NSMutableArray</span><span class="w">  </span><span class="o">*</span><span class="n">normalGradientColors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">colors</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">locCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">normalGradientLocations</span><span class="w"> </span><span class="n">count</span><span class="p">];</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGFloat</span><span class="w"> </span><span class="n">locations</span><span class="p">[</span><span class="n">locCount</span><span class="p">];</span><span class="w"></span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">[</span><span class="n">normalGradientLocations</span><span class="w"> </span><span class="n">count</span><span class="p">];</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="bp">NSNumber</span><span class="w"> </span><span class="o">*</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">normalGradientLocations</span><span class="w"> </span><span class="n">objectAtIndex</span><span class="o">:</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
-<span class="w">        </span><span class="n">locations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">location</span><span class="w"> </span><span class="n">floatValue</span><span class="p">];</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGColorSpaceRef</span><span class="w"> </span><span class="n">space</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGColorSpaceCreateDeviceRGB</span><span class="p">();</span><span class="w"></span>
-
-<span class="w">    </span><span class="n">CGGradientRef</span><span class="w"> </span><span class="n">normalGradient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGGradientCreateWithColors</span><span class="p">(</span><span class="n">space</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="k">__bridge</span><span class="w"> </span><span class="n">CFArrayRef</span><span class="p">)</span><span class="n">normalGradientColors</span><span class="p">,</span><span class="w"> </span><span class="n">locations</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">CGColorSpaceRelease</span><span class="p">(</span><span class="n">space</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">normalGradient</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-</pre></div>
-<p>效果
-<figure  style="flex: 93.841642228739" ><img width="640" height="341" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/4d8b42255239c728170682586ed2f78c.png" alt=""/></figure></p><p>来源<a href="http://stackoverflow.com/questions/11196112/speech-bubble-in-ios-sdk-using-objective-c">StackOverflow</a></p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%A4%87%E4%BB%BD%E7%AF%87%E7%BB%98%E5%88%B6%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E7%9A%84%E6%96%87%E7%AB%A0/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
 </section>
 
 <div class="container">
@@ -781,7 +687,7 @@ IIS导入证书需要转化为pkcs12格式(X509格式?), 中间会询问一次�
                     <div class="copyright">
                         <p class="copyright-text">
                             <span class="brand">walker's code blog</span>
-                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Copyright © 2022 walker</span>
                         </p>
                         <p class="copyright-text powered-by">
                             | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>

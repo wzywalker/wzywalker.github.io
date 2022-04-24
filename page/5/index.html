@@ -19,13 +19,13 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/f936562262a4e7a521f97d6cbfa2ba93.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/4996bd322f9a52abdd33589cf21a7dbf.json"
         }
 
     </script>
     
 <title>walker's code blog</title>
-<meta name="author" content="AlanDecode" />
+<meta name="author" content="walker" />
 <meta name="description" content="coder, reader" />
 <meta property="og:title" content="walker's code blog" />
 <meta property="og:description" content="coder, reader" />
@@ -55,6 +55,525 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%87%A0%E5%A4%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95python%E5%AE%9E%E7%8E%B0/" target="_self">几大排序算法python实现</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E5%87%A0%E5%A4%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95python%E5%AE%9E%E7%8E%B0/" target="_self">
+                <time class="text-uppercase">
+                    August 23 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><h2>冒泡排序</h2>
+<p>冒泡排序基础原理是每一轮都让最大的值移到最右边，一句话就够了。</p><p>如果想小优化一下，可以在每一轮过后都把最后一个（已经是最大的值）排除出去，这种我把它称之为“压缩边界“，在下面的几种排序算法里都有反复提及。而且之所以说优化，就是不做也行，如果只是想演示算法核心思想的话。</p><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">bubble_sort</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">-</span><span class="n">i</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">arr</span>
+<span class="n">bubble_sort</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+</pre></div>
+<p>ouput:</p>
+<pre><code>[0, 1, 1, 1, 2, 3, 5]
+</code></pre>
+<h2>快速排序</h2>
+<p>选出一个合适的（或任意的）中值(<code>pivot</code>），把比它大的和小的分列到两边，再对两边进行上述分类的递归操作。实际操作中往往会选定了<code>pivot</code>后，从右往左搜小数，从左往右搜大数，以规避pivot本身过大或过小时，如果选定的方向不对，可能每一次都需要把整个数组几乎遍历完才找到合适的数的情况。</p><p>again，这只是优化，如果不考虑这些，那么核心思想是非常简单的：</p><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">q_sort</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">arr</span>
+    <span class="n">pivot</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="n">left</span>  <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">arr</span> <span class="k">if</span> <span class="n">item</span> <span class="o">&lt;=</span> <span class="n">pivot</span><span class="p">]</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">arr</span> <span class="k">if</span> <span class="n">item</span> <span class="o">&gt;</span> <span class="n">pivot</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">q_sort</span><span class="p">(</span><span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">pivot</span><span class="p">]</span> <span class="o">+</span> <span class="n">q_sort</span><span class="p">(</span><span class="n">right</span><span class="p">)</span>
+</pre></div>
+<p>这个不但实现了（中值+两侧+递归）的思路+没有任何优化，效果已经出奇的好了！</p><p>但网上演示的都是下面这种花活，从两侧来压缩备选区域（压缩的意思是排好了的区域就不要管了），下面列了个表格来演示过程，看大家是不是能轻松看懂快排的两个核心机制：<code>标红位</code>，和<code>边界压缩</code>。说明如下：</p><ul>
+<li>任意写个数组[6,7,3,2,14,9]，任取一个数为pivot，就第1个吧（6），</li>
+<li>左箭头表示从右往左找第一个小于pivot的值，右箭头表示从左往右找第一个大于pivot的值</li>
+<li>红色代表标红位，废位，即当前位找到本轮符合要求的值，但挪到两侧去了，$\color{red}{下一轮的符合条件的值应该放入这个标红位里}$</li>
+<li>括号里的表示是这一轮该位置赋的新值，它来自于标红位，同时，括号的位置也就是上一轮的标红位</li>
+<li>划掉的表示已经压缩了左右边界，下一轮就不要在这些数里面选了（为了视觉简洁，标红位就不划了）</li>
+</ul>
+<p>$$
+\require{cancel}
+\begin{array}{c|cccccc|l}
+index&amp;0&amp;1&amp;2&amp;3&amp;4&amp;5&amp;\\
+\hline
+array&amp;\color{red}6&amp;7&amp;3&amp;2&amp;14&amp;9\\
+\underleftarrow{\small找小数}&amp;\cancel{(2)}&amp;7&amp;3&amp;\color{red}2&amp;\cancel{14}&amp;\cancel{9}&amp;找到2，放到索引0\\
+\underrightarrow{\small找大数}&amp;\cancel{2}&amp;\color{red}7&amp;3&amp;(7)&amp;\cancel{14}&amp;\cancel{9}&amp;找到7，放到索引3\\
+\underleftarrow{\small找小数}&amp;\cancel{2}&amp;(3)&amp;\color{red}3&amp;\cancel{7}&amp;\cancel{14}&amp;\cancel{9}&amp;找到3，放到索引2\\
+&amp;2&amp;3&amp;(6)&amp;7&amp;14&amp;9&amp;(1,2)索引间已没有大于6的数，排序完成，回填6
+\end{array}
+$$</p>
+<figure  style="flex: 156.39810426540285" ><img width="1320" height="422" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c5a22f53c6f3d78707c3504927c631dc.png" alt=""/></figure><ol>
+<li>注意第1次从右往左找比6小的数时，找到2，右边的14，9就可以全部划掉了，因为我永远是在用6在左右查找，这一次pass了，后面永远会pass</li>
+</ol>
+<ul>
+<li>这样边界压缩得非常快，这就是称之为“快速”排序的原因吧？</li>
+</ul>
+<ol start="2">
+<li>目前只完成一次分割（即按6为标识切分左右），接下来用同样的逻辑递归6左边的<code>[2]</code>和右边的<code>[7,14,9]</code>排序即可</li>
+</ol>
+<ul>
+<li>所以快排就3个部分，一个主体，执行一次分割，然后对分割后的两个数组分别递归回去，这样代码怎么写也出来了：</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">q_sort</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+    <span class="c1"># （left， right）用来保存不断缩小的查找数组索引界限</span>
+    <span class="c1">#  我上面模拟的过程里，就是划掉的数字的左右边界</span>
+    <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">start</span>
+    <span class="n">pivot</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">start</span><span class="p">]</span>
+
+    <span class="k">while</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">:</span>
+        <span class="c1"># 从右往左选小于pivot的数</span>
+        <span class="n">matched</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># 标识这一轮有没有找到合适的数（如果没找到其实说明排序已经完成）</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">left</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="o">+</span><span class="mi">1</span><span class="p">)):</span> <span class="c1"># 去头，含尾, 反序</span>
+            <span class="k">if</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">pivot</span><span class="p">:</span>
+                <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">i</span>  <span class="c1"># 从右到左比到第i个才有比pivot小的数，那么i右侧全大于pivot，下次可以缩小范围了</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="n">matched</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">matched</span><span class="p">:</span>
+            <span class="k">break</span>  <span class="c1"># 右侧没有找到更小的数，说明剩余数组全是大数，已经排完了</span>
+
+        <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># 找到了填入新数后就顺移一位</span>
+        <span class="n">matched</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># 从左往右选大于pivot的数</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span> <span class="c1"># 有头无尾</span>
+            <span class="k">if</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">pivot</span><span class="p">:</span>
+                <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">i</span> <span class="c1"># 此时i左侧也没有比pivot大的数，下次再找也可以忽略了，也标记下缩小范围</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="n">matched</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">matched</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">right</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">pivot</span> <span class="c1"># 把标红位设为pivot</span>
+
+    <span class="c1"># 开始递归处理左右切片</span>
+    <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">index</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">q_sort</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">index</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">end</span> <span class="o">&gt;</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">q_sort</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">array</span>
+
+<span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="c1"># 我封装时为了兼容递归，要人为传入start, end，进入函数时自行计算一下好了</span>
+<span class="n">q_sort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+<p>output</p>
+<pre><code>[0, 1, 1, 1, 2, 3, 5]
+</code></pre>
+<h2>堆排序</h2>
+<ol>
+<li>其实就是把数字摆成二叉树，知道二叉树是啥就行，或者看下面的动图</li>
+<li>每当一个数字排入堆中的时候，都与父节点比一下大小，如果大于父节点，则与父节点交换位置</li>
+</ol>
+<ul>
+<li>不与兄弟节点比较，即兄弟节点之间暂不排序</li>
+</ul>
+<ol start="3">
+<li>交换到父节点后再跟当前位置的父节点比较，如此往复，至到根节点（<strong>递归警告</strong>）</li>
+<li>一轮摆完后，最大的数肯定已经<strong>上浮</strong>到根节点了，把它与最末的一个数字调换位置（这个数字是一个相对小，但不一定是最小的），然后把最大的这个数从堆里移除（已经确认是最大的，位置也就确认了，不再参与比较）</li>
+<li>实现的时候，因为有“找父/子节点比大小”这样的逻辑，显然可以直接用上二叉树的性质，不要自己去观察或归纳了。</li>
+</ol>
+<p>动图比较长，耐心看下：</p><figure  style="flex: 62.5" ><img width="350" height="280" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5aa56935b19cd4afe2cd50fb2ff0b485.gif" alt=""/></figure><blockquote>
+<p>在实现每一轮的遍历数字较大的那个子节点并交换数字的过程中，我之前用的是递归，在小数据量顺利通过，但上万条数据时碰到了<code>RecursionError: maximum recursion depth exceeded in comparison</code>, 查询本机迭代大小设置为1000，但设到几十万就不起作用了（虽然不报错），于是改成了<code>while</code>循环，代码几乎没变，但是秒过了。</p></blockquote>
+<p>递归只是让代码看起来简洁而牛逼，并没有创造什么新的东西，while能行那就算过了吧。</p><p>但是代码开始dirty了起来，大量的代码在控制边界和描述场景，显然有些条件可能是冗余的，我没有很好地合并这些边界和条件导致if太多，这是个不好的演示，但三个核心函数还是阐释了这种算法的思路：</p><ul>
+<li>摆成树（堆）</li>
+<li>从leaf到root冒泡 (child去比parent)</li>
+<li>从root到leaf冒泡 (parent去比child)</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># helper</span>
+<span class="n">get_parent_index</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span> <span class="p">:</span> <span class="nb">max</span><span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">get_child_index</span>  <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span> <span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">heap_sort</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+    <span class="n">heapify</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>                    <span class="c1"># 初排</span>
+    <span class="n">siftDown</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>    <span class="c1"># 整理</span>
+    <span class="k">return</span> <span class="n">arr</span>
+
+<span class="k">def</span> <span class="nf">heapify</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+        <span class="n">p_index</span> <span class="o">=</span> <span class="n">get_parent_index</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">parent</span>  <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">p_index</span><span class="p">]</span>
+        <span class="n">child</span>   <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">child</span> <span class="o">&gt;</span> <span class="n">parent</span><span class="p">:</span>
+            <span class="n">arr</span><span class="p">[</span><span class="n">p_index</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">p_index</span><span class="p">]</span>
+            <span class="n">siftUp</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">p_index</span><span class="p">)</span>
+        <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">arr</span>
+
+<span class="k">def</span> <span class="nf">siftUp</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">c_index</span><span class="p">):</span>
+    <span class="n">p_index</span> <span class="o">=</span> <span class="n">get_parent_index</span><span class="p">(</span><span class="n">c_index</span><span class="p">)</span>
+    <span class="n">parent</span>  <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">p_index</span><span class="p">]</span>
+    <span class="n">leaf</span>    <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">c_index</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">parent</span> <span class="o">&lt;</span> <span class="n">leaf</span><span class="p">:</span>
+        <span class="n">arr</span><span class="p">[</span><span class="n">p_index</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">c_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">c_index</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">p_index</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">p_index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">siftUp</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">p_index</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">siftDown</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    1. 交换首尾两个数，这样尾数就变成了最大</span>
+<span class="sd">    2. 跟两个子节点中较大的比较，并迭代，递归下去</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">while</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">end</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">left_i</span>  <span class="o">=</span> <span class="n">get_child_index</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">left_i</span> <span class="o">&gt;=</span> <span class="n">end</span><span class="p">:</span> 
+            <span class="c1"># 子结点是end，就不要比了，把当前节点设为新end</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">end</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">continue</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">right_i</span> <span class="o">=</span> <span class="n">left_i</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">left_i</span>
+            <span class="k">if</span> <span class="n">right_i</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
+                <span class="c1"># 右边没有到end的话，取出值比大小</span>
+                <span class="c1"># 并且把下一轮的start设为选中的子节点</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">left_i</span> <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">left_i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">right_i</span><span class="p">]</span> <span class="k">else</span> <span class="n">right_i</span>
+            <span class="n">parent</span>  <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">start</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">parent</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span>
+                <span class="n">arr</span><span class="p">[</span><span class="n">start</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">start</span><span class="p">]</span>
+        <span class="c1"># 如果左叶子已经被标记为end  (已提前return)</span>
+        <span class="c1"># 如果右边叶子被标记为end</span>
+        <span class="c1"># 如果下一个索引被标记为end</span>
+        <span class="c1"># 都表示本轮遍历已经到底, end往前移一位即可</span>
+        <span class="k">if</span> <span class="n">right_i</span> <span class="o">&gt;=</span> <span class="n">end</span> <span class="ow">or</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">right_i</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 用start=0表示需要进行一次首尾替换再从头到尾移动一次</span>
+            <span class="n">end</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># 否则进入下一个循环</span>
+            <span class="c1"># 起点就是用来跟父级做比较的索引</span>
+            <span class="c1"># 终点不变</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">index</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">import</span> <span class="nn">time</span>
+<span class="c1">#     np.random.seed(7)</span>
+<span class="c1">#     length = 20000</span>
+<span class="c1">#     arr = list(np.random.randint(0, length*5, size=(length,)))</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="s2">&quot;65318724&quot;</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">heap_sort</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">s</span><span class="p">[:</span><span class="mi">100</span><span class="p">])</span>
+</pre></div>
+<p>output</p>
+<pre><code>4.696846008300781e-05 
+ ['1', '2', '3', '4', '5', '6', '7', '8']
+</code></pre>
+<h2>归并排序</h2>
+<p>这次先看图吧，看你能总结出啥：
+<figure  style="flex: 83.33333333333333" ><img width="300" height="180" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9f48407474a15d03bd183eafc6266e88.gif" alt=""/></figure></p><ol>
+<li>第一步是把数组打散后两两排序，实现每一组（2个元素）是排好序的</li>
+<li>第二步仍然是两两排序，但是把前面排序好的每两个组成一个组：</li>
+</ol>
+<ul>
+<li>这样每组就有2个数了，但组数就减半了</li>
+<li>每一组拿出当前最前面的数出来比较，每次挑1个最小的，移出来</li>
+<li>剩下的组里数字有多有少，仍然比较组里面排最前的那个（因为每组已经从小到大排好了，最前面那个就是组里最小的）</li>
+<li>所以代码里能跟踪两个组里当前的“最前的索引”是多少就行了</li>
+</ul>
+<ol start="3">
+<li>继续合并，单从理论上你也能发现，每组的数字个数会越来越多，组数却越来越少， 显然，最终会归并成一个组，而且已经是排好序了的。</li>
+</ol>
+<p>这就是归并名字的<strong>由来</strong>。后面还有一种<code>希尔算法</code>，正好是它的相反，即打得越来越散，散成每组只有一个元素的时候，排序也排好了，看到那一节的时候注意对比。</p><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="k">def</span> <span class="nf">merge_sort</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    每一轮比较的时候是把选中的元素填到另一个数组里</span>
+<span class="sd">    为了减少内存消耗，就循环用两个数组</span>
+<span class="sd">    我们用交替设置i和j为0和1来实现这个逻辑</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">start</span>    <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">step</span>     <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">length</span>   <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">lists</span>    <span class="o">=</span> <span class="p">[</span><span class="n">arr</span><span class="p">,</span> <span class="p">[]]</span>
+    <span class="n">i</span><span class="p">,</span> <span class="n">j</span>     <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">step</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">:</span>
+        <span class="n">compare</span><span class="p">(</span><span class="n">lists</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">start</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">lists</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="n">step</span> <span class="o">*=</span> <span class="mi">2</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span>  <span class="o">=</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">lists</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">gen_indexs</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    根据左边界和步长确定本轮拿来比较的两个数组的边界</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">left_end</span>    <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">step</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">right_start</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">step</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+    <span class="n">right_end</span>   <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">right_start</span> <span class="o">+</span> <span class="n">step</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">start</span><span class="p">,</span> <span class="n">left_end</span><span class="p">,</span> <span class="n">right_start</span><span class="p">,</span> <span class="n">right_end</span>
+
+
+<span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+    <span class="n">left_start</span><span class="p">,</span> <span class="n">left_end</span><span class="p">,</span> <span class="n">right_start</span><span class="p">,</span> <span class="n">right_end</span> \
+                <span class="o">=</span> <span class="n">gen_indexs</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+    <span class="n">left_index</span>  <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># 组内索引(0, step-1)</span>
+    <span class="n">right_index</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">left_start</span> <span class="o">&lt;=</span> <span class="n">length</span><span class="p">:</span>
+        <span class="n">left</span>    <span class="o">=</span> <span class="n">left_start</span> <span class="o">+</span> <span class="n">left_index</span>
+        <span class="n">right</span>   <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">right_start</span> <span class="o">+</span> <span class="n">right_index</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+        <span class="n">l_done</span>  <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">r_done</span>  <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">right</span><span class="p">]:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">])</span>
+            <span class="n">left_index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">left</span>   <span class="o">=</span> <span class="n">left_start</span> <span class="o">+</span> <span class="n">left_index</span>
+            <span class="n">l_done</span> <span class="o">=</span> <span class="n">left</span> <span class="o">==</span> <span class="n">right_start</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">right</span><span class="p">])</span>
+            <span class="n">right_index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">r_done</span> <span class="o">=</span> <span class="p">(</span><span class="n">right_start</span> <span class="o">+</span> <span class="n">right_index</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">right_end</span>
+        <span class="k">if</span> <span class="n">l_done</span> <span class="ow">or</span> <span class="n">r_done</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">l_done</span><span class="p">:</span>
+                <span class="c1"># 左边没数了，右边的数全塞到result里去</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="n">arr</span><span class="p">[</span><span class="n">right</span><span class="p">:</span><span class="n">right_end</span><span class="p">]</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">right_end</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># 右边没数了，左边剩下的数全塞到result里去</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">:</span><span class="n">right_start</span><span class="p">]</span>
+            <span class="n">left_start</span><span class="p">,</span> <span class="n">left_end</span><span class="p">,</span> <span class="n">right_start</span><span class="p">,</span> <span class="n">right_end</span> \
+                        <span class="o">=</span> <span class="n">gen_indexs</span><span class="p">(</span><span class="n">right_end</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+            <span class="n">left_index</span>  <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">right_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">import</span> <span class="nn">time</span>
+<span class="c1">#     np.random.seed(7)</span>
+<span class="c1">#     length = 20000</span>
+<span class="c1">#     arr = list(np.random.randint(0, length*5, size=(length,)))</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">65</span><span class="p">]</span><span class="c1">#,2,13,4,6,17,33,8,0,4,17,22]</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">merge_sort</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start</span><span class="p">,</span> <span class="n">s</span><span class="p">[:</span><span class="mi">100</span><span class="p">])</span>
+</pre></div>
+<p>output</p>
+<pre><code>5.626678466796875e-05
+[0, 1, 1, 2, 3, 5, 6, 7, 8, 9, 9, 17, 22, 65]
+</code></pre>
+<p>以上是我对着动画实现的一个版本，很繁琐，而且只是直观地把动画演示了一遍，即先两两组合，对比，再四四对比，直到最后只有两个大数组，比一次。直到我看到这个思路，我把它实现出来如下：</p><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mergesort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">end</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="n">mergesort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">mid</span><span class="p">)</span> <span class="c1"># left</span>
+        <span class="n">mergesort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span> <span class="c1"># right</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span> 
+        <span class="c1"># 最里层：([0:1],[1:2]) -&gt; (start, mid, end) 为(0,1,2)</span>
+        <span class="c1"># 所以退出条件是 end - start &gt; 1</span>
+
+<span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="n">left</span>
+    <span class="n">p2</span> <span class="o">=</span> <span class="n">mid</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># 本轮排序的结果</span>
+    <span class="c1"># 左右两个数组分别按顺序取出最前一个来比较大小</span>
+    <span class="c1"># 小数拿到临时数组里去，游标加1</span>
+    <span class="k">while</span> <span class="n">p1</span> <span class="o">&lt;</span> <span class="n">mid</span> <span class="ow">and</span> <span class="n">p2</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">p2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">p1</span><span class="p">]:</span>
+            <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">p1</span><span class="p">])</span>
+            <span class="n">p1</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">p2</span><span class="p">])</span>
+            <span class="n">p2</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="c1"># 不管是左边还是右边，剩下的都是已经排好的（大数），直接接到数组后面</span>
+    <span class="k">if</span> <span class="n">p1</span> <span class="o">&lt;</span> <span class="n">mid</span><span class="p">:</span>
+        <span class="n">temp</span> <span class="o">+=</span> <span class="n">arr</span><span class="p">[</span><span class="n">p1</span><span class="p">:</span><span class="n">mid</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">p2</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">:</span>
+        <span class="n">temp</span> <span class="o">+=</span> <span class="n">arr</span><span class="p">[</span><span class="n">p2</span><span class="p">:</span><span class="n">right</span><span class="p">]</span>
+
+    <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">:</span><span class="n">right</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span>
+</pre></div>
+<p>sort部分没变，还是两边比较，永远取小的一个，直到排成一排变成一组。主体变成了mergesort()的递归。用文字描述的话，就是这个方法就做了一件事：把当前数组左右分开，然后用永远取最前一个来当最小值的方式（sort方法）完成排序。
+等于是直接就走到了我实现的方法的最后一步，而用递归的方式，让更小的单元完成排序，比如每8个，每4个，每2个，真实发生排序的时候，仍然是我写的代码的第一层，就是两两排序。但是代码简洁抽象好多。</p><p>如果把递归理解为异步的话：</p><div class="highlight"><pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">sort_lert</span><span class="p">()</span><span class="w"></span>
+<span class="k">await</span><span class="w"> </span><span class="nx">sort_right</span><span class="p">()</span><span class="w"></span>
+<span class="nx">sort</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span><span class="w"> </span><span class="nx">right</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+<p>即代码真走到第3行了的话，所有的数据已经排好序了</p><h2>基数排序</h2>
+<figure  style="flex: 126.0377358490566" ><img width="668" height="265" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/3c9e057d213761a0ebe19f5453b4a629.png" alt=""/></figure><p>看图，为什么从个位向高位依次排过去为什么就能保证后面高位的排序不会影响低序的，直观来理解的话，就是</p><ol>
+<li>如果高位数字不一样，那么低位顺序是没意义的，按高位大小排即可</li>
+<li>如果高位数字一样，那么低位已经排好序了</li>
+<li>按这个逻辑由低位向高位排，按归纳法，可以推到适用普遍情况的</li>
+</ol>
+<p>这里就有一个逻辑bug了，我本来就是要根据大小排序比如1万个数字，结果你说要先把这1万个数字根据个位数大小排一遍，再根据十位数大小排一遍，我无数次地排这1万个数字，为何不直接按大小把它排好算了呢？</p><p>这就是这个算法存在的意义吧，根据位数排序数次快的很，因为你不需要排它，你只需要做10个容器，编号为0-9，你要排序的位数上，数字是几就把整个数字丢到对应编号的容器里，自然就实现了排序，因为0-9本身就是个排好了序的数组。</p><blockquote>
+<p>你甚至可以用字典，key就是0到9，但数组天生自带了数字Index，何乐而不为？</p></blockquote>
+<p>演示：385, 17, 45, 26, 72, 1265, 用个位数字排序，排好后的容器（数组）应该是：</p><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">[],</span>
+    <span class="p">[],</span>
+    <span class="p">[</span><span class="mi">72</span><span class="p">],</span>
+    <span class="p">[],</span>
+    <span class="p">[],</span>
+    <span class="p">[</span><span class="mi">835</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">1265</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">26</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">17</span><span class="p">],</span>
+    <span class="p">[],</span>
+    <span class="p">[]</span>
+<span class="p">]</span>
+</pre></div>
+<p>其实这也是排序，和接下来要讲的插入排序很像。它没有查找的过程，时间复杂度为0。上面剧透的shell排序还没讲，又剧透了另一个。</p><p>别的就没啥好说的了，由低位到高位循环就是了。</p><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_number</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    提取指定位数数字的方法：</span>
+<span class="sd">    个位：527 % 10^1 // 10^0 = 7</span>
+<span class="sd">    十位：527 % 10^2 // 10^1 = 2</span>
+<span class="sd">    百位：527 % 10^3 // 10^2 = 5</span>
+<span class="sd">    千位：527 % 10^4 // 10^3 = 0</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">10</span><span class="o">**</span><span class="n">index</span>
+
+<span class="k">def</span> <span class="nf">digit_length</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">math</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">number</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">number</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">digit_sort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    对第index个数字进行排序</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">11</span><span class="p">):</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span> <span class="c1"># [[]] * 10 会造成引用传递</span>
+    <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">get_number</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">digit</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">results</span> <span class="k">for</span> <span class="n">digit</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>  <span class="c1"># flatten the 2-d array</span>
+
+<span class="k">def</span> <span class="nf">radix_sort</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="n">digit_length</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span> <span class="c1"># 演示如何从数学上取得数字的长度（几十万次迭代效率只有毫米级的差别）</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">digit_sort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">arr</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">import</span> <span class="nn">time</span>
+<span class="c1">#     np.random.seed(7)</span>
+<span class="c1">#     length = 20000</span>
+<span class="c1">#     arr = list(np.random.randint(0, length*50, size=(length,)))</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">954</span><span class="p">,</span><span class="mi">354</span><span class="p">,</span><span class="mi">309</span><span class="p">,</span><span class="mi">411</span><span class="p">]</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">radix_sort</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start</span><span class="p">,</span> <span class="n">s</span><span class="p">[:</span><span class="mi">100</span><span class="p">])</span>
+</pre></div>
+<p>output:</p>
+<pre><code>0.0008242130279541016
+[309, 354, 411, 954]
+</code></pre>
+<h2>插入排序</h2>
+<p>准备一个空数组，依次把原数组的每一个数插入到该数组里的适当位置。上面说的基数排序里的按位初排就有点类似插入排序，只不过基数排序里不需要比较大小（即235， 15， 1375）这样的数，如果看个位，都是在索引5的位置，且无序），而且插入的位置是固定的，所以没有时间复杂度。</p><p>而插入排序则实实在在地要在排入的数组里遍历才能找到正确的插入位置，越排到后面，新数组就越长，时间复杂度也就越来越大了。</p><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">insert_sort</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+    <span class="n">rst</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rst</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">:</span>
+                <span class="n">rst</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="c1"># 排到第一个比它大的前面</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+            <span class="n">rst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rst</span>
+
+<span class="n">insert_sort</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+<p>output</p>
+<pre><code>[0, 1, 5, 6, 9, 34]
+</code></pre>
+<h2>希尔排序</h2>
+<ol>
+<li><code>归并排序</code>是化整为零，两两比较后再组合，分组越来越大，最终变成一组</li>
+<li>希尔排序是一开始就对半分（注：如果不能整除，如11//2=5, 这样会有3组），每一组相同位置的数做比较，实现一轮过后分组间<code>同位置的数</code>是顺序排列的</li>
+<li>每组元素再减半，就上一条来说是(5//2=2，即上一层一组5个，下一轮每组就只有2个了)，以此往复，让组数越来越多，组内元素却越来越少，极端情况就是每组只有1个了，再参考前面总结的“<strong>分组间同位置的数是顺序排列的</strong>”这一结论，说明整个数组已经排好序了（退出条件get）。这个思路妙不妙？</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">shell_sort</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+    <span class="n">group</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+
+    <span class="k">while</span> <span class="n">group</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)):</span>
+            <span class="n">right</span>   <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">while</span> <span class="n">current</span> <span class="o">&gt;=</span> <span class="n">group</span> <span class="ow">and</span> <span class="n">arr</span><span class="p">[</span><span class="n">current</span> <span class="o">-</span> <span class="n">group</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">right</span><span class="p">:</span>
+                <span class="n">arr</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">current</span> <span class="o">-</span> <span class="n">group</span><span class="p">]</span>
+                <span class="n">current</span> <span class="o">-=</span> <span class="n">group</span>
+            <span class="n">arr</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span>
+        <span class="n">group</span> <span class="o">//=</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">arr</span>
+
+<span class="n">shell_sort</span><span class="p">([</span><span class="mi">34</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="mi">538</span><span class="p">,</span><span class="mi">536</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+<p>output</p>
+<pre><code>[1, 24, 34, 536, 538]
+</code></pre>
+<hr />
+<p>最后，生成可重复的随机数测几轮， quick sort要快一些：</p><div class="highlight"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">import</span> <span class="nn">time</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="mi">20000</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">length</span><span class="o">*</span><span class="mi">50</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">length</span><span class="p">,)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">length</span><span class="si">}</span><span class="s1"> random integers sort comparation:&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;-------------round </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">------------&#39;</span><span class="p">)</span>
+        <span class="c1"># insert is too slow</span>
+        <span class="c1"># or my implementation is not so good</span>
+<span class="c1">#         start = time.time()</span>
+<span class="c1">#         s1 = insert_sort(arr)</span>
+<span class="c1">#         print(f&quot;insert_sort\t {time.time()-start:.5f} seconds&quot;)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">s2</span> <span class="o">=</span> <span class="n">quick_sort</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;quick_sort</span><span class="se">\t</span><span class="s2"> </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">s3</span> <span class="o">=</span> <span class="n">shell_sort</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;shell_sort</span><span class="se">\t</span><span class="s2"> </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">s4</span> <span class="o">=</span> <span class="n">heap_sort</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;heap_sort</span><span class="se">\t</span><span class="s2"> </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">s5</span> <span class="o">=</span> <span class="n">merge_sort</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;merge_sort</span><span class="se">\t</span><span class="s2"> </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">s6</span> <span class="o">=</span> <span class="n">radix_sort</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;radix_sort</span><span class="se">\t</span><span class="s2"> </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;first 10 numbers:</span><span class="se">\n</span><span class="si">{</span><span class="n">s2</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">s3</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">s4</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">s5</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">s6</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+<p>output</p>
+<pre><code>20000 random integers sort comparation:
+-------------round 1------------
+quick_sort	 0.07970 seconds
+shell_sort	 0.17623 seconds
+heap_sort	 0.32919 seconds
+merge_sort	 0.20177 seconds
+radix_sort	 0.18000 seconds
+-------------round 2------------
+quick_sort	 0.05894 seconds
+shell_sort	 0.15423 seconds
+heap_sort	 0.28844 seconds
+merge_sort	 0.20043 seconds
+radix_sort	 0.19310 seconds
+-------------round 3------------
+quick_sort	 0.06169 seconds
+shell_sort	 0.18299 seconds
+heap_sort	 0.33159 seconds
+merge_sort	 0.20836 seconds
+radix_sort	 0.20003 seconds
+-------------round 4------------
+quick_sort	 0.05780 seconds
+shell_sort	 0.15414 seconds
+heap_sort	 0.26780 seconds
+merge_sort	 0.18810 seconds
+radix_sort	 0.17084 seconds
+</code></pre>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%87%A0%E5%A4%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95python%E5%AE%9E%E7%8E%B0/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%88%91%E7%9A%84%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/" target="_self">我的知识图谱入门笔记</a></h1>
@@ -1793,105 +2312,6 @@ b + 3a = 2
         
     </article>
     
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E7%9F%A9%E9%98%B5%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E6%B1%82%E8%A7%A3%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5/" target="_self">矩阵最小二乘法求解仿射变换矩阵</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E7%9F%A9%E9%98%B5%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E6%B1%82%E8%A7%A3%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5/" target="_self">
-                <time class="text-uppercase">
-                    January 17 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>一个矩形三个顶点<code>(0,0), (50, 0), (50, 50)</code>, 变换后为<code>(30, 30), (30, 130), (130, 130)</code>, 求其仿射矩阵。</p><p>我们分别设起始和结束矩阵的坐标为：$(a_x, a_y), (b_x, b_y), (c_x, c_y)$， 变换后的加一个prime（$ ^\prime$)符号，以此类推。<br />
-要知道，一个3X2的矩阵是不可能右乘一个矩阵得到一个3X2的矩阵（只能左乘一个3X3的），<br />
-然后，每一个新坐标，都是由原坐标的(x, y)经过变换得到(x', y‘），即使是新坐标的X值，也是需要原坐标的(x, y)值参与过来进行变化的（乘以合适的系数），然后还要加上偏移的系数，以<code>x'</code>为例，应该是这样：$a^\prime_x = a_x m_{00} + a_y m_{01} + m_{02} $
-我们根据矩阵特征，补一个1，构造这个矩阵看看效果：</p><p>$$
-\begin{bmatrix}
-\color{red}{a_x} &amp; \color{red}{a_y} &amp; \color{red}1 \\
-b_x &amp; b_y &amp; 1 \\
-c_x &amp; c_y &amp; 1 \\
-\end{bmatrix}
-\begin{bmatrix}
-\color{red}{m_{00}} \\ \color{red}{m_{01}} \\ \color{red}{m_{02}}
-\end{bmatrix} = 
-\begin{bmatrix}
-\color{red}{a^\prime_x} \\ b^\prime_x \\ c^\prime_x
-\end{bmatrix} \tag{红色部分即为上面的等式}
-$$</p>
-<p>这只是把三个x给变换出来了，<strong>其实你也可以认为这是把y给变换出来了</strong>（因为原理一样，只是系数不同）。<br />
-做到这一步，我们已经知道要如何求y坐标了，即我们只补一列的话，只能得到一个坐标的x值（或y值），要求另一半，根据坐标相乘的原理，看来只能把前三列置零，再把后三列复制进去了（__这样仿射矩阵也就变成6X1了__），其实就是上面矩阵乘法的重复，只不过交错一下形成x,y交错的排列：</p><p>$$
-\begin{bmatrix}
-a_x &amp; a_y &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
-0 &amp; 0 &amp; 0 &amp; a_x &amp; a_y &amp; 1 \\
-b_x &amp; b_y &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
-0 &amp; 0 &amp; 0 &amp; b_x &amp; b_y &amp; 1 \\
-c_x &amp; c_y &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
-0 &amp; 0 &amp; 0 &amp; c_x &amp; c_y &amp; 1 
-\end{bmatrix}
-\begin{bmatrix}
-m_{00} \\ m_{01} \\ m_{02} \\ m_{10} \\ m_{11} \\ m_{12}
-\end{bmatrix} = 
-\begin{bmatrix}
-a^\prime_x \\ a^\prime_y \\ b^\prime_x \\ b^\prime_y \\ c^\prime_x \\ c^\prime_y \\
-\end{bmatrix}
-$$</p>
-<p>原理当然就是把第一个公式补全：</p><p>$$
-\begin{cases}
-    \; a^\prime_x = a_x m_{00} + a_y m{01} + m_{02} \\
-    \; a^\prime_y = a_x m_{10} + a_y m{11} + m_{12} \\
-    \\
-    \; b^\prime_x = b_x m_{00} + b_y m{01} + m_{02} \\
-    \; b^\prime_y = b_x m_{10} + b_y m{11} + m_{12} \\
-    \\
-    \; c^\prime_x = c_x m_{00} + c_y m{01} + m_{02} \\
-    \; c^\prime_y = c_x m_{10} + c_y m{11} + m_{12} \\
-\end{cases}
-$$</p>
-<p>最小二乘的公式如下：</p><p>$$
-\begin{aligned}
-&amp;\lVert A\beta - Y \rVert{^2_2} \quad A \in \mathbb{R}^{(m\times n+1)}, \beta \in \mathbb{R}^{(n+1)\times 1}, Y \in \mathbb{R}^{m\times 1} \\
-&amp;\hat \beta = (A^TA)^{-1}A^TY
-\end{aligned}
-$$</p>
-<p><a href="https://iewaij.github.io/introDataScience/OLS.html">推导过程见此</a></p><blockquote>
-<p>奇异矩阵没有逆矩阵，$(A^TA)^{-1}$会出现无法求解的问题，也就是该方法对数据是有约束的，这个有解，另议。</p></blockquote>
-<p>我们把A和Y都做出来了，直接套用公式即可，为了编程方便，我们把前后矩阵设为A和B，仿射矩阵为M，就成了：</p><p>$$
-M = (A^TA)^{-1}A^TB
-$$</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="n">A</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">]]</span>
-<span class="n">B</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="p">[</span><span class="mi">130</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="p">[</span><span class="mi">130</span><span class="p">,</span> <span class="mi">130</span><span class="p">]]</span>
-
-<span class="c1"># 分别整理成上面分析的6x6和6x1的矩阵</span>
-<span class="c1"># 先定义变量保留6个坐标的值</span>
-<span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ay</span><span class="p">),</span> <span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">),</span> <span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">)</span> <span class="o">=</span> <span class="n">A</span>
-<span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ay1</span><span class="p">),</span> <span class="p">(</span><span class="n">bx1</span><span class="p">,</span> <span class="n">by1</span><span class="p">),</span> <span class="p">(</span><span class="n">cx1</span><span class="p">,</span> <span class="n">cy1</span><span class="p">)</span> <span class="o">=</span> <span class="n">B</span>
-
-<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-    <span class="p">[</span><span class="n">ax</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-    <span class="p">[</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-    <span class="p">[</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-<span class="p">])</span>
-<span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ay1</span><span class="p">,</span> <span class="n">bx1</span><span class="p">,</span> <span class="n">by1</span><span class="p">,</span> <span class="n">cx1</span><span class="p">,</span> <span class="n">cy1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># 比手写6X1矩阵要省事</span>
-<span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">A</span><span class="p">)</span> <span class="o">@</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">B</span> <span class="c1"># 套公式</span>
-<span class="n">M</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-</pre></div>
-<p>输出：</p><div class="highlight"><pre><span></span>array<span class="o">([[</span> <span class="m">2</span>.,  <span class="m">0</span>., <span class="m">30</span>.<span class="o">]</span>,
-       <span class="o">[</span> <span class="m">0</span>.,  <span class="m">2</span>., <span class="m">30</span>.<span class="o">]])</span>
-</pre></div>
-<hr />
-<p>上就是最小二乘的一个应用，也给了一篇链接介绍推导，后来我翻阅学习线代时的笔记，其实有从投影方面给的解释，直观易懂，于是<a href="https://www.jianshu.com/p/39db42a6dd5a">另写了篇博文</a>来介绍这个推导。</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E7%9F%A9%E9%98%B5%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E6%B1%82%E8%A7%A3%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
 </section>
 
 <div class="container">
@@ -1941,7 +2361,7 @@ $$</p>
                     <div class="copyright">
                         <p class="copyright-text">
                             <span class="brand">walker's code blog</span>
-                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Copyright © 2022 walker</span>
                         </p>
                         <p class="copyright-text powered-by">
                             | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>

@@ -19,13 +19,13 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/f936562262a4e7a521f97d6cbfa2ba93.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/4996bd322f9a52abdd33589cf21a7dbf.json"
         }
 
     </script>
     
 <title>walker's code blog</title>
-<meta name="author" content="AlanDecode" />
+<meta name="author" content="walker" />
 <meta name="description" content="coder, reader" />
 <meta property="og:title" content="walker's code blog" />
 <meta property="og:description" content="coder, reader" />
@@ -55,6 +55,161 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/" target="_self">数据结构篇九：Indexed Priority Queue</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/" target="_self">
+                <time class="text-uppercase">
+                    November 17 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><hr />
+<h1>Indexed Priority Queue</h1>
+<ul>
+<li>a traditional priority queue variant</li>
+<li>top node supports <code>quick update and deletions of key-value paris</code></li>
+</ul>
+<figure  style="flex: 77.8894472361809" ><img width="1240" height="796" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5e238bf5e89b7b2188cfb748c4e5990e.png" alt=""/></figure><p>观察这个图，数据是Anna, Bella...等等，</p><ul>
+<li>首先，为这一堆数据进行任意排序，得到一堆索引(0,1,...)</li>
+<li>然后组一个binary heap，这样每个元素又获得一个索引，就是在heap上的序号（<code>Position Map</code>）</li>
+</ul>
+<p>通过两组索引迅速找到key（就是人名）在堆中的位置，比如：</p><ul>
+<li>George，ki = 6, pm = 1</li>
+<li>kelly, ki = 10, pm = 10</li>
+<li>...</li>
+</ul>
+<p>现在能迅速找到数据源在堆上的位置了，那么如果反过来呢？比如堆上索引3是数据源的谁？</p><ul>
+<li>pm = 3 -&gt; ki = 8 -&gt; Issac <strong>BINGO!!!</strong></li>
+</ul>
+<p>但神奇的事发生了，有人希望复用ki这个自然数序列（闲的蛋疼？），于是多做了一个数组，把ki定义为heap上的索引，与元素原来的ki进行映射（<code>Inverse Map</code>）:IM
+<figure  style="flex: 68.88888888888889" ><img width="1240" height="900" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/71be1add8c1a0cde72e08fc72adbd071.png" alt=""/></figure></p><p>可以看到，这张图上张个ki到im的映射，与pm到ki的映射其实是一样的，也就是说重定义了一下，并没有引入新的东西。(pm表里找到3，对应的第一行ki表里就是8）</p><p>这个时候，我们直接用ki的3就能找到im的8，继而找到数据源的<em>Issac</em>了。</p><h2>Insertion</h2>
+<p>上面的数组，我们往里面添加第12条数据试试:</p><ul>
+<li>{ki:12, pm: 12, im:12, value:2}</li>
+<li>显然违反了binary heap的 invariant，向上冒泡，也就是跟{ki:12, pm:5, im:2, value:4}的节点互换</li>
+<li>此时，数据源肯定不会变，但是节点变了，pm的值就要交换（5， 12 互换）</li>
+<li>pm变了，把pm当成ki的映射表im也要变（12， 11互换）</li>
+</ul>
+<figure  style="flex: 224.63768115942028" ><img width="1240" height="276" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/47da2e700214e5e2de16aa42f5b92fb3.png" alt=""/></figure><p>仔细观察图片，搞清楚第一行ki在两次互换时的身份就明白了</p><ul>
+<li>pm的互换是直观的，就是节点的位置</li>
+<li>知道pm互换的依据后（2，5），在第一行找2，5对应的im值互换，因为在这个映射里，相当于pm与原ki的映射，pm此时是（2，5）了。</li>
+</ul>
+<p>同样逻辑继续冒泡就是了。</p><p>pseudo code:</p><div class="highlight"><pre><span></span><span class="c1"># Inserts a value into the min indexed binary </span>
+<span class="c1"># heap. The key index must not already be in </span>
+<span class="c1"># the heap and the value must not be null. </span>
+<span class="n">function</span> <span class="n">insert</span><span class="p">(</span><span class="n">ki</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="n">values</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="c1"># ‘sz’ is the current size of the heap</span>
+    <span class="n">pm</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span> <span class="o">=</span> <span class="n">sz</span>  <span class="c1"># 对应上图，意思就第一行索引器是ki</span>
+    <span class="n">im</span><span class="p">[</span><span class="n">sz</span><span class="p">]</span> <span class="o">=</span> <span class="n">ki</span>  <span class="c1"># 对应上图，意思就是一行索引器是pm</span>
+    <span class="n">swim</span><span class="p">(</span><span class="n">sz</span><span class="p">)</span>     <span class="c1"># 这里传进去的pm，即heap上节点的索引</span>
+    <span class="n">sz</span> <span class="o">=</span> <span class="n">sz</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># 添加成功，size加1</span>
+</pre></div>
+<p>理论上，添加元素到最后一个, sz和ki应该是相等的（因为都是尾巴上）</p><div class="highlight"><pre><span></span><span class="c1"># Swims up node i (zero based) until heap </span>
+<span class="c1"># invariant is satisfied.</span>
+<span class="n">function</span> <span class="n">swim</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="c1"># 比父节点小就冒泡，注意入参i是节点上的索引，即pm</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="p">)):</span> 
+        <span class="n">swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>  <span class="c1"># 所以这里传的也是pm</span>
+        <span class="n">i</span><span class="o">=</span><span class="n">p</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+
+<span class="n">function</span> <span class="n">swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span> 
+    <span class="c1"># 我们交换了节点，需要交换pm表里的值，和im表里的值</span>
+    <span class="c1"># 交换pm的值需要数据源的索引，即ki，而ki能从im表里用pm算出来</span>
+    <span class="c1"># 所以ki = im[pm] 这里i,j是pm，所以im[i]自然就是i对应ki</span>
+    <span class="c1"># pm[ki]当然就是pm[im[i]]了：</span>
+    <span class="n">pm</span><span class="p">[</span><span class="n">im</span><span class="p">[</span><span class="n">j</span><span class="p">]],</span> <span class="n">pm</span><span class="p">[</span><span class="n">im</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span>
+    <span class="n">im</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">im</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">im</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">im</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+<span class="n">function</span> <span class="n">less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">values</span><span class="p">[</span><span class="n">im</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">values</span><span class="p">[</span><span class="n">im</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
+</pre></div>
+<p>还是那句话，理解清楚那三行映射表里第一行的动态含义，就不会有问题。</p><ul>
+<li>pm表要key index来索引</li>
+<li>im表要node index来索引</li>
+</ul>
+<p>在操作时，只需要知道传入的是哪种索引，及时转化就行了。</p><p>有了索引，lookup的时间复杂度就是常量时间了：O(1)</p><h2>Polling and Removals</h2>
+<p>没有什么特殊的,仍然是找到节点,与最后一个交换,移除最后一个节点,然后再看最后一个在堆里是上升还是下降.
+仍然是记得每一步交换,相应的几个索引值也需要随之交换.(polling 其实就是移除第1个节点,本质上还是 removal)
+<figure class="vertical-figure" style="flex: 36.70811130846655" ><img width="1240" height="1689" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/581b8563020c36307eae7a9bf618a7e0.png" alt=""/></figure></p><p>pseudo code</p><div class="highlight"><pre><span></span><span class="c1"># Deletes the node with the key index ki</span>
+<span class="c1"># in the heap. The key index ki must exist </span>
+<span class="c1"># and be present in the heap.</span>
+<span class="n">function</span> <span class="n">remove</span><span class="p">(</span><span class="n">ki</span><span class="p">):</span>
+    <span class="c1"># 注意，这里送进来的是ki，而不是node index(pm)</span>
+    <span class="c1"># 说明业务需求一般是操作数据源，而不是操作堆</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">pm</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span>    <span class="c1"># 转成节点索引</span>
+    <span class="n">sz</span> <span class="o">=</span> <span class="n">sz</span> <span class="o">-</span> <span class="mi">1</span>   <span class="c1"># 与最后一个元素交换，用size来做节点索引</span>
+
+    <span class="c1"># 下面三个子函数送入的就是节点索引了</span>
+    <span class="n">swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">sz</span><span class="p">)</span> 
+    <span class="n">sink</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">swim</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="n">values</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span> <span class="o">=</span> <span class="n">null</span>  <span class="c1"># 数据源对应的值置空，所以用ki</span>
+    <span class="n">pm</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>        <span class="c1"># 数据源对应的节点置空，所以用ki</span>
+    <span class="n">im</span><span class="p">[</span><span class="n">sz</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>        <span class="c1"># 反查表用节点索引，此处size就是最后一个节点的索引</span>
+</pre></div>
+<p>sink pseudo code</p><div class="highlight"><pre><span></span><span class="c1"># Sinks the node at index i by swapping </span>
+<span class="c1"># itself with the smallest of the left </span>
+<span class="c1"># or the right child node.</span>
+<span class="n">function</span> <span class="n">sink</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="c1"># 这是堆操作,传入的索引也是节点索引,没问题</span>
+    <span class="c1"># sink是下沉，但不是跟BTS一样找左侧最大右则最小那种直接换</span>
+    <span class="c1"># 而是一层层往下换</span>
+    <span class="c1"># 即一次while只跟左右子级比大小，确实比子级还小的话，就替换，然后再跟下一层比较</span>
+    <span class="k">while</span> <span class="n">true</span><span class="p">:</span>
+        <span class="c1"># 利用二叉树特性算出子节点</span>
+        <span class="c1"># 默认左边最小，然后再看右边是不是更小</span>
+        <span class="n">left</span> <span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span>
+        <span class="n">smallest</span> <span class="o">=</span> <span class="n">left</span>
+    <span class="c1"># 右边不越界，且小于左边，就设右边</span>
+    <span class="k">if</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="n">sz</span> <span class="ow">and</span> <span class="n">less</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">left</span><span class="p">):</span>
+        <span class="n">smallest</span> <span class="o">=</span> <span class="n">right</span>
+    <span class="c1"># 左侧都越界了，或已经比最小值大了，说明不需要下沉了</span>
+    <span class="k">if</span> <span class="n">left</span> <span class="o">&gt;=</span> <span class="n">sz</span> <span class="ow">or</span> <span class="n">less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">smallest</span><span class="p">):</span>
+        <span class="k">break</span>
+    <span class="c1"># 只要没有break，说明能交换，然后把交换后的作为下一个循环的起点</span>
+    <span class="n">swap</span><span class="p">(</span><span class="n">smallest</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">smallest</span>
+</pre></div>
+<h2>Updates</h2>
+<p>更新节点要简单的多:</p><ul>
+<li>用ki找到value，把值更新</li>
+<li>然后根据新value实际情况上浮或下沉</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># Updates the value of a key in the binary </span>
+<span class="c1"># heap. The key index must exist and the</span>
+<span class="c1"># value must not be null.</span>
+<span class="n">function</span> <span class="n">update</span><span class="p">(</span><span class="n">ki</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">pm</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span>
+    <span class="n">values</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="n">sink</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">swim</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+<h2>Decrease and Increase key</h2>
+<p>不好说，先看代码吧：</p><div class="highlight"><pre><span></span><span class="c1"># For both these functions assume ki and value </span>
+<span class="c1"># are valid inputs and we are dealing with a</span>
+<span class="c1"># min indexed binary heap.</span>
+<span class="n">function</span> <span class="n">decreaseKey</span><span class="p">(</span><span class="n">ki</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">less</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">values</span><span class="p">[</span><span class="n">ki</span><span class="p">]):</span> 
+        <span class="n">values</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span> 
+        <span class="n">swim</span><span class="p">(</span><span class="n">pm</span><span class="p">[</span><span class="n">ki</span><span class="p">])</span>
+
+<span class="n">function</span> <span class="n">increaseKey</span><span class="p">(</span><span class="n">ki</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span> 
+    <span class="k">if</span> <span class="n">less</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">ki</span><span class="p">],</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">values</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span> 
+        <span class="n">sink</span><span class="p">(</span><span class="n">pm</span><span class="p">[</span><span class="n">ki</span><span class="p">])</span>
+</pre></div>
+<p>代码里是跟一个固定值比较，只要ki对应的值比它大(desreaseKey)或小(increaseKey），就用这个固定值来替换它，并且在value改变后根据实际情况上浮或下沉。</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E5%85%AB%EF%BC%9ABalanced-Binary-Search-Trees%28BBST%29/" target="_self">数据结构篇八：Balanced Binary Search Trees(BBST)</a></h1>
@@ -844,212 +999,6 @@ D固定，同A，<span class="o">(</span><span class="m">6</span><span class="o"
         
     </article>
     
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0_%5B%E5%AE%8C%E7%BB%93%5D_pdf%E4%B8%8B%E8%BD%BD/" target="_self">cs193p_2021_笔记_[完结]_pdf下载</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0_%5B%E5%AE%8C%E7%BB%93%5D_pdf%E4%B8%8B%E8%BD%BD/" target="_self">
-                <time class="text-uppercase">
-                    October 24 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>所有笔记已导出成一篇pdf文档，已上传百度：
-链接: <a href="https://pan.baidu.com/s/1hgnzfxbE9l4zlcYBDsa-1g">https://pan.baidu.com/s/1hgnzfxbE9l4zlcYBDsa-1g</a> 提取码: 7w1f</p><hr />
-<p>本文内容：与UIKit的集成，以及学习过程中的一些tips，skills，与章节无章的notes</p><hr />
-<h1>MVVM</h1>
-<figure  style="flex: 89.08045977011494" ><img width="1240" height="696" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/da570de12fc64177b4e88c6429ae285b.png" alt=""/></figure><ul>
-<li>viewmodel要起到gete keeper的作用，它就要把model给private起来<ul>
-<li>或者private (set), 这样保护了写，但是能读</li>
-<li>或者用一个计算属性把需要的model 暴露出去</li>
-</ul>
-</li>
-<li>一个viewmodel通常要conform <code>ObservableObject</code><ul>
-<li>就隐含了一个<code>var objectWillChange: ObservableObjectPublisher</code></li>
-<li>model要改动前：<code>objectWillChange.send()</code></li>
-<li>或者，把model改为<code>@Publisher var model</code>，会自动广播</li>
-</ul>
-</li>
-<li>订阅者（通常就是View）就要把这个viewmodel打个可订阅的标识：<ul>
-<li><code>@ObservedObject var viewModel: MyViewModel</code></li>
-<li>只能是<code>var</code>，因为很明显是会变的</li>
-<li>View监听到是会自动invalicate view的，就会重绘</li>
-</ul>
-</li>
-</ul>
-<h1>UIKit Integration</h1>
-<p>UIKit并不是纯View的世界，大多数时候是跟ViewController一起出现的，还严重依赖<code>Delegate</code>这种机制进行跨View的事件传递（回调）。</p><h2>Representbles</h2>
-<p><code>UIViewRepresentable</code>，<code>UIViewContorllerRepresentable</code>都是SwiftUI的View了，包含几个组件：</p><ol>
-<li><code>makeUIView{Controller}(context: Context) -&gt; view/controller</code></li>
-<li><code>updateUIView{Controller}(view/controller, context: Context) -&gt;</code></li>
-<li><code>makeCoordiinator() -&gt; Coordinator</code> // handle delegate<ul>
-<li>调用该方法后, <code>context.coordinator</code>就有值了</li>
-</ul>
-</li>
-<li>a <code>Context</code> containn the coordinator, swiftui's env, animation transaction</li>
-<li><code>dismantleUIView{Controller}(view/controller, coordinator: Coordinator)</code> // clean up when disappears</li>
-</ol>
-<h1>Tips &amp; Skills</h1>
-<p>学习过程随笔记下来的一些技巧和知识点:</p><h2>basic</h2>
-<ul>
-<li>[0...6]是0到6，[0..&lt;6]是0到5</li>
-<li>var s = struct_a; s[&quot;a&quot;] = 3, 不会改变struct_a, 因为struct永远是复制</li>
-<li><code>arr.firstIndex(where: { item in item.id == myID})</code>，因为where需要的函数传递的是本身（类似map, filter)，所以可以简化为：<ul>
-<li><code>arr.firstIndex(where: { $0.id == myID})</code></li>
-</ul>
-</li>
-<li><code>typealias Card = MemoryGame&lt;String&gt;.Card</code> 别名</li>
-<li><code>var a_int_array = [Int]()</code> 一种初始化方式</li>
-<li>extension中的属性可以直接用，（当然也可以用<code>self.</code>）</li>
-<li><code>arr.filter { isGood($0)}</code> 因为参数就是自己，还可以继续简化： `arr.filter(isGood)``<ul>
-<li>同理：<code>[1...100].reduce(0, +)</code>，因为默认参数是两个，所以会自动填到+号两边，展开就是<code>{ $0 + $1 }</code></li>
-</ul>
-</li>
-<li><code>Collection</code> protocol is for <em>immutable</em> collections<ul>
-<li>mutalbe Collection protocol is <code>RangeReplaceableCollection</code></li>
-<li>所以要写一个扩展，在改变集合的元素，先选对正确的protocol</li>
-</ul>
-</li>
-<li>用<code>try</code>还是<code>try?</code>调用一个声明了<code>throw</code>的函数，取决于你是要忽略它还是处理它<ul>
-<li><code>try</code>就是不处理，结果就是包含了这段代码的函数也要标上<code>throw</code></li>
-<li><code>try?</code>就是忽略掉，承认<code>nil</code></li>
-</ul>
-</li>
-<li><code>String(describing: obj)</code>: 对象的字符串表示，或字符串描述</li>
-<li><code>#function</code> 程序名</li>
-<li><code>@ScaleMetric var fontSize: CGFloat = 40.0</code> 固定大小的字体，用<code>@ScaleMetric</code>也能按比例缩放</li>
-<li>剪贴板：<code>UIPasteboard.general.image?.jpegData(...)</code></li>
-<li>safe area: <code>UIAplication.shared.windows.first?.safeAreaInsets</code></li>
-<li><code>views.map{ UIHostingController(rootView: $0)}</code> 把一组View转为ViewController</li>
-<li><code>timer = Timer.publish(erery: 3, on: .current, in: .common).autoconnect()</code><ul>
-<li>view<code>.onReceive(timer, perform: {})</code></li>
-</ul>
-</li>
-<li><code>Texxt(Image(systemName: &quot;video.circle&quot;)) + Text(&quot;视频&quot;)</code>: 两个知识点<ul>
-<li>Text view重载了<code>+</code>操作符，省去了用<code>HStack</code></li>
-<li>Image也可以作为Text的内容</li>
-</ul>
-</li>
-<li><code>Circle + trim + stroke + rotation</code> 可以组合出一段任意角度的弧形</li>
-<li>一个<code>PreferenceKey</code>用来广播属性变化的例子：</li>
-</ul>
-<figure class="vertical-figure" style="flex: 38.9937106918239" ><img width="1240" height="1590" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e660e659aadcd624c62b1b9102d015d5.png" alt=""/></figure>
-<pre><code>* see more [https://swiftwithmajid.com/2020/01/15/the-magic-of-view-preferences-in-swiftui/](https://swiftwithmajid.com/2020/01/15/the-magic-of-view-preferences-in-swiftui/)
-</code></pre>
-<p>看一个简化的实例：
-<figure class="vertical-figure" style="flex: 43.13868613138686" ><img width="1182" height="1370" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/01b4f14b413613c6bd36ad5b2288df9d.png" alt=""/></figure>
-可以看到，其实化简化可读性更强，用for循环，再在里面做逻辑，会把直白的初衷绕进去：</p><ul>
-<li><p>返回唯一一个面朝上的卡片</p></li>
-<li><p>设置选定索引的卡片面朝上</p></li>
-<li><p>同样， <code>Button</code>的声明是：<code>(_ title: StringProtocol, action: () -&gt; Void)</code>,</p><ul>
-<li>简化后也更加直观了：<code>Button(&quot;text&quot;){ actions }</code></li>
-</ul>
-</li>
-<li><p>给class/struct添加和使用默认的<code>description</code>有点绕，等于原生并不支持，还理解成了<code>String</code>的方法</p></li>
-</ul>
-<div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">abc</span><span class="p">:</span> <span class="n">CustomStringConvertible</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nv">a</span><span class="p">:</span><span class="nb">Int</span>
-    <span class="kd">var</span> <span class="nv">b</span><span class="p">:</span><span class="nb">Int</span>
-    <span class="kd">func</span> <span class="nf">de</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="nb">String</span><span class="p">{</span>
-        <span class="c1">// #function, file, filePaht, fileID, line, column</span>
-        <span class="s">&quot;</span><span class="si">\(</span><span class="nb">String</span><span class="si">(</span><span class="n">describing</span><span class="p">:</span> <span class="kc">self</span><span class="si">))</span><span class="se">\n</span><span class="si">\(</span><span class="kc">#function</span><span class="si">)</span><span class="se">\n</span><span class="si">\(</span><span class="p">#</span><span class="n">filePath</span><span class="si">)</span><span class="s">&quot;</span>
-
-        <span class="c1">// String(describing: obj)</span>
-        <span class="c1">// 理解为用obj对象的description属性来构造字符串</span>
-        <span class="c1">// 而一般人的设计思路会是：给obj对象增加一个description属性，这个属性是个string</span>
-        <span class="c1">// 并且这个对象要服务 CustomStringConvertible 协议</span>
-    <span class="p">}</span>
-    <span class="kd">var</span> <span class="nv">description</span><span class="p">:</span> <span class="nb">String</span> <span class="p">{</span>
-        <span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">a</span><span class="se">\&quot;</span><span class="s">:</span><span class="si">\(</span><span class="n">a</span><span class="si">)</span><span class="s">, </span><span class="se">\&quot;</span><span class="s">b</span><span class="se">\&quot;</span><span class="s">:</span><span class="si">\(</span><span class="n">b</span><span class="si">)</span><span class="s">}&quot;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="n">abc</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="mi">77</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="mi">88</span><span class="p">).</span><span class="n">de</span><span class="p">()</span> <span class="c1">// 输出： {&quot;a&quot;: 77, &quot;b&quot;: 88} \n de() \n myfile_path</span>
-</pre></div>
-<h2>view</h2>
-<ul>
-<li><code>var body : some View {...}</code> 意思是你自己不需要实现View，但你要返回some实现了View的（别的）对象<ul>
-<li>它是一个computed var，所以跟的{}就是一个function</li>
-<li>所以{}里隐含了一个return</li>
-</ul>
-</li>
-<li><code>Text(&quot;hello&quot;).padding()</code>返回的不再是Text</li>
-<li><code>ZStack(alignment: .center, content: {...})</code><ul>
-<li>简化为：<code>ZStack(alignment: .center) {...}</code>，提取了方法体</li>
-<li>如果<code>alignment</code>为空： <code>ZStack {...}</code></li>
-<li>所以它里面也可以有局部变量</li>
-</ul>
-</li>
-<li>多个函数参数也可以简化：<ul>
-<li><code>Button(action: {...}, label: {...})</code></li>
-<li><code>Button {...} label: {...}</code>省掉了第一个参数名，省掉了逗号</li>
-</ul>
-</li>
-<li><code>Button.contextMenu{ some View}</code> 上下文菜单，内容就是some View</li>
-<li><code>Menu{ some View} label: { Label }</code> 呈现为一个button，点击后会自动呈现some View组成的菜单<ul>
-<li>也就是说它自己帮你封装了UI和行为（点击弹出菜单），不需要写什么<code>onTap</code>事件</li>
-</ul>
-</li>
-<li><code>myView.sheet(isPresented: $flag) { some View}</code> 通过<code>$flag</code>就能根据<code>myView</code>的位置在合适的位置打开sheet，内容由@viewBuilder的closure提供</li>
-<li><code>popover</code>也同理，还有一种popover时把对象传进去的用法：<ul>
-<li><code>popover</code>与<code>sheet</code>的区别是<code>popover</code>在计算自身大小的时候是“尽可能小”，所以在包的对象里对好自己size一下</li>
-</ul>
-</li>
-<li>alert有点不同：<code>.alert(item: $flag) { alertToShow in return Alert}</code>， 就是要返回一个<code>Alert</code>对象</li>
-<li><code>myView.popover(item: $obj) {obj in ...}</code> 这一类传item做flag的用法也有广泛的使用场景</li>
-<li>弹出的页面查看自己的状态，用<code>presentationMode</code>环境变量<ul>
-<li><code>presentationMode.wrappedValue.isPresented</code></li>
-</ul>
-</li>
-<li><code>NavigationView</code>里的<code>NavigationLink</code>也是一样封装了UI和行为（点击跳转）</li>
-<li>toolbaritem的placement除了leading, trailing等直观表示，还有一些语义对应的(类似alert中有红色的销毁按钮），如<code>destructiveAction, cancellationAction, confirmationAction</code>等，甚至<code>automaic</code></li>
-<li>工具条放到底部：ToolbarItemGroup(placement: .bottmbar){}`</li>
-<li><code>.StackNavigationViewStyle</code>, 让大屏幕iPhone横屏时不去尝试左右分屏，直接铺满</li>
-<li><code>UIDevice.current.userInterfaceIdiom == .pad</code></li>
-<li>环境变量：<code>horizontalSizeClass</code>, <code>verticalSizeClass</code>等，根据是否compact来判断布局，而不是写死的大小，以实现跨机型适配</li>
-</ul>
-<h2>layout</h2>
-<ul>
-<li><code>lazyVGrid(columns: [GridItem(.fixed(200)), GridItem(.flexable()), GridItem())])</code><ul>
-<li>其实就是一个flex的排版</li>
-<li>横向利用所有空间，竖向尽可能小</li>
-<li>竖排，没定义，看效果是top</li>
-<li>横排，由每一个GridItem来定义</li>
-<li><code>Lazy</code>的意思是只有出现在屏幕上时，才会渲染<code>body</code></li>
-<li>如果横向元素也自由排列呢？比如横屏15个，竖屏6个<ul>
-<li><code>lazyVGrid(columns: GridItem(.adaptive(minimum: 80)))</code> 只要一个item, 然后指定一个最小宽度即可</li>
-</ul>
-</li>
-<li>同理应该有lazyHGrid</li>
-</ul>
-</li>
-</ul>
-<h2>static</h2>
-<ul>
-<li>.largeTitle, .white, 其实就是静态变量: <code>Font.largeTitle</code>, <code>Color.white</code>，所以不要觉得代码里用<code>static let xxx = xxx</code>很low<ul>
-<li>静态方法同理，只要不需要是实例变量的，都可以staic起来，跳出初始化流程</li>
-</ul>
-</li>
-</ul>
-<h2>XCode</h2>
-<ul>
-<li>设置 &gt; Behaviors &gt; Generates output 可以设置模拟器有output时的行为，比如拉出控制台看输出</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="c1">// 设置预览的设备</span>
-    <span class="p">.</span><span class="n">previewDevice</span><span class="p">(</span><span class="n">PreviewDevice</span><span class="p">(</span><span class="n">rawValue</span><span class="p">:</span> <span class="s">&quot;iPhone 12&quot;</span><span class="p">))</span>
-    <span class="p">.</span><span class="n">previewDisplayName</span><span class="p">(</span><span class="s">&quot;iPhone 12&quot;</span><span class="p">)</span>
-</pre></div>
-<ul>
-<li>preview里面你做两个<code>.preferredColorScheme(.dark/.light)</code>就可以同时预览两种颜色模式下的效果了</li>
-<li>其实以上在右侧面板设置会更简单，一样会在Preview里生成相应（跟手写一模一样）的代码</li>
-</ul>
-<p>...</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0_%5B%E5%AE%8C%E7%BB%93%5D_pdf%E4%B8%8B%E8%BD%BD/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
 </section>
 
 <div class="container">
@@ -1099,7 +1048,7 @@ D固定，同A，<span class="o">(</span><span class="m">6</span><span class="o"
                     <div class="copyright">
                         <p class="copyright-text">
                             <span class="brand">walker's code blog</span>
-                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Copyright © 2022 walker</span>
                         </p>
                         <p class="copyright-text powered-by">
                             | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>

@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/f936562262a4e7a521f97d6cbfa2ba93.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/4996bd322f9a52abdd33589cf21a7dbf.json"
         }
 
     </script>
@@ -389,9 +389,9 @@ $$</p>
     <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">:</span><span class="n">right</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span>
 </pre></div>
 <p>sort部分没变，还是两边比较，永远取小的一个，直到排成一排变成一组。主体变成了mergesort()的递归。用文字描述的话，就是这个方法就做了一件事：把当前数组左右分开，然后用永远取最前一个来当最小值的方式（sort方法）完成排序。
-等于是直接就走到了我实现的方法的最后一步，而用递归的方式，让更小的单元完成排序，比如每8个，每4个，每2个，真实发生排序的时候，仍然是我写的代码的第一层，就是两两排序。但是代码简洁抽象好多。</p><p>如果把递归理解为异步的话：</p><div class="highlight"><pre><span></span><span class="k">await</span> <span class="nx">sort_lert</span><span class="p">()</span>
-<span class="k">await</span> <span class="nx">sort_right</span><span class="p">()</span>
-<span class="nx">sort</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="nx">right</span><span class="p">)</span>
+等于是直接就走到了我实现的方法的最后一步，而用递归的方式，让更小的单元完成排序，比如每8个，每4个，每2个，真实发生排序的时候，仍然是我写的代码的第一层，就是两两排序。但是代码简洁抽象好多。</p><p>如果把递归理解为异步的话：</p><div class="highlight"><pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">sort_lert</span><span class="p">()</span><span class="w"></span>
+<span class="k">await</span><span class="w"> </span><span class="nx">sort_right</span><span class="p">()</span><span class="w"></span>
+<span class="nx">sort</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span><span class="w"> </span><span class="nx">right</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 <p>即代码真走到第3行了的话，所有的数据已经排好序了</p><h2>基数排序</h2>
 <figure  style="flex: 126.0377358490566" ><img width="668" height="265" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/3c9e057d213761a0ebe19f5453b4a629.png" alt=""/></figure><p>看图，为什么从个位向高位依次排过去为什么就能保证后面高位的排序不会影响低序的，直观来理解的话，就是</p><ol>
@@ -659,7 +659,7 @@ radix_sort	 0.17084 seconds
                     <div class="copyright">
                         <p class="copyright-text">
                             <span class="brand">walker's code blog</span>
-                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Copyright © 2022 walker</span>
                         </p>
                         <p class="copyright-text powered-by">
                             | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>

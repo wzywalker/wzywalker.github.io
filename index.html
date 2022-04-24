@@ -19,13 +19,13 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/f936562262a4e7a521f97d6cbfa2ba93.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/4996bd322f9a52abdd33589cf21a7dbf.json"
         }
 
     </script>
     
 <title>walker's code blog</title>
-<meta name="author" content="AlanDecode" />
+<meta name="author" content="walker" />
 <meta name="description" content="coder, reader" />
 <meta property="og:title" content="walker's code blog" />
 <meta property="og:description" content="coder, reader" />
@@ -55,6 +55,56 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/js-spread-syntax/" target="_self">js spread syntax</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/js-spread-syntax/" target="_self">
+                <time class="text-uppercase">
+                    April 23 2022
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>写了个解析DOM的小功能，记录下用到的小技巧，更多的是展开语法(<code>...</code>)的使用：</p><h1>Dictionary</h1>
+<div class="highlight"><pre><span></span><span class="c1">// 得到字典所有key的方法：</span><span class="w"></span>
+<span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">dict</span><span class="p">)</span><span class="w"></span>
+<span class="c1">// 得到字典所有key, value的方法： </span><span class="w"></span>
+<span class="nb">Object</span><span class="p">.</span><span class="nx">entries</span><span class="p">(</span><span class="nx">dict</span><span class="p">).</span><span class="nx">map</span><span class="p">(([</span><span class="nx">k</span><span class="p">,</span><span class="nx">v</span><span class="p">],</span><span class="nx">i</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">k</span><span class="p">)</span><span class="w"></span>
+<span class="c1">// 根据字段过滤：</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">filtered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Object</span><span class="p">.</span><span class="nx">fromEntries</span><span class="p">(</span><span class="nb">Object</span><span class="p">.</span><span class="nx">entries</span><span class="p">(</span><span class="nx">dict</span><span class="p">).</span><span class="nx">filter</span><span class="p">(([</span><span class="nx">k</span><span class="p">,</span><span class="nx">v</span><span class="p">])</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">v</span><span class="o">&gt;</span><span class="mf">1</span><span class="p">));</span><span class="w"></span>
+<span class="c1">// 或者用assign和spread syntax:</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">filtered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">({},</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
+<span class="nb">Object</span><span class="p">.</span><span class="nx">entries</span><span class="p">(</span><span class="nx">dict</span><span class="p">).</span><span class="nx">filter</span><span class="p">(([</span><span class="nx">k</span><span class="p">,</span><span class="nx">v</span><span class="p">])</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">v</span><span class="o">&gt;</span><span class="mf">1</span><span class="p">).</span><span class="nx">map</span><span class="p">(([</span><span class="nx">k</span><span class="p">,</span><span class="nx">v</span><span class="p">])</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">({[</span><span class="nx">k</span><span class="p">]</span><span class="o">:</span><span class="nx">v</span><span class="p">}))</span><span class="w"></span>
+</pre></div>
+<h1>Array</h1>
+<div class="highlight"><pre><span></span><span class="c1">// HTMLCollection to Array</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">arr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="w"> </span><span class="nx">htmlCollection</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">arr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[].</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">htmlCollection</span><span class="p">);</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">arr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Array</span><span class="p">.</span><span class="kr">from</span><span class="p">(</span><span class="nx">htmlCollection</span><span class="p">);</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">arr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[...</span><span class="nx">htmlCollection</span><span class="p">];</span><span class="w"></span>
+
+<span class="c1">// remove duplicates (distinct)</span><span class="w"></span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">chars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;B&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;A&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;C&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;B&#39;</span><span class="p">];</span><span class="w"></span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">uniqueChars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[...</span><span class="ow">new</span><span class="w"> </span><span class="nb">Set</span><span class="p">(</span><span class="nx">chars</span><span class="p">)];</span><span class="w"></span>
+</pre></div>
+<h1>String</h1>
+<div class="highlight"><pre><span></span><span class="c1">// 遍历一个数字的每一位</span><span class="w"></span>
+<span class="p">[...</span><span class="mf">1e4</span><span class="o">+</span><span class="s1">&#39;&#39;</span><span class="p">].</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
+
+<span class="c1">// 首字母大写</span><span class="w"></span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">capitalizeFirstLetter</span><span class="p">([</span><span class="nx">first</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="nx">rest</span><span class="p">])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">first</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">rest</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<p>很有python的风格啊</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/js-spread-syntax/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/cocoapods_private_library/" target="_self">CocoaPods创建私有库过程拾遗</a></h1>
@@ -2419,161 +2469,6 @@ constraint(lessThanOrEqualToSystemSpacingBelow:multiplier:)
         
     </article>
     
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/" target="_self">数据结构篇九：Indexed Priority Queue</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/" target="_self">
-                <time class="text-uppercase">
-                    November 17 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><hr />
-<h1>Indexed Priority Queue</h1>
-<ul>
-<li>a traditional priority queue variant</li>
-<li>top node supports <code>quick update and deletions of key-value paris</code></li>
-</ul>
-<figure  style="flex: 77.8894472361809" ><img width="1240" height="796" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5e238bf5e89b7b2188cfb748c4e5990e.png" alt=""/></figure><p>观察这个图，数据是Anna, Bella...等等，</p><ul>
-<li>首先，为这一堆数据进行任意排序，得到一堆索引(0,1,...)</li>
-<li>然后组一个binary heap，这样每个元素又获得一个索引，就是在heap上的序号（<code>Position Map</code>）</li>
-</ul>
-<p>通过两组索引迅速找到key（就是人名）在堆中的位置，比如：</p><ul>
-<li>George，ki = 6, pm = 1</li>
-<li>kelly, ki = 10, pm = 10</li>
-<li>...</li>
-</ul>
-<p>现在能迅速找到数据源在堆上的位置了，那么如果反过来呢？比如堆上索引3是数据源的谁？</p><ul>
-<li>pm = 3 -&gt; ki = 8 -&gt; Issac <strong>BINGO!!!</strong></li>
-</ul>
-<p>但神奇的事发生了，有人希望复用ki这个自然数序列（闲的蛋疼？），于是多做了一个数组，把ki定义为heap上的索引，与元素原来的ki进行映射（<code>Inverse Map</code>）:IM
-<figure  style="flex: 68.88888888888889" ><img width="1240" height="900" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/71be1add8c1a0cde72e08fc72adbd071.png" alt=""/></figure></p><p>可以看到，这张图上张个ki到im的映射，与pm到ki的映射其实是一样的，也就是说重定义了一下，并没有引入新的东西。(pm表里找到3，对应的第一行ki表里就是8）</p><p>这个时候，我们直接用ki的3就能找到im的8，继而找到数据源的<em>Issac</em>了。</p><h2>Insertion</h2>
-<p>上面的数组，我们往里面添加第12条数据试试:</p><ul>
-<li>{ki:12, pm: 12, im:12, value:2}</li>
-<li>显然违反了binary heap的 invariant，向上冒泡，也就是跟{ki:12, pm:5, im:2, value:4}的节点互换</li>
-<li>此时，数据源肯定不会变，但是节点变了，pm的值就要交换（5， 12 互换）</li>
-<li>pm变了，把pm当成ki的映射表im也要变（12， 11互换）</li>
-</ul>
-<figure  style="flex: 224.63768115942028" ><img width="1240" height="276" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/47da2e700214e5e2de16aa42f5b92fb3.png" alt=""/></figure><p>仔细观察图片，搞清楚第一行ki在两次互换时的身份就明白了</p><ul>
-<li>pm的互换是直观的，就是节点的位置</li>
-<li>知道pm互换的依据后（2，5），在第一行找2，5对应的im值互换，因为在这个映射里，相当于pm与原ki的映射，pm此时是（2，5）了。</li>
-</ul>
-<p>同样逻辑继续冒泡就是了。</p><p>pseudo code:</p><div class="highlight"><pre><span></span><span class="c1"># Inserts a value into the min indexed binary </span>
-<span class="c1"># heap. The key index must not already be in </span>
-<span class="c1"># the heap and the value must not be null. </span>
-<span class="n">function</span> <span class="n">insert</span><span class="p">(</span><span class="n">ki</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-    <span class="n">values</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-    <span class="c1"># ‘sz’ is the current size of the heap</span>
-    <span class="n">pm</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span> <span class="o">=</span> <span class="n">sz</span>  <span class="c1"># 对应上图，意思就第一行索引器是ki</span>
-    <span class="n">im</span><span class="p">[</span><span class="n">sz</span><span class="p">]</span> <span class="o">=</span> <span class="n">ki</span>  <span class="c1"># 对应上图，意思就是一行索引器是pm</span>
-    <span class="n">swim</span><span class="p">(</span><span class="n">sz</span><span class="p">)</span>     <span class="c1"># 这里传进去的pm，即heap上节点的索引</span>
-    <span class="n">sz</span> <span class="o">=</span> <span class="n">sz</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># 添加成功，size加1</span>
-</pre></div>
-<p>理论上，添加元素到最后一个, sz和ki应该是相等的（因为都是尾巴上）</p><div class="highlight"><pre><span></span><span class="c1"># Swims up node i (zero based) until heap </span>
-<span class="c1"># invariant is satisfied.</span>
-<span class="n">function</span> <span class="n">swim</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-    <span class="c1"># 比父节点小就冒泡，注意入参i是节点上的索引，即pm</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="p">)):</span> 
-        <span class="n">swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>  <span class="c1"># 所以这里传的也是pm</span>
-        <span class="n">i</span><span class="o">=</span><span class="n">p</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-
-<span class="n">function</span> <span class="n">swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span> 
-    <span class="c1"># 我们交换了节点，需要交换pm表里的值，和im表里的值</span>
-    <span class="c1"># 交换pm的值需要数据源的索引，即ki，而ki能从im表里用pm算出来</span>
-    <span class="c1"># 所以ki = im[pm] 这里i,j是pm，所以im[i]自然就是i对应ki</span>
-    <span class="c1"># pm[ki]当然就是pm[im[i]]了：</span>
-    <span class="n">pm</span><span class="p">[</span><span class="n">im</span><span class="p">[</span><span class="n">j</span><span class="p">]],</span> <span class="n">pm</span><span class="p">[</span><span class="n">im</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span>
-    <span class="n">im</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">im</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">im</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">im</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
-<span class="n">function</span> <span class="n">less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">values</span><span class="p">[</span><span class="n">im</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">values</span><span class="p">[</span><span class="n">im</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
-</pre></div>
-<p>还是那句话，理解清楚那三行映射表里第一行的动态含义，就不会有问题。</p><ul>
-<li>pm表要key index来索引</li>
-<li>im表要node index来索引</li>
-</ul>
-<p>在操作时，只需要知道传入的是哪种索引，及时转化就行了。</p><p>有了索引，lookup的时间复杂度就是常量时间了：O(1)</p><h2>Polling and Removals</h2>
-<p>没有什么特殊的,仍然是找到节点,与最后一个交换,移除最后一个节点,然后再看最后一个在堆里是上升还是下降.
-仍然是记得每一步交换,相应的几个索引值也需要随之交换.(polling 其实就是移除第1个节点,本质上还是 removal)
-<figure class="vertical-figure" style="flex: 36.70811130846655" ><img width="1240" height="1689" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/581b8563020c36307eae7a9bf618a7e0.png" alt=""/></figure></p><p>pseudo code</p><div class="highlight"><pre><span></span><span class="c1"># Deletes the node with the key index ki</span>
-<span class="c1"># in the heap. The key index ki must exist </span>
-<span class="c1"># and be present in the heap.</span>
-<span class="n">function</span> <span class="n">remove</span><span class="p">(</span><span class="n">ki</span><span class="p">):</span>
-    <span class="c1"># 注意，这里送进来的是ki，而不是node index(pm)</span>
-    <span class="c1"># 说明业务需求一般是操作数据源，而不是操作堆</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="n">pm</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span>    <span class="c1"># 转成节点索引</span>
-    <span class="n">sz</span> <span class="o">=</span> <span class="n">sz</span> <span class="o">-</span> <span class="mi">1</span>   <span class="c1"># 与最后一个元素交换，用size来做节点索引</span>
-
-    <span class="c1"># 下面三个子函数送入的就是节点索引了</span>
-    <span class="n">swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">sz</span><span class="p">)</span> 
-    <span class="n">sink</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-    <span class="n">swim</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-
-    <span class="n">values</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span> <span class="o">=</span> <span class="n">null</span>  <span class="c1"># 数据源对应的值置空，所以用ki</span>
-    <span class="n">pm</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>        <span class="c1"># 数据源对应的节点置空，所以用ki</span>
-    <span class="n">im</span><span class="p">[</span><span class="n">sz</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>        <span class="c1"># 反查表用节点索引，此处size就是最后一个节点的索引</span>
-</pre></div>
-<p>sink pseudo code</p><div class="highlight"><pre><span></span><span class="c1"># Sinks the node at index i by swapping </span>
-<span class="c1"># itself with the smallest of the left </span>
-<span class="c1"># or the right child node.</span>
-<span class="n">function</span> <span class="n">sink</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-    <span class="c1"># 这是堆操作,传入的索引也是节点索引,没问题</span>
-    <span class="c1"># sink是下沉，但不是跟BTS一样找左侧最大右则最小那种直接换</span>
-    <span class="c1"># 而是一层层往下换</span>
-    <span class="c1"># 即一次while只跟左右子级比大小，确实比子级还小的话，就替换，然后再跟下一层比较</span>
-    <span class="k">while</span> <span class="n">true</span><span class="p">:</span>
-        <span class="c1"># 利用二叉树特性算出子节点</span>
-        <span class="c1"># 默认左边最小，然后再看右边是不是更小</span>
-        <span class="n">left</span> <span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
-        <span class="n">right</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span>
-        <span class="n">smallest</span> <span class="o">=</span> <span class="n">left</span>
-    <span class="c1"># 右边不越界，且小于左边，就设右边</span>
-    <span class="k">if</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="n">sz</span> <span class="ow">and</span> <span class="n">less</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">left</span><span class="p">):</span>
-        <span class="n">smallest</span> <span class="o">=</span> <span class="n">right</span>
-    <span class="c1"># 左侧都越界了，或已经比最小值大了，说明不需要下沉了</span>
-    <span class="k">if</span> <span class="n">left</span> <span class="o">&gt;=</span> <span class="n">sz</span> <span class="ow">or</span> <span class="n">less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">smallest</span><span class="p">):</span>
-        <span class="k">break</span>
-    <span class="c1"># 只要没有break，说明能交换，然后把交换后的作为下一个循环的起点</span>
-    <span class="n">swap</span><span class="p">(</span><span class="n">smallest</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="n">smallest</span>
-</pre></div>
-<h2>Updates</h2>
-<p>更新节点要简单的多:</p><ul>
-<li>用ki找到value，把值更新</li>
-<li>然后根据新value实际情况上浮或下沉</li>
-</ul>
-<div class="highlight"><pre><span></span><span class="c1"># Updates the value of a key in the binary </span>
-<span class="c1"># heap. The key index must exist and the</span>
-<span class="c1"># value must not be null.</span>
-<span class="n">function</span> <span class="n">update</span><span class="p">(</span><span class="n">ki</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="n">pm</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span>
-    <span class="n">values</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-    <span class="n">sink</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-    <span class="n">swim</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-</pre></div>
-<h2>Decrease and Increase key</h2>
-<p>不好说，先看代码吧：</p><div class="highlight"><pre><span></span><span class="c1"># For both these functions assume ki and value </span>
-<span class="c1"># are valid inputs and we are dealing with a</span>
-<span class="c1"># min indexed binary heap.</span>
-<span class="n">function</span> <span class="n">decreaseKey</span><span class="p">(</span><span class="n">ki</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">less</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">values</span><span class="p">[</span><span class="n">ki</span><span class="p">]):</span> 
-        <span class="n">values</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span> 
-        <span class="n">swim</span><span class="p">(</span><span class="n">pm</span><span class="p">[</span><span class="n">ki</span><span class="p">])</span>
-
-<span class="n">function</span> <span class="n">increaseKey</span><span class="p">(</span><span class="n">ki</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span> 
-    <span class="k">if</span> <span class="n">less</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">ki</span><span class="p">],</span> <span class="n">value</span><span class="p">):</span>
-        <span class="n">values</span><span class="p">[</span><span class="n">ki</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span> 
-        <span class="n">sink</span><span class="p">(</span><span class="n">pm</span><span class="p">[</span><span class="n">ki</span><span class="p">])</span>
-</pre></div>
-<p>代码里是跟一个固定值比较，只要ki对应的值比它大(desreaseKey)或小(increaseKey），就用这个固定值来替换它，并且在value改变后根据实际情况上浮或下沉。</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
 </section>
 
 <div class="container">
@@ -2623,7 +2518,7 @@ constraint(lessThanOrEqualToSystemSpacingBelow:multiplier:)
                     <div class="copyright">
                         <p class="copyright-text">
                             <span class="brand">walker's code blog</span>
-                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Copyright © 2022 walker</span>
                         </p>
                         <p class="copyright-text powered-by">
                             | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>

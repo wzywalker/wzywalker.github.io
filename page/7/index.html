@@ -19,13 +19,13 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/f936562262a4e7a521f97d6cbfa2ba93.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/4996bd322f9a52abdd33589cf21a7dbf.json"
         }
 
     </script>
     
 <title>walker's code blog</title>
-<meta name="author" content="AlanDecode" />
+<meta name="author" content="walker" />
 <meta name="description" content="coder, reader" />
 <meta property="og:title" content="walker's code blog" />
 <meta property="og:description" content="coder, reader" />
@@ -55,6 +55,375 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/-bin-bash%E5%92%8C-bin-sh%E7%9A%84%E5%8C%BA%E5%88%AB/" target="_self">-bin-bash和-bin-sh的区别</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/-bin-bash%E5%92%8C-bin-sh%E7%9A%84%E5%8C%BA%E5%88%AB/" target="_self">
+                <time class="text-uppercase">
+                    July 02 2020
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p><a href="https://wangdoc.com/bash/intro.html">教程地址</a></p><h2>快捷键:</h2>
+
+<pre><code>ctrl+L: 清除屏幕并移到顶部
+ctrl+U: 删到行首(剪) ctrl+A: 移到行首
+ctrl+K: 删到行尾(剪) ctrl+E: 移到行尾
+ctrl+b, f, (左移, 右移)
+alt+b,f (前, 后移一个单词)
+ctrl+1 等同于clear
+ctrl+d delete, ctrl+w 删到单词首
+alt+t 词换位, ctrl+t 字符换位 (与前一个)
+alt+d, alt+backspace 剪切至词首, 词尾
+ctrl+y 粘贴
+</code></pre>
+
+<pre><code>$ ’Something wrong happend’ &gt;&amp;2
+</code></pre>
+<p>解释:</p><blockquote>
+<p><code>&gt;</code>代表重定向输出</p></blockquote>
+<p><code>&amp;</code>表示接下来的是一个文件描述符数字(<em>file descriptor number</em>)
+<code>2</code>表示<code>stderr</code>
+所以就是把上述字符串输出到stderr里去的意思,
+如果是<code>$ ”str” &lt;2</code> (没有&amp;), 则会输出到一个叫2的文件里去</p><h2>echo</h2>
+<p><code>-n</code>: 可以取消结尾的换行 
+<code>-e</code>: 解释字符串里的转义符</p><h2>扩展(通配符)</h2>
+
+<pre><code>$ ~/walker # 表示用户目录下的walker目录
+$ ~walker # 表示名为walker的目录
+$ ~+ # 扩展为当前目录, 等同于 pwd
+$ echo d{a, e, I, o, u}g 输出: dag, deg, dig, dog, dug # 大括号内不要有空格(否则会当成参数)
+$ echo {j{p,pe}g, png} —&gt; 嵌套
+</code></pre>
+<p>波浪线, 方括号的括号都是基于”<strong>路径</strong>”的, 如果当前路径没有匹配到对应的文件名, 则会<strong>变成字符串</strong>原样输出, 而大括号则不然, 是基于”<strong>逻辑</strong>”的, 只管扩展, 不会去探测扩展后对应的路径存不存在, 因此可能报错文件不存在. 
+如<code>echo [a,b].txt</code>, 如果不存在a.txt, b.txt, 则会变成<code>”[a,b].txt”</code>这样一个输出, 而<code>{a,b}.txt</code>则<strong>一定</strong>会扩展成a.txt, b.txt
+<strong>例外</strong>: 
+在用<code>..</code>来扩展时, 如果系统无法理解, 则不会扩展, 如<code>{1..5}</code>会扩展成1,2,3,4,5, 但<code>{ab..123}</code>, 则会变成字符串
+但是前导0不参与路径匹配: <code>{01…5}</code> # 01,02,03,04,05 (几个零都可以)
+步长:{0..8..2}  (<code>未测试成功</code>) # 要打开哪个shopt开关?
+活用:</p>
+<pre><code>$ echo .{mp{3..4},m4{a,b,p,v}} # 匹配了: .mp3 .mp4 .m4a .m4b .m4p .m4v
+$ mkdir {2007..2009}-{01..12}  # 建了2007-2009每年12个目录
+for I in {1..4}
+</code></pre>
+<p>注意惊叹号的使用(类似正则里的<code>^</code>)</p>
+<pre><code>$ echo ${!S*} # 返回所有以S开头的”变量名”, 如SHELL, SSH..等
+</code></pre>
+<p>另两种转义(<code>string interpolation</code>):</p>
+<pre><code>$ echo date is $(date) # 即包在$(…)中
+$ echo date is `date` # 包在反引号中
+</code></pre>
+<p>但是要计算2+2, 只有<code>echo $((2+2))</code> 这种形式, 反引号就不行了</p><p>[[:alnum:]], [[:digit:]]等<strong>预置</strong>的字符类扩展见: <a href="https://wangdoc.com/bash/expansion.html"><a href="https://wangdoc.com/bash/expansion.html">https://wangdoc.com/bash/expansion.html</a></a> 很丰富, 建议详读.</p><p><code>(?, \*, +, @, !)</code>则为匹配的个数, 分别是(0或1, 0或多, 一或多, 一个, 非一个), 如<code>song@(.)mp3</code>等同于song.mp3,
+是的, 不同于正则, 它是先规定<strong>个数</strong>, 再设定匹配字串</p><blockquote>
+<p>注: 需要打开<code>shopt -s extglob</code></p></blockquote>
+<p>双引号碰到$, 反引号和反斜杠都会自动扩展, 所以<code>echo “$SHELL”</code> 等同于<code>echo echo \$SHELL</code>
+双引号能保留”输出”的格式, 比如 echo `cal`, 格式就没了, 自己试试看? 而<code>echo “$(cal)”</code>则可以保留格式:</p>
+<pre><code>$ echo &quot;$(cal)&quot;
+      六月 2020
+日 一 二 三 四 五 六
+    1  2  3  4  5  6
+ 7  8  9 10 11 12 13
+14 15 16 17 18 19 20
+21 22 23 24 25 26 27
+28 29 30
+</code></pre>
+<p>大段文字输入可以用</p>
+<pre><code>$command &lt;&lt; token
+your long inputs
+token
+</code></pre>
+<p>等同于: <code>echo &quot;your long inputs&quot; | command</code> 即把echo的输出作为command的输入, 这个一般用于多行文本</p><blockquote>
+<p>texts里面可以进行使用变量, 但是如果把token用双引号包起来就不能解释变量了.</p></blockquote>
+<p>如果只是简单字符串, 用下面更明确:
+<code>$ command &lt;&lt;&lt; ‘text’</code> 
+如: <code>$ cat &lt;&lt;&lt; “hello world”</code>, 一样等同于 <code>$ echo “hello world” | cat</code>
+<code>&lt;&lt;&lt;</code> 还有一个作用就是把变量值用这种方式能变成<strong>标准输入</strong>, 这样被”<strong>计算</strong>”出来的值也能用于只接受标准输入的命令了, 比如<code>read</code></p><h2>变量</h2>
+<p><code>printenv PATH</code> 与 <code>echo $PATH</code>等同
+解释变量中的变量, 比如<code>$PATH</code>, 不是想象中的$嵌套: <code>${${myvar}}</code>, 应该这么用</p>
+<pre><code>$ myvar=PATH
+$ echo ${!myvar}, # 即多加一个惊叹号
+</code></pre>
+<p><code>$?</code>: 上一个命令的退出码(0成功, 1失败) 
+<code>$$</code>: 当前Shell进程的ID
+<code>$_</code>: 上一个命令的最后一个参数
+<code>$!</code>: 最后一个后台执行的异步命令的进程ID
+<code>$0</code>: 当前Shell的名称
+<code>$-</code>: 当前shell的启动参数, <code>$@</code>, <code>$#</code> 表示脚本的参数数量</p><blockquote>
+<p><code>$?</code>命令除了取出上一个命令的返回值, 也可以取出上一个函数的返回值</p></blockquote>
+<p><code>${varname-:value}</code> 取值, 如果不存在则返value, 但<strong>不赋值</strong>
+<code>${varname=:value}</code> 取值, 如果不存在则返value, 顺便<strong>赋值</strong>
+<code>${varname+:value}</code> 如果有值则返value(而<strong>不是值本身</strong>), 没有值则为空, 所以这个时候的value一般用一个标识符号就好了
+<code>${varname?:value}</code> 取值, 如果不存在就<strong>报错</strong>并把value作为错误错误打印出来
+比如 <code>$ filename=${$1:?”filename missing”}</code> 从脚本中取第一个参数作为文件名, 发现没有文件名就报错退出</p><p>变量都是字符串, 可以用<code>declare</code>来进行一些限定</p>
+<pre><code>$ declare -I v1=13 v2=14 v3=v1+v2 # 声明为integer
+$ echo $v3
+# 这样更快: 
+$ let v=13+14  # 如果习惯了=两边加空格, 则包到引号里: $ let “v = 13 + 14”
+</code></pre>
+<h2>字符串</h2>
+<p><code>${#”string”}</code> 长度
+<code>${varname:offset:length}</code> 切片(变量名_不需要_美元符号)
+删除: (# 和 ## 的区别就是贪婪与否的区别)</p>
+<pre><code>$ phone=&quot;555-456-1414&quot;
+$ echo ${phone#*-}
+&gt; 456-1414
+$ echo ${phone##*-}
+&gt; 1414
+</code></pre>
+<p>替换: <code>${variable/#pattern/string}</code> 注意, <code>#</code> 左边多了一个 <code>/</code> , 右边多了替换字串
+以上, 都是从头匹配, 从<strong>尾部</strong>匹配把 <code>#</code> 换成 <code>%</code> 
+<strong>任意位置</strong>匹配则换成/, 所以就成了你们最熟悉的语法:<code>varname/search/replace</code></p><blockquote>
+<p>这个时候再回头看<code>/#</code> , <code>/%</code>, 不过是<code>/</code>语法的修饰符罢了(限定起始方向)</p></blockquote>
+<p><code>${varname^^}</code>, <code>${varname,,}</code> # 转大写, 转小写</p><h2>数值运算</h2>
+<p>逗号是求值, 如
+<code>$ echo $((foo = 1+2, 3*4))</code> 输出为12, 但foo的值是3, 依次计算, 输出是逗号后面的</p><blockquote>
+<p><code>expr</code>命令等同于双括号: <code>expr 3+5</code> 与<code>$((3+5))</code>同义</p></blockquote>
+<h2>行操作</h2>
+<p>Bash内置Readline库, 默认采用Emacs快捷键, 切换:</p>
+<pre><code>$ set -o vi 或 $ set -o emacs
+</code></pre>
+<h2>切换目录/堆栈</h2>
+<p>不管你cd到哪个了哪个目录, 想回到cd前的目录, 用<code>cd -</code>就行了
+<code>pushd</code> , <code>popd</code>则可以把目录推到堆栈里, 演示:</p>
+<pre><code>$ pushd 2
+/test/1/2 /test/1
+$ pushd 3
+/test/1/2/3 /test/1/2 /test/1
+$ pushd 4
+/test/1/2/3/4 /test/1/2/3 /test/1/2 /test/1
+$ dirs  # 其实每一次pushd都会把当前堆栈dirs出来
+/test/1/2/3/4 /test/1/2/3 /test/1/2 /test/1
+$ cd /tmp
+$ dirs # 观察, cd其实只是把顶层给改了, 不会增减层级
+/tmp /test/1/2/3 /test/1/2 /test/1
+$ cd /usr
+$ dirs  # 验算
+/usr /test/1/2/3 /test/1/2 /test/1
+</code></pre>
+<p>现在你知道 了, cd永远只是更改顶栈, 大多数情况下, 你可以用<code>pushd</code>来替换<code>cd</code>, 这样你就有了<em>后退权</em>了
+此时你再<code>popd</code>, 目录会顺利切到<code>/test/1/2/3</code>, 不管你进行过多少次<code>cd</code>, 第二层都不会变并且能直接<code>pop</code>出来
+$小练习$
+如果你查看堆栈, 要从第4个开始后退(0为起始), 那么可以把从3开始(不是4)的记录提到顶层来(然后再<code>popd</code>):
+<code>$ pushd +3</code> (加号不可省)</p><blockquote>
+<p>注意, 此时0, 1, 2都还在, 只是挪到了尾巴</p></blockquote>
+<p>而<code>popd +3</code>则不是”<strong>移动</strong>”, 而是<strong>删除</strong>了, 意思是正向删除<strong>第</strong>3个, 如果不带<code>+</code>, 则理解为删除3<strong>以后</strong>的所有堆栈(即从4开始)</p><blockquote>
+<p>注意: 为什么要从第4个开始退要把从3开始的移到顶层呢?</p></blockquote>
+<p>因为如下<code>dirs: /1, /2, /3</code> , 你做<code>popd</code>, 是会回到/2的
+可见顶栈永远表示的是&quot;当前&quot;目录. 所以你自然无法<strong>跳到</strong>当前目录.
+而<code>pushd</code>, <code>popd</code>+<code>数字</code>改动的只是堆栈表, 不是目录, 即虽然你的目录没变, 但是系统<strong>认为</strong>你在第三层, 这个时候再后退(<code>popd</code>)自然到了目录表里的下一层<code>/4</code>.</p><h2>脚本</h2>
+<p>shebang行<code>#!/usr/bin/env bash</code> 的写法是为了避免<code>#!/bin/bash</code> 这种写法时bash不在bin目录
+<code>source</code>命令可以 用一个点来表示: <code>. ~/.bash_profile</code>
+读用户的输入:</p>
+<pre><code>$ read firstname lastname
+$ “you input: $firstname, $lastname” # 如果read后没有给变量名, 则由默认的$REPLY来取出
+</code></pre>
+<p>读文件:</p>
+<pre><code>while read myline  # 每次读一行
+do
+  echo &quot;$myline&quot;
+done &lt; $filename  # 注意这里特殊的传参方式, 同时, 如果不传入文件路径, 就是一个无限循环了(read)
+</code></pre>
+<p>存数组:</p>
+<pre><code>$ read -a varname. #  -a 参数把用户的多个输入全存到`varname`这个数组里了
+</code></pre>
+<p>其它有用的:</p>
+<pre><code># -e 参数使得用户在输入的时候能用tab补全(包含所有readline库快捷键),
+# 如果没有这个参数输入文本的时候是不能使用快捷键的
+$ read -e -p “please input the path to the file” 
+# -s 可以隐藏用户的输入, 通常用于密码
+$ read -s  -p “input password”
+# -p 显然就是能直接显示输入前的提示了
+</code></pre>
+<h2>条件判断</h2>
+<p><code>if</code>里面的<code>test</code>命令
+<code>test expression</code>, <code>[ expression]</code>, <code>[[ expression ]]</code> 是等价的(<em>第三种</em>支持正则)  <strong>空格不能省</strong>
+<code>[ -? file ]</code> 查看文件状态有非常多的表达式(参数), 具体参阅<a href="https://wangdoc.com/bash/condition.html">https://wangdoc.com/bash/condition.html</a> 推荐阅读
+for循环
+<code>for [ test ] in list; do … done</code> 其中的<code>in list</code>如果省略, 则代表所有脚本参数<code>”$@“</code>:</p>
+<pre><code>$ for filename; do echo “$filename”; done
+# 等同于
+$ for filename in “$@“; do echo “$filename”; done
+</code></pre>
+<p>同理, 如果是用在<strong>函数中</strong>, 则等于所有函数参数.
+用双括号, 变量也无需加<code>$</code>了
+<code>for (( i=0; i&lt;5; i+=1 )); do echo $i; done</code>
+<code>case in</code>, 如果希望一个匹配后继续做下一个匹配(<code>passthrough</code>), 每一个case 的结尾用<code>;;&amp;</code>而不是<code>;;</code> (多了一个&amp;)</p><h2>select</h2>
+<p>select生成的菜单, 选择并执行命令后, 要自行在<code>do-done</code>体内用<code>break</code>退出, 否则会一直要你选择</p><h2>数组</h2>
+<p>以下方式声明数组</p>
+<pre><code>$ names=(hatter [5]=duchess Alice), 指定了0, 5, 6, 其它为空字符串
+$ mp3s=( *.mp3 )
+$ declare -a ARRAYNAME
+$ read -a ARRAYNAME
+</code></pre>
+<p>读取的时候: <code>$ echo ${array[1]}</code> 大括号不可省
+<code>@</code>仍然是返回所有元素: <code>$ echo ${array[@]}</code> 但是在<code>for…in</code>中, 要把整个表达式放双引号中:</p>
+<pre><code>$ activities=( swimming &quot;water skiing&quot; canoeing &quot;white-water rafting&quot; surfing )
+$ for act in “${activities[@]}”; do….; done
+</code></pre>
+<p>不然其中有”water”, “skiing”,”white-water&quot;, rafting”等都会被拆开(<em>bug吧? 字符串也拆</em>)
+把<code>@</code>换成<code>*</code>, 加上双引号, 则会一个个字符返回
+拷贝数组最方便的方法:</p>
+<pre><code>$ hobbies=( “${activities[@]}” diving ) # 顺便演示了为数组添加成员
+</code></pre>
+<p>直接赋值给一个数组(即没有指定索引), 则是赋给<strong>第0个组员</strong>, 同理, <strong>使用</strong>数组名也是使用的0号组员</p>
+<pre><code># 以下@可以换成*
+$ echo ${#array[@]} # #仍然用以计数, 但是如果传的是具体索引, 则返回的是对应项的字符串长度
+$ echo ${!array[@]} 用以返回有值的索引 (为空的不返回) # 活用的话遍历数组更高效
+$ echo ${array[@]:2:3} # 切片
+$ arr+=(3 4 5) # 追加
+$ unset arr[2] # 删除 , 或: 
+$ arr[2]= # 或
+$ arr[2]=‘’
+# 以上三者等效, 
+</code></pre>
+<p>根据上面知识<code>$ arr=</code> 表示删除第一个成员, 但是<code>unset arr</code> 则是清空整个数组了
+也可以用<strong>字符串</strong>做索引, 就成了字典了:</p>
+<pre><code>$ declare -A colors  # 变成大写即可
+$ colors[“red”]=“#ff0000”
+</code></pre>
+<h2>set命令</h2>
+<p>单独一个set会显示所有环境变量和Shell函数
+以下都可以以<code>set -xxx</code> 的方式写在<strong>脚本头</strong>或<strong>任何位置</strong>, 就当一个即时开关使用吧
+也可以在调用bash脚本前传入比如: <code>bash -eux script.sh</code>
+<code>-u</code>: 遇到不存在的变量就报错, 而不是忽略 与 <code>-o nounset</code> 等价
+<code>-x</code>: 每一个命令执行前会先打印出来 等同于 <code>-o xtrace</code>, 关闭用<code>set +x</code> (组合起来用就是一个小环境)
+<code>-e</code>: 有错误就中止 等同于 <code>-o errexit</code>
+<code>-o pipefail</code>: 即使在管道中, 有错也中止(-e 在管道中会失效)
+<code>-n</code>: <code>-o noexec</code> 不执行命令只检查语法
+<code>-f</code>: <code>-o noglob</code> 不对通配符进行文件名(路径)扩展  可用+f 关闭
+<code>-v</code>: <code>-o verbose</code> 打印shell接收到的每一行输入     可用+v 关闭
+$ set -euxo pipefail 一般这么四个连用</p><h2>shopt</h2>
+<p>即: shell option
+同set, 直接shopt也可以列出所有参数, <code>-s</code>, <code>-u</code>分别是是打开, 关闭某个参数
+<code>shopt 参数名</code>, 可直接查询该参数是否打开关闭, 但是如果是用于编程, 因为返回是字符串不好判断, 所以提供了<code>-q</code>参数(返回0/1, 分别表示打开/关闭)</p>
+<pre><code>$ if shopt -q globstar; then …; fi
+</code></pre>
+<h2>除错</h2>
+
+<pre><code># 先看目录存不存在, 然后再进入, 然后再打印出来将要删除的文件, 
+# 这是最安全的删除方法
+# 否则一旦目录不存在, 不同的写法会有不同的问题
+[[ -d $dir_name ]] &amp;&amp; cd $dir_name &amp;&amp; echo rm *  
+</code></pre>
+<p>如果在执行bash脚本前加入<code>-x</code>参数, 则每一条命令<strong>执行前</strong>都会打印出来 # 等同于<code>set -x</code></p><blockquote>
+<p>或者写在脚本的shebang行里也行</p></blockquote>
+<p>每一条命令会同上一个<strong>标识符</strong>作前缀, 默认是<code>+</code>, 可以用<code>export PS4=‘$LINENO +’</code>这种方式自定义(比如现在就加上了行号)
+$几个环境变量$
+<code>$LINENO</code>: 这个变量在哪, 打印的就是这一行的行号
+<code>$FUNCNAME</code>: 返回一个数组, 函数调用的名称堆栈, 最里层(即本函数)的是0
+<code>$BASH_SOURCE</code>: 返回一个数组, 函数调用的脚本堆栈, 即每层调用的脚本是哪一个, 最里层(即本文件)的是0
+<code>$BASH_LINENO</code>: 返回一个数组, 函数每一次被调用时在该脚本的行号, 同样也是从最里层开始
+例:</p>
+<pre><code>${BASH_SOURCE[1] = main.sh  # [0] 是文件本身, 所以要[1]
+${BASH_LINENO[0] = 17  # 调用来源的行号  —&gt; 所以调用来源的行号的索引永远比调用来源(文件)的索引要小1
+${FUNCNAME[0]} = hello  # 本方法(或者说”被调用的方法”)
+</code></pre>
+<p>上例代表在 main.sh的17行调用了hello()方法 
+$小练习$</p>
+<pre><code>#!/bin/bash
+source lv2.sh   # 引入外部脚本
+function lv1method()
+{
+    echo ---------lv1------------
+    i=0
+    for v in &quot;${BASH_LINENO[@]}&quot;; do
+        echo &quot;bash_line_no[$((i++))]: $v&quot;
+    done
+    i=0
+    for v in &quot;${FUNCNAME[@]}&quot;; do
+        echo &quot;func_name[$((i++))]: $v&quot;
+    done
+    i=0
+    for v in &quot;${BASH_SOURCE[@]}&quot;; do
+        echo &quot;bash_source[$((i++))]: $v&quot;
+    done
+    lv2method # 调用外部脚本的方法
+}
+</code></pre>
+<p>以上脚本, 多做几次嵌套,  打印出来看看索引之间的关系
+输出:</p>
+<pre><code>---------lv1------------
+bash_line_no[0]: 5
+bash_line_no[1]: 0
+func_name[0]: lv1method
+func_name[1]: main
+bash_source[0]: lv1.sh
+bash_source[1]: entry.sh
+---------lv2------------
+bash_line_no[0]: 21
+bash_line_no[1]: 5
+bash_line_no[2]: 0
+func_name[0]: lv2method
+func_name[1]: lv1method
+func_name[2]: main
+bash_source[0]: lv2.sh
+bash_source[1]: lv1.sh
+bash_source[2]: entry.sh
+---------lv3------------
+bash_line_no[0]: 19
+bash_line_no[1]: 21
+bash_line_no[2]: 5
+bash_line_no[3]: 0
+func_name[0]: lv3method
+func_name[1]: lv2method
+func_name[2]: lv1method
+func_name[3]: main
+bash_source[0]: lv3.sh
+bash_source[1]: lv2.sh
+bash_source[2]: lv1.sh
+bash_source[3]: entry.sh
+</code></pre>
+<h2>临时文件</h2>
+<p>安全的用法:</p>
+<pre><code>trap 'rm -f &quot;$TMPFILE&quot;’ EXIT  # 退出时删除临时文件)
+TMPFILE=$(mktemp) || exit 1  # 用mktemp命令建立临时文件可以只有本人能读, 如果失败就退出
+echo &quot;Our temp file is $TMPFILE”
+</code></pre>
+<p>参数: 
+<code>-d</code>: 创建的是目录
+<code>-p</code>: 指定目录
+<code>-t</code>: 指定模板
+如 <code>mktemp -t aaa.XXXXXXX</code> 能生成<code>/tmp/aaa.yZ1HgZV</code>(与X个数相同)
+<code>trap</code>是用来响应系统信号的, 如<code>ctrl+c</code>产生中断信号<code>SIGINT</code>
+<code>$ trap -l</code> 列出所有信号(自己打印出来看看)
+<code>trap</code>的格式: <code>$ trap [动作] [信号1] [信号2] ...</code>
+<code>trap</code> 命令接的信号有如下</p><ul>
+<li>HUP：编号1，脚本与所在的终端脱离联系。</li>
+<li>INT：编号2，用户按下 Ctrl + C，意图让脚本中止运行。</li>
+<li>QUIT：编号3，用户按下 Ctrl + 斜杠，意图退出脚本。</li>
+<li>KILL：编号9，该信号用于杀死进程。</li>
+<li>TERM：编号15，这是kill命令发出的默认信号。</li>
+<li>EXIT：编号0，这不是系统信号，而是 Bash 脚本特有的信号，不管什么情况，只要退出脚本就会产生。</li>
+</ul>
+<p>如果trap要执行多条命令, 可以封装到函数里, 命令的位置写函数:<code>$ trap func_name EXIT</code></p><h2>启动环境</h2>
+<p>登录session依次启动如下脚本:</p><ul>
+<li>/etc/profile</li>
+<li>/etc/profile.d # 目录下的所有.sh文件</li>
+<li>~/.bash_profile # 如果有, 则中止</li>
+<li>~/.bash_login # 如果有, 则中止  此为C shell 初始化脚本</li>
+<li>~/.profile # Bourne shell 和 Korn shell 初始化脚本</li>
+</ul>
+<p>通过<code>$ bash - -login</code> 参数, 可以强制执行以上脚本
+非登录session</p><ul>
+<li>/etc/bash.bashrc # 所有用户都执行</li>
+<li>~/.bashrc # 当前用户的</li>
+</ul>
+<p>启动参数:
+<code>-n</code>: 不执行脚本, 只检查语法
+<code>-v</code>: 执行语句前先输出
+<code>-x</code>: 执行语句后输出该语句</p><p><code>~/.bash_logout</code> 退出时要执行的命令
+<code>$ include /etc/inputrc</code> 在<code>~/.inputrc</code>里加这一行, 可以在里面自定义快捷键</p><h2>命令提示符</h2>
+<p>上面提到过<code>$PS4</code>能修改<code>set -x</code>时打印的每句语句前面的<code>+</code>号
+命令提示符默认的<code>$</code>符号(<strong>根用户</strong>是<code>#</code>号)则可以用<code>$PS1</code>来修改, 怎么改参考<a href="https://wangdoc.com/bash/prompt.html"><a href="https://wangdoc.com/bash/prompt.html">https://wangdoc.com/bash/prompt.html</a></a>
+<code>$PS2</code>表示的是输入时折行的提示符, 默认为<code>&gt;</code>
+<code>$PS3</code>表示使用select命令时系统输入菜单的提示符</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/-bin-bash%E5%92%8C-bin-sh%E7%9A%84%E5%8C%BA%E5%88%AB/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/iOS%E5%B1%8F%E5%B9%95%E6%BB%9A%E5%8A%A8%E6%97%B6Timer%E4%BF%9D%E6%8C%81%E5%B7%A5%E4%BD%9C%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/" target="_self">iOS屏幕滚动时Timer保持工作的几种方式</a></h1>
@@ -620,30 +989,6 @@ Permission denied (publickey).
         
     </article>
     
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%A4%87%E4%BB%BDNginx%E8%AE%BE%E7%BD%AEphp%E7%9A%84%E6%96%B9%E6%B3%95/" target="_self">备份Nginx设置php的方法</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E5%A4%87%E4%BB%BDNginx%E8%AE%BE%E7%BD%AEphp%E7%9A%84%E6%96%B9%E6%B3%95/" target="_self">
-                <time class="text-uppercase">
-                    July 31 2019
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>版本nginx/1.12.2</p>
-<pre><code>  location ~ \.php$ {
-    fastcgi_pass   unix:/run/php/php7.0-fpm.sock;
-    fastcgi_param  SCRIPT_FILENAME $document_root/$fastcgi_script_name;
-    include        fastcgi_params;
-   }
-</code></pre>
-<p>我机器上的fastcgi_param值不对, 改成上图成功, 备份下</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%A4%87%E4%BB%BDNginx%E8%AE%BE%E7%BD%AEphp%E7%9A%84%E6%96%B9%E6%B3%95/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
 </section>
 
 <div class="container">
@@ -693,7 +1038,7 @@ Permission denied (publickey).
                     <div class="copyright">
                         <p class="copyright-text">
                             <span class="brand">walker's code blog</span>
-                            <span>Copyright © 2022 AlanDecode</span>
+                            <span>Copyright © 2022 walker</span>
                         </p>
                         <p class="copyright-text powered-by">
                             | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
