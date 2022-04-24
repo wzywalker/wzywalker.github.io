@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 2022-04-23-js-spread-syntax
+title: js spread syntax
 slug: js-spread-syntax
 date: 2022-04-23 23:16
 status: publish
