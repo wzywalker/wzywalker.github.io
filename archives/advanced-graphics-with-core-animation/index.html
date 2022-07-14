@@ -1,0 +1,445 @@
+<!DOCTYPE HTML>
+<html lang="english">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Prism" />
+    <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+        }
+
+    </script>
+    
+<title>Advanced Graphics With Core Animation 笔记 - walker's code blog</title>
+<meta name="author" content="walker" />
+<meta name="description" content="Core Animation" />
+<meta property="og:title" content="Advanced Graphics With Core Animation 笔记 - walker's code blog" />
+<meta property="og:description" content="Core Animation" />
+<meta property="og:site_name" content="walker's code blog" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/advanced-graphics-with-core-animation/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-06-25T17:35:00-00.00" />
+<meta name="twitter:title" content="Advanced Graphics With Core Animation 笔记 - walker's code blog" />
+<meta name="twitter:description" content="Core Animation" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
+<main>
+    <section class="prism-section row" id="prism__content">
+        <article class="yue col-md-8 offset-md-2">
+            <h1 class="prism-post-title">Advanced Graphics With Core Animation 笔记</h1>
+            <div class="prism-post-time">
+                <time class="text-uppercase">
+                    June 25 2022
+                </time>
+            </div>
+            <div class="prism-content-body">
+                <h1>Core Animation</h1>
+<p><a href="https://academy.realm.io/posts/tryswift-tim-oliver-advanced-graphics-with-core-animation/">Source</a></p><p><strong>Core Graphics</strong></p><ul>
+<li>Core Animation is supposed to be the graphics system of the framework, but there is also Core Graphics.</li>
+<li>Core Graphics is entirely done on the CPU, and cannot be performed on the GPU.<ul>
+<li>Because it is an entirely CPU-bound operation</li>
+</ul>
+</li>
+<li>you can <strong>combine</strong> it with Core Animation.<ul>
+<li>You can use <code>Core Graphics</code> to create the actual bitmaps, and use <code>Core Animation</code> to display them to create some cool effects.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Core Animation</strong></p><ul>
+<li>It is comprised of a series of <strong>layout objects</strong>. &gt;&gt;&gt; typically <code>CALayer</code></li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">import</span> <span class="nc">QuartzCore</span>
+
+<span class="kd">let</span> <span class="nv">newLayer</span> <span class="p">=</span> <span class="bp">CALayer</span><span class="p">()</span>
+<span class="n">newLayer</span><span class="p">.</span><span class="n">frame</span> <span class="p">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">newLayer</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="p">=</span> <span class="bp">UIColor</span><span class="p">.</span><span class="n">redColor</span><span class="p">().</span><span class="n">CGColor</span>
+<span class="n">newLayer</span><span class="p">.</span><span class="n">cornerRadius</span> <span class="p">=</span> <span class="mi">10</span>
+</pre></div>
+<p><strong>UIKit</strong></p><ul>
+<li>Everything you see when you look at a <code>UIView</code> is <strong>not</strong> being done on the <code>UIView</code> level, but by a <strong>backing layer</strong> attached to that view.</li>
+<li>The layer is providing the <strong>visual content</strong>,</li>
+<li><code>UIView</code> is providing <strong>other</strong> things:<ul>
+<li>order layout functionality, touch recognition, guest recognizers.</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="bp">UIView</span> <span class="p">{</span>
+   <span class="kd">public</span> <span class="kd">var</span> <span class="nv">layer</span><span class="p">:</span> <span class="bp">CALayer</span> <span class="p">{</span> <span class="kr">get</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p><strong>为什么不让UIView直接继承CALayer</strong></p><ul>
+<li>CALayer确实有自己的子类</li>
+<li>它们可以插入UIView的subLayer中，并指定其为暴露的那个layer，这种设计决定了它需要有一个“容器&quot;</li>
+<li>比如用一个渐变的layer子类来替换原来的layer:</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyGradientClass</span> <span class="p">:</span> <span class="bp">UIView</span> <span class="p">{</span>
+    <span class="kr">override</span> <span class="kd">class</span> <span class="nc">func</span> <span class="n">layerClass</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="nb">AnyClass</span> <span class="p">{</span>
+       <span class="k">return</span> <span class="bp">CAGradientLayer</span><span class="p">.</span><span class="kc">self</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<ul>
+<li>Mapping contents to CALayer: <code>someLayer.contents = someImage.CGImage</code><ul>
+<li>the <code>.contents</code> property is <code>animatable</code></li>
+</ul>
+</li>
+</ul>
+<p>Scale (with <code>contentGravity</code> property):</p><figure  style="flex: 102.4390243902439" ><img width="1848" height="902" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/faa855dd2861cf296eb2c4ef5e8cf430.png" alt="image-20220515014627253"/></figure><ul>
+<li>场景一：屏幕向下拉，背景图越变越大（根据设置的填充和变形方式，以及容器的frame）</li>
+<li>场景二：类似macOS的docker，鼠标（滑块/slider）在图标上滚过的时候放大，处理为一个滑块，和左右两个layer，分别设置了只显示左边或右边的<code>gravity</code></li>
+</ul>
+<figure  style="flex: 157.19844357976655" ><img width="1616" height="514" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/76a10bc63cff42cdd20b5324358b5ce8.png" alt="image-20220515021047122"/></figure><blockquote>
+<p>我本以为是两张页码背景图是<strong>重合</strong>的，根据滑块位置来“切”掉对应的左侧图和右侧图，但是显然这个方案是左右两个背景图是<strong>并列</strong>的，它同时改的两个图的frame(其实就是width加起来永远是100%)，然后设置resize的方案是让左边的从左显示起，右边的从中显示起就行了</p><p>但仔细一想，仍然可以理解为两张图是重合的，分别往左右两方去resize使得两张图的frame并不相交而已</p></blockquote>
+<p>场景二的其它方案：</p><ul>
+<li>Because this method leverages the GPU, it is incredibly performant.</li>
+<li>There are other ways you could have gone about doing this.<ul>
+<li>For example, using a masking layer, or doing it in Core Graphics.</li>
+<li>But, because both of them would have leveraged the CPU, it would have been slower.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Bitmap Sampling in CALayer</strong></p><ul>
+<li>Core Animation also <strong>exposes settings</strong> that lets you configure which resizing resampling algorithms the GPU uses.</li>
+<li>Whenever you change the size of a layer and the size <strong>no longer matches the original size</strong> of the bitmap mapped to it, resampling needs to be done to make sure it does not look <em>jagged</em> or <em>distorted</em>.<ul>
+<li>By default, the sampling mode that Core Animation uses is called <strong>bilinear filtering</strong> (<code>kCAFilterLinear</code>), a simple linear interpolation between two pixels. (线性插值最快)</li>
+<li>Sometimes, even bilinear filtering is too <code>slow</code>. If you are rapidly resizing a frame during animation, you might get stuttering.<ul>
+<li>这时可以使用 nearest (<code>kCAFilterNearest</code>). Nearest mode completely <strong>disables</strong> pixel resampling.</li>
+</ul>
+</li>
+<li>trilinear filtering (<code>kCAFilterTrilinear</code>) 则能提供最好的resampling质量，the GPU will generate <strong>differently sized versions</strong> of the same bitmap, and <strong>blend them together</strong> to create resizing of the texture in question.<ul>
+<li>最慢，而且把CPU也拉进来了</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure  style="flex: 83.88030888030887" ><img width="1738" height="1036" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/dd2c66a62f209303b9177f794efff8cc.png" alt="image-20220515023547309"/></figure><p>最近邻插值图像质量最差，但也最省资源最快速，用在动画切换场景（视频里演示了app退到桌面时，app的icon由当前app界面的截图逐渐变回logo的过程，这个截图显然就不需要高质量的图片）</p><ul>
+<li>同时也暗示了在图片展示区域本来就很小时，也没必要应用高质量scale</li>
+<li>或者动画相当快时，也尽量用最近邻插值</li>
+</ul>
+<p><strong>Masking CALayer Objects</strong></p><ul>
+<li><p>让一个layer(<strong>A</strong>)成为另一个layer(<strong>B</strong>)的<code>mask</code>属性</p></li>
+<li><p>A会被B(涂黑的区域)<code>clip</code>，同时仍然具有功能性，交互性，和动画性</p><figure  style="flex: 164.367816091954" ><img width="1144" height="348" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/f395601e92129519e7383fb4a3e4b514.png" alt="涂黑就是不显示"/></figure></li>
+</ul>
+<figure  style="flex: 81.36574074074075" ><img width="1406" height="864" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/37fbec26917db6079bb03b3ec2db28a3.png" alt="image-20220622143708966"/></figure><p><strong>Adding Shadows to CALayer</strong></p><p>The following code will <strong>indeed</strong> render a shadow. However, because the system has to do <strong>a per pixel</strong> comparison to work out the <strong>size</strong> of the shadow, it will be <strong>incredibly slow</strong> in terms of rendering and animation.</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">myLayer</span> <span class="p">=</span> <span class="n">view</span><span class="p">.</span><span class="n">layer</span>
+ <span class="n">myLayer</span><span class="p">.</span><span class="n">shadowColor</span> <span class="p">=</span> <span class="bp">UIColor</span><span class="p">.</span><span class="n">blackColor</span><span class="p">().</span><span class="n">CGColor</span>
+ <span class="n">myLayer</span><span class="p">.</span><span class="n">shadowOpacity</span> <span class="p">=</span> <span class="mf">0.75</span>
+ <span class="n">myLayer</span><span class="p">.</span><span class="n">shadowOffset</span> <span class="p">=</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+ <span class="n">myLayer</span><span class="p">.</span><span class="n">shadowRadius</span> <span class="p">=</span> <span class="mi">10</span>
+
+<span class="c1">// IMPORTANT FOR PERFORMANCE</span>
+<span class="kd">let</span> <span class="nv">myShadowPath</span> <span class="p">=</span> <span class="bp">UIBezierPath</span><span class="p">(</span><span class="n">roundedRect</span><span class="p">:</span>
+                     <span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">cornerRadius</span><span class="p">:</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="n">myLayer</span><span class="p">.</span><span class="n">shadowPath</span> <span class="p">=</span> <span class="n">myShadowPath</span><span class="p">.</span><span class="n">CGPath</span>
+</pre></div>
+<p>As a result, whenever you are working with <strong>shadows in Core Animation</strong>, you should always make sure to set the <code>.shadowPath</code> property. This property will tell Core Animation in advance what the shape of the shadow will be, reducing render time.</p><p><strong>Transforming a CALayer</strong></p><ul>
+<li>Core Animation also provides a transform property on <code>CALayer</code>.</li>
+<li>Unlike the transform property on UIView, which is purely <strong>2D</strong>, the one on <code>CALayer</code> provides <strong>3D</strong> transformations.</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">myLayer</span> <span class="p">=</span> <span class="bp">CALayer</span><span class="p">()</span>
+<span class="n">myLayer</span><span class="p">.</span><span class="n">contents</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">makeTrySwiftLogoImage</span><span class="p">().</span><span class="n">CGImage</span>
+
+<span class="kd">var</span> <span class="nv">transform</span> <span class="p">=</span> <span class="n">CATransform3DIdentity</span>
+<span class="n">transform</span><span class="p">.</span><span class="n">m34</span> <span class="p">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="o">-</span><span class="mi">500</span>
+<span class="n">transform</span> <span class="p">=</span> <span class="n">CATransform3DRotate</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="mf">45.0</span><span class="n">f</span> <span class="o">*</span> <span class="n">M_PI</span> <span class="o">/</span> <span class="mf">180.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">myLayer</span><span class="p">.</span><span class="n">transform</span> <span class="p">=</span> <span class="n">transform</span>
+</pre></div>
+<p><strong>Blend Modes with CALayer</strong></p><p>看看就好</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">myBlendLayer</span> <span class="p">=</span> <span class="bp">CALayer</span><span class="p">()</span>
+<span class="n">myBlendLayer</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span> <span class="n">forKey</span><span class="p">:</span> <span class="err">“</span><span class="n">allowsGroupBlending</span><span class="err">”</span><span class="p">)</span> <span class="c1">// PRIVATE</span>
+<span class="n">myBlendLayer</span><span class="p">.</span><span class="n">compositingFilter</span> <span class="p">=</span> <span class="err">“</span><span class="n">screenBlendMode</span><span class="s">&quot;</span>
+<span class="s">myBlendLayer.allowsGroupOpacity = false</span>
+<span class="s">myLayer.addSublayer(myBlendLayer)</span>
+</pre></div>
+<figure  style="flex: 189.568345323741" ><img width="1054" height="278" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/333bf0036824a4c48a4badd2371474bd.png" alt="image-20220622145432815"/></figure><p>苹果的&quot;slide to unlick&quot;重度应用了blend mode(注意那道左右跑动的流光)</p><figure  style="flex: 95.98997493734336" ><img width="1532" height="798" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/98de775b5e16920acd97bd71e0a154d9.png" alt="image-20220622145619139"/></figure><p><strong>Animating with Core Animation</strong></p><p>UIView实现方式：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">trySwiftLayer</span> <span class="p">=</span> <span class="c1">//...</span>
+
+<span class="kd">let</span> <span class="nv">myAnimation</span> <span class="p">=</span> <span class="bp">CABasicAnimation</span><span class="p">(</span><span class="n">keyPath</span><span class="p">:</span> <span class="err">“</span><span class="n">position</span><span class="p">.</span><span class="n">x</span><span class="err">”</span><span class="p">)</span>
+<span class="n">myAnimation</span><span class="p">.</span><span class="n">duration</span> <span class="p">=</span> <span class="mi">2</span>
+<span class="n">myAnimation</span><span class="p">.</span><span class="n">fromValue</span> <span class="p">=</span> <span class="n">trySwiftLayer</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">x</span>
+<span class="n">myAnimation</span><span class="p">.</span><span class="n">toValue</span> <span class="p">=</span> <span class="n">trySwiftLayer</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">500</span>
+<span class="n">myAnimation</span><span class="p">.</span><span class="n">timingFunction</span> <span class="p">=</span> <span class="n">kCAMediaTimingFunctionEaseInEaseOut</span>
+<span class="n">myAnimation</span><span class="p">.</span><span class="n">repeatCount</span> <span class="p">=</span> <span class="p">.</span><span class="n">infinity</span>
+
+<span class="n">trySwiftLayer</span><span class="p">.</span><span class="n">addAnimation</span><span class="p">(</span><span class="n">myAnimation</span><span class="p">,</span> <span class="n">forKey</span><span class="p">:</span> <span class="err">“</span><span class="n">myAnimationKeyName</span><span class="err">”</span><span class="p">)</span>
+</pre></div>
+<ul>
+<li>You can access these animations from the <code>.animationsKeys</code> property of the layer.</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1">// timing function</span>
+<span class="kd">let</span> <span class="nv">timingFunction</span> <span class="p">=</span> <span class="bp">CAMediaTimingFunction</span><span class="p">(</span><span class="n">controlPoints</span><span class="p">:</span> <span class="p">.</span><span class="mi">08</span><span class="p">,</span> <span class="p">.</span><span class="mi">04</span><span class="p">,</span> <span class="p">.</span><span class="mi">08</span><span class="p">,</span> <span class="p">.</span><span class="mi">99</span><span class="p">)</span>
+
+<span class="kd">let</span> <span class="nv">myAnimation</span> <span class="p">=</span> <span class="bp">CABasicAnimation</span><span class="p">()</span>
+<span class="n">myAnimation</span><span class="p">.</span><span class="n">timingFunction</span> <span class="p">=</span> <span class="n">timingFunction</span>
+</pre></div>
+<ul>
+<li><p>资源: <a href="http://cubic-bezier.com/"><a href="http://cubic-bezier.com">http://cubic-bezier.com</a></a></p></li>
+<li><p>如果你要实现一个<code>cross fade</code>的效果，可能想的是两个view，同时切换alpha由0到1（和相反）</p><ul>
+<li>当同时达到0.5时，人眼能捕捉到这一刻，两个图片都非常明显</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1">// animating a calayer&#39;s contents</span>
+<span class="kd">let</span> <span class="nv">imageView</span> <span class="p">=</span> <span class="bp">UIImageView</span><span class="p">()</span>
+<span class="kd">let</span> <span class="nv">onImage</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">()</span>
+<span class="kd">let</span> <span class="nv">offImage</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">()</span>
+
+<span class="kd">let</span> <span class="nv">myCrossfadeAnimation</span> <span class="p">=</span> <span class="bp">CABasicAnimation</span><span class="p">(</span><span class="n">keyPath</span><span class="p">:</span> <span class="err">“</span><span class="n">contents</span><span class="err">”</span><span class="p">)</span>
+<span class="n">myCrossfadeAnimation</span><span class="p">.</span><span class="n">fromValue</span> <span class="p">=</span> <span class="n">offImage</span><span class="p">.</span><span class="n">CGImage</span>
+<span class="n">myCrossfadeAnimation</span><span class="p">.</span><span class="n">toValue</span> <span class="p">=</span> <span class="n">onImage</span><span class="p">.</span><span class="n">CGImage</span>
+<span class="n">myCrossfadeAnimation</span><span class="p">.</span><span class="n">duration</span> <span class="p">=</span> <span class="mf">0.15</span>
+
+<span class="n">imageView</span><span class="p">.</span><span class="n">layer</span><span class="p">.</span><span class="n">addAnimation</span><span class="p">(</span><span class="n">myCrossfadeAnimation</span><span class="p">,</span>
+                               <span class="n">forKey</span><span class="p">:</span> <span class="err">“</span><span class="n">myCrossfadeAnimationKeyName</span><span class="err">”</span><span class="p">)</span>
+
+<span class="n">imageView</span><span class="p">.</span><span class="n">image</span> <span class="p">=</span> <span class="n">onImage</span>
+</pre></div>
+<p><strong>CAKeyframeAnimation</strong></p><ul>
+<li>you can chain up multiple animation points within one object(本文未阐述).</li>
+<li>each keyframe point can have a <code>CG path object</code> assigned, which lets you create animations that are not just linear, point-to-point transitions, but curves.</li>
+</ul>
+<p>就是你要让view按一个cgpath做移动动画，也可以用<code>CAKeyframeAnimation</code></p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">rect</span> <span class="p">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">circlePath</span> <span class="p">=</span> <span class="bp">UIBezierPath</span><span class="p">(</span><span class="n">ovalInRect</span><span class="p">:</span><span class="n">rect</span><span class="p">)</span>
+
+<span class="kd">let</span> <span class="nv">circleAnimation</span> <span class="p">=</span> <span class="bp">CAKeyframeAnimation</span><span class="p">()</span>
+<span class="n">circleAnimation</span><span class="p">.</span><span class="n">keyPath</span> <span class="p">=</span> <span class="err">“</span><span class="n">position</span><span class="err">”</span>
+<span class="n">circleAnimation</span><span class="p">.</span><span class="n">path</span> <span class="p">=</span> <span class="n">circlePath</span><span class="p">.</span><span class="n">CGPath</span>
+<span class="n">circleAnimation</span><span class="p">.</span><span class="n">duration</span> <span class="p">=</span> <span class="mi">4</span>
+
+<span class="c1">// Manually specify keyframe points</span>
+<span class="c1">// circleAnimation.values = //...</span>
+<span class="c1">// circleAnimation.keyTimes = //..</span>
+
+<span class="kd">let</span> <span class="nv">trySwiftLayer</span> <span class="p">=</span> <span class="c1">//...</span>
+<span class="n">trySwiftLayer</span><span class="p">.</span><span class="n">addAnimation</span><span class="p">(</span><span class="n">circleAnimation</span><span class="p">,</span>
+                            <span class="n">forKey</span><span class="p">:</span> <span class="err">“</span><span class="n">position</span><span class="err">”</span><span class="p">)</span>
+</pre></div>
+<p><strong>CAAnimationGroup</strong></p><p>没多说什么，一个简单应用：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">myPositionAnimation</span> <span class="p">=</span> <span class="bp">CABasicAnimation</span><span class="p">.</span><span class="n">animation</span><span class="p">(</span><span class="n">keyPath</span><span class="p">:</span> <span class="err">“</span><span class="n">position</span><span class="err">”</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">myAlphaAnimation</span> <span class="p">=</span> <span class="bp">CABasicAnimation</span><span class="p">.</span><span class="n">animation</span><span class="p">(</span><span class="n">keyPath</span><span class="p">:</span> <span class="err">“</span><span class="n">opacity</span><span class="err">”</span><span class="p">)</span>
+
+<span class="kd">let</span> <span class="nv">animationGroup</span> <span class="p">=</span> <span class="bp">CAAnimationGroup</span><span class="p">()</span>
+<span class="n">animationGroup</span><span class="p">.</span><span class="n">timingFunction</span> <span class="p">=</span> <span class="n">kCAMediaTimingFunctionEaseInEaseOut</span>
+<span class="n">animationGroup</span><span class="p">.</span><span class="n">duration</span> <span class="p">=</span> <span class="mi">2</span>
+<span class="n">animationGroup</span><span class="p">.</span><span class="n">animations</span> <span class="p">=</span> <span class="p">[</span><span class="n">myPositionAnimation</span><span class="p">,</span> <span class="n">myAlphaAnimation</span><span class="p">]</span>
+
+<span class="kd">let</span> <span class="nv">trySwiftLayer</span> <span class="p">=</span> <span class="bp">CALayer</span><span class="p">()</span>
+<span class="n">trySwiftLayer</span><span class="p">.</span><span class="n">addAnimation</span><span class="p">(</span><span class="n">animationGroup</span><span class="p">,</span> <span class="n">forKey</span><span class="p">:</span> <span class="err">“</span><span class="n">myAnimations</span><span class="err">”</span><span class="p">)</span>
+</pre></div>
+<p><strong>Completion Handling</strong></p><div class="highlight"><pre><span></span><span class="c1">// Set a delegate object</span>
+<span class="kd">let</span> <span class="nv">myAnimation</span> <span class="p">=</span> <span class="bp">CABasicAnimation</span><span class="p">()</span>
+<span class="n">myAnimation</span><span class="p">.</span><span class="n">delegate</span> <span class="p">=</span> <span class="kc">self</span>
+
+<span class="c1">// Animation completion sent to ‘animationDidStop(anim: finished flag:)</span>
+
+<span class="c1">// ———</span>
+
+<span class="c1">//Set a closure to be executed at the end of this transaction</span>
+<span class="bp">CATransaction</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span>
+
+<span class="bp">CATransaction</span><span class="p">.</span><span class="n">setCompletionBlock</span><span class="p">({</span>
+   <span class="c1">// Logic to be performed, post animation</span>
+<span class="p">})</span>
+
+<span class="bp">CATransaction</span><span class="p">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+<p><strong>Features of Core Animation Subclasses</strong></p><p>本节内容可看一个更好的<a href="https://www.raywenderlich.com/10317653-calayer-tutorial-for-ios-getting-started">RayWenderlich教程</a></p><p>In iOS, Apple provides a variety of CLS subclasses, with many different features.</p><ul>
+<li>Some of these subclasses rely on the CPU for the operations which they perform; it may be necessary to test these on certain devices to make sure they fill your specific needs.</li>
+<li>To insert a CLS subclass into a UIView, all you need to do is subclass the UIView, and then override its layer class property.</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyGradientClass</span> <span class="p">:</span> <span class="bp">UIView</span> <span class="p">{</span>
+  <span class="kr">override</span> <span class="kd">class</span> <span class="nc">func</span> <span class="n">layerClass</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="nb">AnyClass</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="bp">CAGradientLayer</span><span class="p">.</span><span class="kc">self</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<ul>
+<li>CATileLayer, 基于矢量绘图的层，可以无限放大</li>
+<li>CAgradientLayer 运行在GPU上，非常快，通常用在用了3D变形的Layer场景，添加景深投影等效果</li>
+<li>CAReplicaterLayer 一个可以被复制多次的layer（on the GPU），而且复制产物还能更改自己的颜色，位置等</li>
+<li>CAShapeLayer 拥有一个<code>CGPath</code>属性很容易进行fill, stroke等绘制，参考<a href="https://github.com/UrbanApps/UAProgressView">UAProgressView</a>项目应用</li>
+<li>CAEmitterLayer 参考一个<a href="https://itunes.apple.com/es/app/particle-playground/id600661093?l=en&amp;mt=12">Partical Playground</a>的Mac app，能够“发射”出其它的layer，并animat它</li>
+<li>CATextLayer</li>
+<li>CAScrollayer</li>
+<li>CATransformLayer</li>
+<li>CAEAGLayer, CAMetalLayer</li>
+</ul>
+<p><strong>资源</strong></p><ul>
+<li><a href="http://www.paintcodeapp.com/">PaintCode</a>,为你创建的图片生成CoreGraphic代码</li>
+<li><a href="http://www.coreanimator.com/">Core Animator</a>，为你创建的动画生成CoreAnimatioin代码</li>
+<li><a href="(https://github.com/TimOliver/TOGlintyStringView)">slide to unlock 代码复现实例</a></li>
+<li><a href="http://revealapp.com/">Reveal</a>，一个视图的线上debug工具</li>
+</ul>
+
+            </div>
+        </article>
+        <div class="prism-post-meta col-md-8 offset-md-2">
+    <span>walker</span>
+    
+    <span>/</span>
+    <span>
+        <a class="category no-link" href="/category/posts/" target="_self">
+        posts
+        </a>
+    </span>
+    
+    
+    <span>/</span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/Core%20Graphics/" target="_self">#Core Graphics</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/Core%20Animation/" target="_self">#Core Animation</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/CAShape/" target="_self">#CAShape</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/Animation/" target="_self">#Animation</a>
+    </span>
+    
+    
+    
+    <span>/</span>
+    <span class="leancloud_visitors" id="/archives/advanced-graphics-with-core-animation/" data-flag-title="Advanced Graphics With Core Animation 笔记"><span class="leancloud-visitors-count"></span> Views</span>
+    
+</div>
+    </section>
+
+    
+<section id="prism__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+    <ul>
+        
+        <li class="next">
+            <a class="no-link" href="/archives/calayer_mask/" target="_self" title="CALayer应用mask实现为文字部分涂抹"><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</a>
+        </li>
+        
+        
+        <li class="prev">
+            <a class="no-link" href="/archives/js-spread-syntax/" target="_self" title="js spread syntax">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    
+    <script>
+        var initValine = function() {
+            new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+        }
+
+    </script>
+    <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+    <div class="prism-comment-section container" id="prism__comment">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div id="vcomments"></div>
+            </div>
+        </div>
+    </div>
+    
+
+</main>
+
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
+                    </section>
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
+                            <span>Copyright © 2022 walker</span>
+                        </p>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+            </footer>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    
+</body>
+
+</html>

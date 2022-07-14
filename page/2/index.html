@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/9011fc9b53efc28f0a64f0ad21a55012.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -55,6 +55,500 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E7%90%86%E8%A7%A3Core-Graphics%E7%9A%84Clipping%E5%92%8C%E5%A1%AB%E5%85%85%E6%A8%A1%E5%BC%8F/" target="_self">理解Core-Graphics的Clipping和填充模式</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E7%90%86%E8%A7%A3Core-Graphics%E7%9A%84Clipping%E5%92%8C%E5%A1%AB%E5%85%85%E6%A8%A1%E5%BC%8F/" target="_self">
+                <time class="text-uppercase">
+                    November 28 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>先来看一个例子
+<figure class="vertical-figure" style="flex: 38.76146788990825" ><img width="338" height="436" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d5fdc49bd6037d399e4685d3cf9d72bf.png" alt=""/></figure>
+画一个箭头，其中箭尾有分叉，一般来说，是画一个三角，画一个矩形（实心矩形一般也直接用很粗的线条），最后再叠一个三角（with <code>CGBlendModel.clear</code>)，这里就不多介绍了：</p><div class="highlight"><pre><span></span><span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">rect</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">{</span>       
+    <span class="kd">let</span> <span class="nv">p</span> <span class="p">=</span> <span class="bp">UIBezierPath</span><span class="p">()</span>
+    <span class="c1">// shaft</span>
+    <span class="bp">UIColor</span><span class="p">.</span><span class="n">yellow</span><span class="p">.</span><span class="kr">set</span><span class="p">()</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">19</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">lineWidth</span> <span class="p">=</span> <span class="mi">20</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">stroke</span><span class="p">()</span>
+
+    <span class="c1">// point</span>
+    <span class="bp">UIColor</span><span class="p">.</span><span class="n">red</span><span class="p">.</span><span class="kr">set</span><span class="p">()</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">removeAllPoints</span><span class="p">()</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">fill</span><span class="p">()</span>
+
+    <span class="c1">// snip</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">removeAllPoints</span><span class="p">()</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">101</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">90</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="mi">110</span><span class="p">,</span> <span class="mi">101</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">with</span><span class="p">:</span><span class="n">CGBlendMode</span><span class="p">.</span><span class="n">clear</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<p>我们来看看<code>clipping</code>怎么用</p><ol>
+<li>fill三角箭头（出于堆叠上目的可以最后画）</li>
+<li>找到箭尾的三个顶点<ul>
+<li>用<code>boundingBoxOfClipPath</code>来创建整个画板大小的矩形</li>
+<li>应用<code>clipping</code>把小三角挖掉</li>
+</ul>
+</li>
+</ol>
+<p>3，画一根黄色箭柄粗细的线（从底向上）
+    * 因为小三角区域被clipping掉了，结果就成了图示的模样</p><div class="highlight"><pre><span></span><span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">rect</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// obtain the current graphics context</span>
+        <span class="kd">let</span> <span class="nv">con</span> <span class="p">=</span> <span class="n">UIGraphicsGetCurrentContext</span><span class="p">()</span><span class="o">!</span>
+
+        <span class="c1">// punch triangular hole in context clipping region</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">90</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">100</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">90</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">110</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">100</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">closePath</span><span class="p">()</span>
+        <span class="c1">// 添加整个区域为rect</span>
+        <span class="c1">// 然后再clip设定为不渲染的区域</span>
+        <span class="c1">// 后续的渲染全会避开这个区域</span>
+        <span class="c1">// 我们后面把这个rect设为蓝色试试(顺便改为一个小一点的rect)</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">addRect</span><span class="p">(</span><span class="n">con</span><span class="p">.</span><span class="n">boundingBoxOfClipPath</span><span class="p">)</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">clip</span><span class="p">(</span><span class="n">using</span><span class="p">:.</span><span class="n">evenOdd</span><span class="p">)</span>
+<span class="c1">//        con.fillPath()</span>
+
+        <span class="c1">// draw the vertical line</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">setStrokeColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">yellow</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">100</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">19</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">setLineWidth</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">strokePath</span><span class="p">()</span>
+
+        <span class="c1">// draw the red triangle, the point of the arrow</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">setFillColor</span><span class="p">(</span><span class="bp">UIColor</span><span class="p">.</span><span class="n">red</span><span class="p">.</span><span class="n">cgColor</span><span class="p">)</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">80</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">25</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">0</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">to</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="mi">120</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="mi">25</span><span class="p">))</span>
+        <span class="n">con</span><span class="p">.</span><span class="n">fillPath</span><span class="p">()</span>
+    <span class="p">}</span>
+</pre></div>
+<p>能够完美run起来，但是我对clipping的机制还是有点不理解，一些关键点的讲解，和我的问题，一条条过：</p><ol>
+<li>我们用构建了箭尾的三角形，然后<code>closePath</code>，那是因为我们只画了两条线，如果事实上第三条线连回了原点，那么这个<code>closePath</code>就不需要了</li>
+</ol>
+<ul>
+<li>（图一）演示了不close的话就直接只有两条线了</li>
+</ul>
+<ol start="2">
+<li>我想看看clipping到底发生了啥，于是注释掉了clip的那一行，得到了（图二）</li>
+</ol>
+<ul>
+<li>之所以长那样是因为随后设置了stroke的参数（20像素的黄色）</li>
+<li>stroke时，画板上有三个元素：一个三角，一个矩形，一条线段，全部用20宽的黄线描边了，一切如预期</li>
+</ul>
+<ol start="3">
+<li>于是我尝试添加rect时只取了中间一小块，并涂成蓝色，不clip试试，得到（图三）。</li>
+<li>知道了新rect的位置，把clip加回来，发现箭尾有了，箭头却没了（图四）</li>
+<li>rect与clip的关系已经出来了，尝试把红三角的y通通加50，移到了蓝矩形范围内，得到证明（图五）</li>
+</ol>
+<figure  style="flex: 58.108108108108105" ><img width="774" height="666" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/83a72f77f3c1af59c2e83c0616699ca5.png" alt=""/></figure><p>那么clipping到底能对哪些起作用呢？是上面的rect吗？<strong>当然不是</strong>！</p><p>在clip方法被调用的时候，画布里有多少封闭元素，就会被应用clip。由于我们选择的是<code>evenOdd</code>模式，那么就会简单计数，某像素覆盖奇数次显示，偶数次则不显示。</p><p>上例中，<code>con.clip(using:)</code>方法调用时，画布里有两个封闭元素，一个三角，一个矩形，三角包在矩形里，那么计数为2，就不予显示了。</p><blockquote>
+<p>事实上，判定奇偶的依据是该点向外做无限长的射线，判定有几条边与射线相交。同时，同样的设定可以用来解释<code>.winding</code>模式，即不但与相交的边有交，还与相交时，那条边是顺时针方向绘制的（+1）还是逆时针方向绘制的（-1）,总结果为0则不填充。<a href="https://www.jianshu.com/p/5cf8048b083b">参考</a></p></blockquote>
+<p>那就玩一玩验证下吧</p><ol>
+<li>把矩形改成了圆圈，线宽也改小一点，得到（图一）<em>绿色三角形是我后加的，因为被黄实线盖住了</em></li>
+<li>再在里面添加了一个小圆，得到（图二）</li>
+<li>这时候按照奇偶原则，小圆里的像素是偶数，而小圆里的三角则是奇数了，那么应该就只有大圆减掉小圆的部分，和小圆内的三角会被渲染了（图三），与预期一致</li>
+</ol>
+<figure  style="flex: 137.00564971751413" ><img width="970" height="354" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/84aa194f6e13d2f92fe6e9929e5c7110.png" alt=""/></figure><p>现在再来回顾书上先套一个画布大小的矩形，再画一个三角形，你大概应该知道目的了（凑奇偶），我们矩形区域过小时绘制不了红色三角，纯粹也是因为奇数，往下移到矩形区域内，立马变偶数了。(当然，要在原位置渲染我们可以先中止clip:<code>con.resetClip()</code>再绘图）</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E7%90%86%E8%A7%A3Core-Graphics%E7%9A%84Clipping%E5%92%8C%E5%A1%AB%E5%85%85%E6%A8%A1%E5%BC%8F/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/Thread-in-iOS/" target="_self">Programming iOS 14 - Threading</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/Thread-in-iOS/" target="_self">
+                <time class="text-uppercase">
+                    November 26 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第25章</p><hr />
+<h1>Thread</h1>
+<p>Thread在开发过程中基本上线程是隐形的，你感知不到，因为大多数情况下，程序只（需要）跑在主线程上，这是没有问题的：</p><ul>
+<li>你的代码事实上执行得非常快，你感知不到</li>
+<li>响应逻辑过程锁死UI，是安全的操作</li>
+</ul>
+<p>原生的后台线程：</p><ul>
+<li>动画：The Core Animation framework is running the animation and updating the presentation layer on a background thread.</li>
+<li>网络：A web view’s fetching and loading of its content is asynchronous</li>
+<li>影音：Sounds are played asynchronously. Loading, preparation, and playing of movies happens asynchronously.</li>
+<li>存盘：UIDocument saves and reads on a background thread.</li>
+</ul>
+<p>但所有的<code>complete functions / delegations / notification</code> 都是在主线程被调用的</p><p>多线程的问题</p><ul>
+<li>调用时机/顺序不可控，次数也不可控，随时可能被执行</li>
+<li>数据的线程安全，不得不借助“锁”的机制来保证（race condition）<ul>
+<li>a lock is an <code>invitation</code> to <em>forget</em> to use the lock, or to <em>forget</em> to remove the lock after you’ve set it.</li>
+</ul>
+</li>
+<li>The lifetime of a thread is independent of the lifetimes of other objects in your app.<ul>
+<li>一个对象的退出不能保证有后台线程将来会调用它 -&gt; 闪退或Zombie</li>
+</ul>
+</li>
+<li>Hard to debug.</li>
+</ul>
+<p>XCode对debug的支持：</p><ul>
+<li>Debug navigator</li>
+<li><code>NSLog / os_log / Logger</code> outputs</li>
+<li>Instruments &gt; Time Profiler</li>
+<li>Thread Sanitizer, Main Thread Checker (项目配置 &gt; Diagnostics)</li>
+</ul>
+<p>执行后台线程的方法：</p><h2>Manual Threading</h2>
+<p><code>performSelector(inBackground:with:)</code></p><ul>
+<li>只能传一个参数，多个参数要打包</li>
+<li>手动管理内存 -&gt; wrap every thing in an autorelease pool</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nf">drawThatPuppy</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">makeBitmapContext</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="kd">let</span> <span class="nv">center</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span>
+        <span class="c1">// 这里打包参数为一个字典</span>
+        <span class="kd">let</span> <span class="nv">d</span> <span class="p">:</span> <span class="p">[</span><span class="n">AnyHashable</span><span class="p">:</span><span class="nb">Any</span><span class="p">]</span> <span class="p">=</span>
+            <span class="p">[</span><span class="s">&quot;center&quot;</span><span class="p">:</span><span class="n">center</span><span class="p">,</span> <span class="s">&quot;bounds&quot;</span><span class="p">:</span><span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">,</span> <span class="s">&quot;zoom&quot;</span><span class="p">:</span><span class="n">CGFloat</span><span class="p">(</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">performSelector</span><span class="p">(</span><span class="n">inBackground</span><span class="p">:</span> <span class="k">#selector</span><span class="p">(</span><span class="n">reallyDraw</span><span class="p">),</span> <span class="n">with</span><span class="p">:</span> <span class="n">d</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="c1">// trampoline, background thread entry point</span>
+<span class="kr">@objc</span> <span class="kd">func</span> <span class="nf">reallyDraw</span><span class="p">(</span><span class="kc">_</span> <span class="n">d</span><span class="p">:</span> <span class="p">[</span><span class="n">AnyHashable</span><span class="p">:</span><span class="nb">Any</span><span class="p">])</span> <span class="p">{</span>
+    <span class="c1">// 手动控制内存</span>
+    <span class="n">autoreleasepool</span> <span class="p">{</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">center</span><span class="p">:</span> <span class="n">d</span><span class="p">[</span><span class="s">&quot;center&quot;</span><span class="p">]</span> <span class="k">as</span><span class="p">!</span> <span class="n">CGPoint</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="p">:</span> <span class="n">d</span><span class="p">[</span><span class="s">&quot;bounds&quot;</span><span class="p">]</span> <span class="k">as</span><span class="p">!</span> <span class="n">CGRect</span><span class="p">,</span>
+            <span class="n">zoom</span><span class="p">:</span> <span class="n">d</span><span class="p">[</span><span class="s">&quot;zoom&quot;</span><span class="p">]</span> <span class="k">as</span><span class="p">!</span> <span class="n">CGFloat</span><span class="p">)</span>
+        <span class="c1">// 手动回调主线程</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">performSelector</span><span class="p">(</span><span class="n">onMainThread</span><span class="p">:</span> <span class="k">#selector</span><span class="p">(</span><span class="n">allDone</span><span class="p">),</span> <span class="n">with</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span>
+            <span class="n">waitUntilDone</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
+
+<span class="p">}</span>
+<span class="c1">// called on main thread! background thread exit point</span>
+<span class="kr">@objc</span> <span class="kd">func</span> <span class="nf">allDone</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kc">self</span><span class="p">.</span><span class="n">setNeedsDisplay</span><span class="p">()</span>
+<span class="p">}</span>
+</pre></div>
+<p>即便如此，还是没有解决不同线程使用同一个实例变量（如<code>bitmapContext</code>）造成程序非常脆弱的问题，得进一步使用<code>lock</code>等机制。</p><h2>Operation</h2>
+<ul>
+<li>将<code>thread</code>封装成<code>task</code>，表示成<code>Operation</code> 通过 <code>OperationQueue</code>来操作。</li>
+<li>回调机制变成了通知机制（或<code>KVO</code>）</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">queue</span> <span class="p">:</span> <span class="n">OperationQueue</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nv">q</span> <span class="p">=</span> <span class="n">OperationQueue</span><span class="p">()</span>
+    <span class="c1">// ... further configurations can go here ...</span>
+    <span class="k">return</span> <span class="n">q</span>
+<span class="p">}()</span>
+
+<span class="kd">func</span> <span class="nf">drawThatPuppy</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nv">center</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span>
+    <span class="c1">// 也可以用 BlcokOperation</span>
+    <span class="c1">// 来执行你的耗时操作</span>
+    <span class="kd">let</span> <span class="nv">op</span> <span class="p">=</span> <span class="n">MyMandelbrotOperation</span><span class="p">(</span>
+        <span class="n">center</span><span class="p">:</span> <span class="n">center</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span> <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">zoom</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1">// 通知/回调</span>
+    <span class="n">NotificationCenter</span><span class="p">.</span><span class="k">default</span><span class="p">.</span><span class="n">addObserver</span><span class="p">(</span><span class="kc">self</span><span class="p">,</span>
+        <span class="n">selector</span><span class="p">:</span> <span class="k">#selector</span><span class="p">(</span><span class="n">operationFinished</span><span class="p">),</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">MyMandelbrotOperation</span><span class="p">.</span><span class="n">mandelOpFinished</span><span class="p">,</span> <span class="n">object</span><span class="p">:</span> <span class="n">op</span><span class="p">)</span>
+    <span class="c1">// 结合起来</span>
+    <span class="kc">self</span><span class="p">.</span><span class="n">queue</span><span class="p">.</span><span class="n">addOperation</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<p>而一个<code>Operation</code>子类包含两个部分：</p><ol>
+<li>A designated initializer<ul>
+<li>你可以把需要的参数设计成对应的属性，并初始化好它</li>
+</ul>
+</li>
+<li>A main method<ul>
+<li>耗程序真正执行的地方，OperationQueue执行到这个Operation的时候就会被自动执行</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">MyMandelbrotOperation</span><span class="p">:</span> <span class="n">Operation</span> <span class="p">{</span>
+    <span class="kd">static</span> <span class="kd">let</span> <span class="nv">mandelOpFinished</span> <span class="p">=</span> <span class="n">Notification</span><span class="p">.</span><span class="n">Name</span><span class="p">(</span><span class="s">&quot;mandelOpFinished&quot;</span><span class="p">)</span>
+
+    <span class="c1">// 1. params -&gt; arguments</span>
+    <span class="kd">private</span> <span class="kd">let</span> <span class="nv">center</span> <span class="p">:</span> <span class="n">CGPoint</span>
+    <span class="kd">private</span> <span class="kd">let</span> <span class="nv">bounds</span> <span class="p">:</span> <span class="n">CGRect</span>
+    <span class="kd">private</span> <span class="kd">let</span> <span class="nv">zoom</span> <span class="p">:</span> <span class="n">CGFloat</span>
+    <span class="kd">private</span><span class="p">(</span><span class="kr">set</span><span class="p">)</span> <span class="kd">var</span> <span class="nv">bitmapContext</span> <span class="p">:</span> <span class="n">CGContext</span><span class="p">!</span> <span class="p">=</span> <span class="kc">nil</span>  <span class="c1">// 封装成了类属性，不再线程共享</span>
+    <span class="kd">init</span><span class="p">(</span><span class="n">center</span> <span class="n">c</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">,</span> <span class="n">bounds</span> <span class="n">b</span><span class="p">:</span><span class="n">CGRect</span><span class="p">,</span> <span class="n">zoom</span> <span class="n">z</span><span class="p">:</span><span class="n">CGFloat</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">center</span> <span class="p">=</span> <span class="n">c</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span> <span class="p">=</span> <span class="n">b</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">zoom</span> <span class="p">=</span> <span class="n">z</span>
+        <span class="kc">super</span><span class="p">.</span><span class="kd">init</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 1.1 logic</span>
+    <span class="kd">let</span> <span class="nv">MANDELBROT_STEPS</span> <span class="p">=</span> <span class="mi">100</span>
+    <span class="kd">func</span> <span class="nf">makeBitmapContext</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="n">CGSize</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// ... same as before</span>
+    <span class="p">}</span>
+    <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="n">center</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span><span class="n">CGRect</span><span class="p">,</span> <span class="n">zoom</span><span class="p">:</span><span class="n">CGFloat</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// ... same as before</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 2. main</span>
+    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// 首先要检查isCancelled</span>
+        <span class="k">guard</span> <span class="o">!</span><span class="kc">self</span><span class="p">.</span><span class="n">isCancelled</span> <span class="k">else</span> <span class="p">{</span><span class="k">return</span><span class="p">}</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">makeBitmapContext</span><span class="p">(</span><span class="n">size</span><span class="p">:</span> <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">center</span><span class="p">:</span> <span class="kc">self</span><span class="p">.</span><span class="n">center</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span> <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">zoom</span><span class="p">:</span> <span class="kc">self</span><span class="p">.</span><span class="n">zoom</span><span class="p">)</span>
+        <span class="k">if</span> <span class="o">!</span><span class="kc">self</span><span class="p">.</span><span class="n">isCancelled</span> <span class="p">{</span>
+            <span class="c1">// 完成通知，也可以用KVO机制</span>
+            <span class="c1">// 主线程接收到后要立即处理，因为OpearationQueue将会立即释放这个Operation</span>
+            <span class="c1">// 此外，接收通知可能也不在主线程，-&gt; GCD</span>
+            <span class="n">NotificationCenter</span><span class="p">.</span><span class="k">default</span><span class="p">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">:</span> <span class="n">MyMandelbrotOperation</span><span class="p">.</span><span class="n">mandelOpFinished</span><span class="p">,</span> <span class="n">object</span><span class="p">:</span> <span class="kc">self</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 3. observer</span>
+<span class="c1">// 就是前面在主线程里注册监听消息的方法</span>
+<span class="c1">// warning! called on background thread</span>
+<span class="kr">@objc</span> <span class="kd">func</span> <span class="nf">operationFinished</span><span class="p">(</span><span class="kc">_</span> <span class="n">n</span><span class="p">:</span><span class="n">Notification</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="kd">let</span> <span class="nv">op</span> <span class="p">=</span> <span class="n">n</span><span class="p">.</span><span class="n">object</span> <span class="k">as</span><span class="p">?</span> <span class="n">MyMandelbrotOperation</span> <span class="p">{</span>
+        <span class="c1">// 1. 主线程（GCD）</span>
+        <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="k">async</span> <span class="p">{</span>
+            <span class="c1">// 2. 移除通知监听</span>
+            <span class="n">NotificationCenter</span><span class="p">.</span><span class="k">default</span><span class="p">.</span><span class="n">removeObserver</span><span class="p">(</span><span class="kc">self</span><span class="p">,</span>
+                <span class="n">name</span><span class="p">:</span> <span class="n">MyMandelbrotOperation</span><span class="p">.</span><span class="n">mandelOpFinished</span><span class="p">,</span> <span class="n">object</span><span class="p">:</span> <span class="n">op</span><span class="p">)</span>
+            <span class="kc">self</span><span class="p">.</span><span class="n">bitmapContext</span> <span class="p">=</span> <span class="n">op</span><span class="p">.</span><span class="n">bitmapContext</span>  <span class="c1">// 传回这个之前是线程共享的变量</span>
+            <span class="kc">self</span><span class="p">.</span><span class="n">setNeedsDisplay</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span> 
+<span class="p">}</span>
+</pre></div>
+<p>注意<code>bitmapContext</code>这个之前主线程设置，然后后台线程共享的变量，现在由Operation这个类自己持有，结束时才赋值回主线程。</p><p>此外，还能限制并发数量：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">q</span> <span class="p">=</span> <span class="n">OperationQueue</span><span class="p">()</span>
+<span class="n">q</span><span class="p">.</span><span class="n">maxConcurrentOperationCount</span> <span class="p">=</span> <span class="mi">1</span>
+</pre></div>
+<p>This turns the OperationQueue into a <code>serial queue</code>.</p><p>最后，解决最后一个问题，即你的调用者都没了，比如ViewController没了，调用者没了，后台任务也理应取消（下载、存盘类不需要UI交互的除外）</p><div class="highlight"><pre><span></span><span class="kd">deinit</span><span class="p">{</span>
+    <span class="kc">self</span><span class="p">.</span><span class="n">queue</span><span class="p">.</span><span class="n">cancelAllOperations</span><span class="p">()</span>
+<span class="p">}</span>
+</pre></div>
+<p>至此，前面提到的一些多线程会带来的问题如调用时机和数量不可控，跨线程数据安全，以及生命周期等问题，<code>Operation</code>都完美解决并封装了。</p><p>设置优先级，QoS, 依赖等一些进阶示例：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">backgroundOperation</span> <span class="p">=</span> <span class="bp">NSOperation</span><span class="p">()</span>
+<span class="n">backgroundOperation</span><span class="p">.</span><span class="n">queuePriority</span> <span class="p">=</span> <span class="p">.</span><span class="n">Low</span>
+<span class="n">backgroundOperation</span><span class="p">.</span><span class="n">qualityOfService</span> <span class="p">=</span> <span class="p">.</span><span class="n">Background</span>
+
+<span class="kd">let</span> <span class="nv">operationQueue</span> <span class="p">=</span> <span class="bp">NSOperationQueue</span><span class="p">.</span><span class="n">mainQueue</span><span class="p">()</span>
+<span class="n">operationQueue</span><span class="p">.</span><span class="n">addOperation</span><span class="p">(</span><span class="n">backgroundOperation</span><span class="p">)</span>
+
+<span class="c1">// dependence</span>
+<span class="kd">let</span> <span class="nv">networkingOperation</span><span class="p">:</span> <span class="bp">NSOperation</span> <span class="p">=</span> <span class="p">...</span>
+<span class="kd">let</span> <span class="nv">resizingOperation</span><span class="p">:</span> <span class="bp">NSOperation</span> <span class="p">=</span> <span class="p">...</span>
+<span class="n">resizingOperation</span><span class="p">.</span><span class="n">addDependency</span><span class="p">(</span><span class="n">networkingOperation</span><span class="p">)</span>
+
+<span class="kd">let</span> <span class="nv">operationQueue</span> <span class="p">=</span> <span class="bp">NSOperationQueue</span><span class="p">.</span><span class="n">mainQueue</span><span class="p">()</span>
+<span class="c1">// 虽然resizing添加了network为依赖，但是还是需要全部加到队列里</span>
+<span class="c1">// 不要以为加了尾部operation就能把依赖全加进去</span>
+<span class="n">operationQueue</span><span class="p">.</span><span class="n">addOperations</span><span class="p">([</span><span class="n">networkingOperation</span><span class="p">,</span> <span class="n">resizingOperation</span><span class="p">],</span> <span class="n">waitUntilFinished</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
+</pre></div>
+<h2>Grand Central Dispatch</h2>
+<p>可以认为GCD是更底层的Operation，它甚至直接嵌入了操作系统，能被任何代码执行而且非常高效。调用过程也与Operation差不多:</p><ul>
+<li>表示一个task</li>
+<li>加入一个queue<ul>
+<li>GCD Queue也被表示成了<em>dispatch queue</em></li>
+<li>a lightweight opaque pseudo-object consisting essentially of <code>a list of functions</code> to be executed.</li>
+<li>如果自定义这个queue，它默认状态下是<code>serial queue</code></li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">MANDELBROT_STEPS</span> <span class="p">=</span> <span class="mi">100</span>
+<span class="kd">var</span> <span class="nv">bitmapContext</span><span class="p">:</span> <span class="n">CGContext</span><span class="p">!</span>
+<span class="kd">let</span> <span class="nv">draw_queue</span> <span class="p">=</span> <span class="n">DispatchQueue</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="s">&quot;com.neuburg.mandeldraw&quot;</span><span class="p">)</span>
+
+<span class="c1">// 改造一个返回前述跨线程变量的方法</span>
+<span class="kd">func</span> <span class="nf">makeBitmapContext</span><span class="p">(</span><span class="n">size</span><span class="p">:</span><span class="n">CGSize</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">CGContext</span> <span class="p">{</span>
+    <span class="c1">// ... as before ...</span>
+    <span class="kd">let</span> <span class="nv">context</span> <span class="p">=</span> <span class="n">CGContext</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span>
+        <span class="n">width</span><span class="p">:</span> <span class="nb">Int</span><span class="p">(</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">),</span> <span class="n">height</span><span class="p">:</span> <span class="nb">Int</span><span class="p">(</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">),</span>
+        <span class="n">bitsPerComponent</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="n">bytesPerRow</span><span class="p">:</span> <span class="n">bitmapBytesPerRow</span><span class="p">,</span>
+        <span class="n">space</span><span class="p">:</span> <span class="n">colorSpace</span><span class="p">,</span> <span class="n">bitmapInfo</span><span class="p">:</span> <span class="n">prem</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">context</span><span class="p">!</span>
+<span class="p">}</span>
+<span class="c1">// 相应方法增加这个context参数，而不是从环境里取</span>
+<span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="n">center</span><span class="p">:</span><span class="n">CGPoint</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span><span class="n">CGRect</span><span class="p">,</span> <span class="n">zoom</span><span class="p">:</span><span class="n">CGFloat</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span><span class="n">CGContext</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// ... as before, but we refer to local context, not self.bitmapContext</span>
+<span class="p">}</span>
+
+<span class="c1">// 剩下的，一个block搞定：</span>
+<span class="c1">// UI触发的事件</span>
+<span class="kd">func</span> <span class="nf">drawThatPuppy</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nv">center</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">center</span>
+    <span class="kd">let</span> <span class="nv">bounds</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">bounds</span>
+    <span class="kc">self</span><span class="p">.</span><span class="n">draw_queue</span><span class="p">.</span><span class="k">async</span> <span class="p">{</span>
+        <span class="c1">// 下面两行代码虽然用到了self，但是它们没有改变任何属性，是线程安全的</span>
+        <span class="kd">let</span> <span class="nv">bitmap</span> <span class="p">=</span> <span class="kc">self</span><span class="p">.</span><span class="n">makeBitmapContext</span><span class="p">(</span><span class="n">size</span><span class="p">:</span> <span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">center</span><span class="p">:</span> <span class="n">center</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">zoom</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">bitmap</span><span class="p">)</span>
+        <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="k">async</span> <span class="p">{</span>
+            <span class="kc">self</span><span class="p">.</span><span class="n">bitmapContext</span> <span class="p">=</span> <span class="n">bitmap</span>
+            <span class="kc">self</span><span class="p">.</span><span class="n">setNeedsDisplay</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span> 
+<span class="p">}</span>
+</pre></div>
+<p>可以看到，相比Operation把代码结构都改了，GCD几乎只是包了一层block，代码变动非常少。（唯一的发动就是把所有执行代码的变量都需要通过参数机制传进去）。</p><p>同时， <em>center, bounds</em>等参数，直接从环境里取，这是block机制带来的便利；同样的机制也被用在了线程共享的变量传回主线程时，因为对第二层block而言，第一层block就是它的<code>higher surrounding scope</code>，是能看到它的<em>bitmap</em>变量的。 -&gt; 我们并没有从头到尾retrive一个<code>self.bitmap</code>变量，也就不存在data sharing。</p><p>不像Operation把耗时操作写在别处，GCD的方式易读性更高。</p><p>除了有<code>.async(execute:)</code>，还有<code>asyncAfter(deadline:execute:)</code>和<code>sync(execute:)</code>，望文生义，就不多介绍了。</p><h3>Dispatch Groups</h3>
+<p>group提供了监听(wait)一组后台线程全部执行结束的功能：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">outerQueue</span> <span class="p">=</span> <span class="n">DispatchQueue</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="s">&quot;outer&quot;</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">innerQueue</span> <span class="p">=</span> <span class="n">DispatchQueue</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="s">&quot;inner&quot;</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nv">group</span> <span class="p">=</span> <span class="n">DispatchGroup</span><span class="p">()</span>
+<span class="n">outerQueue</span><span class="p">.</span><span class="k">async</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nv">series</span> <span class="p">=</span> <span class="s">&quot;123456789&quot;</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="k">in</span> <span class="n">series</span> <span class="p">{</span>
+        <span class="n">group</span><span class="p">.</span><span class="n">enter</span><span class="p">()</span>  <span class="c1">// flag 1</span>
+        <span class="n">innerQueue</span><span class="p">.</span><span class="n">asyncAfter</span><span class="p">(</span>
+            <span class="n">deadline</span><span class="p">:.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="p">.</span><span class="n">milliseconds</span><span class="p">(</span><span class="nb">Int</span><span class="p">.</span><span class="n">random</span><span class="p">(</span><span class="k">in</span><span class="p">:</span> <span class="mf">1.</span><span class="p">..</span><span class="mi">1000</span><span class="p">)))</span> <span class="p">{</span>
+                <span class="bp">print</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">terminator</span><span class="p">:</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">group</span><span class="p">.</span><span class="n">leave</span><span class="p">()</span> <span class="c1">// flag 2</span>
+        <span class="p">}</span> 
+        <span class="n">group</span><span class="p">.</span><span class="n">wait</span><span class="p">()</span>  <span class="c1">// 一旦加了这句话，这9个线程就变成线性的了，注释掉，就是9个线程随机先后执行</span>
+    <span class="p">}</span>
+    <span class="c1">// 可见这个notify等同于wait_all</span>
+    <span class="c1">// 当enter次数与leave次数一致时触发</span>
+    <span class="n">group</span><span class="p">.</span><span class="n">notify</span><span class="p">(</span><span class="n">queue</span><span class="p">:</span> <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span><span class="p">)</span> <span class="p">{</span>
+        <span class="bp">print</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">done&quot;</span><span class="p">)</span>
+    <span class="p">}</span> 
+<span class="p">}</span>
+</pre></div>
+<h3>One-Time Execution</h3>
+<p>Objective-C中实现单例的<code>dispatch_once</code>其实就是GCD的内容，而在Swift中这个方法就没有了，也没用GCD去实现了:</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">globalOnce</span> <span class="p">:</span> <span class="nb">Void</span> <span class="p">=</span> <span class="p">{</span>
+        <span class="bp">print</span><span class="p">(</span><span class="s">&quot;once in a lifetime&quot;</span><span class="p">)</span> <span class="c1">// once, at most</span>
+<span class="p">}()</span>
+</pre></div>
+<p>这个print只会打印一次。而如果是用在对象中，可以声明为<code>lazy</code>：</p><div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">ViewController</span><span class="p">:</span> <span class="bp">UIViewController</span> <span class="p">{</span>
+        <span class="kd">private</span> <span class="kr">lazy</span> <span class="kd">var</span> <span class="nv">instanceOnce</span> <span class="p">:</span> <span class="nb">Void</span> <span class="p">=</span> <span class="p">{</span>
+            <span class="bp">print</span><span class="p">(</span><span class="s">&quot;once in an instance&quot;</span><span class="p">)</span> <span class="c1">// once per instance, at most</span>
+        <span class="p">}()</span>
+<span class="c1">// ... }</span>
+</pre></div>
+<p><code>instanceOnce</code>这个变量也只会初始化一次。</p><p><strong>Bonus</strong></p><div class="highlight"><pre><span></span><span class="c1">// 并发</span>
+<span class="kd">let</span> <span class="nv">queue</span> <span class="p">=</span> <span class="n">DispatchQueue</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="s">&quot;queue&quot;</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="p">.</span><span class="n">concurrent</span><span class="p">)</span>
+<span class="c1">// 条件， check the queue</span>
+<span class="n">dispatchPrecondition</span><span class="p">(</span><span class="n">condition</span><span class="p">:</span> <span class="p">.</span><span class="n">onQueue</span><span class="p">(</span><span class="kc">self</span><span class="p">.</span><span class="n">draw_queue</span><span class="p">))</span>
+</pre></div>
+<h2>App Backgrounding</h2>
+<ul>
+<li>应用进入后台时，iOS系统会给应用<code>小于5秒</code>的时间来结束当前的任务</li>
+<li>可以用<code>UIApplication.shared.beginBackgroundTask(expirationHandler:)</code>来申请更长的时间（<code>不超过30秒</code>），返回一个identifier<ul>
+<li><code>expirationHandler</code>是一个超时还没处理完的话，系统会调的方法，</li>
+</ul>
+</li>
+<li>任务执行完后需要调用<code>UIApplication.shared.endBackgroundTask(_:)</code>方法来结束后台时间的申请<ul>
+<li><code>expirationHandler</code>里同样需要显式<code>endBackgroundTask</code></li>
+<li>所以正常方法体和超时方法体都会有endBackgroundTask的调用</li>
+</ul>
+</li>
+</ul>
+<p>把这个特性直接封装到一个operation里去：</p><div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">BackgroundTaskOperation</span><span class="p">:</span> <span class="n">Operation</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">whatToDo</span> <span class="p">:</span> <span class="p">(()</span> <span class="p">-&gt;</span> <span class="p">())?</span>
+    <span class="kd">var</span> <span class="nv">cleanup</span> <span class="p">:</span> <span class="p">(()</span> <span class="p">-&gt;</span> <span class="p">())?</span>
+    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">guard</span> <span class="o">!</span><span class="kc">self</span><span class="p">.</span><span class="n">isCancelled</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+        <span class="kd">var</span> <span class="nv">bti</span> <span class="p">:</span> <span class="n">UIBackgroundTaskIdentifier</span> <span class="p">=</span> <span class="p">.</span><span class="n">invalid</span>
+        <span class="n">bti</span> <span class="p">=</span> <span class="bp">UIApplication</span><span class="p">.</span><span class="n">shared</span><span class="p">.</span><span class="n">beginBackgroundTask</span> <span class="p">{</span>
+            <span class="kc">self</span><span class="p">.</span><span class="n">cleanup</span><span class="p">?()</span>
+            <span class="kc">self</span><span class="p">.</span><span class="n">cancel</span><span class="p">()</span>
+            <span class="bp">UIApplication</span><span class="p">.</span><span class="n">shared</span><span class="p">.</span><span class="n">endBackgroundTask</span><span class="p">(</span><span class="n">bti</span><span class="p">)</span> <span class="c1">// cancellation</span>
+        <span class="p">}</span>
+        <span class="k">guard</span> <span class="n">bti</span> <span class="o">!=</span> <span class="p">.</span><span class="n">invalid</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+        <span class="n">whatToDo</span><span class="p">?()</span>
+        <span class="k">guard</span> <span class="o">!</span><span class="kc">self</span><span class="p">.</span><span class="n">isCancelled</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+        <span class="bp">UIApplication</span><span class="p">.</span><span class="n">shared</span><span class="p">.</span><span class="n">endBackgroundTask</span><span class="p">(</span><span class="n">bti</span><span class="p">)</span> <span class="c1">// completion</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 调用</span>
+<span class="kd">let</span> <span class="nv">task</span> <span class="p">=</span> <span class="n">BackgroundTaskOperation</span><span class="p">()</span>
+<span class="n">task</span><span class="p">.</span><span class="n">whatToDo</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+<span class="n">myQueue</span><span class="p">.</span><span class="n">addOperation</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+</pre></div>
+<p>这样，</p><ul>
+<li>正常情况下会执行<code>whatToDo()</code></li>
+<li>如果应用被挂到后台，因为注册过后台任务，有小于30秒的时间跑完任务</li>
+<li>如果顺利跑完，你把应用切到前台，会发现UI已经更新了</li>
+<li>超时也没跑完，就会进入超时的block里去取消任务了，UI上也得不到结果</li>
+</ul>
+<blockquote>
+<p>最后，要知道所谓的申请时长，并不是在<em>didEnterBackground</em>之类的方法里去做的，而是做任务的时候就直接注册了，是不是很麻烦？</p></blockquote>
+<h2>Background Processing</h2>
+<p>相比向系统申请少得可怜的后台挂起时间，iOS 从13开始引入了后台任务机制，方便你执行一些用户不需要感知的任务，比如下载，或数据清理：</p><ul>
+<li>路径：target &gt; Signing &amp; Capabilities &gt; Background processing</li>
+<li>use <code>Background Task framework</code>, need to import <code>BackgroundTasks</code></li>
+<li><em>Info.plist</em> &gt; add &quot;Permitted background task schedule identifiers&quot; key (<code>BTTaskSchedulerPermittedIdentifiers</code>), 任意标识字符串，比如反域名</li>
+<li>在<code>appDelegate</code>里面去实现需要后台执行的方法</li>
+</ul>
+<p>涉及到两个类:</p><ul>
+<li><code>BGProcessingTaskRequest</code><ul>
+<li>在<code>didEnterBackground</code>方法里调用</li>
+<li>需要match <em>plist.info</em>里的id</li>
+<li>注册是否通电/有网/延迟执行（ExternalPower / Network / earliestBeginDate）</li>
+</ul>
+</li>
+<li><code>BGTaskScheduler</code><ul>
+<li><code>application(_:didFinishLaunchingWithOptions:)</code>里执行</li>
+<li><code>register(forTaskWithIdentifier:using:launchHandler:)</code>方法<ul>
+<li>id: matching plist.info</li>
+<li>using: dispatch queue</li>
+<li>handler: <code>BGTask</code> object</li>
+</ul>
+</li>
+<li>在<code>BGTask</code>的超时方法里，和正常执行的代码里，均需调用<code>setTaskCompleted(_:bool)</code>方法</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">taskid</span> <span class="p">=</span> <span class="s">&quot;com.neuburg.matt.lengthy&quot;</span>
+<span class="kd">func</span> <span class="nf">application</span><span class="p">(</span><span class="kc">_</span> <span class="n">application</span><span class="p">:</span> <span class="bp">UIApplication</span><span class="p">,</span>
+    <span class="n">didFinishLaunchingWithOptions</span> <span class="n">launchOptions</span><span class="p">:</span>
+    <span class="p">[</span><span class="bp">UIApplication</span><span class="p">.</span><span class="n">LaunchOptionsKey</span> <span class="p">:</span> <span class="nb">Any</span><span class="p">]?)</span> <span class="p">-&gt;</span> <span class="nb">Bool</span> <span class="p">{</span>
+<span class="p">}</span>
+<span class="c1">// let v = MyView()</span>
+<span class="kd">let</span> <span class="nv">ok</span> <span class="p">=</span> <span class="bp">BGTaskScheduler</span><span class="p">.</span><span class="n">shared</span><span class="p">.</span><span class="n">register</span><span class="p">(</span>
+    <span class="n">forTaskWithIdentifier</span><span class="p">:</span> <span class="n">taskid</span><span class="p">,</span>
+    <span class="n">using</span><span class="p">:</span> <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">global</span><span class="p">(</span><span class="n">qos</span><span class="p">:</span> <span class="p">.</span><span class="n">background</span><span class="p">))</span> <span class="p">{</span> <span class="n">task</span> <span class="k">in</span>
+        <span class="n">task</span><span class="p">.</span><span class="n">expirationHandler</span> <span class="p">=</span> <span class="p">{</span>
+            <span class="n">task</span><span class="p">.</span><span class="n">setTaskCompleted</span><span class="p">(</span><span class="n">success</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="c1">//... my task logic</span>
+        <span class="n">task</span><span class="p">.</span><span class="n">setTaskCompleted</span><span class="p">(</span><span class="n">success</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// might check `ok` here</span>
+    <span class="k">return</span> <span class="kc">true</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">applicationDidEnterBackground</span><span class="p">(</span><span class="kc">_</span> <span class="n">application</span><span class="p">:</span> <span class="bp">UIApplication</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// might check to see whether it&#39;s time to submit this request</span>
+    <span class="kd">let</span> <span class="nv">req</span> <span class="p">=</span> <span class="bp">BGProcessingTaskRequest</span><span class="p">(</span><span class="n">identifier</span><span class="p">:</span> <span class="kc">self</span><span class="p">.</span><span class="n">taskid</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">?</span> <span class="bp">BGTaskScheduler</span><span class="p">.</span><span class="n">shared</span><span class="p">.</span><span class="n">submit</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<h3>Debug</h3>
+<ol>
+<li>打满<em>print</em>和断点</li>
+<li>设备上，把应用送到后台再拉到前台</li>
+<li>Xcode上暂停app</li>
+<li><code>(lldb) e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@&quot;my_id&quot;]</code> 模拟launching<ul>
+<li><code>(lldb) e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateExpirationForTaskWithIdentifier:@&quot;my_id&quot;]</code> 模拟超时</li>
+</ul>
+</li>
+<li>控制台输入<code>continue</code>, 运行task function</li>
+<li>当<code>task.setTaskComplete(success: true)</code> 被调用，控制台输出：“Marking simulated task complete,”</li>
+</ol>
+<h3>BGAppRefreshTaskRequest</h3>
+<p>not mentioned</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Thread-in-iOS/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B9%9D%EF%BC%9AIndexed-Priority-Queue/" target="_self">数据结构篇九：Indexed Priority Queue</a></h1>
@@ -806,195 +1300,6 @@ Remove(): O(n) (最坏情况下，可能要删的元素在最后一个)</p><p>�
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%8C%EF%BC%9APriority-Queues-%28PQs%29-with-an-interlude-on-Heaps/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%80%EF%BC%9AArray-Linked-List-Stack-Queues/" target="_self">数据结构篇一：Array, Linked-List, Stack, Queues</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%80%EF%BC%9AArray-Linked-List-Stack-Queues/" target="_self">
-                <time class="text-uppercase">
-                    November 12 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><p>前几个比较基础,只记录了些关键字和提纲</p><h1>Static and Dynamic Arrays</h1>
-<p><strong>static array</strong></p><ul>
-<li>fixed length</li>
-<li>indexable</li>
-</ul>
-<p>usage:</p><ul>
-<li>sequential data</li>
-<li>IO routines as buffers</li>
-<li>lookup tables and inverse lookup tables</li>
-<li>return multiple values</li>
-</ul>
-<p>operation complexity:
-access: O(1)
-search: <code>O(n)</code>
-insert: <code>O(n)</code>
-append: O(1)
-delet: <code>O(n)</code>
-需要遍历的操作就是O(n)</p><p>Q: How to implement a dynamic array?
-A:</p><ol>
-<li>static array with an initial capacity</li>
-<li>add new elements, keep tracking the size</li>
-<li>if exceed capacity, create a new static array with <code>twice the capacity</code><ul>
-<li>and copy the original elements into it</li>
-</ul>
-</li>
-</ol>
-<h2>Singly and Doubly Linked Lists</h2>
-<p>单向/双向链表</p><p>sequential list of nodes that hold data which point to other nodes also containing data.</p><ul>
-<li>节点序列，</li>
-<li>节点拥有指向别的节点的数据（指针）</li>
-<li>别的节点也拥有这种指针</li>
-</ul>
-<p>usage:</p><ul>
-<li>many <code>List, Queue &amp; Stack</code> implementations</li>
-<li>circular lists</li>
-<li>model real world objects such as <code>trains</code></li>
-<li>implementation of adjancy list for graphs</li>
-<li>separate chaining -&gt; ?<ul>
-<li>deal with hashing collisions -&gt; ?</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>上述两上问号后续在<code>Hash Table</code>一节里自然就解惑了</p></blockquote>
-<p><strong>Terminology</strong>
-Head / Tail / Pointer / Node</p><p>Singly vs Doubly</p><ul>
-<li>Doubly holds a <code>next</code> and <code>prev</code> reference, which Singly has no <code>prev</code><ul>
-<li>插入删除的时候需要更新所有引用</li>
-</ul>
-</li>
-<li>both maintain a reference of <code>head</code> and <code>tail</code> for quick additions / removals</li>
-</ul>
-<p><strong>insertion</strong></p><ul>
-<li>create a traverser and move by sepcific steps</li>
-<li>create new node</li>
-<li>singly:<ul>
-<li>原node的next指向新node</li>
-<li>新node的next指向原next的node</li>
-</ul>
-</li>
-<li>doubly:<ul>
-<li>新node的next和prev分别指向原node和下一个node</li>
-<li>两个node分别用next和prev指向新node</li>
-</ul>
-</li>
-</ul>
-<p><strong>removal</strong></p><p>singly需要两个游标:</p><ul>
-<li>pt1指向head, pt2指向head-&gt;next</li>
-<li>pt1, pt2一起移动，直到pt2找到目标</li>
-<li>pt2再向前移动一步</li>
-<li>pt1位置的node用next指向pt2位置</li>
-<li>now can sefely remoing the element between pt1 and pt2</li>
-</ul>
-<p>doubly却只需要一个：</p><ul>
-<li>pointer找到目标元素</li>
-<li>用prev和next找到上一个和下一个</li>
-<li>下一个和下一个node分别互相指向</li>
-</ul>
-<p><strong>Complexity</strong>
-searth: <code>O(n)</code>
-insert at head/tail: O(1)
-remove at head: O(1)
-remove at tail: <code>O(n)</code> (singly) / O(1) (doubly)
-因为即使我们知道tail在哪，在单向链表中，我们也找不到它的前一个去设置为新的tail
-remove in middle: <code>O(n)</code></p><h1>Stack</h1>
-<ul>
-<li>one-ended linear data structure (LIFO)</li>
-<li>two operation: <code>push</code> and <code>pop</code></li>
-</ul>
-<p><strong>Usage</strong></p><ul>
-<li>undo mechanisms</li>
-<li>compiler syntax checking for matching brackets and braces<ul>
-<li>开括号压入栈内，每碰到一个闭括号，与栈顶的比较，匹配就出栈，不匹配就报错</li>
-</ul>
-</li>
-<li>model a pile of books or plates<ul>
-<li>汉诺塔(tower of hanoi)</li>
-</ul>
-</li>
-<li>tracking previous function calls</li>
-<li>DFS on a graph</li>
-</ul>
-<p><strong>Complexity</strong>
-push/pop/peek/size: O(1)
-search: <code>O(n)</code></p><p>双向链表实现一个Stack，基本上就是操作tail</p><h1>Queues</h1>
-<ul>
-<li>a linear data structure, model real world queues (FIFO)</li>
-<li>two primary operations: <code>enqueue</code>, <code>dequeue</code></li>
-</ul>
-<p><strong>Usage</strong></p><ul>
-<li>any waiting line models a queue</li>
-<li>keep track of the x most recently added elements -&gt; ?</li>
-<li>web server request management where you want first come first serve</li>
-<li>BFS graph traversal</li>
-</ul>
-<p><strong>Complexity</strong></p><p>只有<code>contains, revomval</code>需要遍历，其它操作（出入列等）都是O(1)</p><p>实现一个BFS：</p><p>基本就是动态往 queue 里添加子节点,当前级别元素访问完后, 再 dequeue 出来的就是所有的下一级子节点
-<figure  style="flex: 92.55319148936171" ><img width="1044" height="564" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/910285ef71036aa37402e819d06f56fc.png" alt=""/></figure></p><p>双向列表实现Queue，入列用tail，出列用head，即添加的总在尾巴，永远从头部取出。</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%80%EF%BC%9AArray-Linked-List-Stack-Queues/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%8C%E9%80%92%E5%BD%92%E4%B8%8E%E5%88%86%E6%B2%BB/" target="_self">全排列，递归与分治</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%8C%E9%80%92%E5%BD%92%E4%B8%8E%E5%88%86%E6%B2%BB/" target="_self">
-                <time class="text-uppercase">
-                    November 04 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>能够用递归和分治解决的，特征都是下一级做的事跟上一级一样（抽象），最后一层做真正的业务。比如n个数字的全排列，抽象出来就是每n-1个数字的全排列</p><p>它的难点就在于抽象，因为等于什么都没描述（我要5个数字的全排列，你就说，那好，你告诉我这4个数字的全排列，我就能告诉你5个数字的全排列）。</p><p>也就是说，尝试用n和n-1的思维（有点像归纳法，动态规划）去描述问题，而不去看能不能解决。</p><p>具体到这里，以ABCD为例，我们的请求过程应该是这样的</p><ul>
-<li>A打头的话，BCD的全排列 swap(0, 0)</li>
-<li>B打头的话，ACD的全排列 swap(0, 1)</li>
-<li>...swap(0,2)</li>
-<li>...swap(0,3)</li>
-</ul>
-<p>自己是可以数出来的：</p><div class="highlight"><pre><span></span>A固定，BCD的所有排列 swap<span class="o">(</span><span class="m">0</span>,0<span class="o">)</span>
-  B固定，CD的所有排列 swap<span class="o">(</span><span class="m">1</span>,1<span class="o">)</span>
-      C固定，D的所有排列 swap<span class="o">(</span><span class="m">1</span>,2<span class="o">)</span>（1）
-      D固定，C的所有排列 swap<span class="o">(</span><span class="m">1</span>,3<span class="o">)</span>（1）
-  C固定，同B（2）
-  D固定，同B（2）
-  计6种
-B固定，同A，<span class="o">(</span><span class="m">6</span><span class="o">)</span> swap<span class="o">(</span><span class="m">0</span>,1<span class="o">)</span>
-C固定，同A，<span class="o">(</span><span class="m">6</span><span class="o">)</span> swap<span class="o">(</span><span class="m">0</span>,2<span class="o">)</span>
-D固定，同A，<span class="o">(</span><span class="m">6</span><span class="o">)</span> swap<span class="o">(</span><span class="m">0</span>,3<span class="o">)</span>
-结果应该是24
-</pre></div>
-<p>所有缩进部分都是递归，所以真正的业务代码就是一句话，交换每次比较的数组的第一个和剩下的几个的位置，然后递归下去</p><div class="highlight"><pre><span></span><span class="n">ctr</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">def</span> <span class="nf">perm</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">global</span> <span class="n">ctr</span>
-    <span class="n">end</span> <span class="o">=</span> <span class="n">end</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">start</span> <span class="o">==</span> <span class="n">end</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
-        <span class="n">ctr</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
-            <span class="c1"># 思路是，我每次只动一个数字，然后固定住这个数字，看剩下的数字有多少种排列</span>
-            <span class="c1"># 代码里每次把固定的数字挪到开头</span>
-            <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">start</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">perm</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">start</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
-            <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">start</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
-    <span class="n">perm</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">ctr</span><span class="p">)</span>
-</pre></div>
-<p>output: 24</p><p>可能是我理解能力的问题，所有人都没有解释为什么有swap，可能是太直观吧，毕竟swap才是真正在”排列“的业务代码。我还是自己写一遍才想明白，记录一下吧。</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%85%A8%E6%8E%92%E5%88%97%EF%BC%8C%E9%80%92%E5%BD%92%E4%B8%8E%E5%88%86%E6%B2%BB/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

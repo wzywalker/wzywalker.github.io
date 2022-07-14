@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/9011fc9b53efc28f0a64f0ad21a55012.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -55,6 +55,729 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/scikit-learn%E5%AE%98%E7%BD%91%E6%95%99%E7%A8%8B%E7%AC%94%E8%AE%B0%28%E4%B8%80%29/" target="_self">scikit-learn官网教程笔记(一)</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/scikit-learn%E5%AE%98%E7%BD%91%E6%95%99%E7%A8%8B%E7%AC%94%E8%AE%B0%28%E4%B8%80%29/" target="_self">
+                <time class="text-uppercase">
+                    March 02 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>当初翻scikit learn文档的时候，越翻越多，干脆把它的教程拿出来看了看，只有前面的部分，主要想看看scikit learn角度整理的知识体系，果然，一开始就是从监督和非监督讲起：</p><h2>Machine learning</h2>
+<p>In general, a learning problem considers a set of n samples of data and then tries to predict properties of unknown data.</p><p>Learning problems fall into a few categories:</p><ul>
+<li><a href="https://scikit-learn.org/stable/supervised_learning.html#supervised-learning">supervised learning</a>, in which the data comes with additional attributes that we want to predict. This problem can be either:<ul>
+<li><strong>classification</strong>: samples belong to two or more classes and we want to learn from already labeled data how to predict the class of unlabeled data.</li>
+<li><strong>regression</strong>: if the desired output consists of one or more continuous variables, then the task is called regression.</li>
+</ul>
+</li>
+<li><a href="https://scikit-learn.org/stable/unsupervised_learning.html#unsupervised-learning">unsupervised learning</a>, in which the training data consists of a set of input vectors x without any corresponding target values.<ul>
+<li><strong>clustering</strong>: The goal in such problems may be to discover groups of similar examples within the data</li>
+<li><strong>density estimation</strong>: to determine the <em>distribution</em> of data within the input space</li>
+<li><strong>down dimensional</strong>: project the data from a high-dimensional space down to two or three dimensions for the purpose of visualization.</li>
+</ul>
+</li>
+</ul>
+<h2>dataset</h2>
+<p><a href="https://scikit-learn.org/stable/datasets/loading_other_datasets.html#external-datasets">see more</a> dataset load method</p><h3>data, targets</h3>
+<p>A <code>dataset</code> is a dictionary-like object that holds all the data and some metadata about the data. This data is stored in the <code>.data</code> member, which is a n_samples, n_features array. In the case of supervised problem, one or more response variables are stored in the <code>.target</code> member.</p><h2>estimator</h2>
+<p>In scikit-learn, an <code>estimator</code> for classification is a Python object that <strong>implements</strong> the methods <code>fit(X, y)</code> and <code>predict(T)</code>,  an estimator is any object that learns from data</p><p>An example of an estimator is the class <code>sklearn.svm.SVC</code>, which implements <code>support vector classification</code>.</p><ul>
+<li>estimator.param1 表示传入的参数</li>
+<li>estimator.param1_   表示estimated param</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="n">iris</span>   <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+<span class="n">digits</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_digits</span><span class="p">()</span>
+
+<span class="c1"># digits.data.shape,  (1797, 64)</span>
+<span class="c1"># digits.images.shape, (1797, 8, 8)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">digits</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">svm</span>
+<span class="c1"># first, we treat the estimator as a black box, and set params manually</span>
+<span class="c1"># or we can use `grid search` and `cross validation` to determine the best params</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mf">100.</span><span class="p">)</span>
+
+<span class="c1"># train(or learn) from all (except last one) digits</span>
+<span class="c1"># validate with the last digit</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">digits</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">digits</span><span class="o">.</span><span class="n">target</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">digits</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:])</span>
+</pre></div>
+
+<pre><code>array([8])
+</code></pre>
+<figure  style="flex: 50.81967213114754" ><img width="496" height="488" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5f41cd44fe4cf94f9dbfee9954b82ec6.png" alt=""/></figure><div class="highlight"><pre><span></span><span class="c1"># better practise</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="c1"># flatten the images</span>
+<span class="n">n_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">digits</span><span class="o">.</span><span class="n">images</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">digits</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">n_samples</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="c1"># Create a classifier: a support vector classifier</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+
+<span class="c1"># Split data into 50% train and 50% test subsets</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">digits</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Learn the digits on the train subset</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Predict the value of the digit on the test subset</span>
+<span class="n">predicted</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+<h2>classification_report</h2>
+<p><a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html#sklearn.metrics.classification_report">classification_report</a> builds a text report showing the main classification metrics.</p><h2>confusion matrix</h2>
+<p><a href="https://scikit-learn.org/stable/modules/model_evaluation.html#confusion-matrix">plot_confusion_matrix</a> can e used to visually represent a confusion matrix:</p><p>$
+\begin{array}{c|c}
+&amp; Positive &amp; Negative \
+\hline
+True &amp; TP &amp; TN \
+\hline
+False &amp; FP &amp; FN
+\end{array}
+$</p><p>混淆矩阵还有另一种写法，即横纵轴都以positive，和negative表示，而不是如上的一个是指标，一个是判断（正确，错误）。这些都不重要，自己看清楚不要臆测就好了。
+如果：
+$
+\begin{array}{c|c}
+&amp; Positive &amp; Negative \
+\hline
+True &amp;3 &amp; 4 \
+\hline
+Fa lse &amp;1 &amp; 2
+\end{array}
+$</p><p>解读：</p><ul>
+<li>预测Positive共4例，成功3，失败1</li>
+<li>预测Negative共6例，成功4，失败2</li>
+</ul>
+<p>所以反推正样本3+2=5，负样1+4=5，共10例</p><p>大原则，我们看到的时候已经是结果，所以只能从结果反推真实情况，比如正确的<code>正</code>和错误的<code>负</code>，加起来就是样本的<code>正</code>，等等</p><ul>
+<li>准确率：7/10 （TP+TN/total) 根据上文的文字描述，其实就是判断成功的次数</li>
+<li>精确率：3/4 (TP/TP+FP) 即<strong>只关注一个指标</strong>(等于是竖向统计），比如正例，或负例，然后观察它错了多少。<ul>
+<li>本例中，只预测了4个正，就错了一个</li>
+</ul>
+</li>
+<li>召回率：3/5 (TP/TP+FN) 仍然只关注一个指标，比如正例，但是召回率关心你把所有的“正例“找出来多少<ul>
+<li>也就是说，如果你把所有的样本判断为正例，召回率可达100%</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Classification report for classifier </span><span class="si">{</span><span class="n">clf</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metrics</span><span class="o">.</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predicted</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+<pre><code>Classification report for classifier SVC(gamma=0.001):
+              precision    recall  f1-score   support
+
+           0       1.00      0.99      0.99        88
+           1       0.99      0.97      0.98        91
+           2       0.99      0.99      0.99        86
+           3       0.98      0.87      0.92        91
+           4       0.99      0.96      0.97        92
+           5       0.95      0.97      0.96        91
+           6       0.99      0.99      0.99        91
+           7       0.96      0.99      0.97        89
+           8       0.94      1.00      0.97        88
+           9       0.93      0.98      0.95        92
+
+    accuracy                           0.97       899
+   macro avg       0.97      0.97      0.97       899
+weighted avg       0.97      0.97      0.97       899
+</code></pre>
+<div class="highlight"><pre><span></span><span class="n">disp</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">plot_confusion_matrix</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+<span class="n">disp</span><span class="o">.</span><span class="n">figure_</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Confusion Matrix&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Confusion matrix:</span><span class="se">\n</span><span class="si">{</span><span class="n">disp</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+<figure  style="flex: 54.00696864111498" ><img width="620" height="574" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2088af7c0ab08ef8b680eab7d06d4bcd.png" alt=""/></figure><h2>Conventions</h2>
+<h3>Type Casting</h3>
+<p>Unless otherwise specified, input will be cast to float64:</p><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">random_projection</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">X</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">X</span><span class="o">.</span><span class="n">dtype</span>
+<span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">transformer</span> <span class="o">=</span> <span class="n">random_projection</span><span class="o">.</span><span class="n">GaussianRandomProjection</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">X_new</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">X_new</span><span class="o">.</span><span class="n">dtype</span>
+<span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+</pre></div>
+<p>the example above, the <code>float32</code> X is casst to <code>float64</code> by <code>fit_transform(X)</code></p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
+<span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">()</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span><span class="mi">3</span><span class="p">])))</span>
+
+<span class="c1"># fit string</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">target_names</span><span class="p">[</span><span class="n">iris</span><span class="o">.</span><span class="n">target</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span><span class="mi">3</span><span class="p">])))</span>
+<span class="c1"># [&#39;setosa&#39;, &#39;setosa&#39;, &#39;setosa&#39;]</span>
+</pre></div>
+
+<pre><code>[0, 0, 0]
+['setosa', 'setosa', 'setosa']
+</code></pre>
+<h3>Refitting and updating parameters</h3>
+<p>Hyper-parameters of an estimator can be updated after it has been <strong>constructed</strong> via the <code>set_params()</code>. then you call <code>fit()</code>, the learned will be overwrite.</p><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_iris</span>
+<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>    <span class="c1"># 注意换了种load方式</span>
+
+<span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">()</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">5</span><span class="p">]))</span>
+
+<span class="n">clf</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;rbf&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">5</span><span class="p">]))</span>
+</pre></div>
+
+<pre><code>linear [0 0 0 0 0]
+rbf [0 0 0 0 0]
+</code></pre>
+<h2>Multiclass vs. multilabel fitting</h2>
+<p>When using multiclass classifiers, the learning and prediction task that is performed is <strong>dependent on</strong> the format of the target data fit upon:</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
+<span class="kn">from</span> <span class="nn">sklearn.multiclass</span> <span class="kn">import</span> <span class="n">OneVsRestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">LabelBinarizer</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="c1"># 注意一行的写法</span>
+<span class="n">classif</span> <span class="o">=</span> <span class="n">OneVsRestClassifier</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">SVC</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> 
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;1d:&#39;</span><span class="p">,</span> <span class="n">classif</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+
+<span class="c1"># one-hot</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">LabelBinarizer</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;y:&#39;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;one-hot:&#39;</span><span class="p">,</span> <span class="n">classif</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>  <span class="c1"># 可以看到，已经开始不准确了b</span>
+</pre></div>
+
+<pre><code>1d: [0 0 1 1 2]
+y: [[1 0 0]
+ [1 0 0]
+ [0 1 0]
+ [0 1 0]
+ [0 0 1]]
+one-hot: [[1 0 0]
+ [1 0 0]
+ [0 1 0]
+ [0 0 0]
+ [0 0 0]]
+</code></pre>
+<h3>multiple label</h3>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MultiLabelBinarizer</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]</span>  <span class="c1"># 一个instance被赋予多个label，（甚至第4个有3个label)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">MultiLabelBinarizer</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">classif</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+
+<pre><code>array([[1, 1, 0, 0, 0],
+       [1, 0, 1, 0, 0],
+       [0, 1, 0, 1, 0],
+       [1, 0, 1, 0, 0],
+       [1, 0, 1, 0, 0]])
+</code></pre>
+<h2>KNN (k nearest neighbors classification)</h2>
+<p>KNN是一种用身边最近的n个数据点哪个类别最多来推断自己类别的的方法，所以本质上还是有标签的（周边数据点都是打标的）</p><blockquote>
+<p>我还写过一种无监督的<strong>聚类</strong>方法，叫<code>k-means</code>，就因为都有个<code>k</code>，一度都让我混淆了起来。其实没有关系，<code>k-means</code>是随机选k个点当作中心点，找出与它们最近的点来聚类，然后再每个点取中心，这么迭代N次之后，聚类好的数据也会越来越远。这里只是作个旁记。</p></blockquote>
+
+<pre><code>import numpy as np
+from sklearn import datasets
+iris_X, iris_y = datasets.load_iris(return_X_y=True)
+# Split iris data in train and test data
+# A random permutation, to split the data randomly
+np.random.seed(0)
+indices = np.random.permutation(len(iris_X))
+iris_X_train = iris_X[indices[:-10]]
+iris_y_train = iris_y[indices[:-10]]
+iris_X_test = iris_X[indices[-10:]]
+iris_y_test = iris_y[indices[-10:]]
+# Create and fit a nearest-neighbor classifier
+from sklearn.neighbors import KNeighborsClassifier
+knn = KNeighborsClassifier()
+knn.fit(iris_X_train, iris_y_train)
+print(knn.predict(iris_X_test))
+print(iris_y_test)
+</code></pre>
+
+<pre><code>[1 2 1 0 0 0 2 1 2 0]
+[1 1 1 0 0 0 2 1 2 0]
+</code></pre>
+<h3>The curse of dimensionality</h3>
+<p>nearest neighbor算法，维数越高，需要的数据越多，才能保证在一点的附近有足够多的neighbor。所以一般来说当特征很多时KNN的效果会下降。当然也有例外，某次做一个20个特征的KNN时候，结果居然比随机森林还要好_(:з」∠)_场面一度十分尴尬… <a href="https://www.zhihu.com/question/27836140/answer/145952018">参考</a></p><h2>Shrinkage</h2>
+<p>If there are <strong>few</strong> data points per dimension, noise in the observations induces <strong>high variance</strong>:</p><h1>train with very few data</h1>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span> <span class="mf">.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mf">.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="n">regr</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LinearRegression</span><span class="p">()</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> 
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span> 
+    <span class="n">this_X</span> <span class="o">=</span> <span class="mf">.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="n">X</span>
+    <span class="n">regr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">this_X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">regr</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">))</span> 
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">this_X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+<figure  style="flex: 75.50607287449392" ><img width="746" height="494" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/22a14395fafb62dcbaabdca600191fd6.png" alt=""/></figure><h2>Ridge regression:</h2>
+<p>A solution in high-dimensional statistical learning is to shrink the regression coefficients to zero: any two randomly chosen set of observations are likely to be uncorrelated. This is called Ridge regression.</p><p>This is an example of <code>bias/variance</code> tradeoff:</p><p>the <strong>larger</strong> the ridge <code>alpha</code> parameter,</p><ul>
+<li>the <strong>higher</strong> the <code>bias</code></li>
+<li>the <strong>lower</strong> the <code>variance</code>.</li>
+</ul>
+<p>lasso 回归和岭回归（ridge regression）其实就是在标准线性回归的基础上分别加入 L1 和 L2 正则化（regularization）。相比直接把一些特征的系数置零，只是把它们的“贡献”变小，即乘一下较低的权重（惩罚，imposing a penalty on the size of the coefficients）。</p><p>Lasso 更多用于估计稀疏样本的系数。</p><p>以下关于几个加了正则的demo和调优是整理笔记整理岔了，不是官方教程里的，但是也是我的学习笔记，正好演示一些demo和cross validation的用法就不删了。</p><ul>
+<li>L1-norm (Lasso)</li>
+<li>L2-norm (Ridge)</li>
+<li>(Elastic Net) (l1+l2)</li>
+</ul>
+<p>Lasso:<br />
+$$J(\theta) = \frac{1}{2}\sum_{i}^{m}(y^{(i)} - \theta^Tx^{(i)})^2 + 
+            \color{red} {\lambda \sum_{j}^{n}|\theta_j|}$$</p><p>Ridge:<br />
+$$J(\theta) = \frac{1}{2}\sum_{i}^{m}(y^{(i)} - \theta^Tx^{(i)})^2 +
+            \color{blue} {\lambda \sum_{j}^{n}\theta_j^2}$$</p><p>ElasticNet:<br />
+$$J(\theta) = \frac{1}{2}\sum_{i}^{m}(y^{(i)} - \theta^Tx^{(i)})^2 + 
+            \lambda(\rho 
+            \color{red}{\sum_{j}^{n}|\theta_j|} + 
+            (1-\rho)\color{blue}{ \sum_{j}^{n}\theta_j^2})$$</p><h4>岭回归demo</h4>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">Ridge</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_boston</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">boston</span> <span class="o">=</span> <span class="n">load_boston</span><span class="p">()</span>   <span class="c1"># 还记得上一节课 load_iris() 吗？</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">boston</span><span class="o">.</span><span class="n">data</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">boston</span><span class="o">.</span><span class="n">target</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>   <span class="c1"># 用岭回归构建模型</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>                 <span class="c1"># 拟合</span>
+<span class="n">train_score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span> <span class="c1"># 模型对训练样本得准确性</span>
+<span class="n">test_score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>    <span class="c1"># 模型对测试集的准确性</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">boston</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span><span class="mi">5</span><span class="p">],</span> <span class="n">boston</span><span class="o">.</span><span class="n">target</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;train_score: </span><span class="si">{</span><span class="n">train_score</span><span class="si">}</span><span class="s2">, test_score: </span><span class="si">{</span><span class="n">test_score</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+<pre><code>[[6.3200e-03 1.8000e+01 2.3100e+00 0.0000e+00 5.3800e-01 6.5750e+00
+  6.5200e+01 4.0900e+00 1.0000e+00 2.9600e+02 1.5300e+01 3.9690e+02
+  4.9800e+00]
+ [2.7310e-02 0.0000e+00 7.0700e+00 0.0000e+00 4.6900e-01 6.4210e+00
+  7.8900e+01 4.9671e+00 2.0000e+00 2.4200e+02 1.7800e+01 3.9690e+02
+  9.1400e+00]
+ [2.7290e-02 0.0000e+00 7.0700e+00 0.0000e+00 4.6900e-01 7.1850e+00
+  6.1100e+01 4.9671e+00 2.0000e+00 2.4200e+02 1.7800e+01 3.9283e+02
+  4.0300e+00]
+ [3.2370e-02 0.0000e+00 2.1800e+00 0.0000e+00 4.5800e-01 6.9980e+00
+  4.5800e+01 6.0622e+00 3.0000e+00 2.2200e+02 1.8700e+01 3.9463e+02
+  2.9400e+00]
+ [6.9050e-02 0.0000e+00 2.1800e+00 0.0000e+00 4.5800e-01 7.1470e+00
+  5.4200e+01 6.0622e+00 3.0000e+00 2.2200e+02 1.8700e+01 3.9690e+02
+  5.3300e+00]] [24.  21.6 34.7 33.4 36.2]
+
+train_score: 0.723706995939315, test_score: 0.7926416423787221
+</code></pre>
+<h4>岭回归调优</h4>
+<ul>
+<li>Ridge regression is a penalized linear regression model for predicting a numerical value</li>
+<li>and it can be very effective when applied to classification</li>
+<li>the important parameter to tune is the regularization strength (<code>alpha</code>) in (0.1, 1.0) step = 0.1</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">RidgeCV</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_boston</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">boston</span> <span class="o">=</span> <span class="n">load_boston</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">boston</span><span class="o">.</span><span class="n">data</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">boston</span><span class="o">.</span><span class="n">target</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># 用redge cross validation建模而不是Ridge</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">RidgeCV</span><span class="p">(</span><span class="n">alphas</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.0005</span><span class="p">,</span> <span class="mf">0.0001</span><span class="p">],</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">alpha_</span><span class="p">)</span>
+</pre></div>
+
+<pre><code>0.01
+</code></pre>
+<h4>lass demo和调优</h4>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">Lasso</span>
+
+<span class="n">lasso_reg</span> <span class="o">=</span> <span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">lasso_reg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;lasso score&quot;</span><span class="p">,</span> <span class="n">lasso_reg</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
+
+<span class="c1"># 调优</span>
+<span class="n">lscv</span> <span class="o">=</span> <span class="n">LassoCV</span><span class="p">(</span><span class="n">alphas</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.0025</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.00025</span><span class="p">),</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">lscv</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Lasso optimal alpha: </span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">lscv</span><span class="o">.</span><span class="n">alpha_</span><span class="p">)</span>
+</pre></div>
+
+<pre><code>lasso score 0.7956864030940746
+Lasso optimal alpha: 0.010
+</code></pre>
+<h4>弹性网络</h4>
+<p>大多情况下应该避免使用纯线性回归，如果特征数比较少，更倾向于<code>Lasso回归</code>或者<code>弹性网络</code>，因为它们会将无用的特征权重降为0，一般来说<code>弹性网络</code>优于<code>Lasso回归</code></p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">ElasticNet</span>
+
+<span class="n">e_net</span> <span class="o">=</span> <span class="n">ElasticNet</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">l1_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">e_net</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;e_net score:&quot;</span><span class="p">,</span> <span class="n">e_net</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
+
+<span class="c1"># 调优</span>
+<span class="n">encv</span> <span class="o">=</span> <span class="n">ElasticNetCV</span><span class="p">(</span><span class="n">alphas</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.0025</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">),</span> 
+                    <span class="n">l1_ratio</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span> 
+                    <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">encv</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ElasticNet optimal alpha: </span><span class="si">%.3f</span><span class="s1"> and L1 ratio: </span><span class="si">%.4f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">encv</span><span class="o">.</span><span class="n">alpha_</span><span class="p">,</span> <span class="n">encv</span><span class="o">.</span><span class="n">l1_ratio_</span><span class="p">))</span>
+</pre></div>
+
+<pre><code>e_net score: 0.7926169728251697
+ElasticNet optimal alpha: 0.001 and L1 ratio: 0.5000
+</code></pre>
+<p>回到教程，对前例（数据过少引起的过拟合），加入了惩罚项后：</p><div class="highlight"><pre><span></span><span class="n">regr</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">.1</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span> 
+    <span class="n">this_X</span> <span class="o">=</span> <span class="mf">.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="n">X</span>
+    <span class="n">regr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">this_X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">regr</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">))</span> 
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">this_X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span> 
+
+<span class="c1"># 观察图像的不同，其实可以理解为样本过少时的”过拟合“，引入忽略的指标后虽然对训练集的准确率大打折扣，但确实降低了方差</span>
+</pre></div>
+<figure  style="flex: 76.02459016393442" ><img width="742" height="488" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/97bc036cb6f5c3ce99362eb4bbba4c3d.png" alt=""/></figure><h4>Diabetes dataset</h4>
+<p>换个数据源，<code>estimator</code>并不需要更换，如果需要换超参，前文也已经讲过了：</p><div class="highlight"><pre><span></span><span class="n">diabetes_X</span><span class="p">,</span> <span class="n">diabetes_y</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_diabetes</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">diabetes_X_train</span> <span class="o">=</span> <span class="n">diabetes_X</span><span class="p">[:</span><span class="o">-</span><span class="mi">20</span><span class="p">]</span>
+<span class="n">diabetes_X_test</span>  <span class="o">=</span> <span class="n">diabetes_X</span><span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">:]</span>
+<span class="n">diabetes_y_train</span> <span class="o">=</span> <span class="n">diabetes_y</span><span class="p">[:</span><span class="o">-</span><span class="mi">20</span><span class="p">]</span>
+<span class="n">diabetes_y_test</span>  <span class="o">=</span> <span class="n">diabetes_y</span><span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">:]</span>
+
+<span class="c1"># observe the alpha and the score:</span>
+
+<span class="n">alphas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>  <span class="c1"># log10(-4)到log10(-1)共6个数做alpha</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">alphas</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">regr</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">diabetes_X_train</span><span class="p">,</span> <span class="n">diabetes_y_train</span><span class="p">)</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">diabetes_X_test</span><span class="p">,</span> <span class="n">diabetes_y_test</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">%&#39;</span>
+       <span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">alphas</span><span class="p">])</span>
+</pre></div>
+
+<pre><code>[0.0001     0.00039811 0.00158489 0.00630957 0.02511886 0.1       ]
+['58.51%', '58.52%', '58.55%', '58.56%', '58.31%', '57.06%']
+</code></pre>
+<h2>Lasso regression</h2>
+<p>Lasso = least absolute shrinkage and selection operator</p><p>相比Ridge, Lasso会真的把一些feature系数置0 (<strong>sparse method</strong>)，适用奥卡姆剃刀原理(<strong>Occam’s razor</strong>: prefer simpler models)</p><div class="highlight"><pre><span></span><span class="n">regr</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">Lasso</span><span class="p">()</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">regr</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+              <span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">diabetes_X_train</span><span class="p">,</span> <span class="n">diabetes_y_train</span><span class="p">)</span>
+              <span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">diabetes_X_test</span><span class="p">,</span> <span class="n">diabetes_y_test</span><span class="p">)</span>
+          <span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">alphas</span><span class="p">]</span>
+<span class="n">best_alpha</span> <span class="o">=</span> <span class="n">alphas</span><span class="p">[</span><span class="n">scores</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">))]</span>
+<span class="n">regr</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">best_alpha</span>   <span class="c1"># 不链式调用的话不需要用set_params</span>
+<span class="n">regr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">diabetes_X_train</span><span class="p">,</span> <span class="n">diabetes_y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">regr</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+</pre></div>
+
+<pre><code>[   0.         -212.43764548  517.19478111  313.77959962 -160.8303982
+   -0.         -187.19554705   69.38229038  508.66011217   71.84239008]
+</code></pre>
+<h3>Different algorithms for the same problem</h3>
+<p>Different algorithms can be used to solve the same mathematical problem. For instance the <code>Lasso</code> object in scikit-learn solves the lasso regression problem using a <code>coordinate descent</code> method, that is efficient on <strong>large datasets</strong>. However, scikit-learn also provides the <code>LassoLars</code> object using the <code>LARS</code> algorithm, which is very efficient for problems in which the weight vector estimated is very <strong>sparse</strong> (i.e. problems with <strong>very few</strong> observations).</p><h2>Classification</h2>
+<h3>Logistic Regerssion</h3>
+<figure  style="flex: 66.66666666666667" ><img width="400" height="300" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/386b1a1250985ccfdacd014b942dff98.png" alt=""/></figure><div class="highlight"><pre><span></span><span class="n">log</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1e5</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">iris_X_train</span><span class="p">,</span> <span class="n">iris_y_train</span><span class="p">)</span>
+</pre></div>
+
+<pre><code>LogisticRegression(C=100000.0)
+</code></pre>
+<ul>
+<li>The <code>C</code> parameter controls the <strong>amount of regularization</strong> in the LogisticRegression object:<ul>
+<li>a large value for <code>C</code> results in <strong>less regularization</strong>.</li>
+</ul>
+</li>
+<li><code>penalty=&quot;l2&quot;</code> gives <strong>Shrinkage</strong> (i.e. non-sparse coefficients),</li>
+<li><code>penalty=&quot;l1&quot;</code> gives <strong>Sparsity</strong>.</li>
+</ul>
+<p><strong>DEMO</strong>: 比较<code>KNN</code>和<code>LogisticRegression</code></p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">,</span> <span class="n">linear_model</span>
+
+<span class="n">X_digits</span><span class="p">,</span> <span class="n">y_digits</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_digits</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">X_digits</span> <span class="o">=</span> <span class="n">X_digits</span> <span class="o">/</span> <span class="n">X_digits</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+<span class="n">n_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_digits</span><span class="p">)</span>
+
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">X_digits</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="mf">.9</span> <span class="o">*</span> <span class="n">n_samples</span><span class="p">)]</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">y_digits</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="mf">.9</span> <span class="o">*</span> <span class="n">n_samples</span><span class="p">)]</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">X_digits</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="mf">.9</span> <span class="o">*</span> <span class="n">n_samples</span><span class="p">):]</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">y_digits</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="mf">.9</span> <span class="o">*</span> <span class="n">n_samples</span><span class="p">):]</span>
+
+<span class="n">knn</span> <span class="o">=</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">KNeighborsClassifier</span><span class="p">()</span>
+<span class="n">logistic</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;KNN score: </span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">knn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;LogisticRegression score: </span><span class="si">%f</span><span class="s1">&#39;</span>
+      <span class="o">%</span> <span class="n">logistic</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
+</pre></div>
+
+<pre><code>KNN score: 0.961111
+LogisticRegression score: 0.933333
+</code></pre>
+<h2>Support vector machines (SVMs)</h2>
+<p>支持向量机(support vector machines,SVM)是一种二分类模型，它的基本模型是定义在特征空间上的间隔最大的线性分类器。除此之外，SVM算法还包括核函数，核函数可以使它成为非线性分类器。</p><p><code>Support Vector Machines</code> belong to the <strong>discriminant model family</strong>:</p><p>they try to find a combination of samples to <strong>build a plane</strong> maximizing the margin between the two classes. <code>Regularization</code> is set by the <code>C</code> parameter:</p><ul>
+<li>a <strong>small</strong> value for C means the margin is calculated using <strong>many or all</strong> of the observations around the separating line (more regularization);</li>
+<li>a <strong>large</strong> value for C means the margin is calculated on observations <strong>close to</strong> the separating line (less regularization).</li>
+</ul>
+<p>SVMs can be used：</p><ul>
+<li>in regression –<code>SVR</code> (Support Vector Regression)–,</li>
+<li>or in classification –<code>SVC</code> (Support Vector Classification).</li>
+</ul>
+<p>SVM模型有两个非常重要的参数C与gamma。其中:</p><ul>
+<li>C是惩罚系数，即对误差的宽容度。c越高，说明越不能容忍出现误差,容易过拟合。C越小，容易欠拟合。C过大或过小，泛化能力变差</li>
+<li>gamma是选择RBF函数作为kernel后，该函数自带的一个参数。隐含地决定了数据映射到新的特征空间后的分布，gamma越大，支持向量越少，gamma值越小，支持向量越多。支持向量的个数影响训练与预测的速度。</li>
+</ul>
+<h3>Using kernels</h3>
+<p>Classes are not always <strong>linearly separable</strong> in feature space. The solution is to <code>build a decision function</code> that is not linear but may be <strong>polynomial</strong> instead.</p><p>This is done using the <code>kernel</code> trick that can be seen as creating a decision energy by positioning kernels on observations:</p><h4>Linear kernal</h4>
+<div class="highlight"><pre><span></span><span class="n">svc</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span>
+</pre></div>
+<h4>Polynomial kernel</h4>
+<div class="highlight"><pre><span></span><span class="n">svc</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+<h4>RBF kernel (Radial Basis Function)</h4>
+<div class="highlight"><pre><span></span><span class="n">svc</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;rfb&#39;</span><span class="p">)</span>
+</pre></div>
+<p><strong>DEMO</strong>: Plot different SVM classifiers in the iris dataset</p><ul>
+<li>LinearSVC minimizes the squared hinge loss while SVC minimizes the regular hinge loss.</li>
+<li>LinearSVC uses the One-vs-All (also known as One-vs-Rest) multiclass reduction while SVC uses the One-vs-One multiclass reduction.</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># 代码片段，定义4个estimator</span>
+<span class="n">C</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># SVM regularization parameter</span>
+<span class="n">models</span> <span class="o">=</span> <span class="p">(</span><span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">),</span>
+          <span class="n">svm</span><span class="o">.</span><span class="n">LinearSVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">),</span>
+          <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">),</span>
+          <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">))</span>
+<span class="n">models</span> <span class="o">=</span> <span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">models</span><span class="p">)</span>
+</pre></div>
+<figure  style="flex: 79.81132075471699" ><img width="846" height="530" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/73af5427b414af6455402c92562d3524.png" alt=""/></figure><h2>cross validation</h2>
+<p><a href="https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation">https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation</a></p><p><strong>RAW DEMO</strong>: KFold cross-validation:</p><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">svm</span>
+
+<span class="n">X_digits</span><span class="p">,</span> <span class="n">y_digits</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_digits</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">svc</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span>
+
+<span class="n">score</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_digits</span><span class="p">[:</span><span class="o">-</span><span class="mi">100</span><span class="p">],</span> <span class="n">y_digits</span><span class="p">[:</span><span class="o">-</span><span class="mi">100</span><span class="p">])</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_digits</span><span class="p">[</span><span class="o">-</span><span class="mi">100</span><span class="p">:],</span> <span class="n">y_digits</span><span class="p">[</span><span class="o">-</span><span class="mi">100</span><span class="p">:])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+
+<span class="n">X_folds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">X_digits</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># 分成了3个fold</span>
+<span class="n">y_folds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">y_digits</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="c1"># We use &#39;list&#39; to copy, in order to &#39;pop&#39; later on</span>
+    <span class="n">X_train</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">X_folds</span><span class="p">)</span>
+    <span class="n">X_test</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="c1"># 取出最后一个fold # 不对，python居然可以Pop任意一个索引</span>
+    <span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span> <span class="c1"># 把剩下的fold拼回去</span>
+    <span class="n">y_train</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">y_folds</span><span class="p">)</span>
+    <span class="n">y_test</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>
+    <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">svc</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
+<span class="n">scores</span>
+</pre></div>
+
+<pre><code>0.98
+[0.9348914858096828, 0.9565943238731218, 0.9398998330550918]
+</code></pre>
+<p>Scikit-learn肯定是提供了官方支持的：</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">KFold</span><span class="p">,</span> <span class="n">cross_val_score</span>
+
+<span class="c1"># step 1: 用KFold和fold数做一个KFold对象，然后用这个KFold对象去循环（其实就是一个generator)</span>
+<span class="c1"># step 2: 每次循环自己手动计算score</span>
+<span class="n">k_fold</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">svc</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_digits</span><span class="p">[</span><span class="n">train</span><span class="p">],</span> <span class="n">y_digits</span><span class="p">[</span><span class="n">train</span><span class="p">])</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_digits</span><span class="p">[</span><span class="n">test</span><span class="p">],</span> <span class="n">y_digits</span><span class="p">[</span><span class="n">test</span><span class="p">])</span> \
+         <span class="k">for</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="ow">in</span> <span class="n">k_fold</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X_digits</span><span class="p">)]</span>
+<span class="n">scores</span>
+</pre></div>
+<p>[0.9348914858096828, 0.9565943238731218, 0.9398998330550918]</p>
+<pre><code>可见官方api分折和我们手动split，每次从后向前取一折做测试集结果是一致的
+当然，打印cross_validation的结果也是有封装的：
+```python
+# 把KFolder对象传入即可
+scores = cross_val_score(svc, X_digits, y_digits, cv=k_fold)
+print(scores)
+
+# 定制scoring method:
+scores = cross_val_score(svc, X_digits, y_digits, cv=k_fold, scoring='precision_macro')
+print(scores)
+</code></pre>
+
+<pre><code>[0.93489149 0.95659432 0.93989983]
+[0.93969761 0.95911415 0.94041254]
+</code></pre>
+<h5>Cross-validation generators:</h5>
+<p><a href="https://scikit-learn.org/stable/tutorial/statistical_inference/model_selection.html">see more</a> cross-validation generators:</p><p>$
+\begin{array}{l|l|l}
+KFold &amp; StratifiedKFold &amp; GroupKFold \
+\hline
+ShuffleSplit &amp; StratifiedShuffleSplit &amp; GroupShuffleSplit \
+\hline
+LeaveOneGroupOut &amp; LeavePGroupOut &amp; LeaveOneOut \
+\hline
+LeavePOut &amp; PredefinedSplit
+\end{array}
+$</p><h4>Datatransformation with held out data</h4>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+<span class="o">...</span>     <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">scaler</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">X_train_transformed</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">clf</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_transformed</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">X_test_transformed</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test_transformed</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+<span class="mf">0.9333</span><span class="o">...</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">make_pipeline</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">clf</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">preprocessing</span><span class="o">.</span><span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">)</span>
+<span class="n">array</span><span class="p">([</span><span class="mf">0.977</span><span class="o">...</span><span class="p">,</span> <span class="mf">0.933</span><span class="o">...</span><span class="p">,</span> <span class="mf">0.955</span><span class="o">...</span><span class="p">,</span> <span class="mf">0.933</span><span class="o">...</span><span class="p">,</span> <span class="mf">0.977</span><span class="o">...</span><span class="p">])</span>
+</pre></div>
+<h4>cross_validate v.s. cross_val_score</h4>
+<p>The cross_validate function differs from cross_val_score in two ways:</p><ul>
+<li>It allows specifying multiple metrics for evaluation.</li>
+<li>It returns a dict containing fit-times, score-times (and optionally training scores as well as fitted estimators) in addition to the test score.</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_validate</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">recall_score</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">scoring</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;precision_macro&#39;</span><span class="p">,</span> <span class="s1">&#39;recall_macro&#39;</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">clf</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">)</span>  <span class="c1"># 以字典返回validate几个指标</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="p">[</span><span class="s1">&#39;fit_time&#39;</span><span class="p">,</span> <span class="s1">&#39;score_time&#39;</span><span class="p">,</span> <span class="s1">&#39;test_precision_macro&#39;</span><span class="p">,</span> <span class="s1">&#39;test_recall_macro&#39;</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">scores</span><span class="p">[</span><span class="s1">&#39;test_recall_macro&#39;</span><span class="p">]</span>
+<span class="n">array</span><span class="p">([</span><span class="mf">0.96</span><span class="o">...</span><span class="p">,</span> <span class="mf">1.</span>  <span class="o">...</span><span class="p">,</span> <span class="mf">0.96</span><span class="o">...</span><span class="p">,</span> <span class="mf">0.96</span><span class="o">...</span><span class="p">,</span> <span class="mf">1.</span>        <span class="p">])</span>
+</pre></div>
+<h2>grid search</h2>
+<p><a href="https://scikit-learn.org/stable/modules/grid_search.html#grid-search">https://scikit-learn.org/stable/modules/grid_search.html#grid-search</a></p><p>对不同参数进行组合遍历，目的是为了<code>maximize the cross-validation score</code></p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span><span class="p">,</span> <span class="n">cross_val_score</span>
+<span class="n">Cs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">svc</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">Cs</span><span class="p">),</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_digits</span><span class="p">[:</span><span class="mi">1000</span><span class="p">],</span> <span class="n">y_digits</span><span class="p">[:</span><span class="mi">1000</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;best score:&#39;</span><span class="p">,</span> <span class="n">clf</span><span class="o">.</span><span class="n">best_score_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;best estimator.c:&#39;</span><span class="p">,</span> <span class="n">clf</span><span class="o">.</span><span class="n">best_estimator_</span><span class="o">.</span><span class="n">C</span><span class="p">)</span>
+<span class="c1"># Prediction performance on test set is not as good as on train set</span>
+<span class="n">score</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_digits</span><span class="p">[</span><span class="mi">1000</span><span class="p">:],</span> <span class="n">y_digits</span><span class="p">[</span><span class="mi">1000</span><span class="p">:])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;score:&#39;</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
+</pre></div>
+
+<pre><code>best score: 0.95
+best estimator.c: 0.0021544346900318843
+score: 0.946047678795483
+</code></pre>
+<p>与此同时，每个estimator也有自己的CV版本（跟之前串课的笔记呼应上了）</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span><span class="p">,</span> <span class="n">datasets</span>
+<span class="n">lasso</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LassoCV</span><span class="p">()</span>
+<span class="n">X_diabetes</span><span class="p">,</span> <span class="n">y_diabetes</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_diabetes</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">lasso</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_diabetes</span><span class="p">,</span> <span class="n">y_diabetes</span><span class="p">)</span>
+<span class="c1"># The estimator chose automatically its lambda:</span>
+<span class="n">lasso</span><span class="o">.</span><span class="n">alpha_</span>
+</pre></div>
+
+<pre><code>0.003753767152692203
+</code></pre>
+<h2>Unsupervised learning: seeking representations of the data</h2>
+<h3>Clustreing: grouping observations together</h3>
+<h3>K-means clustreing</h3>
+<p>随机选k个质心计算所有的点的距离，然后再取每个群里的均值做质心，如此往复。结果的随机性很强（前面剧透了，把k-means和knn搞混过）</p><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">datasets</span>
+<span class="n">X_iris</span><span class="p">,</span> <span class="n">y_iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">k_means</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">k_means</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_iris</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">k_means</span><span class="o">.</span><span class="n">labels_</span><span class="p">[::</span><span class="mi">10</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y_iris</span><span class="p">[::</span><span class="mi">10</span><span class="p">])</span>
+</pre></div>
+
+<pre><code>[0 0 0 0 0 1 1 1 1 1 2 2 2 2 2]
+[0 0 0 0 0 1 1 1 1 1 2 2 2 2 2]
+</code></pre>
+<div class="highlight"><pre><span></span><span class="n">k_means</span><span class="o">.</span><span class="n">cluster_centers_</span>
+</pre></div>
+
+<pre><code>array([[5.006     , 3.428     , 1.462     , 0.246     ],
+       [5.9016129 , 2.7483871 , 4.39354839, 1.43387097],
+       [6.85      , 3.07368421, 5.74210526, 2.07105263]])
+</code></pre>
+<h3>未完结</h3>
+<p><a href="https://scikit-learn.org/stable/tutorial/statistical_inference/unsupervised_learning.html">https://scikit-learn.org/stable/tutorial/statistical_inference/unsupervised_learning.html</a></p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/scikit-learn%E5%AE%98%E7%BD%91%E6%95%99%E7%A8%8B%E7%AC%94%E8%AE%B0%28%E4%B8%80%29/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E4%BB%8E%E6%8A%95%E5%BD%B1%E3%80%81%E6%AD%A3%E4%BA%A4%E8%A1%A5%E8%A7%92%E5%BA%A6%E8%AF%81%E6%98%8E%EF%BC%88%E6%8E%A8%E5%AF%BC%EF%BC%89%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E5%85%AC%E5%BC%8F/" target="_self">从投影、正交补角度证明（推导）最小二乘法公式</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E4%BB%8E%E6%8A%95%E5%BD%B1%E3%80%81%E6%AD%A3%E4%BA%A4%E8%A1%A5%E8%A7%92%E5%BA%A6%E8%AF%81%E6%98%8E%EF%BC%88%E6%8E%A8%E5%AF%BC%EF%BC%89%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E5%85%AC%E5%BC%8F/" target="_self">
+                <time class="text-uppercase">
+                    January 25 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>学习线性回归的时候，会教我们$X\theta=y$可以直接用<strong>最小二乘法</strong>直接把$\theta$求出来：</p><p>$\theta=(X^TX)^{-1}X^Ty$</p><p>并且还在我<a href="https://blog.wzy.one/archives/%E7%9F%A9%E9%98%B5%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E6%B1%82%E8%A7%A3%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5/">之前的博文</a>里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。</p><p>首先，在吴恩达的教材里，这个并不叫最小二乘(<code>least suqare</code>），而是叫<code>Normal Equation method</code>，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(<code>Projection</code>)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：</p><p>首先，预备知识</p><h2>子空间</h2>
+<figure class="vertical-figure" style="flex: 35.609397944199706" ><img width="970" height="1362" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/454cb3771fb0eb69bf0301b42ad8d9f3.png" alt=""/></figure><p>笔记很清楚了，对于一个矩阵
+$A= \begin{bmatrix}
+   -2 &amp; -1 &amp; -3 \
+   4 &amp; 2 &amp; 6 \
+\end{bmatrix}$ 它的列空间是自然是C(A)，行空间自然是A的转置的后的<code>列空间</code>，然后各自拥有一个对应的零空间（即求解$Ax=0, A^Tx=0）$</p><p>上图用红框框出来的部分即是具体这个矩阵$A$的四个子空间。同时，拥有如下性质：</p><ol>
+<li>$C(A)$与$N(A^T)$正交(<code>orthogonal</code>)，即列空间与左零空间正交</li>
+<li>$C(A^T)$与$N(A)$正交，即行空间与零空间正交</li>
+</ol>
+<h2>正交补</h2>
+<p>$V^\bot = {\vec x \in \R^n | \vec x \cdot \vec{v} = 0; for; every\ \vec{v} \in V \text{}}$ 即V的正交补为垂直于V内任意一个向量的所有向量。</p><p>那么:</p><ul>
+<li>$C(A) = (N(A^T))^\bot$</li>
+<li>$C(A^T) = (N(A))^\bot$</li>
+</ul>
+<h2>投影是一个线性变换</h2>
+<figure  style="flex: 66.66666666666667" ><img width="1240" height="930" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d73cc50bd39caeb73a1816384ee8e8d7.png" alt=""/></figure>
+这里已经看到我们熟悉的$(A^TA)^{-1}A^Tx$了，我们来看一下推导过程：<ol>
+<li>$\vec x$在$V \in \R^n$上的投影$Proj_V^{\vec x} = \vec v$必然能表示成该空间的<code>basis</code>{$\vec b_1, \vec b_2, \vec b_3, \dots$}的线性变换：$\vec v \in V = y_1\vec b_1 + y_2\vec b_2 + \cdots + y_k \vec b_k =  A\vec y$</li>
+<li>求出$\vec y$则求出了这个投影在哪里</li>
+<li>$\vec x$能向$V$投影，自然也能向$V^\bot$投影($\vec w$)</li>
+</ol>
+<ul>
+<li>这里是故意这么说的，强调都是投影，其实在向$V$投影时，在$V^\bot$的投影（$\vec w$）就是那条<strong>垂线</strong></li>
+</ul>
+<ol start="4">
+<li>$V \Rightarrow C(A),; V^\bot \Rightarrow N(A^T), \vec v \in V, \vec w \in V^\bot$</li>
+<li>左零空间只不过是转置的零空间，那么零空间的特性是什么呢？即$A\vec x = 0$的空间，那么$\vec w$在左零空间里，意味着: $A^T\vec w = 0$</li>
+<li>$\vec w = \vec x - \vec v = \vec x - A\vec y \Rightarrow A^T(\vec x - A\vec y) = 0 \Rightarrow A^T \vec x = A^TA\vec y$</li>
+<li>只要$A^TA$可逆的话: $\Rightarrow \vec  y= (A^TA)^{-1}A^T\vec x$</li>
+<li>$\therefore Proj_V^{\vec x} = A\vec y = A(A^TA)^{-1}A^T\vec x$</li>
+<li>得证$\vec x$在$V$上的投影就是一个线性变换</li>
+<li>$\vec y$即是机器学习中我们需要学习到的<strong>系数</strong> = $(A^TA)^{-1}A^T$</li>
+</ol>
+<h2>最小二乘逼近</h2>
+<p>由此到了下一课，<code>the lease squares approximation</code>，讲的就是$A\vec x = \vec b$无解时，意思就是在$\vec b$不存在A的张成子空间中，所以无论进行怎样的<strong>线性变换</strong>，都是不可能得到$\vec b$的，则取$\vec x$在$C(A)$中的投影作为近似的解（证明就不再展开了）
+<figure class="vertical-figure" style="flex: 49.5603517186251" ><img width="1240" height="1251" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d390aad67946ec06a573bddf79d29339.png" alt=""/></figure>
+仍然用的是同一个思路，即&quot;垂线在左零空间中&quot;，来构造$A^T\cdot \vec w = \vec 0$</p><h2>应用最小二乘拟合一条回归线</h2>
+<p>这里终于讲到了与机器学习最接近的内容：<code>regression</code>
+<figure  style="flex: 164.89361702127658" ><img width="1240" height="376" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2da3910c441eb8061e11ea708824fd7d.png" alt=""/></figure>
+可以看到，毫无业务思维的花花肠子，很多机器学习课程里会花大量工夫从感性到理性上给你讲这些内容，因为它的期望从0跟你讲清楚，而在循序渐进的数学理论体系里，这些根本就不需要关联感性认识的，什么每年的房价啊，数学关注的只是建模。</p><p>这个回归实例里，因为需要拟合的是一条直线：$y = b + ax$，那么既有的数据就成了机器学习里的“样本”，但我们这里不需要这么理解，而是直接理解为矩阵，得到
+方程组：</p><p>$$\begin{cases}
+b + a = 1 \\
+b + 2a = 2 \\
+b + 3a = 2
+\end{cases}$$</p>
+<p>提取矩阵：</p><p>$$A = \begin{bmatrix}1&amp;1\\1&amp; 2\\ 1&amp; 3\end{bmatrix}, \vec b = \begin{bmatrix}1\\2\\ 2\end{bmatrix} \Rightarrow A\vec x = \vec b$$</p>
+<p>好了，在上面提到的<a href="https://www.jianshu.com/p/c2d0c743dc5d">这篇博文</a>里，我们不明就里地直接用了公式，已知A和b求变换矩阵M(即这里的$\vec x$)，还当成是机器学习的内容，而现在我们已经知道自己是在做什么，就是找b在$A$的张成子空间里的投影，就能得到最近似的解</p><p>$$\vec x \approx (A^TA)^{-1}A^T\vec b$$</p>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E4%BB%8E%E6%8A%95%E5%BD%B1%E3%80%81%E6%AD%A3%E4%BA%A4%E8%A1%A5%E8%A7%92%E5%BA%A6%E8%AF%81%E6%98%8E%EF%BC%88%E6%8E%A8%E5%AF%BC%EF%BC%89%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E5%85%AC%E5%BC%8F/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E7%9F%A9%E9%98%B5%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E6%B1%82%E8%A7%A3%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5/" target="_self">矩阵最小二乘法求解仿射变换矩阵</a></h1>
@@ -151,35 +874,6 @@ $$</p>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E7%9F%A9%E9%98%B5%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E6%B1%82%E8%A7%A3%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/" target="_self">add_subplots方法传递额外参数</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/" target="_self">
-                <time class="text-uppercase">
-                    January 14 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>用matplotlib绘制3D图，最快的用法</p><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
-
-<span class="n">此后即可</span>  <span class="err">`</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="err">`</span><span class="p">,</span> <span class="err">`</span><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="err">`</span><span class="n">等</span><span class="err">，</span><span class="n">具体用法请翻阅文档</span>
-</pre></div>
-<p>其次，这样：</p><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
-</pre></div>
-<p>而我喜欢要同时绘多栏图的时候喜欢用<code>plt.subplots</code>方法，却发现传不进<code>projection</code>参数，仔细看文档，是支持用<code>subplot_kw</code>来为它添加的subplots来进行属性设置的，这样可以保持外层api干净而不必把subplots的所有属性都复制一遍</p><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s2">&quot;subplot_kw&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;3d&#39;</span><span class="p">}})</span>
-<span class="c1"># 或</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">))</span>
-</pre></div>
-<p>看你自己习惯了。
-<figure  style="flex: 53.95996518711923" ><img width="1240" height="1149" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e131d84109722ad314d449f86313f68e.png" alt=""/></figure></p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>
@@ -392,6 +1086,35 @@ sin(59.999998857570986) ≈ sqrt(3)/2
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E4%BA%8C%E5%88%86%E6%B3%95%E3%80%81%E7%89%9B%E9%A1%BF%E6%B3%95%E5%92%8C%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E5%BC%80%E6%A0%B9%E5%8F%B7%E5%92%8C%E8%A7%A3%E6%96%B9%E7%A8%8B/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/" target="_self">add_subplots方法传递额外参数</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/" target="_self">
+                <time class="text-uppercase">
+                    January 14 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>用matplotlib绘制3D图，最快的用法</p><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+
+<span class="n">此后即可</span>  <span class="err">`</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="err">`</span><span class="p">,</span> <span class="err">`</span><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="err">`</span><span class="n">等</span><span class="err">，</span><span class="n">具体用法请翻阅文档</span>
+</pre></div>
+<p>其次，这样：</p><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+</pre></div>
+<p>而我喜欢要同时绘多栏图的时候喜欢用<code>plt.subplots</code>方法，却发现传不进<code>projection</code>参数，仔细看文档，是支持用<code>subplot_kw</code>来为它添加的subplots来进行属性设置的，这样可以保持外层api干净而不必把subplots的所有属性都复制一遍</p><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s2">&quot;subplot_kw&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;3d&#39;</span><span class="p">}})</span>
+<span class="c1"># 或</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">))</span>
+</pre></div>
+<p>看你自己习惯了。
+<figure  style="flex: 53.95996518711923" ><img width="1240" height="1149" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e131d84109722ad314d449f86313f68e.png" alt=""/></figure></p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>
@@ -954,77 +1677,6 @@ echo ./a.txt HELLO?...y
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E4%BB%8E%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6%E5%B9%B6%E7%A7%BB%E5%8A%A8%E7%9A%84shell%E5%91%BD%E4%BB%A4%E8%AF%B4%E5%BC%80%E5%8E%BB/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/error--IB-Designables--Failed-to-update-auto-layout-status/" target="_self">error--IB-Designables--Failed-to-update-auto-layout-status</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/error--IB-Designables--Failed-to-update-auto-layout-status/" target="_self">
-                <time class="text-uppercase">
-                    August 21 2020
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>首先, 了解一下 <a href="http://nshipster.com/ibinspectable-ibdesignable/">IBInspectable / IBDesignable</a>
-这是让 Xcode能在设计时就体现你代码对 UI 进行的修改, 以及在设计器里能动态增加你对视图添加的属性的控件的特性(是的, 只是 xcode 的特性, 并不是语言特征)</p><p>然后, 用这个的人多半碰到了这类问题:
-<figure  style="flex: 200.0" ><img width="360" height="90" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8dd76778db9d224fac448fc48d7671eb.png" alt=""/></figure></p><blockquote>
-<p>error: IB Designables: Failed to update auto layout status: Interface Builder Cocoa Touch Tool raised a &quot;NSInternalInconsistencyException&quot; exception: Could not load NIB in bundle: 'NSBundle</p></blockquote>
-<p>网上可能有一大堆讨论相关问题的贴子, 解决方法不尽其数, 可能都不适用你, 所以我的这篇也可能不适用你, 最好还是善用搜索, 我谨提供一种思路.</p><p>网上有让你修改工程配置的, 寻找崩溃日志的, 解决我这个问题的, 是在Storyboard 界面里选中出问题的 View(你一定要至少知道是给哪个 view 添加上 <code>IB_DESIGNABLE</code>才导致的问题, 可以通过逐个移除这个声明以测试), 再在菜单里选择: <code>Editor - Debug Selected Views</code>
-这个时候就会模拟<code>IB_DESIGNABLE</code>进行 debug, 再加上全局异常断点, 代码就会在崩溃处命中了.</p><p>我的问题是我用了两个属性, 然后在 view 的 <code>drawWithRect:</code>方法中, 这两个属性都为空, 而我的属性是在<code>initWithCoder:</code>中初始化的. 所以我再添加<code>initWithFrame:</code>, 在其中解决, 顺利解决.</p><p>这说明三个问题:</p><ol>
-<li><code>IB_DESIGNABLE</code>目前的实现还有 bug, 真实启动是跑<code>initWithCoder:</code>的, 它在设计器里绘图的时候却走了<code>initWithFrame:</code>, 你可能不得不为了对付这个 bug 而添加一次同样的代码</li>
-<li><code>initWithFrame:</code>的时候 frame 是{0, 0, 0, 0}可别忘了, 有时候这个也是崩溃原因</li>
-<li>如果我把<code>drawWithRect:</code>中要用到的属性提前初始化一样可以避免这样的问题, 怎样做? 配合<code>IBInspectable</code>, 然后在设计器中给属性设初始值</li>
-</ol>
-<figure  style="flex: 145.88235294117646" ><img width="1240" height="425" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9224752a673054143b82aadd16747841.png" alt=""/></figure></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/error--IB-Designables--Failed-to-update-auto-layout-status/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/El-Captain%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" target="_self">El-Captain设置环境变量</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/El-Captain%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" target="_self">
-                <time class="text-uppercase">
-                    August 19 2020
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>这里说的不是设置变量给bash/shell来用, 而是给程序使用, 比如, chromium自36版以后, 就不再内置google api keys, <a href="http://www.chromium.org/developers/how-tos/api-keys">官方文档</a>说明你打包的时候没有添加key的话, 可以在runtime添加, 比如在系统的环境变量里添加进去.</p><blockquote>
-<p>Providing Keys at Runtime</p></blockquote>
-<p>If you prefer, you can build a Chromium binary (or use a pre-built Chromium binary) without API keys baked in, and instead provide them at runtime. To do so, set the environment variables GOOGLE_API_KEY, GOOGLE_DEFAULT_CLIENT_ID and GOOGLE_DEFAULT_CLIENT_SECRET to your &quot;API key&quot;, &quot;Client ID&quot; and &quot;Client secret&quot; values respectively.</p><p>至于key哪来的请自行google, 我们不去申请key的话, 还是拿来主义:</p><blockquote>
-<p>export GOOGLE_API_KEY=&quot;AIzaSyCkfPOPZXDKNn8hhgu3JrA62wIgC93d44k&quot;</p></blockquote>
-<p>export GOOGLE_DEFAULT_CLIENT_ID=&quot;811574891467.apps.googleusercontent.com&quot;
-export GOOGLE_DEFAULT_CLIENT_SECRET=&quot;kdloedMFGdGla2P1zacGjAQh&quot;</p><p>关于如何在mac上设置环境变量, 有这么<a href="http://www.dowdandassociates.com/blog/content/howto-set-an-environment-variable-in-mac-os-x-terminal-only/">一篇雄文</a>, 我一般是直接编辑<code>~/.bash_profile</code>文件, 这次不生效了, 改来改去都没用, 于是换关键词: <code>yosemite/el captain下如何设置环境变量</code>, 立刻就有<a href="http://stackoverflow.com/questions/25385934/setting-environment-variables-via-launchd-conf-no-longer-works-in-os-x-yosemite">答案</a>了</p><p>头两个答案都可以, 第一个是使用了<code>setenv VARIABLENAME=VALUE</code>这种语法, 第二个是直接在一个文件里编辑, 然后使之生效, 我直接用了第二种, 因为文本随时可编辑, 可查看</p><p>1, Create an environment.plist file in <code>~/Library/LaunchAgents/</code> with this content:</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
-&lt;plist version=&quot;1.0&quot;&gt;
-&lt;dict&gt;
-  &lt;key&gt;Label&lt;/key&gt;
-  &lt;string&gt;my.startup&lt;/string&gt;
-  &lt;key&gt;ProgramArguments&lt;/key&gt;
-  &lt;array&gt;
-    &lt;string&gt;sh&lt;/string&gt;
-    &lt;string&gt;-c&lt;/string&gt;
-    &lt;string&gt;
-        launchctl setenv GOOGLE_API_KEY AIzaSyCkfPOPZXDKNn8hhgu3JrA62wIgC93d44k
-        launchctl setenv GOOGLE_DEFAULT_CLIENT_ID 811574891467.apps.googleusercontent.com
-        launchctl setenv GOOGLE_DEFAULT_CLIENT_SECRET kdloedMFGdGla2P1zacGjAQh
-    &lt;/string&gt;
-  &lt;/array&gt;
-  &lt;key&gt;RunAtLoad&lt;/key&gt;
-  &lt;true/&gt;
-&lt;/dict&gt;
-&lt;/plist&gt;
-</code></pre>
-<p>2, You can add many launchctl commands inside the <code>&lt;string&gt;&lt;/string&gt;</code> block.可见, 我们只需要在<code>string</code>标签里写需要的内容就行了, 本例是一系列google api keys.</p><p>3, The plist will activate after system reboot. You can also use <code>launchctl load ~/Library/LaunchAgents/environment.plist</code> to launch it immediately.</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/El-Captain%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

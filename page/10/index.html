@@ -1,0 +1,290 @@
+<!DOCTYPE HTML>
+<html lang="english">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Prism" />
+    <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+        }
+
+    </script>
+    
+<title>walker's code blog</title>
+<meta name="author" content="walker" />
+<meta name="description" content="coder, reader" />
+<meta property="og:title" content="walker's code blog" />
+<meta property="og:description" content="coder, reader" />
+<meta property="og:site_name" content="walker's code blog" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="/page/10/" />
+<meta property="og:image" content="walker's code blog" />
+<meta name="twitter:title" content="walker's code blog" />
+<meta name="twitter:description" content="coder, reader" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png" />
+
+
+    
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
+<main>    
+    
+
+<section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%8A%8AGAE%E7%A8%8B%E5%BA%8F%E9%80%9A%E8%BF%87SSH%E9%83%A8%E7%BD%B2%E5%88%B0VPS/" target="_self">把GAE程序通过SSH部署到VPS</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E6%8A%8AGAE%E7%A8%8B%E5%BA%8F%E9%80%9A%E8%BF%87SSH%E9%83%A8%E7%BD%B2%E5%88%B0VPS/" target="_self">
+                <time class="text-uppercase">
+                    January 14 2017
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>大部分在<a href="https://cloud.google.com/appengine/downloads">文档</a>上都写了, 写这篇文章的目的是发现现在<code>appcfg.py update xxxx</code>的时候会打开浏览器访问google请求授权(后台内建了一个本地server, 端口是<code>8090</code>, 授权成功后会带授权码请求本地的8090端口, 所以我们在 ssh 环境中是没有浏览器的, 该怎么解决呢?</p><p>我玩 linux 不多, 就以我的知识量这么解决:</p><ol>
+<li>碰到需要访问网站的时候, 程序已经给出了提示, 要你退出, 你当然不退出, 而是把网址复制出来, 在本地打开, 授权成功后, 本地浏览器会请求<code>127.0.0.1:8090</code>, 当然, 什么都不会发生, 但从地址栏里把地址复制到剪贴板.</li>
+<li>回到SSH, 把当前任务放到后台(<code>ctrl+z</code>)</li>
+<li>用<code>curl</code>访问剪贴板里的地址</li>
+<li>继续<code>ctrl+z</code>把<code>curl</code>请求放到后台</li>
+<li><code>jobs</code>命令查一下, 如果后台没有别的任务的话, <code>appcfg</code>任务的id 应该是1, <code>curl</code>任务id 应该是2(现在以我的1和2为准)</li>
+<li>把<code>appcfg</code>提到前台: <code>fg %1</code></li>
+<li>你会看到程序顺利进行下去了</li>
+<li>继续, <code>fg %2</code>把 curl 任务提到前台, 你会看到提示, 什么授权成功之类的</li>
+</ol>
+<p>演示:</p>
+<pre><code>root@walker:~/KindleEar# appcfg.py update app.yaml module-worker.yaml
+07:52 AM Host: appengine.google.com
+07:52 AM Application: kindleearwalker; version: 1
+07:52 AM Starting update of app: kindleearwalker, version: 1
+07:52 AM Getting current resource limits.
+Your browser has been opened to visit:
+
+    https://accounts.google.com/o/oauth2/auth?scope=演示数据
+    # step1: 请复制此网址, 并忽略要你退出换电脑的提示
+
+If your browser is on a different machine then exit and re-run this
+application with the command-line parameter
+
+  --noauth_local_webserver
+
+# step2: 现在开始把任务放到后台
+^Z
+[1]+  Stopped                 appcfg.py update app.yaml module-worker.yaml
+# step3: 把从本机浏览器复制的回调 url 访问一下
+root@walker:~/KindleEar# curl http://localhost:8090/?code=4/CYdQFQLiLBFwa7ajsU1acb1Xx9Kpal6SxMuPIS-dRYo#
+# step4: 把访问任务放到后台
+^Z
+[2]+  Stopped                 curl http://localhost:8090/?code=4/CYdQFQLiLBFwa7ajsU1acb1Xx9Kpal6SxMuPIS-dRYo#
+# step 5: 查看一下任务和 ID
+root@walker:~/KindleEar# jobs
+[1]-  Stopped                 appcfg.py update app.yaml module-worker.yaml
+[2]+  Stopped                 curl http://localhost:8090/?code=4/xxxxx#
+# step 6: 把appcgf的任务提到前台
+root@walker:~/KindleEar# fg %1
+appcfg.py update app.yaml module-worker.yaml
+Authentication successful.
+07:54 AM Scanning files on local disk.
+07:54 AM Cloning 15 static files.
+07:54 AM Cloning 387 application files.
+07:54 AM Uploading 3 files and blobs.
+07:54 AM Uploaded 3 files and blobs.
+.........省略
+07:54 AM Compilation completed.
+07:54 AM Starting deployment.
+07:54 AM Checking if deployment succeeded.
+07:54 AM Deployment successful.
+07:54 AM Checking if updated app version is serving.
+07:54 AM Completed update of app: kindleearwalker, module: worker, version: 1
+# step 7: see? 成功了, 看看剩下的任务吧
+root@walker:~/KindleEar# jobs
+[2]+  Stopped                 curl http://localhost:8090/?code=4/xxxxxxx#
+# step 8: 提到前台来结束吧
+root@walker:~/KindleEar# fg %2
+curl http://localhost:8090/?code=4/CYdQFQLiLBFwa7ajsU1acb1Xx9Kpal6SxMuPIS-dRYo#
+&lt;html&gt;&lt;head&gt;&lt;title&gt;Authentication Status&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;The authentication flow has completed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;root@walker:~/KindleEar#
+</code></pre>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%8A%8AGAE%E7%A8%8B%E5%BA%8F%E9%80%9A%E8%BF%87SSH%E9%83%A8%E7%BD%B2%E5%88%B0VPS/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/-bin-bash%E5%92%8C-bin-sh%E7%9A%84%E5%8C%BA%E5%88%AB/" target="_self">-bin-bash和-bin-sh的区别</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/-bin-bash%E5%92%8C-bin-sh%E7%9A%84%E5%8C%BA%E5%88%AB/" target="_self">
+                <time class="text-uppercase">
+                    March 26 2010
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>[该文不严谨, 文末有补充]</p><p>脚本test.sh内容：</p>
+<pre><code>#!/bin/sh
+source pcy.sh #pcy.sh并不存在
+echo hello
+</code></pre>
+<p>执行./test.sh，屏幕输出为：</p>
+<pre><code>./test.sh: line 2: pcy.sh: No such file or directory
+</code></pre>
+<p>由此可见，在<code>#!/bin/sh</code>的情况下，source不成功，<strong>不会运行</strong>source后面的代码。
+修改test.sh脚本的第一行，变为<code>#!/bin/bash</code>，再次执行./test.sh，屏幕输出为：</p>
+<pre><code>./test.sh: line 2: pcy.sh: No such file or directory
+hello
+</code></pre>
+<p>由此可见，在<code>#!/bin/bash</code>的情况下，虽然source不成功，但是还是运行了source后面的echo语句。
+但是紧接着我又试着运行了一下<code>sh ./test.sh</code>，这次屏幕输出为：</p>
+<pre><code>./test.sh: line 2: pcy.sh: No such file or directory
+</code></pre>
+<p>表示虽然脚本中指定了#!/bin/bash，但是如果使用sh 方式运行，如果source不成功，也不会运行source后面的代码。</p><p>为什么会有这样的区别呢？</p><p>junru同学作了解释</p><ol>
+<li>sh一般设成bash的软链</li>
+</ol>
+
+<pre><code>[work@zjm-testing-app46 cy]$ ll /bin/sh
+lrwxrwxrwx 1 root root 4 Nov 13 2006 /bin/sh -&gt; bash
+</code></pre>
+<ol start="2">
+<li>在一般的linux系统当中（如redhat），使用sh调用执行脚本相当于打开了bash的POSIX标准模式</li>
+<li>也就是说 /bin/sh 相当于 /bin/bash --posix</li>
+</ol>
+<p>所以，sh跟bash的区别，实际上就是bash有没有开启posix模式的区别</p><p>so，可以预想的是，如果第一行写成 #!/bin/bash --posix，那么脚本执行效果跟#!/bin/sh是一样的（遵循posix的特定规范，有可能就包括这样的规范：“当某行代码出错时，不继续往下解释”）</p><p>来源: <a href="http://www.cnblogs.com/baizhantang/archive/2012/09/11/2680453.html"><a href="http://www.cnblogs.com/baizhantang/archive/2012/09/11/2680453.html">http://www.cnblogs.com/baizhantang/archive/2012/09/11/2680453.html</a></a></p><h1>其它解释</h1>
+<p>等等,  这里就完了吗? 这里有更明确的说法</p><p>在<code>CentOS</code>里，/bin/sh是一个指向/bin/bash的符号链接: (只是在 CentOS 里哦)</p>
+<pre><code>[root@centosraw ~]# ls -l /bin/*sh
+-rwxr-xr-x. 1 root root 903272 Feb 22 05:09 /bin/bash
+-rwxr-xr-x. 1 root root 106216 Oct 17  2012 /bin/dash
+lrwxrwxrwx. 1 root root      4 Mar 22 10:22 /bin/sh -&gt; bash
+</code></pre>
+<p><strong>但在Mac OS上不是</strong>，/bin/sh和/bin/bash是两个<strong>不同</strong>的文件，尽管它们的大小只相差100字节左右:</p>
+<pre><code>iMac:~ wuxiao$ ls -l /bin/*sh
+-r-xr-xr-x  1 root  wheel  1371648  6 Nov 16:52 /bin/bash
+-rwxr-xr-x  2 root  wheel   772992  6 Nov 16:52 /bin/csh
+-r-xr-xr-x  1 root  wheel  2180736  6 Nov 16:52 /bin/ksh
+-r-xr-xr-x  1 root  wheel  1371712  6 Nov 16:52 /bin/sh
+-rwxr-xr-x  2 root  wheel   772992  6 Nov 16:52 /bin/tcsh
+-rwxr-xr-x  1 root  wheel  1103984  6 Nov 16:52 /bin/zsh
+</code></pre>
+<p>来源: <a href="https://github.com/qinjx/30min_guides/blob/master/shell.md"><a href="https://github.com/qinjx/30min_guides/blob/master/shell.md">https://github.com/qinjx/30min_guides/blob/master/shell.md</a></a></p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/-bin-bash%E5%92%8C-bin-sh%E7%9A%84%E5%8C%BA%E5%88%AB/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+</section>
+
+<div class="container">
+    <section id="prism__page__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+        <ul>
+            
+            <li class="next">
+                <a class="no-link" href="/page/9/" target="_self"><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</a>
+            </li>
+            
+            
+            <li class="prev text-muted">
+                <span title="Viewing the last page.">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></span>
+            </li>
+            
+        </ul>
+    </section>
+</div>
+
+
+</main>
+
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
+                    </section>
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
+                            <span>Copyright © 2022 walker</span>
+                        </p>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+            </footer>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    
+</body>
+
+</html>

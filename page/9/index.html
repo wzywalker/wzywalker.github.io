@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/9011fc9b53efc28f0a64f0ad21a55012.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -55,6 +55,123 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/libxml-tree-h-file-not-found/" target="_self">libxml-tree-h-file-not-found</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/libxml-tree-h-file-not-found/" target="_self">
+                <time class="text-uppercase">
+                    September 22 2018
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>stackoverflow用户对添加libxml2库表现出了极大的抱怨，原因在要把它好好地添加进去实在是太复杂了。</p><p>我就是因为出现了'libxml/tree.h file not found’错误，才发现的这篇贴子，照着做，错误就消除了，备注如下：</p><p>原始地址：<a href="http://stackoverflow.com/questions/1428847/libxml-tree-h-no-such-file-or-directory"><a href="http://stackoverflow.com/questions/1428847/libxml-tree-h-no-such-file-or-directory">http://stackoverflow.com/questions/1428847/libxml-tree-h-no-such-file-or-directory</a></a></p><p>见e.w. parris的答案</p><p>Adding libxml2 is a big, fat, finicky pain in the ass. If you're going to do it, do it before you get too far in building your project.</p><p>You need to add it in two ways:</p><h2>1. Target settings</h2>
+<p>Click on your target (not your project) and select Build Phases.</p><p>Click on the reveal triangle titled Link Binary With Libraries. Click on the + to add a library.</p><p>Scroll to the bottom of the list and select libxml2.dylib. That adds the libxml2 library to your project.</p><blockquote>
+<p>注: xcode 7 以后, <code>.dylib</code>文件变成了<code>.tbd</code>文件, 想要引用<code>.dylib</code>文件, 点<code>add others</code> → <code>cmd+shift+G</code>→type <code>/usr/lib</code> → find <code>libxml2.dylib</code> or <code>libxml2.2.dylib</code></p></blockquote>
+<h2>2. Project settings</h2>
+<p>Now you have to tell your project where to look for it three more times.</p><p>Select the Build Settings tab.</p><p>Scroll down to the Linking section. Under your projects columns double click on the Other Linker Flags row. Click the + and add -lxml2 to the list.</p><p>Still more.</p><p>In the same tab, scroll down to the Search Paths section.</p><p>Under your projects column in the Framework Search Paths row add /usr/lib/libxml2.dylib.</p><p>In the Header Search Paths and the User Header Search Paths row add $(SDKROOT)/usr/include/libxml2.</p><p>In those last two cases make sure that path is entered in Debug and Release.</p><h2>3. Clean</h2>
+<p>Under the Product Menu select Clean.</p><p>Then, if I were you (and lets face it, I probably am) I'd quit Xcode and walk away. When you come back and launch you should be good to go.</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/libxml-tree-h-file-not-found/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/iOS%E5%BA%94%E7%94%A83D-Touch%E5%BF%AB%E6%8D%B7%E8%AE%BF%E9%97%AE/" target="_self">iOS应用3D-Touch快捷访问</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/iOS%E5%BA%94%E7%94%A83D-Touch%E5%BF%AB%E6%8D%B7%E8%AE%BF%E9%97%AE/" target="_self">
+                <time class="text-uppercase">
+                    September 14 2018
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>#用法</p><h2>添加快捷项(UIApplicationShortcutItem)</h2>
+<p>有两种途径, 编辑<code>Info.plist</code>或代码添加</p><h3>Info.plist</h3>
+<div class="highlight"><pre><span></span><span class="nt">&lt;key&gt;</span>UIApplicationShortcutItems<span class="nt">&lt;/key&gt;</span>
+<span class="nt">&lt;array&gt;</span>
+    <span class="nt">&lt;dict&gt;</span>
+       <span class="cm">&lt;!--图标, 必须--&gt;</span>
+    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemIconType<span class="nt">&lt;/key&gt;</span>
+    	<span class="nt">&lt;string&gt;</span>UIApplicationShortcutIconTypeCapturePhoto<span class="nt">&lt;/string&gt;</span>
+    	<span class="cm">&lt;!--标题, 必须--&gt;</span>
+    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemTitle<span class="nt">&lt;/key&gt;</span>
+    	<span class="nt">&lt;string&gt;</span>Scan<span class="nt">&lt;/string&gt;</span>
+    	<span class="cp">&lt;!-副标题--&gt;</span>
+    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemSubtitle<span class="nt">&lt;/key&gt;</span>
+    	<span class="nt">&lt;string&gt;</span>QR Code<span class="nt">&lt;/string&gt;</span>
+    	<span class="cm">&lt;!--快捷项标识符--&gt;</span>
+    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemType<span class="nt">&lt;/key&gt;</span>
+    	<span class="nt">&lt;string&gt;</span>$(PRODUCT_BUNDLE_IDENTIFIER).Scan<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;/dict&gt;</span>
+<span class="nt">&lt;/array&gt;</span>
+</pre></div>
+<p>完整可选项见<a href="https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/iPhoneOSKeys.html">文档</a></p><h3>代码添加</h3>
+<div class="highlight"><pre><span></span><span class="c1">// Construct the items.</span>
+<span class="kd">let</span> <span class="nv">shortcut3</span> <span class="p">=</span> <span class="bp">UIMutableApplicationShortcutItem</span><span class="p">(</span>
+    <span class="n">type</span><span class="p">:</span> <span class="n">ShortcutIdentifier</span><span class="p">.</span><span class="n">Third</span><span class="p">.</span><span class="n">type</span><span class="p">,</span> 
+    <span class="n">localizedTitle</span><span class="p">:</span> <span class="s">&quot;Play&quot;</span><span class="p">,</span> 
+    <span class="n">localizedSubtitle</span><span class="p">:</span> <span class="s">&quot;Will Play an item&quot;</span><span class="p">,</span> 
+    <span class="n">icon</span><span class="p">:</span> <span class="bp">UIApplicationShortcutIcon</span><span class="p">(</span><span class="n">type</span><span class="p">:</span> <span class="p">.</span><span class="n">play</span><span class="p">),</span> 
+    <span class="n">userInfo</span><span class="p">:</span> <span class="p">[</span>
+        <span class="n">AppDelegate</span><span class="p">.</span><span class="n">applicationShortcutUserInfoIconKey</span><span class="p">:</span> <span class="n">UIApplicationShortcutIconType</span><span class="p">.</span><span class="n">play</span><span class="p">.</span><span class="n">rawValue</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="kd">let</span> <span class="nv">shortcut4</span> <span class="p">=</span> <span class="p">...</span> <span class="c1">// 同上</span>
+
+<span class="c1">// Update the application providing the initial &#39;dynamic&#39; shortcut items.</span>
+<span class="n">application</span><span class="p">.</span><span class="n">shortcutItems</span> <span class="p">=</span> <span class="p">[</span><span class="n">shortcut3</span><span class="p">,</span> <span class="n">shortcut4</span><span class="p">]</span>
+</pre></div>
+<h2>良好实践</h2>
+<ol>
+<li>实现一个<code>(BOOL)handleShortcutItem:(UIApplicationShortcutItem *)shortcutItem</code>返<code>BOOL</code>值的方法, 里面进行业务操作</li>
+<li>实现代理方法:</li>
+</ol>
+
+<pre><code>- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler {
+    completionHandler([self handleShortcutItem:shortcutItem]);
+}
+</code></pre>
+<ol start="3">
+<li>在<code>didBecomeActive</code>方法里判断是否需要 handle 快捷方式</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">applicationDidBecomeActive:</span><span class="p">(</span><span class="bp">UIApplication</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nv">application</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">handleShortcutItem</span><span class="o">:</span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nil</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<ol start="4">
+<li>3说明如果你需要提取一个属性<code>launchedShortcutItem</code></li>
+<li>如果提取了属性, 那么<code>didFinishLaunch</code>也可以顺便改为:</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="kt">BOOL</span><span class="w"> </span><span class="n">shouldPerformAdditionalDelegateHandling</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">YES</span><span class="p">;</span><span class="w"></span>
+<span class="bp">UIApplicationShortcutItem</span><span class="w"> </span><span class="o">*</span><span class="n">shortcutItem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="bp">UIApplicationShortcutItem</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">launchOptions</span><span class="p">[</span><span class="n">UIApplicationLaunchOptionsShortcutItemKey</span><span class="p">];</span><span class="w"></span>
+<span class="k">if</span><span class="p">(</span><span class="n">shortcutItem</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shortcutItem</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">shouldPerformAdditionalDelegateHandling</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NO</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c1">// 你的其它初始代码</span>
+
+<span class="k">return</span><span class="w"> </span><span class="n">shouldPerformAdditionalDelegateHandling</span><span class="p">;</span><span class="w">  </span><span class="c1">// 通常这里返的是 YES;</span>
+</pre></div>
+<p>试试吧</p><p>#参考资料</p><ol>
+<li><a href="https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/Adopting3DTouchOniPhone/">官方文档</a></li>
+<li><a href="https://developer.apple.com/library/content/samplecode/ApplicationShortcuts/Introduction/Intro.html#//apple_ref/doc/uid/TP40016545">示例代码</a></li>
+<li><a href="https://developer.apple.com/documentation/uikit/uiapplicationshortcuticontype">快捷图标</a></li>
+<li><a href="https://github.com/DeskConnect/SBShortcutMenuSimulator">模拟器支持</a></li>
+<li><a href="https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/iPhoneOSKeys.html">iOS Keys</a> 一些键值的说明</li>
+</ol>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/iOS%E5%BA%94%E7%94%A83D-Touch%E5%BF%AB%E6%8D%B7%E8%AE%BF%E9%97%AE/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%A4%87%E4%BB%BD%E7%AF%87%E7%BB%98%E5%88%B6%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E7%9A%84%E6%96%87%E7%AB%A0/" target="_self">备份篇绘制聊天气泡的文章</a></h1>
@@ -580,146 +697,6 @@ if (myClazz) {
         
     </article>
     
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E6%8A%8AGAE%E7%A8%8B%E5%BA%8F%E9%80%9A%E8%BF%87SSH%E9%83%A8%E7%BD%B2%E5%88%B0VPS/" target="_self">把GAE程序通过SSH部署到VPS</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E6%8A%8AGAE%E7%A8%8B%E5%BA%8F%E9%80%9A%E8%BF%87SSH%E9%83%A8%E7%BD%B2%E5%88%B0VPS/" target="_self">
-                <time class="text-uppercase">
-                    January 14 2017
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>大部分在<a href="https://cloud.google.com/appengine/downloads">文档</a>上都写了, 写这篇文章的目的是发现现在<code>appcfg.py update xxxx</code>的时候会打开浏览器访问google请求授权(后台内建了一个本地server, 端口是<code>8090</code>, 授权成功后会带授权码请求本地的8090端口, 所以我们在 ssh 环境中是没有浏览器的, 该怎么解决呢?</p><p>我玩 linux 不多, 就以我的知识量这么解决:</p><ol>
-<li>碰到需要访问网站的时候, 程序已经给出了提示, 要你退出, 你当然不退出, 而是把网址复制出来, 在本地打开, 授权成功后, 本地浏览器会请求<code>127.0.0.1:8090</code>, 当然, 什么都不会发生, 但从地址栏里把地址复制到剪贴板.</li>
-<li>回到SSH, 把当前任务放到后台(<code>ctrl+z</code>)</li>
-<li>用<code>curl</code>访问剪贴板里的地址</li>
-<li>继续<code>ctrl+z</code>把<code>curl</code>请求放到后台</li>
-<li><code>jobs</code>命令查一下, 如果后台没有别的任务的话, <code>appcfg</code>任务的id 应该是1, <code>curl</code>任务id 应该是2(现在以我的1和2为准)</li>
-<li>把<code>appcfg</code>提到前台: <code>fg %1</code></li>
-<li>你会看到程序顺利进行下去了</li>
-<li>继续, <code>fg %2</code>把 curl 任务提到前台, 你会看到提示, 什么授权成功之类的</li>
-</ol>
-<p>演示:</p>
-<pre><code>root@walker:~/KindleEar# appcfg.py update app.yaml module-worker.yaml
-07:52 AM Host: appengine.google.com
-07:52 AM Application: kindleearwalker; version: 1
-07:52 AM Starting update of app: kindleearwalker, version: 1
-07:52 AM Getting current resource limits.
-Your browser has been opened to visit:
-
-    https://accounts.google.com/o/oauth2/auth?scope=演示数据
-    # step1: 请复制此网址, 并忽略要你退出换电脑的提示
-
-If your browser is on a different machine then exit and re-run this
-application with the command-line parameter
-
-  --noauth_local_webserver
-
-# step2: 现在开始把任务放到后台
-^Z
-[1]+  Stopped                 appcfg.py update app.yaml module-worker.yaml
-# step3: 把从本机浏览器复制的回调 url 访问一下
-root@walker:~/KindleEar# curl http://localhost:8090/?code=4/CYdQFQLiLBFwa7ajsU1acb1Xx9Kpal6SxMuPIS-dRYo#
-# step4: 把访问任务放到后台
-^Z
-[2]+  Stopped                 curl http://localhost:8090/?code=4/CYdQFQLiLBFwa7ajsU1acb1Xx9Kpal6SxMuPIS-dRYo#
-# step 5: 查看一下任务和 ID
-root@walker:~/KindleEar# jobs
-[1]-  Stopped                 appcfg.py update app.yaml module-worker.yaml
-[2]+  Stopped                 curl http://localhost:8090/?code=4/xxxxx#
-# step 6: 把appcgf的任务提到前台
-root@walker:~/KindleEar# fg %1
-appcfg.py update app.yaml module-worker.yaml
-Authentication successful.
-07:54 AM Scanning files on local disk.
-07:54 AM Cloning 15 static files.
-07:54 AM Cloning 387 application files.
-07:54 AM Uploading 3 files and blobs.
-07:54 AM Uploaded 3 files and blobs.
-.........省略
-07:54 AM Compilation completed.
-07:54 AM Starting deployment.
-07:54 AM Checking if deployment succeeded.
-07:54 AM Deployment successful.
-07:54 AM Checking if updated app version is serving.
-07:54 AM Completed update of app: kindleearwalker, module: worker, version: 1
-# step 7: see? 成功了, 看看剩下的任务吧
-root@walker:~/KindleEar# jobs
-[2]+  Stopped                 curl http://localhost:8090/?code=4/xxxxxxx#
-# step 8: 提到前台来结束吧
-root@walker:~/KindleEar# fg %2
-curl http://localhost:8090/?code=4/CYdQFQLiLBFwa7ajsU1acb1Xx9Kpal6SxMuPIS-dRYo#
-&lt;html&gt;&lt;head&gt;&lt;title&gt;Authentication Status&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;The authentication flow has completed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;root@walker:~/KindleEar#
-</code></pre>
-</div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%8A%8AGAE%E7%A8%8B%E5%BA%8F%E9%80%9A%E8%BF%87SSH%E9%83%A8%E7%BD%B2%E5%88%B0VPS/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/-bin-bash%E5%92%8C-bin-sh%E7%9A%84%E5%8C%BA%E5%88%AB/" target="_self">-bin-bash和-bin-sh的区别</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/-bin-bash%E5%92%8C-bin-sh%E7%9A%84%E5%8C%BA%E5%88%AB/" target="_self">
-                <time class="text-uppercase">
-                    March 26 2010
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>[该文不严谨, 文末有补充]</p><p>脚本test.sh内容：</p>
-<pre><code>#!/bin/sh
-source pcy.sh #pcy.sh并不存在
-echo hello
-</code></pre>
-<p>执行./test.sh，屏幕输出为：</p>
-<pre><code>./test.sh: line 2: pcy.sh: No such file or directory
-</code></pre>
-<p>由此可见，在<code>#!/bin/sh</code>的情况下，source不成功，<strong>不会运行</strong>source后面的代码。
-修改test.sh脚本的第一行，变为<code>#!/bin/bash</code>，再次执行./test.sh，屏幕输出为：</p>
-<pre><code>./test.sh: line 2: pcy.sh: No such file or directory
-hello
-</code></pre>
-<p>由此可见，在<code>#!/bin/bash</code>的情况下，虽然source不成功，但是还是运行了source后面的echo语句。
-但是紧接着我又试着运行了一下<code>sh ./test.sh</code>，这次屏幕输出为：</p>
-<pre><code>./test.sh: line 2: pcy.sh: No such file or directory
-</code></pre>
-<p>表示虽然脚本中指定了#!/bin/bash，但是如果使用sh 方式运行，如果source不成功，也不会运行source后面的代码。</p><p>为什么会有这样的区别呢？</p><p>junru同学作了解释</p><ol>
-<li>sh一般设成bash的软链</li>
-</ol>
-
-<pre><code>[work@zjm-testing-app46 cy]$ ll /bin/sh
-lrwxrwxrwx 1 root root 4 Nov 13 2006 /bin/sh -&gt; bash
-</code></pre>
-<ol start="2">
-<li>在一般的linux系统当中（如redhat），使用sh调用执行脚本相当于打开了bash的POSIX标准模式</li>
-<li>也就是说 /bin/sh 相当于 /bin/bash --posix</li>
-</ol>
-<p>所以，sh跟bash的区别，实际上就是bash有没有开启posix模式的区别</p><p>so，可以预想的是，如果第一行写成 #!/bin/bash --posix，那么脚本执行效果跟#!/bin/sh是一样的（遵循posix的特定规范，有可能就包括这样的规范：“当某行代码出错时，不继续往下解释”）</p><p>来源: <a href="http://www.cnblogs.com/baizhantang/archive/2012/09/11/2680453.html"><a href="http://www.cnblogs.com/baizhantang/archive/2012/09/11/2680453.html">http://www.cnblogs.com/baizhantang/archive/2012/09/11/2680453.html</a></a></p><h1>其它解释</h1>
-<p>等等,  这里就完了吗? 这里有更明确的说法</p><p>在<code>CentOS</code>里，/bin/sh是一个指向/bin/bash的符号链接: (只是在 CentOS 里哦)</p>
-<pre><code>[root@centosraw ~]# ls -l /bin/*sh
--rwxr-xr-x. 1 root root 903272 Feb 22 05:09 /bin/bash
--rwxr-xr-x. 1 root root 106216 Oct 17  2012 /bin/dash
-lrwxrwxrwx. 1 root root      4 Mar 22 10:22 /bin/sh -&gt; bash
-</code></pre>
-<p><strong>但在Mac OS上不是</strong>，/bin/sh和/bin/bash是两个<strong>不同</strong>的文件，尽管它们的大小只相差100字节左右:</p>
-<pre><code>iMac:~ wuxiao$ ls -l /bin/*sh
--r-xr-xr-x  1 root  wheel  1371648  6 Nov 16:52 /bin/bash
--rwxr-xr-x  2 root  wheel   772992  6 Nov 16:52 /bin/csh
--r-xr-xr-x  1 root  wheel  2180736  6 Nov 16:52 /bin/ksh
--r-xr-xr-x  1 root  wheel  1371712  6 Nov 16:52 /bin/sh
--rwxr-xr-x  2 root  wheel   772992  6 Nov 16:52 /bin/tcsh
--rwxr-xr-x  1 root  wheel  1103984  6 Nov 16:52 /bin/zsh
-</code></pre>
-<p>来源: <a href="https://github.com/qinjx/30min_guides/blob/master/shell.md"><a href="https://github.com/qinjx/30min_guides/blob/master/shell.md">https://github.com/qinjx/30min_guides/blob/master/shell.md</a></a></p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/-bin-bash%E5%92%8C-bin-sh%E7%9A%84%E5%8C%BA%E5%88%AB/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
 </section>
 
 <div class="container">
@@ -731,8 +708,8 @@ lrwxrwxrwx. 1 root root      4 Mar 22 10:22 /bin/sh -&gt; bash
             </li>
             
             
-            <li class="prev text-muted">
-                <span title="Viewing the last page.">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></span>
+            <li class="prev">
+                <a class="no-link" href="/page/10/" target="_self">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
             </li>
             
         </ul>

@@ -5,6 +5,20 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitem
 xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
+    <loc>/archives/calayer_mask/</loc>
+    <lastmod>2022-07-14</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
+    <loc>/archives/advanced-graphics-with-core-animation/</loc>
+    <lastmod>2022-06-25</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+</url>
+
+<url>
     <loc>/archives/js-spread-syntax/</loc>
     <lastmod>2022-04-23</lastmod>
     <changefreq>always</changefreq>
@@ -362,14 +376,14 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-    <loc>/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/</loc>
+    <loc>/archives/%E4%BA%8C%E5%88%86%E6%B3%95%E3%80%81%E7%89%9B%E9%A1%BF%E6%B3%95%E5%92%8C%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E5%BC%80%E6%A0%B9%E5%8F%B7%E5%92%8C%E8%A7%A3%E6%96%B9%E7%A8%8B/</loc>
     <lastmod>2021-01-14</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
 </url>
 
 <url>
-    <loc>/archives/%E4%BA%8C%E5%88%86%E6%B3%95%E3%80%81%E7%89%9B%E9%A1%BF%E6%B3%95%E5%92%8C%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E5%BC%80%E6%A0%B9%E5%8F%B7%E5%92%8C%E8%A7%A3%E6%96%B9%E7%A8%8B/</loc>
+    <loc>/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/</loc>
     <lastmod>2021-01-14</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>

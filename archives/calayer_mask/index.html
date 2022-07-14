@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<html lang="english">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Prism" />
+    <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+        }
+
+    </script>
+    
+<title>CALayer应用mask实现为文字部分涂抹 - walker's code blog</title>
+<meta name="author" content="walker" />
+<meta name="description" content="先看效果，白底黑字，随着拖动，逐渐变成黑底白字（注：因为项目关系，效果是带着底色拖动，所以以这种效果来讲解，如果只是改文字颜色，就是只涂抹文字，会稍微简单一些，请触类旁通）思路：底层（白底黑字），表层（黑底白字），对表层应用蒙板，蒙板的frame由手势控制本质上是CALayer的mask，但我们先用两个UIView来实现一下，因为它直观且简单：- (void)viewDidLoad {" />
+<meta property="og:title" content="CALayer应用mask实现为文字部分涂抹 - walker's code blog" />
+<meta property="og:description" content="先看效果，白底黑字，随着拖动，逐渐变成黑底白字（注：因为项目关系，效果是带着底色拖动，所以以这种效果来讲解，如果只是改文字颜色，就是只涂抹文字，会稍微简单一些，请触类旁通）思路：底层（白底黑字），表层（黑底白字），对表层应用蒙板，蒙板的frame由手势控制本质上是CALayer的mask，但我们先用两个UIView来实现一下，因为它直观且简单：- (void)viewDidLoad {" />
+<meta property="og:site_name" content="walker's code blog" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/calayer_mask/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-07-14T23:25:00-00.00" />
+<meta name="twitter:title" content="CALayer应用mask实现为文字部分涂抹 - walker's code blog" />
+<meta name="twitter:description" content="先看效果，白底黑字，随着拖动，逐渐变成黑底白字（注：因为项目关系，效果是带着底色拖动，所以以这种效果来讲解，如果只是改文字颜色，就是只涂抹文字，会稍微简单一些，请触类旁通）思路：底层（白底黑字），表层（黑底白字），对表层应用蒙板，蒙板的frame由手势控制本质上是CALayer的mask，但我们先用两个UIView来实现一下，因为它直观且简单：- (void)viewDidLoad {" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
+<main>
+    <section class="prism-section row" id="prism__content">
+        <article class="yue col-md-8 offset-md-2">
+            <h1 class="prism-post-title">CALayer应用mask实现为文字部分涂抹</h1>
+            <div class="prism-post-time">
+                <time class="text-uppercase">
+                    July 14 2022
+                </time>
+            </div>
+            <div class="prism-content-body">
+                <p>先看效果，白底黑字，随着拖动，逐渐变成黑底白字（注：因为项目关系，效果是带着底色拖动，所以以这种效果来讲解，如果只是改文字颜色，就是只涂抹文字，会稍微简单一些，请触类旁通）</p><figure  style="flex: 106.89655172413794" ><img width="1116" height="522" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/ffbec7d6d811b8fd6cca175ce25a294e.gif" alt="20220714161447"/></figure><p>思路：底层（白底黑字），表层（黑底白字），对表层应用蒙板，蒙板的frame由手势控制</p><figure class="vertical-figure" style="flex: 49.69230769230769" ><img width="646" height="650" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/6f6838054b30d06ed348b1f6a24d1abf.png" alt="image-20220714193234444"/></figure><p>本质上是CALayer的mask，但我们先用两个UIView来实现一下，因为它直观且简单：</p><div class="highlight"><pre><span></span><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="nb">super</span><span class="w"> </span><span class="n">viewDidLoad</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// create wrapper view 省略</span>
+
+<span class="w">    </span><span class="c1">// 底层白底黑字</span>
+<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">backgroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">UIColor</span><span class="p">.</span><span class="n">whiteColor</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="bp">UILabel</span><span class="w"> </span><span class="o">*</span><span class="n">lbl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">createLabel</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">lbl</span><span class="p">.</span><span class="n">textColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">UIColor</span><span class="p">.</span><span class="n">blackColor</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="w"> </span><span class="n">addSubview</span><span class="o">:</span><span class="n">lbl</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// 表层黑底</span>
+<span class="w">    </span><span class="bp">UIView</span><span class="w"> </span><span class="o">*</span><span class="n">cover</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">UIView</span><span class="w"> </span><span class="n">new</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">cover</span><span class="p">.</span><span class="n">backgroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">UIColor</span><span class="p">.</span><span class="n">blackColor</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">cover</span><span class="p">.</span><span class="n">frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">bounds</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="w"> </span><span class="n">addSubview</span><span class="o">:</span><span class="n">cover</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// 白字</span>
+<span class="w">    </span><span class="bp">UILabel</span><span class="w"> </span><span class="o">*</span><span class="n">lbl2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">createLabel</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">lbl2</span><span class="p">.</span><span class="n">textColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">UIColor</span><span class="p">.</span><span class="n">whiteColor</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="n">cover</span><span class="w"> </span><span class="n">addSubview</span><span class="o">:</span><span class="n">lbl2</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// mask的width从0到100%</span>
+<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">UIView</span><span class="w"> </span><span class="n">new</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">mask</span><span class="p">.</span><span class="n">frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">mask</span><span class="p">.</span><span class="n">backgroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">blackColor</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">cover</span><span class="p">.</span><span class="n">maskView</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">self</span><span class="p">.</span><span class="n">mask</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="p">-</span> <span class="p">(</span><span class="bp">UILabel</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nf">createLabel</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="p">-</span> <span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nf">slidechanged:</span><span class="p">(</span><span class="bp">UISlider</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nv">sender</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">mask</span><span class="p">.</span><span class="n">frame</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sender</span><span class="p">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<p>UIView当然本质上用的都是CALayer，那么我用CALayer改写会怎样呢？</p><p>结构：UIView黑底+CATextLayer Mask &gt; CAShapeLayer黑底 &gt; CATextLayer白字， 对<code>shapeLayer</code>应用mask</p><div class="highlight"><pre><span></span><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="p">[</span><span class="nb">super</span><span class="w"> </span><span class="n">viewDidLoad</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// create wrapper 省略</span>
+
+<span class="w">  </span><span class="c1">// 底部文字，黑底+文字mask</span>
+<span class="w">  </span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">backgroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">blackColor</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="bp">CATextLayer</span><span class="w"> </span><span class="o">*</span><span class="n">bottom</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">createTextLayer</span><span class="o">:</span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">frame</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">layer</span><span class="p">.</span><span class="n">mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bottom</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// 顶部背景layer+顶部文字layer</span>
+<span class="w">  </span><span class="bp">CAShapeLayer</span><span class="w"> </span><span class="o">*</span><span class="n">top</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">CAShapeLayer</span><span class="w"> </span><span class="n">new</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="n">top</span><span class="p">.</span><span class="n">backgroundColor</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">redColor</span><span class="p">].</span><span class="n">CGColor</span><span class="p">;</span><span class="w">  </span><span class="c1">// 原本是黑底白字，后面解释为什么改成了红底</span>
+<span class="w">  </span><span class="n">top</span><span class="p">.</span><span class="n">frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">frame</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="bp">CATextLayer</span><span class="w"> </span><span class="o">*</span><span class="n">toptext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">createTextLayer</span><span class="o">:</span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">bounds</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="n">toptext</span><span class="p">.</span><span class="n">foregroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">whiteColor</span><span class="p">].</span><span class="n">CGColor</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">[</span><span class="n">top</span><span class="w"> </span><span class="n">addSublayer</span><span class="o">:</span><span class="n">toptext</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">layer</span><span class="w"> </span><span class="n">addSublayer</span><span class="o">:</span><span class="n">top</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">  </span><span class="nb">self</span><span class="p">.</span><span class="n">mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">CAShapeLayer</span><span class="w"> </span><span class="n">new</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="nb">self</span><span class="p">.</span><span class="n">mask</span><span class="p">.</span><span class="n">frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CGRectMake</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="nb">self</span><span class="p">.</span><span class="n">mask</span><span class="p">.</span><span class="n">backgroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">blackColor</span><span class="p">].</span><span class="n">CGColor</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">top</span><span class="p">.</span><span class="n">mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">self</span><span class="p">.</span><span class="n">mask</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="p">-</span> <span class="p">(</span><span class="bp">CATextLayer</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nf">createTextLayer:</span><span class="p">(</span><span class="n">CGRect</span><span class="p">)</span><span class="nv">frame</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="bp">CATextLayer</span><span class="w"> </span><span class="o">*</span><span class="n">layer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">CATextLayer</span><span class="w"> </span><span class="n">new</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">layer</span><span class="p">.</span><span class="n">frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">frame</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">layer</span><span class="p">.</span><span class="n">font</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">__bridge</span><span class="w"> </span><span class="n">CFTypeRef</span><span class="p">)[</span><span class="bp">UIFont</span><span class="w"> </span><span class="n">systemFontOfSize</span><span class="o">:</span><span class="mf">12.0f</span><span class="w"> </span><span class="n">weight</span><span class="o">:</span><span class="n">UIFontWeightHeavy</span><span class="p">];</span><span class="w">  </span><span class="c1">// 这里字号是无效的</span>
+<span class="w">    </span><span class="n">layer</span><span class="p">.</span><span class="n">fontSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">73.0f</span><span class="p">;</span><span class="w"> </span><span class="c1">// 在这里设置字号</span>
+<span class="w">    </span><span class="n">layer</span><span class="p">.</span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">@&quot;Hello WestWorld&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">layer</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+<p>结果却得到这个：</p><figure  style="flex: 189.3491124260355" ><img width="1280" height="338" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/41856510dfd32672a9312a09ce95245d.gif" alt="20220714180940"/></figure><p>黑底只剩下了黑边，观察到三个现象：</p><ol>
+<li>对根layer进行mask，其sublayer都是被mask的</li>
+<li>用文字对文字做mask，是会描边的（这一点做了额外几个测试证明了）</li>
+<li>动画没有那么跟手（人在前面跑，魂在后面追），都有动量的感觉了，对比UIView的方案看看</li>
+</ol>
+<p>先来拣第二个软柿子捏，猜测用<code>CAShapeLayer</code>来做cover应该不会有描边，也就是说注释掉以下几行</p><div class="highlight"><pre><span></span><span class="bp">CATextLayer</span><span class="w"> </span><span class="o">*</span><span class="n">toptext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">createTextLayer</span><span class="o">:</span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">frame</span><span class="p">];</span><span class="w"></span>
+<span class="n">toptext</span><span class="p">.</span><span class="n">foregroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">whiteColor</span><span class="p">].</span><span class="n">CGColor</span><span class="p">;</span><span class="w"></span>
+<span class="p">[</span><span class="n">top</span><span class="w"> </span><span class="n">addSublayer</span><span class="o">:</span><span class="n">toptext</span><span class="p">];</span><span class="w"></span>
+</pre></div>
+<p>效果如期望的那样，（这次没有描边了，所以就换了个颜色，不然白底白字就看不见了）</p><figure  style="flex: 200.32051282051282" ><img width="1250" height="312" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2594836c148deacd8a75f4b8fbd2ee29.gif" alt="20220714184942"/></figure><p>这次我们不用根layer做mask，添加一个层：</p><div class="highlight"><pre><span></span><span class="c1">// 底部文字，黑底+文字mask</span>
+<span class="bp">CATextLayer</span><span class="w"> </span><span class="o">*</span><span class="n">bottom</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">createTextLayer</span><span class="o">:</span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">bounds</span><span class="p">];</span><span class="w"></span>
+<span class="c1">// self.wrapper.backgroundColor = [UIColor blackColor];</span>
+<span class="c1">// self.wrapper.layer.mask = bottom; </span>
+<span class="c1">// 对根layer进行mask，会把sublayer全部mask了</span>
+<span class="c1">// 所以添加一个layer</span>
+<span class="bp">CAShapeLayer</span><span class="w"> </span><span class="o">*</span><span class="n">bottomShape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">CAShapeLayer</span><span class="w"> </span><span class="n">new</span><span class="p">];</span><span class="w"></span>
+<span class="n">bottomShape</span><span class="p">.</span><span class="n">frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">bounds</span><span class="p">;</span><span class="w"></span>
+<span class="n">bottomShape</span><span class="p">.</span><span class="n">backgroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">blackColor</span><span class="p">].</span><span class="n">CGColor</span><span class="p">;</span><span class="w"></span>
+<span class="n">bottomShape</span><span class="p">.</span><span class="n">mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bottom</span><span class="p">;</span><span class="w"></span>
+<span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">layer</span><span class="w"> </span><span class="n">addSublayer</span><span class="o">:</span><span class="n">bottomShape</span><span class="p">];</span><span class="w"></span>
+</pre></div>
+<figure  style="flex: 181.14285714285714" ><img width="1268" height="350" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/03ebfa11434ae205e656839d6c410f6b.gif" alt="20220714191352"/></figure><p>现在如愿以偿，整个结构也只有一个UIView了，相比UView的方案，显然在查看视图结构的时候要简化得多，（动画效果仍然是魂在后面追...），但是，这次仍然是文字对文字做mask，这次却没有描边了：</p><figure  style="flex: 268.01801801801804" ><img width="1190" height="222" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/661881063d03936442e6722d2ad82063.png" alt="image-20220714191856600"/></figure><p>难道只有根layer上才会描？不继续探索了。</p><p>最后，解释一下对直接操作CALayer为什么反应还慢半拍呢？因为CALayer的大部分属性的改变是自带了动画的，在这个例子里得到了充分的证明。</p><p>补充一下全部用<code>CALayer</code>的结构
+<figure  style="flex: 67.69662921348315" ><img width="964" height="712" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/98c14a7ed3a8bfe08ed578b50521d239.png" alt=""/></figure></p>
+            </div>
+        </article>
+        <div class="prism-post-meta col-md-8 offset-md-2">
+    <span>walker</span>
+    
+    <span>/</span>
+    <span>
+        <a class="category no-link" href="/category/posts/" target="_self">
+        posts
+        </a>
+    </span>
+    
+    
+    <span>/</span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/calayer/" target="_self">#calayer</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/mask/" target="_self">#mask</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/catextlayer/" target="_self">#catextlayer</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/cashapelayer/" target="_self">#cashapelayer</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/maskView/" target="_self">#maskView</a>
+    </span>
+    
+    
+    
+    <span>/</span>
+    <span class="leancloud_visitors" id="/archives/calayer_mask/" data-flag-title="CALayer应用mask实现为文字部分涂抹"><span class="leancloud-visitors-count"></span> Views</span>
+    
+</div>
+    </section>
+
+    
+<section id="prism__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+    <ul>
+        
+        <li class="next text-muted">
+            <span title="Viewing the newest one."><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</span>
+        </li>
+        
+        
+        <li class="prev">
+            <a class="no-link" href="/archives/advanced-graphics-with-core-animation/" target="_self" title="Advanced Graphics With Core Animation 笔记">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    
+    <script>
+        var initValine = function() {
+            new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+        }
+
+    </script>
+    <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+    <div class="prism-comment-section container" id="prism__comment">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div id="vcomments"></div>
+            </div>
+        </div>
+    </div>
+    
+
+</main>
+
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
+                    </section>
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
+                            <span>Copyright © 2022 walker</span>
+                        </p>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+            </footer>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    
+</body>
+
+</html>

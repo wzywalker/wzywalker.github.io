@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/9011fc9b53efc28f0a64f0ad21a55012.json"
+            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -55,6 +55,82 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%85%B3%E4%BA%8E%40synthesize/" target="_self">关于@synthesize</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E5%85%B3%E4%BA%8E%40synthesize/" target="_self">
+                <time class="text-uppercase">
+                    August 16 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>首先, <code>@synthesize myLocalVar = _myLocalVar;</code> 这句话是显式帮你省掉了一个 <code>getter</code> 方法和一个 <code>setter</code> 方法. 两个方法长什么样不赘述.</p><p>其次, 从某个版本的 Xcode 开始, 你连 <code>@synthesize</code> 这句话也不需要写了, 但是请注意, 这只是一个 IDE 的特性. 你不需要手动合成, 不代表 <code>@synthesize</code> 不作用了, 仅仅是让<strong>你</strong>能少写这一句话, 而 Xcode 帮你补全了.</p><p>再次, @synthesize 仅仅是一个 <a href="http://clang.llvm.org/docs/LanguageExtensions.html#objective-c-autosynthesis-of-properties">clang 的 Objective-C 语言扩展</a> (<code>autosynthesis of properties</code>), 然后<code>clang</code>恰好是 Xcode 的默认编译器. 也就是说, 如果你换成了 <code>gcc</code>, 那么这个特性也就不复存在了.</p><p>基于上述, 如果你使用了自己的文本编辑器, 然后用自己用 <code>clang</code> 从命令行编译, <code>@synthesize</code> 这一句话是需要自己写的.</p><p>最后, 有如下例外</p><ol>
+<li>对于 <code>readwrite</code> 类型的属性, 你自行实现了 <code>getter</code> 和 <code>setter</code></li>
+<li>对于 <code>readonly</code>  类型的属性, 你自行实现了 <code>getter</code>
+ 以上两种情况, 你一旦自行实现了对应的 <code>getter</code> 或 <code>setter</code>, 对于本文的<code>myLocalVar</code>例子, 你将发现 <code>_myLocalVar</code>没有了, 意味着你需要<code>@synthesize</code>一下.</li>
+<li><code>dynamic</code>与<code>synthesize</code>是互斥的</li>
+<li><code>@protocol</code>中声明的属性</li>
+<li><code>category</code>中声明的属性</li>
+<li>你覆盖(<code>overridden</code>)父类的属性时, 必须手动<code>synthesize</code>.</li>
+</ol>
+<p>参考资料:
+1, <a href="https://stackoverflow.com/questions/19784454/when-should-i-use-synthesize-explicitly?answertab=votes">When should I use @synthesize explicitly?</a>
+2, <a href="http://suree.org/2015/09/01/Dynamic-Synthesize/">@dynamic 与 @synthesize 关键词详解</a></p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%85%B3%E4%BA%8E%40synthesize/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E9%87%8D%E8%A3%85mac%E7%B3%BB%E7%BB%9F%E5%90%8Essh%E5%BC%82%E5%B8%B8/" target="_self">重装mac系统后ssh异常</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E9%87%8D%E8%A3%85mac%E7%B3%BB%E7%BB%9F%E5%90%8Essh%E5%BC%82%E5%B8%B8/" target="_self">
+                <time class="text-uppercase">
+                    August 03 2019
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>表现在两个方面: <code>ssh 登录服务器</code>, 和<code>通过ssh 使用 git</code>, 报的错都是<code>Permissino denied (publickey)</code></p><h2>git异常的解决</h2>
+<p>根据<a href="https://help.github.com/articles/error-permission-denied-publickey/">github文档</a>, 我可以解决第二个问题, 第一个问题(ssh login)解决后再来更新.</p><p>使用git出现问题, 并不局限于 github, 我连 gitlab 也是一样. 其实根据文档一项项检测,我在<code>ssh-add -l</code>这一句发现了问题, 虽然我生成了密钥, 但是它的输出显示我没有私钥, 照如下解决即可:</p><blockquote>
+<p><strong>Tip</strong>: On most systems the default private keys (~/.ssh/id_rsa</p></blockquote>
+<p>, ~/.ssh/id_dsa and ~/.ssh/identity) are <strong>automatically</strong> added to the SSH authentication agent. You shouldn't need to run <code>ssh-add path/to/key</code>
+ unless you override the file name when you generate a key.</p><p>也就是说, 把你的id_rsa文件手动指定一下<code>ssh_add 文件路径</code>(不知道为什么会出这种鬼问题)</p><h2>SSH自动登录异常的解决</h2>
+<p>这是补充的内容, 刚刚解决.</p><p>首先, 你登不上这是服务端的问题, 没有把你的公钥写到<code>~/.ssh/authorized_keys</code>里面去, 你想办法把它写进去(当你 <code>ssh</code> 不上去的时候, <code>scp</code>当然也不行)</p><p>写进去后, 仍然报错, 我们继续看日志:
+<code>ssh root@mydomain.com -v</code> 或 <code>ssh root@mydomain.com -vvv</code> (更详细的日志)</p><p>通过看日志, 你可以一步步看到问题:</p>
+<pre><code>...
+debug2: service_accept: ssh-userauth
+debug1: SSH2_MSG_SERVICE_ACCEPT received
+debug3: send packet: type 50
+debug3: receive packet: type 51
+debug1: Authentications that can continue: publickey
+debug3: start over, passed a different list publickey
+debug3: preferred publickey,keyboard-interactive,password
+debug3: authmethod_lookup publickey
+debug3: remaining preferred: keyboard-interactive,password
+debug3: authmethod_is_enabled publickey
+debug1: Next authentication method: publickey
+debug1: Trying private key: .ssh/id_rsa
+debug3: no such identity: .ssh/id_rsa: No such file or directory
+debug2: we did not send a packet, disable method
+debug1: No more authentication methods to try.
+Permission denied (publickey).
+</code></pre>
+<p>注意截取的<strong>倒数第4行</strong>:
+首先, 它昨天不是这么提示的, 它提示的是<code>.ssh/id_rsd</code>, 我到配置文件里把它改成了<code>rsa</code>, 因为我生成的是 <code>rsa</code></p><blockquote>
+<p>配置文件的地址是: <code>/etc/ssh/ssh_config</code>, 改的节点名是<code>IdentityFile</code></p></blockquote>
+<p>其次, 顺便看一下<code>RSAAuthentication</code> 和 <code>PubkeyAuthentication</code>这两项是不是 yes(如果是注释状态, 不要动, 默认是 yes)</p><p>这样, 服务端有你的公钥, 本地配置了 <code>IdentityFile</code> 路径, 就可以登录了, 但我一直没成功的原因在于, 我在原配置文件改的, 它是路径是<code>.ssh/id_rsa,.ssh/id_rsd</code>, 我单纯把 rsd 的去掉, 却没发现它的路径是错的, 直到看了日志提示这个文件不存在, 才想起把格式改对.</p><p>我碰到的情况不知道是不是个例, 比如同一个文件</p>
+<pre><code>UserKnownHostsFile ~/.ssh/known_hosts,~/.ssh/known_hosts2
+</code></pre>
+<p>这一行, 路径格式却是正确的, 匪夷所思.</p><p>总之, 你碰到<code>Permission denied (public key)</code>这个问题, 就结合 git 和 server 这两情况, 看是没有 identity, 还是 id_rsa路径配错了. (前提是公钥必须已经写到服务器上去了)</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E9%87%8D%E8%A3%85mac%E7%B3%BB%E7%BB%9F%E5%90%8Essh%E5%BC%82%E5%B8%B8/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%A4%87%E4%BB%BDNginx%E8%AE%BE%E7%BD%AEphp%E7%9A%84%E6%96%B9%E6%B3%95/" target="_self">备份Nginx设置php的方法</a></h1>
@@ -517,123 +593,6 @@ IIS导入证书需要转化为pkcs12格式(X509格式?), 中间会询问一次�
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E4%BD%BF%E7%94%A8openssl%E5%88%9B%E5%BB%BA%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%8F%8A%E9%83%A8%E7%BD%B2%E5%88%B0IIS%E6%95%99%E7%A8%8B/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/libxml-tree-h-file-not-found/" target="_self">libxml-tree-h-file-not-found</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/libxml-tree-h-file-not-found/" target="_self">
-                <time class="text-uppercase">
-                    September 22 2018
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>stackoverflow用户对添加libxml2库表现出了极大的抱怨，原因在要把它好好地添加进去实在是太复杂了。</p><p>我就是因为出现了'libxml/tree.h file not found’错误，才发现的这篇贴子，照着做，错误就消除了，备注如下：</p><p>原始地址：<a href="http://stackoverflow.com/questions/1428847/libxml-tree-h-no-such-file-or-directory"><a href="http://stackoverflow.com/questions/1428847/libxml-tree-h-no-such-file-or-directory">http://stackoverflow.com/questions/1428847/libxml-tree-h-no-such-file-or-directory</a></a></p><p>见e.w. parris的答案</p><p>Adding libxml2 is a big, fat, finicky pain in the ass. If you're going to do it, do it before you get too far in building your project.</p><p>You need to add it in two ways:</p><h2>1. Target settings</h2>
-<p>Click on your target (not your project) and select Build Phases.</p><p>Click on the reveal triangle titled Link Binary With Libraries. Click on the + to add a library.</p><p>Scroll to the bottom of the list and select libxml2.dylib. That adds the libxml2 library to your project.</p><blockquote>
-<p>注: xcode 7 以后, <code>.dylib</code>文件变成了<code>.tbd</code>文件, 想要引用<code>.dylib</code>文件, 点<code>add others</code> → <code>cmd+shift+G</code>→type <code>/usr/lib</code> → find <code>libxml2.dylib</code> or <code>libxml2.2.dylib</code></p></blockquote>
-<h2>2. Project settings</h2>
-<p>Now you have to tell your project where to look for it three more times.</p><p>Select the Build Settings tab.</p><p>Scroll down to the Linking section. Under your projects columns double click on the Other Linker Flags row. Click the + and add -lxml2 to the list.</p><p>Still more.</p><p>In the same tab, scroll down to the Search Paths section.</p><p>Under your projects column in the Framework Search Paths row add /usr/lib/libxml2.dylib.</p><p>In the Header Search Paths and the User Header Search Paths row add $(SDKROOT)/usr/include/libxml2.</p><p>In those last two cases make sure that path is entered in Debug and Release.</p><h2>3. Clean</h2>
-<p>Under the Product Menu select Clean.</p><p>Then, if I were you (and lets face it, I probably am) I'd quit Xcode and walk away. When you come back and launch you should be good to go.</p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/libxml-tree-h-file-not-found/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/iOS%E5%BA%94%E7%94%A83D-Touch%E5%BF%AB%E6%8D%B7%E8%AE%BF%E9%97%AE/" target="_self">iOS应用3D-Touch快捷访问</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/iOS%E5%BA%94%E7%94%A83D-Touch%E5%BF%AB%E6%8D%B7%E8%AE%BF%E9%97%AE/" target="_self">
-                <time class="text-uppercase">
-                    September 14 2018
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>#用法</p><h2>添加快捷项(UIApplicationShortcutItem)</h2>
-<p>有两种途径, 编辑<code>Info.plist</code>或代码添加</p><h3>Info.plist</h3>
-<div class="highlight"><pre><span></span><span class="nt">&lt;key&gt;</span>UIApplicationShortcutItems<span class="nt">&lt;/key&gt;</span>
-<span class="nt">&lt;array&gt;</span>
-    <span class="nt">&lt;dict&gt;</span>
-       <span class="cm">&lt;!--图标, 必须--&gt;</span>
-    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemIconType<span class="nt">&lt;/key&gt;</span>
-    	<span class="nt">&lt;string&gt;</span>UIApplicationShortcutIconTypeCapturePhoto<span class="nt">&lt;/string&gt;</span>
-    	<span class="cm">&lt;!--标题, 必须--&gt;</span>
-    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemTitle<span class="nt">&lt;/key&gt;</span>
-    	<span class="nt">&lt;string&gt;</span>Scan<span class="nt">&lt;/string&gt;</span>
-    	<span class="cp">&lt;!-副标题--&gt;</span>
-    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemSubtitle<span class="nt">&lt;/key&gt;</span>
-    	<span class="nt">&lt;string&gt;</span>QR Code<span class="nt">&lt;/string&gt;</span>
-    	<span class="cm">&lt;!--快捷项标识符--&gt;</span>
-    	<span class="nt">&lt;key&gt;</span>UIApplicationShortcutItemType<span class="nt">&lt;/key&gt;</span>
-    	<span class="nt">&lt;string&gt;</span>$(PRODUCT_BUNDLE_IDENTIFIER).Scan<span class="nt">&lt;/string&gt;</span>
-    <span class="nt">&lt;/dict&gt;</span>
-<span class="nt">&lt;/array&gt;</span>
-</pre></div>
-<p>完整可选项见<a href="https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/iPhoneOSKeys.html">文档</a></p><h3>代码添加</h3>
-<div class="highlight"><pre><span></span><span class="c1">// Construct the items.</span>
-<span class="kd">let</span> <span class="nv">shortcut3</span> <span class="p">=</span> <span class="bp">UIMutableApplicationShortcutItem</span><span class="p">(</span>
-    <span class="n">type</span><span class="p">:</span> <span class="n">ShortcutIdentifier</span><span class="p">.</span><span class="n">Third</span><span class="p">.</span><span class="n">type</span><span class="p">,</span> 
-    <span class="n">localizedTitle</span><span class="p">:</span> <span class="s">&quot;Play&quot;</span><span class="p">,</span> 
-    <span class="n">localizedSubtitle</span><span class="p">:</span> <span class="s">&quot;Will Play an item&quot;</span><span class="p">,</span> 
-    <span class="n">icon</span><span class="p">:</span> <span class="bp">UIApplicationShortcutIcon</span><span class="p">(</span><span class="n">type</span><span class="p">:</span> <span class="p">.</span><span class="n">play</span><span class="p">),</span> 
-    <span class="n">userInfo</span><span class="p">:</span> <span class="p">[</span>
-        <span class="n">AppDelegate</span><span class="p">.</span><span class="n">applicationShortcutUserInfoIconKey</span><span class="p">:</span> <span class="n">UIApplicationShortcutIconType</span><span class="p">.</span><span class="n">play</span><span class="p">.</span><span class="n">rawValue</span>
-    <span class="p">]</span>
-<span class="p">)</span>
-
-<span class="kd">let</span> <span class="nv">shortcut4</span> <span class="p">=</span> <span class="p">...</span> <span class="c1">// 同上</span>
-
-<span class="c1">// Update the application providing the initial &#39;dynamic&#39; shortcut items.</span>
-<span class="n">application</span><span class="p">.</span><span class="n">shortcutItems</span> <span class="p">=</span> <span class="p">[</span><span class="n">shortcut3</span><span class="p">,</span> <span class="n">shortcut4</span><span class="p">]</span>
-</pre></div>
-<h2>良好实践</h2>
-<ol>
-<li>实现一个<code>(BOOL)handleShortcutItem:(UIApplicationShortcutItem *)shortcutItem</code>返<code>BOOL</code>值的方法, 里面进行业务操作</li>
-<li>实现代理方法:</li>
-</ol>
-
-<pre><code>- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler {
-    completionHandler([self handleShortcutItem:shortcutItem]);
-}
-</code></pre>
-<ol start="3">
-<li>在<code>didBecomeActive</code>方法里判断是否需要 handle 快捷方式</li>
-</ol>
-<div class="highlight"><pre><span></span><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">applicationDidBecomeActive:</span><span class="p">(</span><span class="bp">UIApplication</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nv">application</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">handleShortcutItem</span><span class="o">:</span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="p">];</span><span class="w"></span>
-<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nil</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-</pre></div>
-<ol start="4">
-<li>3说明如果你需要提取一个属性<code>launchedShortcutItem</code></li>
-<li>如果提取了属性, 那么<code>didFinishLaunch</code>也可以顺便改为:</li>
-</ol>
-<div class="highlight"><pre><span></span><span class="kt">BOOL</span><span class="w"> </span><span class="n">shouldPerformAdditionalDelegateHandling</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">YES</span><span class="p">;</span><span class="w"></span>
-<span class="bp">UIApplicationShortcutItem</span><span class="w"> </span><span class="o">*</span><span class="n">shortcutItem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="bp">UIApplicationShortcutItem</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">launchOptions</span><span class="p">[</span><span class="n">UIApplicationLaunchOptionsShortcutItemKey</span><span class="p">];</span><span class="w"></span>
-<span class="k">if</span><span class="p">(</span><span class="n">shortcutItem</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">launchedShortcutItem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shortcutItem</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">shouldPerformAdditionalDelegateHandling</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NO</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-
-<span class="c1">// 你的其它初始代码</span>
-
-<span class="k">return</span><span class="w"> </span><span class="n">shouldPerformAdditionalDelegateHandling</span><span class="p">;</span><span class="w">  </span><span class="c1">// 通常这里返的是 YES;</span>
-</pre></div>
-<p>试试吧</p><p>#参考资料</p><ol>
-<li><a href="https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/Adopting3DTouchOniPhone/">官方文档</a></li>
-<li><a href="https://developer.apple.com/library/content/samplecode/ApplicationShortcuts/Introduction/Intro.html#//apple_ref/doc/uid/TP40016545">示例代码</a></li>
-<li><a href="https://developer.apple.com/documentation/uikit/uiapplicationshortcuticontype">快捷图标</a></li>
-<li><a href="https://github.com/DeskConnect/SBShortcutMenuSimulator">模拟器支持</a></li>
-<li><a href="https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/iPhoneOSKeys.html">iOS Keys</a> 一些键值的说明</li>
-</ol>
-</div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/iOS%E5%BA%94%E7%94%A83D-Touch%E5%BF%AB%E6%8D%B7%E8%AE%BF%E9%97%AE/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>
