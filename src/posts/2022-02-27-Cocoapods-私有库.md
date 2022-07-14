@@ -6,7 +6,7 @@ date: 2022-02-27 17:44
 status: publish
 author: walker
 categories: 
-  - AI
+  - Skill
 tags:
   - cocoapods
   - 私有库
