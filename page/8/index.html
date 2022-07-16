@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -36,7 +36,7 @@
 <meta name="twitter:title" content="walker's code blog" />
 <meta name="twitter:description" content="coder, reader" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png" />
+<meta name="twitter:image" content="/android-chrome-512x512.png" />
 
 
     
@@ -466,7 +466,7 @@ git push origin master
         </div>
         <div class="prism-content"><p>我用树莓派做<code>翻墙网关</code>, <code>透明网关</code>, 通通绕到坑里出不来了, 方案很多, 思路是树莓派翻, 智能dns, 智能国内外分流, 外加让树莓派成为局域网的<code>网关</code>以便让局域网用户<code>无感翻墙</code>.<br />
 黑科技没玩转, 于是我整理思绪, 做一个最简单的局域网http代理服务器吧. 任何网络设备/应用都能找到设http代理的地方, 这样最后只要让树莓派能应用<code>gfwlist</code>的规则.</p><p>我们来看一下最终的拓扑:
-<figure  style="flex: 65.81740976645435" ><img width="1240" height="942" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/82dd9437cc67d2b686f739ff2c5cf8a1.png" alt=""/></figure></p><p>几点说明:</p><ol>
+<figure  style="flex: 65.81740976645435" ><img width="1240" height="942" src="/archives/assets/82dd9437cc67d2b686f739ff2c5cf8a1.png" alt=""/></figure></p><p>几点说明:</p><ol>
 <li>如果只是Shadowsocks翻墙, 那么这一步做完就收工了. 最简步骤</li>
 <li>如果需要转成http代理, 你就再多包一层代理工具, <code>Prixovy</code>, <code>Polipo</code>等, 用关键词搜, 比, 自己定. <code>Polipo</code>配置要简单很多</li>
 <li>对, 不考虑做成网关就是这么简单, 但是我还想用<code>kcptun</code>给提提速, 所以多插一脚</li>
@@ -523,7 +523,7 @@ feedproxy.google.com
 <li>设置全局代理(需要设备Supervised)</li>
 <li>设置某个WiFi热点的代理</li>
 </ol>
-<p>我没去研究什么是<code>Supervised</code>了, 而且也希望代理好切换, 于是选择了第二种方案, 即换了wifi后就没代理了(跟在<code>iPhone</code>上设置一样)</p><figure  style="flex: 66.66666666666667" ><img width="1240" height="930" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b0eb92a0c8ee8ccdfed03a8e1552c69f.jpg" alt=""/></figure><h1>TODO:</h1>
+<p>我没去研究什么是<code>Supervised</code>了, 而且也希望代理好切换, 于是选择了第二种方案, 即换了wifi后就没代理了(跟在<code>iPhone</code>上设置一样)</p><figure  style="flex: 66.66666666666667" ><img width="1240" height="930" src="/archives/assets/b0eb92a0c8ee8ccdfed03a8e1552c69f.jpg" alt=""/></figure><h1>TODO:</h1>
 <p>udp2raw, and udp2raw on mac</p></div>
         
         <div class="prism-action-bar">
@@ -660,18 +660,18 @@ IIS导入证书需要转化为pkcs12格式(X509格式?), 中间会询问一次�
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -683,7 +683,7 @@ IIS导入证书需要转化为pkcs12格式(X509格式?), 中间会询问一次�
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

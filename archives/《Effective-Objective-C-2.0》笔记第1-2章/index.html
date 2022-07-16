@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -62,7 +62,7 @@
                 </time>
             </div>
             <div class="prism-content-body">
-                <figure class="vertical-figure" style="flex: 38.0" ><img width="912" height="1200" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/ac920d0dab7ba40befbff58ed826b587.png" alt=""/></figure><blockquote>
+                <figure class="vertical-figure" style="flex: 38.0" ><img width="912" height="1200" src="/archives/assets/ac920d0dab7ba40befbff58ed826b587.png" alt=""/></figure><blockquote>
 <p>这个书当然中文版的，也很经典，我也读过了，但是嘛，老规矩，有原版还是读一遍原版，再加上英文水平也只有那么好，有机会能多读读在就多读读吧。一共就7章，52节，200多页，并不多。
 此外，因为很多名词其实我们平时直接叫的就是英文，中文版里统统都给了一个中文翻译，反而更陌生了，有种“访达”的即视感。</p></blockquote>
 <h1>Chapter 1: Accustoming Yourself to Objective-C</h1>
@@ -206,7 +206,7 @@
 <span class="w">    </span><span class="n">UIViewAutoresizingFlexibleBottomMargin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </pre></div>
-<figure  style="flex: 66.52173913043478" ><img width="918" height="690" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/4a634eedbb41d909a0b262a8f2f437ee.png" alt=""/></figure><ul>
+<figure  style="flex: 66.52173913043478" ><img width="918" height="690" src="/archives/assets/4a634eedbb41d909a0b262a8f2f437ee.png" alt=""/></figure><ul>
 <li>Foundation框架定义了一些辅助宏，以便支持新的C++标准对宏定义的增强同时还能兼容老的标准: <code>NS_ENUM</code>和<code>NS_OPTIONS</code><ul>
 <li>特别是c++对枚举值里的bitwise操作结果需要显式转换</li>
 <li>所以用到了<strong>可组合</strong>的option类的枚举，最好用<code>NS_OPTIONS</code>宏，否则用<code>NS_ENUM</code>就够了</li>
@@ -351,7 +351,7 @@
 <li>以键值对来存储，所以是可以存储多个关联数据的</li>
 <li>可以指定storage policy，对应内存管理语义</li>
 </ul>
-<figure  style="flex: 140.1840490797546" ><img width="914" height="326" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/820ae39c34d1147867f1dfb6f1d64de3.png" alt=""/></figure><p>方法:</p><div class="highlight"><pre><span></span><span class="c1">// Sets up an association of object to value with the given key and policy.</span>
+<figure  style="flex: 140.1840490797546" ><img width="914" height="326" src="/archives/assets/820ae39c34d1147867f1dfb6f1d64de3.png" alt=""/></figure><p>方法:</p><div class="highlight"><pre><span></span><span class="c1">// Sets up an association of object to value with the given key and policy.</span>
 <span class="kt">void</span><span class="w"> </span><span class="n">objc_setAssociatedObject</span><span class="p">(</span><span class="kt">id</span><span class="w"> </span><span class="n">object</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kt">id</span><span class="w"> </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">objc_AssociationPolicy</span><span class="w"> </span><span class="n">policy</span><span class="p">)</span><span class="w"></span>
 
 <span class="c1">// Retrieves the value for the association on object with the given key.</span>
@@ -478,18 +478,18 @@
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -501,7 +501,7 @@
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

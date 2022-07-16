@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -75,7 +75,7 @@
 <li>每一个转折点加一个新的整流函数</li>
 </ol>
 <p>如下：
-<figure  style="flex: 66.625" ><img width="1066" height="800" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/bc1ab298834013a9304c0c6939d2406b.png" alt=""/></figure></p><p>如果是曲线，也可以近似地理解为数个折线构成的（取决于近似的精度），而蓝色的整流函数不好表示，事实上有sigmoid函数与它非常接近（它是曲线），所以蓝线又可以叫：<code>Hard Sigmoid</code></p><p>所以，最终成了一个常数(<code>bias</code>)和数个<code>sigmoid</code>函数来逼近真实的曲线。同时，每一个转折点<code>i</code>上s函数的具体形状（比如有多斜多高），就由一个新的线性变换来控制：$b_i + w_ix_n$，把<code>i</code>上<strong>累积的线性变换</strong>累加，就得到与$x_n$最可能逼近的曲线。</p><p>下图演示了3个转折点的情况：</p><figure  style="flex: 66.625" ><img width="1066" height="800" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1d785e5ce2165596c3ebeb09fc8fc48b.png" alt=""/></figure><p>至此，一个简单的对b,w依赖的函数变成了对（$w_i, b_i, c_i$)和, x, b的依赖，即多了很多变量。</p><ul>
+<figure  style="flex: 66.625" ><img width="1066" height="800" src="/archives/assets/bc1ab298834013a9304c0c6939d2406b.png" alt=""/></figure></p><p>如果是曲线，也可以近似地理解为数个折线构成的（取决于近似的精度），而蓝色的整流函数不好表示，事实上有sigmoid函数与它非常接近（它是曲线），所以蓝线又可以叫：<code>Hard Sigmoid</code></p><p>所以，最终成了一个常数(<code>bias</code>)和数个<code>sigmoid</code>函数来逼近真实的曲线。同时，每一个转折点<code>i</code>上s函数的具体形状（比如有多斜多高），就由一个新的线性变换来控制：$b_i + w_ix_n$，把<code>i</code>上<strong>累积的线性变换</strong>累加，就得到与$x_n$最可能逼近的曲线。</p><p>下图演示了3个转折点的情况：</p><figure  style="flex: 66.625" ><img width="1066" height="800" src="/archives/assets/1d785e5ce2165596c3ebeb09fc8fc48b.png" alt=""/></figure><p>至此，一个简单的对b,w依赖的函数变成了对（$w_i, b_i, c_i$)和, x, b的依赖，即多了很多变量。</p><ul>
 <li>$y = b + wx_1$</li>
 <li>$y = b + \sum_i c_i sigmoid(b_i + w_i x_{\color{red} 1})$</li>
 </ul>
@@ -86,7 +86,7 @@
 <li>现在就变成了(注意，其实就是把加号右边完整代入）：</li>
 <li>$y = b + \sum_i c_i sigmoid(b_i + \color{red}{\sum_j w_{ij} x_j})$</li>
 </ul>
-<p>展开计算，再根据特征，又可以看回矩阵了（而不是从矩阵出发来思考）：</p><figure class="vertical-figure" style="flex: 33.29129886506936" ><img width="1056" height="1586" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a84ecec9786db279d55ff5ecbb1a8124.png" alt=""/></figure><p>矩阵运算结果为(r)，再sigmoid后，设结果为a:</p><ul>
+<p>展开计算，再根据特征，又可以看回矩阵了（而不是从矩阵出发来思考）：</p><figure class="vertical-figure" style="flex: 33.29129886506936" ><img width="1056" height="1586" src="/archives/assets/a84ecec9786db279d55ff5ecbb1a8124.png" alt=""/></figure><p>矩阵运算结果为(r)，再sigmoid后，设结果为a:</p><ul>
 <li>$a_i = c_i \sigma(r_i)$</li>
 <li>$y = b + \sum_i a_i$ c 和 a要乘加，仍然可以矩阵化（其实是向量化）：</li>
 <li>$y = b + c^T a$， 把上面的展开回去：</li>
@@ -96,7 +96,7 @@
 </li>
 </ul>
 <p>这里，我们把目前所有的“未知数”全部拉平拼成了一个向量 $\theta$：
-<figure  style="flex: 66.625" ><img width="1066" height="800" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/961de3efa8dcf472170d57c5e60f2fc4.png" alt=""/></figure></p><p>这里，如果把$c^T$写成<code>W'</code>你会发现，我们已经推导出了一个2层的神经网络：一个隐层，一个输出层：</p><ul>
+<figure  style="flex: 66.625" ><img width="1066" height="800" src="/archives/assets/961de3efa8dcf472170d57c5e60f2fc4.png" alt=""/></figure></p><p>这里，如果把$c^T$写成<code>W'</code>你会发现，我们已经推导出了一个2层的神经网络：一个隐层，一个输出层：</p><ul>
 <li>b+wx 是第一层 得到<code>a</code></li>
 <li>对<code>a</code>进行一次sigmoid（别的教材里会说是激活）得到<code>a'</code></li>
 <li>把<code>a'</code>当作输入，再进行一次 b+wx (这就是隐层了)</li>
@@ -236,18 +236,18 @@
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -259,7 +259,7 @@
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

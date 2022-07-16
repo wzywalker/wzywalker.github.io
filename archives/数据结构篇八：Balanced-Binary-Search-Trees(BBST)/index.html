@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -81,9 +81,9 @@
 <li>left/right pointer</li>
 </ul>
 <p>使树保持左右平衡主要是靠rotation，极简情况下（三个node），我们有两种基本情况（left-left, right-right），有其它情况就旋转一次变成这两种情况之一：
-<figure  style="flex: 87.44710860366713" ><img width="1240" height="709" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/3b702bd1d181c924971298b096c7c548.png" alt=""/></figure></p><h2>Insertion</h2>
+<figure  style="flex: 87.44710860366713" ><img width="1240" height="709" src="/archives/assets/3b702bd1d181c924971298b096c7c548.png" alt=""/></figure></p><h2>Insertion</h2>
 <p>一次插入需要考虑的是，插在哪边，以及插入后对bf, height和balance的破坏
-<figure  style="flex: 60.546875" ><img width="1240" height="1024" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/7aec7390101d933c2d50971e2733effe.png" alt=""/></figure></p><p>其中修复平衡就是上图中几个基本结构的转换</p><h2>Removal</h2>
+<figure  style="flex: 60.546875" ><img width="1240" height="1024" src="/archives/assets/7aec7390101d933c2d50971e2733effe.png" alt=""/></figure></p><p>其中修复平衡就是上图中几个基本结构的转换</p><h2>Removal</h2>
 <p>avl树就是一棵BST，删除节点分两步：</p><ol>
 <li>按照bst的方法查找节点，即小的在左边找，大的在右边找</li>
 <li>也按bst的原则删除元素，即找到元素后，把左边的最大值或右边的最小值拿过来补上删除的位置</li>
@@ -210,18 +210,18 @@
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -233,7 +233,7 @@
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

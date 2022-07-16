@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -36,7 +36,7 @@
 <meta name="twitter:title" content="walker's code blog" />
 <meta name="twitter:description" content="coder, reader" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png" />
+<meta name="twitter:image" content="/android-chrome-512x512.png" />
 
 
     
@@ -66,7 +66,7 @@
             </a>
         </div>
         <div class="prism-content"><p>先来看一个例子
-<figure class="vertical-figure" style="flex: 38.76146788990825" ><img width="338" height="436" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d5fdc49bd6037d399e4685d3cf9d72bf.png" alt=""/></figure>
+<figure class="vertical-figure" style="flex: 38.76146788990825" ><img width="338" height="436" src="/archives/assets/d5fdc49bd6037d399e4685d3cf9d72bf.png" alt=""/></figure>
 画一个箭头，其中箭尾有分叉，一般来说，是画一个三角，画一个矩形（实心矩形一般也直接用很粗的线条），最后再叠一个三角（with <code>CGBlendModel.clear</code>)，这里就不多介绍了：</p><div class="highlight"><pre><span></span><span class="kr">override</span> <span class="kd">func</span> <span class="nf">draw</span><span class="p">(</span><span class="kc">_</span> <span class="n">rect</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">{</span>       
     <span class="kd">let</span> <span class="nv">p</span> <span class="p">=</span> <span class="bp">UIBezierPath</span><span class="p">()</span>
     <span class="c1">// shaft</span>
@@ -151,14 +151,14 @@
 <li>知道了新rect的位置，把clip加回来，发现箭尾有了，箭头却没了（图四）</li>
 <li>rect与clip的关系已经出来了，尝试把红三角的y通通加50，移到了蓝矩形范围内，得到证明（图五）</li>
 </ol>
-<figure  style="flex: 58.108108108108105" ><img width="774" height="666" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/83a72f77f3c1af59c2e83c0616699ca5.png" alt=""/></figure><p>那么clipping到底能对哪些起作用呢？是上面的rect吗？<strong>当然不是</strong>！</p><p>在clip方法被调用的时候，画布里有多少封闭元素，就会被应用clip。由于我们选择的是<code>evenOdd</code>模式，那么就会简单计数，某像素覆盖奇数次显示，偶数次则不显示。</p><p>上例中，<code>con.clip(using:)</code>方法调用时，画布里有两个封闭元素，一个三角，一个矩形，三角包在矩形里，那么计数为2，就不予显示了。</p><blockquote>
+<figure  style="flex: 58.108108108108105" ><img width="774" height="666" src="/archives/assets/83a72f77f3c1af59c2e83c0616699ca5.png" alt=""/></figure><p>那么clipping到底能对哪些起作用呢？是上面的rect吗？<strong>当然不是</strong>！</p><p>在clip方法被调用的时候，画布里有多少封闭元素，就会被应用clip。由于我们选择的是<code>evenOdd</code>模式，那么就会简单计数，某像素覆盖奇数次显示，偶数次则不显示。</p><p>上例中，<code>con.clip(using:)</code>方法调用时，画布里有两个封闭元素，一个三角，一个矩形，三角包在矩形里，那么计数为2，就不予显示了。</p><blockquote>
 <p>事实上，判定奇偶的依据是该点向外做无限长的射线，判定有几条边与射线相交。同时，同样的设定可以用来解释<code>.winding</code>模式，即不但与相交的边有交，还与相交时，那条边是顺时针方向绘制的（+1）还是逆时针方向绘制的（-1）,总结果为0则不填充。<a href="https://www.jianshu.com/p/5cf8048b083b">参考</a></p></blockquote>
 <p>那就玩一玩验证下吧</p><ol>
 <li>把矩形改成了圆圈，线宽也改小一点，得到（图一）<em>绿色三角形是我后加的，因为被黄实线盖住了</em></li>
 <li>再在里面添加了一个小圆，得到（图二）</li>
 <li>这时候按照奇偶原则，小圆里的像素是偶数，而小圆里的三角则是奇数了，那么应该就只有大圆减掉小圆的部分，和小圆内的三角会被渲染了（图三），与预期一致</li>
 </ol>
-<figure  style="flex: 137.00564971751413" ><img width="970" height="354" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/84aa194f6e13d2f92fe6e9929e5c7110.png" alt=""/></figure><p>现在再来回顾书上先套一个画布大小的矩形，再画一个三角形，你大概应该知道目的了（凑奇偶），我们矩形区域过小时绘制不了红色三角，纯粹也是因为奇数，往下移到矩形区域内，立马变偶数了。(当然，要在原位置渲染我们可以先中止clip:<code>con.resetClip()</code>再绘图）</p></div>
+<figure  style="flex: 137.00564971751413" ><img width="970" height="354" src="/archives/assets/84aa194f6e13d2f92fe6e9929e5c7110.png" alt=""/></figure><p>现在再来回顾书上先套一个画布大小的矩形，再画一个三角形，你大概应该知道目的了（凑奇偶），我们矩形区域过小时绘制不了红色三角，纯粹也是因为奇数，往下移到矩形区域内，立马变偶数了。(当然，要在原位置渲染我们可以先中止clip:<code>con.resetClip()</code>再绘图）</p></div>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E7%90%86%E8%A7%A3Core-Graphics%E7%9A%84Clipping%E5%92%8C%E5%A1%AB%E5%85%85%E6%A8%A1%E5%BC%8F/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
@@ -565,7 +565,7 @@
 <li>a traditional priority queue variant</li>
 <li>top node supports <code>quick update and deletions of key-value paris</code></li>
 </ul>
-<figure  style="flex: 77.8894472361809" ><img width="1240" height="796" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5e238bf5e89b7b2188cfb748c4e5990e.png" alt=""/></figure><p>观察这个图，数据是Anna, Bella...等等，</p><ul>
+<figure  style="flex: 77.8894472361809" ><img width="1240" height="796" src="/archives/assets/5e238bf5e89b7b2188cfb748c4e5990e.png" alt=""/></figure><p>观察这个图，数据是Anna, Bella...等等，</p><ul>
 <li>首先，为这一堆数据进行任意排序，得到一堆索引(0,1,...)</li>
 <li>然后组一个binary heap，这样每个元素又获得一个索引，就是在heap上的序号（<code>Position Map</code>）</li>
 </ul>
@@ -578,14 +578,14 @@
 <li>pm = 3 -&gt; ki = 8 -&gt; Issac <strong>BINGO!!!</strong></li>
 </ul>
 <p>但神奇的事发生了，有人希望复用ki这个自然数序列（闲的蛋疼？），于是多做了一个数组，把ki定义为heap上的索引，与元素原来的ki进行映射（<code>Inverse Map</code>）:IM
-<figure  style="flex: 68.88888888888889" ><img width="1240" height="900" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/71be1add8c1a0cde72e08fc72adbd071.png" alt=""/></figure></p><p>可以看到，这张图上张个ki到im的映射，与pm到ki的映射其实是一样的，也就是说重定义了一下，并没有引入新的东西。(pm表里找到3，对应的第一行ki表里就是8）</p><p>这个时候，我们直接用ki的3就能找到im的8，继而找到数据源的<em>Issac</em>了。</p><h2>Insertion</h2>
+<figure  style="flex: 68.88888888888889" ><img width="1240" height="900" src="/archives/assets/71be1add8c1a0cde72e08fc72adbd071.png" alt=""/></figure></p><p>可以看到，这张图上张个ki到im的映射，与pm到ki的映射其实是一样的，也就是说重定义了一下，并没有引入新的东西。(pm表里找到3，对应的第一行ki表里就是8）</p><p>这个时候，我们直接用ki的3就能找到im的8，继而找到数据源的<em>Issac</em>了。</p><h2>Insertion</h2>
 <p>上面的数组，我们往里面添加第12条数据试试:</p><ul>
 <li>{ki:12, pm: 12, im:12, value:2}</li>
 <li>显然违反了binary heap的 invariant，向上冒泡，也就是跟{ki:12, pm:5, im:2, value:4}的节点互换</li>
 <li>此时，数据源肯定不会变，但是节点变了，pm的值就要交换（5， 12 互换）</li>
 <li>pm变了，把pm当成ki的映射表im也要变（12， 11互换）</li>
 </ul>
-<figure  style="flex: 224.63768115942028" ><img width="1240" height="276" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/47da2e700214e5e2de16aa42f5b92fb3.png" alt=""/></figure><p>仔细观察图片，搞清楚第一行ki在两次互换时的身份就明白了</p><ul>
+<figure  style="flex: 224.63768115942028" ><img width="1240" height="276" src="/archives/assets/47da2e700214e5e2de16aa42f5b92fb3.png" alt=""/></figure><p>仔细观察图片，搞清楚第一行ki在两次互换时的身份就明白了</p><ul>
 <li>pm的互换是直观的，就是节点的位置</li>
 <li>知道pm互换的依据后（2，5），在第一行找2，5对应的im值互换，因为在这个映射里，相当于pm与原ki的映射，pm此时是（2，5）了。</li>
 </ul>
@@ -627,7 +627,7 @@
 <p>在操作时，只需要知道传入的是哪种索引，及时转化就行了。</p><p>有了索引，lookup的时间复杂度就是常量时间了：O(1)</p><h2>Polling and Removals</h2>
 <p>没有什么特殊的,仍然是找到节点,与最后一个交换,移除最后一个节点,然后再看最后一个在堆里是上升还是下降.
 仍然是记得每一步交换,相应的几个索引值也需要随之交换.(polling 其实就是移除第1个节点,本质上还是 removal)
-<figure class="vertical-figure" style="flex: 36.70811130846655" ><img width="1240" height="1689" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/581b8563020c36307eae7a9bf618a7e0.png" alt=""/></figure></p><p>pseudo code</p><div class="highlight"><pre><span></span><span class="c1"># Deletes the node with the key index ki</span>
+<figure class="vertical-figure" style="flex: 36.70811130846655" ><img width="1240" height="1689" src="/archives/assets/581b8563020c36307eae7a9bf618a7e0.png" alt=""/></figure></p><p>pseudo code</p><div class="highlight"><pre><span></span><span class="c1"># Deletes the node with the key index ki</span>
 <span class="c1"># in the heap. The key index ki must exist </span>
 <span class="c1"># and be present in the heap.</span>
 <span class="n">function</span> <span class="n">remove</span><span class="p">(</span><span class="n">ki</span><span class="p">):</span>
@@ -733,9 +733,9 @@
 <li>left/right pointer</li>
 </ul>
 <p>使树保持左右平衡主要是靠rotation，极简情况下（三个node），我们有两种基本情况（left-left, right-right），有其它情况就旋转一次变成这两种情况之一：
-<figure  style="flex: 87.44710860366713" ><img width="1240" height="709" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/3b702bd1d181c924971298b096c7c548.png" alt=""/></figure></p><h2>Insertion</h2>
+<figure  style="flex: 87.44710860366713" ><img width="1240" height="709" src="/archives/assets/3b702bd1d181c924971298b096c7c548.png" alt=""/></figure></p><h2>Insertion</h2>
 <p>一次插入需要考虑的是，插在哪边，以及插入后对bf, height和balance的破坏
-<figure  style="flex: 60.546875" ><img width="1240" height="1024" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/7aec7390101d933c2d50971e2733effe.png" alt=""/></figure></p><p>其中修复平衡就是上图中几个基本结构的转换</p><h2>Removal</h2>
+<figure  style="flex: 60.546875" ><img width="1240" height="1024" src="/archives/assets/7aec7390101d933c2d50971e2733effe.png" alt=""/></figure></p><p>其中修复平衡就是上图中几个基本结构的转换</p><h2>Removal</h2>
 <p>avl树就是一棵BST，删除节点分两步：</p><ol>
 <li>按照bst的方法查找节点，即小的在左边找，大的在右边找</li>
 <li>也按bst的原则删除元素，即找到元素后，把左边的最大值或右边的最小值拿过来补上删除的位置</li>
@@ -794,7 +794,7 @@ LCP|Sorted Suffixes|
 2|ZAZA</p><p>我们知道第一列指的是“重复个数”，也就是说，如果按我们手写的那样去遍历，至少有这么多重复的子串，重复的既是“个数”，也是“组合方式”。</p><p>所以如果我们只需要计数的话，把右边的数出来就知道有会有多少个重复的了，此例为6.</p><p>$$\tt unique\ count = \underbrace{\frac{n(n+1)}{2}}_{substr\ count} - \underbrace{\sum_{i=1}^n LCP[i]}_{duplicates}$$</p>
 <p>这是LCP的应用之一，利用了LCP本身就是在数重复次数的特征。</p><h2>K common substring problem</h2>
 <p>n个字符串，找出一个子串，它至少是k个字符串的子串，求最大子串。$2\leq k \leq n$</p><p>即如果有k=2，那么这个子串只需要是其中两个的子串就行了，如果k=n，那么就需要是每一个字符串的子串。</p><p>直接上图
-<figure  style="flex: 50.4885993485342" ><img width="1240" height="1228" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b7cb01449aa00a46b95ca35f28751a33.png" alt=""/></figure></p><ul>
+<figure  style="flex: 50.4885993485342" ><img width="1240" height="1228" src="/archives/assets/b7cb01449aa00a46b95ca35f28751a33.png" alt=""/></figure></p><ul>
 <li>图1演示k=3时，找到了<code>ca</code>，即3个串里都有的是<code>ca</code></li>
 <li>图2演示k=2时，找到了<code>bca</code>，即<code>bca</code>存在2个串里</li>
 <li>图3演示的是用了size=4的滑窗才包含了3个字符串，以及最大匹配是<code>AG</code></li>
@@ -828,7 +828,7 @@ LCP|Sorted Suffixes|
 <li>从前面排序，客观上就把来自不同字符串的相同字母打头的子串给排到一起了</li>
 </ul>
 <p>这就是为什么在<code>Suffix</code> Array的内容里面出现Longest Common <code>Prefix</code>的内容的原因了.</p><p>聪明。</p><h2>Longest Repeated Substring (LRS)</h2>
-<figure  style="flex: 72.68464243845251" ><img width="1240" height="853" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/ef47276f994f76ccabc2c60900227916.png" alt=""/></figure><p>这个比暴力遍历要简单太多，直接找LCP最大值即可</p></div>
+<figure  style="flex: 72.68464243845251" ><img width="1240" height="853" src="/archives/assets/ef47276f994f76ccabc2c60900227916.png" alt=""/></figure><p>这个比暴力遍历要简单太多，直接找LCP最大值即可</p></div>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%83%EF%BC%9ASuffix-Array%2C-Longest-Common-Prefix-%28LCP%29-array/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
@@ -847,7 +847,7 @@ LCP|Sorted Suffixes|
         </div>
         <div class="prism-content"><p>这是一位 google 工程师分享的8小时的<a href="https://www.youtube.com/watch?v=RBSGKlAvoiM">数据结构</a>的视频,我的笔记</p><hr />
 <h1>Fenwick Tree (Binary Indexed Tree)</h1>
-<p>树状数组</p><p><strong>Motivation</strong></p><figure  style="flex: 118.0952380952381" ><img width="1240" height="525" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2591209692305dbd9d640a53765581e1.png" alt=""/></figure><ul>
+<p>树状数组</p><p><strong>Motivation</strong></p><figure  style="flex: 118.0952380952381" ><img width="1240" height="525" src="/archives/assets/2591209692305dbd9d640a53765581e1.png" alt=""/></figure><ul>
 <li>计算数组里任意连续片段的和，最直观的方案当然是累加：线性时间O(n)</li>
 <li>但是如果你有一个记录了每个节点到当前位置时的累加和的数组（<code>prefix sum</code>），立刻变成了常量时间</li>
 <li>问题是更新数据变成了线性时间（后续所有的求和都要改一遍）<ul>
@@ -857,14 +857,14 @@ LCP|Sorted Suffixes|
 </ul>
 <p>所以引入了:
 <code>Fenwick Tree</code> is an efficient data structure for performing range/point queries/updates.(即在上面的动机上，还考虑了update的效率)</p><p>前面的例子在update时效率不高，所以Fenwick Tree用了一种聪明的方式，不是累加所有的值，而是分段累加，具体实现看下图：
-<figure  style="flex: 67.24511930585683" ><img width="1240" height="922" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/eb45cb86abbe7a62cd8cc8d3fc2a8f06.png" alt=""/></figure></p><ul>
+<figure  style="flex: 67.24511930585683" ><img width="1240" height="922" src="/archives/assets/eb45cb86abbe7a62cd8cc8d3fc2a8f06.png" alt=""/></figure></p><ul>
 <li>把索引值用二进制表示</li>
 <li><code>LSB</code>的解释看图，实际应用上，就是看从低位到高位第一个1的右边有几个0，假设为<code>n</code>个</li>
 <li>那么该cell上存的值就是前$2^n$个cell的值的和</li>
 </ul>
 <p>图中例子是索引10，不直观，我们换成12， 二进制是1100， 最右边有2个零，那么它保存它$2^2=4$个位置的和。
 也就是说，如果你要求和，如果用了cell 12位置的值的话，至少可以省掉3次累加。</p><p>当然，它还有更牛逼的特性，结合range query一起来看吧：
-<figure  style="flex: 67.3913043478261" ><img width="1240" height="920" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/0a9944a0140262760c9fb4a45cb3d75e.png" alt=""/></figure></p><p>蓝线表示的是当然位置上累加了前几个位置的值，已经很有规律了</p><p>假如计算前11个值的和，过程是：</p><ol>
+<figure  style="flex: 67.3913043478261" ><img width="1240" height="920" src="/archives/assets/0a9944a0140262760c9fb4a45cb3d75e.png" alt=""/></figure></p><p>蓝线表示的是当然位置上累加了前几个位置的值，已经很有规律了</p><p>假如计算前11个值的和，过程是：</p><ol>
 <li>11的索引是1011，右边没有0，所以当前的和为A[11]</li>
 <li>根据$2^0$来移位，来到10。<ul>
 <li>右边一个0，所以它管$2^1$个presum，目前A[11] + A[10]</li>
@@ -896,7 +896,7 @@ LCP|Sorted Suffixes|
 <li>1010 + 10 = 1100 = 12</li>
 <li>1100 + 100 = 10000 = 16 到顶了，</li>
 </ul>
-<p>所以需要把9, 10, 12, 16分别应用这个point的更新，也就是说只有这几个cell把9计算进去了。</p><figure  style="flex: 66.59505907626209" ><img width="1240" height="931" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/57cf2e654121e8c54e9f6cd1eeb60d9b.png" alt=""/></figure><p>当然，可以看一下左边的示意图，更直观</p><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span> 
+<p>所以需要把9, 10, 12, 16分别应用这个point的更新，也就是说只有这几个cell把9计算进去了。</p><figure  style="flex: 66.59505907626209" ><img width="1240" height="931" src="/archives/assets/57cf2e654121e8c54e9f6cd1eeb60d9b.png" alt=""/></figure><p>当然，可以看一下左边的示意图，更直观</p><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span> 
     <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">:</span>
         <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span> 
         <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">LSB</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
@@ -1000,14 +1000,14 @@ LCP|Sorted Suffixes|
 </ol>
 <p>可见，虽然系数是“动态”的了，但是取值还是（1，N）中的一个而已，hash只是让其动起来的一个原因，而不是参与计算的值。</p><p>我们本来就是在求hash value，结果又要引入另一个hash function，显然这个$H_2$不能像外层这样复杂，一般是针对常见的key类型(string, int...-&gt; fundamental data type)的<code>universal hash functions</code></p><blockquote>
 <p>因为N要是一个素数，所以在double size的时候，还要继续往上找直到找到一个素数为止，比如N=7, double后，N=14，那么最终，N=17</p></blockquote>
-<figure  style="flex: 67.68558951965065" ><img width="1240" height="916" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/cbae1de97a3f72ae84ea59804293ec56.png" alt=""/></figure><h3>Issues with removing</h3>
+<figure  style="flex: 67.68558951965065" ><img width="1240" height="916" src="/archives/assets/cbae1de97a3f72ae84ea59804293ec56.png" alt=""/></figure><h3>Issues with removing</h3>
 <p>因为冲突的hash value需要probing，probing的依据是从序列里依次取出下一个位置，检查这个位置<strong>有没有被占用</strong>，那么问题就来了，如果一个本被占用的位置，因为元素需要删除，反而变成没有占用了，这有点类似删除树节点，不但要考虑删除，还要考虑这个位置怎么接续。</p><p><strong>lazy deletion</strong>
 但HT机制比树要复杂，为了避免反复应用probing函数重新摆放后续所有节点，干脆就在删除的位置放置一个预设的标识，我们称为墓碑(<code>tombstone</code>)，而不是直接置空，然后所有的查找和添加加上这一条规则，就能快速删除又无需重新排序。</p><p>大量删除会造成空间浪费，但无需立即处理：</p><ol>
 <li>添加元素允许添加到墓碑位置</li>
 <li>到达阈值容量需要倍增的时候有一次重排，这个时候就可以移除所有的墓碑</li>
 </ol>
 <p>如果查找一个hash value，连续3个都是墓碑，第4个才是它，这是不是有点浪费时间？
-确实，所以还可以优化，当你查找过一次之后，就可以把它移到第一个墓碑的位置，这样，<strong>下次</strong>查询的时候速度就会快很多了。</p><p>整个机制，叫<code>lazy deletion</code></p><figure class="vertical-figure" style="flex: 29.61816305469556" ><img width="1148" height="1938" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a935a20b4bc9641962766872aace8306.png" alt=""/></figure></div>
+确实，所以还可以优化，当你查找过一次之后，就可以把它移到第一个墓碑的位置，这样，<strong>下次</strong>查询的时候速度就会快很多了。</p><p>整个机制，叫<code>lazy deletion</code></p><figure class="vertical-figure" style="flex: 29.61816305469556" ><img width="1148" height="1938" src="/archives/assets/a935a20b4bc9641962766872aace8306.png" alt=""/></figure></div>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%BA%94%EF%BC%9AHash-Tables/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
@@ -1038,7 +1038,7 @@ LCP|Sorted Suffixes|
 <li>左子树的元素小于右子树</li>
 </ul>
 <p>拥有重复元素是允许的，但多数情况下我们只研究不重复的元素</p><p>这是一个有效的BST吗？
-<figure  style="flex: 57.83582089552239" ><img width="1240" height="1072" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d9ca27993e1a1228a3ffcadf9ed86aba.png" alt=""/></figure></p><p>是的（对于单链下来的，几乎会直接就满足右边比左边大）</p><p><strong>Usage</strong></p><ul>
+<figure  style="flex: 57.83582089552239" ><img width="1240" height="1072" src="/archives/assets/d9ca27993e1a1228a3ffcadf9ed86aba.png" alt=""/></figure></p><p>是的（对于单链下来的，几乎会直接就满足右边比左边大）</p><p><strong>Usage</strong></p><ul>
 <li>BSTs<ul>
 <li>implementation of some map and set ADTs</li>
 <li>red black trees</li>
@@ -1081,16 +1081,16 @@ LCP|Sorted Suffixes|
 <li>递归</li>
 </ul>
 <p>新找到的元素当然要从原来的位置删除，这时又根据它是否叶节点，单子节点还是全节点，来反复进行前面的操作，最终总是可以退出的
-<figure  style="flex: 57.83582089552239" ><img width="1240" height="1072" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/511db0d1a3889dca35b02ce18318c787.png" alt=""/></figure></p><figure  style="flex: 68.69266055045871" ><img width="1198" height="872" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/85b0081fb572f97bd8fb1a93c9ca3d90.png" alt=""/></figure><h2>Tree Traversals</h2>
+<figure  style="flex: 57.83582089552239" ><img width="1240" height="1072" src="/archives/assets/511db0d1a3889dca35b02ce18318c787.png" alt=""/></figure></p><figure  style="flex: 68.69266055045871" ><img width="1198" height="872" src="/archives/assets/85b0081fb572f97bd8fb1a93c9ca3d90.png" alt=""/></figure><h2>Tree Traversals</h2>
 <p>(Preorder, Inorder, Postorder &amp; Level order)
-<figure  style="flex: 92.67563527653213" ><img width="1240" height="669" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/731be06981a3a58193e3d1ea54d7fd22.png" alt=""/></figure></p><ul>
+<figure  style="flex: 92.67563527653213" ><img width="1240" height="669" src="/archives/assets/731be06981a3a58193e3d1ea54d7fd22.png" alt=""/></figure></p><ul>
 <li>preorder，在遍历左侧元素的时候，每次已经先取到元素了（最顶层）</li>
 <li>inorder里，遍历元素的时候，直到所有的left走完了，才取到第一个元素（最底层的）</li>
 <li>postorder里，也是遍历到最底层，但是下一步就是取兄弟节点了</li>
 </ul>
-<figure  style="flex: 99.51845906902086" ><img width="1240" height="623" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/47fe26cb82c30df966d2cbb9f8bd3ee8.png" alt=""/></figure><p>inorder一个重要特征：它是从小到大排好序的！
-<figure  style="flex: 97.79179810725552" ><img width="1240" height="634" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/730f8d00e817c006cb9c33171da53386.png" alt=""/></figure>
-preorder 和 postorder没什么特征，举一个post的例子观察下</p><p>而levelorder则是一<code>层</code>一层地取的：</p><figure  style="flex: 91.58050221565732" ><img width="1240" height="677" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/483fae0876dbf6b3d954f86b6341ecf5.png" alt=""/></figure>
+<figure  style="flex: 99.51845906902086" ><img width="1240" height="623" src="/archives/assets/47fe26cb82c30df966d2cbb9f8bd3ee8.png" alt=""/></figure><p>inorder一个重要特征：它是从小到大排好序的！
+<figure  style="flex: 97.79179810725552" ><img width="1240" height="634" src="/archives/assets/730f8d00e817c006cb9c33171da53386.png" alt=""/></figure>
+preorder 和 postorder没什么特征，举一个post的例子观察下</p><p>而levelorder则是一<code>层</code>一层地取的：</p><figure  style="flex: 91.58050221565732" ><img width="1240" height="677" src="/archives/assets/483fae0876dbf6b3d954f86b6341ecf5.png" alt=""/></figure>
 这就是广度优先了（<code>Breadth First Searth</code>)BFS<p>实现BFS</p><ol>
 <li>每处理一个parent的时候，把parent加到结果数组里</li>
 <li>parent的子节点加到队列里</li>
@@ -1098,7 +1098,7 @@ preorder 和 postorder没什么特征，举一个post的例子观察下</p><p>�
 <li>该值的child加到队列里（步骤2）</li>
 </ol>
 <p>其实就是步骤1，2的重复，比如：
-<figure  style="flex: 70.7516339869281" ><img width="866" height="612" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/80ff2df354c0700753943e83fd5cd17a.png" alt=""/></figure></p>
+<figure  style="flex: 70.7516339869281" ><img width="866" height="612" src="/archives/assets/80ff2df354c0700753943e83fd5cd17a.png" alt=""/></figure></p>
 <pre><code>[11], [6, 15] 处理第1个数11， 队列里多了两个元素6， 15
 [11, 6], [15, 3, 8] 从队列里取出6， 加入结果，它的子元素(3, 8)加入队列
 [11, 6, 15], [3, 8, 13, 17]
@@ -1156,11 +1156,11 @@ preorder 和 postorder没什么特征，举一个post的例子观察下</p><p>�
 </li>
 </ul>
 <p>看到这里，首先想知道什么是unified，看实现，也就是在一个集合里(component)
-<figure class="vertical-figure" style="flex: 42.622950819672134" ><img width="1040" height="1220" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/475d857d18dc3fe4749139b896e6f68a.png" alt=""/></figure></p><ul>
+<figure class="vertical-figure" style="flex: 42.622950819672134" ><img width="1040" height="1220" src="/archives/assets/475d857d18dc3fe4749139b896e6f68a.png" alt=""/></figure></p><ul>
 <li>观察C_J，因为C和J已经在一个组里了，这条边就不需要了</li>
 <li>观察D_E，一旦连上后，紫色和绿色其实就是一个组了</li>
 </ul>
-<figure class="vertical-figure" style="flex: 36.810730253353206" ><img width="988" height="1342" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a3a52e1b62a1b105bc18f817ba801011.png" alt=""/></figure><ul>
+<figure class="vertical-figure" style="flex: 36.810730253353206" ><img width="988" height="1342" src="/archives/assets/a3a52e1b62a1b105bc18f817ba801011.png" alt=""/></figure><ul>
 <li>观察D_H，一旦连上后，紫色和红色也成为了一个组</li>
 <li>连接B_C，所有顶点就全部连上了，并且只有一条紫线</li>
 </ul>
@@ -1178,10 +1178,10 @@ Union: 找两个元素分别在哪个component里，然后找到它们的root，
 </li>
 </ul>
 <h2>Path Compression Union Find</h2>
-<figure class="vertical-figure" style="flex: 36.48111332007952" ><img width="734" height="1006" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5bac1a63885746047c532e2362b8ead9.png" alt=""/></figure><p>由一层层找到root改为所有顶点直接指向顶点（星形结构），实现路径压缩</p><p>这段代码演示的是，查找p的root节点，在查找的过程中，顺便进行了路径压缩
-<figure  style="flex: 102.99003322259136" ><img width="1240" height="602" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/6de31545897b5731ee7c6916033393a1.png" alt=""/></figure></p><p>合并的逻辑就是比较谁的元素多就把谁当作root，另一个component的root的parent设为元素多的组的root<br />
+<figure class="vertical-figure" style="flex: 36.48111332007952" ><img width="734" height="1006" src="/archives/assets/5bac1a63885746047c532e2362b8ead9.png" alt=""/></figure><p>由一层层找到root改为所有顶点直接指向顶点（星形结构），实现路径压缩</p><p>这段代码演示的是，查找p的root节点，在查找的过程中，顺便进行了路径压缩
+<figure  style="flex: 102.99003322259136" ><img width="1240" height="602" src="/archives/assets/6de31545897b5731ee7c6916033393a1.png" alt=""/></figure></p><p>合并的逻辑就是比较谁的元素多就把谁当作root，另一个component的root的parent设为元素多的组的root<br />
 合并完成后组数就少了1
-<figure  style="flex: 71.1825487944891" ><img width="1240" height="871" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1b52c2255e8963040253701946bae7d8.png" alt=""/></figure></p><p>看代码，这一步里面并没有路径压缩，也就是小组里面的元素并没有<strong>进一步</strong>再星状地指向新的parent，仍然指向的是老的组的root。</p></div>
+<figure  style="flex: 71.1825487944891" ><img width="1240" height="871" src="/archives/assets/1b52c2255e8963040253701946bae7d8.png" alt=""/></figure></p><p>看代码，这一步里面并没有路径压缩，也就是小组里面的元素并没有<strong>进一步</strong>再星状地指向新的parent，仍然指向的是老的组的root。</p></div>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%89%EF%BC%9AUnion-Find/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
@@ -1218,8 +1218,8 @@ Union: 找两个元素分别在哪个component里，然后找到它们的root，
 </li>
 </ul>
 <p>Priority Queue有时候也被叫做Heap，因为它只是一个ADT，当然它也可以用别的数据结构实现。</p><p>以下四个，都是heap
-<figure class="vertical-figure" style="flex: 45.29616724738676" ><img width="1040" height="1148" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/ca1ec5da989f79cdabb15eaf7cc6c092.png" alt=""/></figure></p><p>这些就不是
-<figure  style="flex: 141.57608695652175" ><img width="1042" height="368" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a2a4acdc3e610752ca81c063f3b7b01f.png" alt=""/></figure></p><p><strong>Usage</strong></p><ul>
+<figure class="vertical-figure" style="flex: 45.29616724738676" ><img width="1040" height="1148" src="/archives/assets/ca1ec5da989f79cdabb15eaf7cc6c092.png" alt=""/></figure></p><p>这些就不是
+<figure  style="flex: 141.57608695652175" ><img width="1042" height="368" src="/archives/assets/a2a4acdc3e610752ca81c063f3b7b01f.png" alt=""/></figure></p><p><strong>Usage</strong></p><ul>
 <li>certain implementations of <code>Dijkstra's Shortest Path algorithm</code></li>
 <li>anytime you need the <em>dynamically</em> fetch the <strong>next</strong> <code>best</code> or <code>worst</code> element</li>
 <li><code>Huffman coding</code> -&gt; lossless data compression</li>
@@ -1367,18 +1367,18 @@ Remove(): O(n) (最坏情况下，可能要删的元素在最后一个)</p><p>�
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -1390,7 +1390,7 @@ Remove(): O(n) (最坏情况下，可能要删的元素在最后一个)</p><p>�
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

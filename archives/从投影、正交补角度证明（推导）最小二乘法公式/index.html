@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -63,7 +63,7 @@
             </div>
             <div class="prism-content-body">
                 <p>学习线性回归的时候，会教我们$X\theta=y$可以直接用<strong>最小二乘法</strong>直接把$\theta$求出来：</p><p>$\theta=(X^TX)^{-1}X^Ty$</p><p>并且还在我<a href="https://blog.wzy.one/archives/%E7%9F%A9%E9%98%B5%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E6%B1%82%E8%A7%A3%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5/">之前的博文</a>里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。</p><p>首先，在吴恩达的教材里，这个并不叫最小二乘(<code>least suqare</code>），而是叫<code>Normal Equation method</code>，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(<code>Projection</code>)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：</p><p>首先，预备知识</p><h2>子空间</h2>
-<figure class="vertical-figure" style="flex: 35.609397944199706" ><img width="970" height="1362" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/454cb3771fb0eb69bf0301b42ad8d9f3.png" alt=""/></figure><p>笔记很清楚了，对于一个矩阵
+<figure class="vertical-figure" style="flex: 35.609397944199706" ><img width="970" height="1362" src="/archives/assets/454cb3771fb0eb69bf0301b42ad8d9f3.png" alt=""/></figure><p>笔记很清楚了，对于一个矩阵
 $A= \begin{bmatrix}
    -2 &amp; -1 &amp; -3 \
    4 &amp; 2 &amp; 6 \
@@ -77,7 +77,7 @@ $A= \begin{bmatrix}
 <li>$C(A^T) = (N(A))^\bot$</li>
 </ul>
 <h2>投影是一个线性变换</h2>
-<figure  style="flex: 66.66666666666667" ><img width="1240" height="930" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d73cc50bd39caeb73a1816384ee8e8d7.png" alt=""/></figure>
+<figure  style="flex: 66.66666666666667" ><img width="1240" height="930" src="/archives/assets/d73cc50bd39caeb73a1816384ee8e8d7.png" alt=""/></figure>
 这里已经看到我们熟悉的$(A^TA)^{-1}A^Tx$了，我们来看一下推导过程：<ol>
 <li>$\vec x$在$V \in \R^n$上的投影$Proj_V^{\vec x} = \vec v$必然能表示成该空间的<code>basis</code>{$\vec b_1, \vec b_2, \vec b_3, \dots$}的线性变换：$\vec v \in V = y_1\vec b_1 + y_2\vec b_2 + \cdots + y_k \vec b_k =  A\vec y$</li>
 <li>求出$\vec y$则求出了这个投影在哪里</li>
@@ -97,10 +97,10 @@ $A= \begin{bmatrix}
 </ol>
 <h2>最小二乘逼近</h2>
 <p>由此到了下一课，<code>the lease squares approximation</code>，讲的就是$A\vec x = \vec b$无解时，意思就是在$\vec b$不存在A的张成子空间中，所以无论进行怎样的<strong>线性变换</strong>，都是不可能得到$\vec b$的，则取$\vec x$在$C(A)$中的投影作为近似的解（证明就不再展开了）
-<figure class="vertical-figure" style="flex: 49.5603517186251" ><img width="1240" height="1251" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d390aad67946ec06a573bddf79d29339.png" alt=""/></figure>
+<figure class="vertical-figure" style="flex: 49.5603517186251" ><img width="1240" height="1251" src="/archives/assets/d390aad67946ec06a573bddf79d29339.png" alt=""/></figure>
 仍然用的是同一个思路，即&quot;垂线在左零空间中&quot;，来构造$A^T\cdot \vec w = \vec 0$</p><h2>应用最小二乘拟合一条回归线</h2>
 <p>这里终于讲到了与机器学习最接近的内容：<code>regression</code>
-<figure  style="flex: 164.89361702127658" ><img width="1240" height="376" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2da3910c441eb8061e11ea708824fd7d.png" alt=""/></figure>
+<figure  style="flex: 164.89361702127658" ><img width="1240" height="376" src="/archives/assets/2da3910c441eb8061e11ea708824fd7d.png" alt=""/></figure>
 可以看到，毫无业务思维的花花肠子，很多机器学习课程里会花大量工夫从感性到理性上给你讲这些内容，因为它的期望从0跟你讲清楚，而在循序渐进的数学理论体系里，这些根本就不需要关联感性认识的，什么每年的房价啊，数学关注的只是建模。</p><p>这个回归实例里，因为需要拟合的是一条直线：$y = b + ax$，那么既有的数据就成了机器学习里的“样本”，但我们这里不需要这么理解，而是直接理解为矩阵，得到
 方程组：</p><p>$$\begin{cases}
 b + a = 1 \\
@@ -222,18 +222,18 @@ b + 3a = 2
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -245,7 +245,7 @@ b + 3a = 2
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

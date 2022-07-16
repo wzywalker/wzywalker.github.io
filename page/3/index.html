@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -36,7 +36,7 @@
 <meta name="twitter:title" content="walker's code blog" />
 <meta name="twitter:description" content="coder, reader" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png" />
+<meta name="twitter:image" content="/android-chrome-512x512.png" />
 
 
     
@@ -181,7 +181,7 @@ search: <code>O(n)</code></p><p>双向链表实现一个Stack，基本上就是�
 <li>BFS graph traversal</li>
 </ul>
 <p><strong>Complexity</strong></p><p>只有<code>contains, revomval</code>需要遍历，其它操作（出入列等）都是O(1)</p><p>实现一个BFS：</p><p>基本就是动态往 queue 里添加子节点,当前级别元素访问完后, 再 dequeue 出来的就是所有的下一级子节点
-<figure  style="flex: 92.55319148936171" ><img width="1044" height="564" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/910285ef71036aa37402e819d06f56fc.png" alt=""/></figure></p><p>双向列表实现Queue，入列用tail，出列用head，即添加的总在尾巴，永远从头部取出。</p></div>
+<figure  style="flex: 92.55319148936171" ><img width="1044" height="564" src="/archives/assets/910285ef71036aa37402e819d06f56fc.png" alt=""/></figure></p><p>双向列表实现Queue，入列用tail，出列用head，即添加的总在尾巴，永远从头部取出。</p></div>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87%E4%B8%80%EF%BC%9AArray-Linked-List-Stack-Queues/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
@@ -258,7 +258,7 @@ D固定，同A，<span class="o">(</span><span class="m">6</span><span class="o"
 链接: <a href="https://pan.baidu.com/s/1hgnzfxbE9l4zlcYBDsa-1g">https://pan.baidu.com/s/1hgnzfxbE9l4zlcYBDsa-1g</a> 提取码: 7w1f</p><hr />
 <p>本文内容：与UIKit的集成，以及学习过程中的一些tips，skills，与章节无章的notes</p><hr />
 <h1>MVVM</h1>
-<figure  style="flex: 89.08045977011494" ><img width="1240" height="696" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/da570de12fc64177b4e88c6429ae285b.png" alt=""/></figure><ul>
+<figure  style="flex: 89.08045977011494" ><img width="1240" height="696" src="/archives/assets/da570de12fc64177b4e88c6429ae285b.png" alt=""/></figure><ul>
 <li>viewmodel要起到gete keeper的作用，它就要把model给private起来<ul>
 <li>或者private (set), 这样保护了写，但是能读</li>
 <li>或者用一个计算属性把需要的model 暴露出去</li>
@@ -333,11 +333,11 @@ D固定，同A，<span class="o">(</span><span class="m">6</span><span class="o"
 <li><code>Circle + trim + stroke + rotation</code> 可以组合出一段任意角度的弧形</li>
 <li>一个<code>PreferenceKey</code>用来广播属性变化的例子：</li>
 </ul>
-<figure class="vertical-figure" style="flex: 38.9937106918239" ><img width="1240" height="1590" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e660e659aadcd624c62b1b9102d015d5.png" alt=""/></figure>
+<figure class="vertical-figure" style="flex: 38.9937106918239" ><img width="1240" height="1590" src="/archives/assets/e660e659aadcd624c62b1b9102d015d5.png" alt=""/></figure>
 <pre><code>* see more [https://swiftwithmajid.com/2020/01/15/the-magic-of-view-preferences-in-swiftui/](https://swiftwithmajid.com/2020/01/15/the-magic-of-view-preferences-in-swiftui/)
 </code></pre>
 <p>看一个简化的实例：
-<figure class="vertical-figure" style="flex: 43.13868613138686" ><img width="1182" height="1370" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/01b4f14b413613c6bd36ad5b2288df9d.png" alt=""/></figure>
+<figure class="vertical-figure" style="flex: 43.13868613138686" ><img width="1182" height="1370" src="/archives/assets/01b4f14b413613c6bd36ad5b2288df9d.png" alt=""/></figure>
 可以看到，其实化简化可读性更强，用for循环，再在里面做逻辑，会把直白的初衷绕进去：</p><ul>
 <li><p>返回唯一一个面朝上的卡片</p></li>
 <li><p>设置选定索引的卡片面朝上</p></li>
@@ -589,10 +589,10 @@ D固定，同A，<span class="o">(</span><span class="m">6</span><span class="o"
 <p>声明能打开什么类型的文件，通过：UTType(<code>Uniform Type Identifier</code>)</p><p>可以理解为怎么定义并注册（关联）自己的扩展名，就像photoshop关联.psd一样。</p><ol>
 <li>声明(Info tab)，设置<code>Exported/Imported Type Identifier</code>，所以表面上的扩展名，内里还对应了一个唯一的标识符，一般用反域名的格式</li>
 </ol>
-<figure  style="flex: 322.98850574712645" ><img width="1124" height="174" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/6b64ff3f0d28f9e054f79ae65e4eada0.png" alt=""/></figure><ol start="2">
+<figure  style="flex: 322.98850574712645" ><img width="1124" height="174" src="/archives/assets/6b64ff3f0d28f9e054f79ae65e4eada0.png" alt=""/></figure><ol start="2">
 <li>声明拥有权，用的就是上一步标识符，而不是扩展名</li>
 </ol>
-<figure  style="flex: 400.0" ><img width="1136" height="142" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/86264dc076782270e53b2ea22b2eb60f.png" alt=""/></figure><ol start="3">
+<figure  style="flex: 400.0" ><img width="1136" height="142" src="/archives/assets/86264dc076782270e53b2ea22b2eb60f.png" alt=""/></figure><ol start="3">
 <li>告知系统能在<code>Files</code> app里打开这种文档<ul>
 <li>info.plist &gt; Supports Document Browser &gt; YES</li>
 </ul>
@@ -880,7 +880,7 @@ D固定，同A，<span class="o">(</span><span class="m">6</span><span class="o"
 <li>值为100报错了</li>
 <li>于是我改为&quot;&quot;或&quot;other“等字符串或空字符串，解码的结果是<code>nil</code></li>
 </ol>
-<p>也就是说，默认的decode只认<code>{}</code></p><figure  style="flex: 82.77310924369748" ><img width="1182" height="714" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c3a4240a7582937166f9300c35b4e868.png" alt=""/></figure><p>而前面我们知道了，如果是自己手写，它可以是任何值，它的意义仅仅是个标识，并不会取它的值。验证：</p><div class="highlight"><pre><span></span><span class="kd">enum</span> <span class="nc">NormEnum</span><span class="p">:</span> <span class="n">Codable</span> <span class="p">{</span>
+<p>也就是说，默认的decode只认<code>{}</code></p><figure  style="flex: 82.77310924369748" ><img width="1182" height="714" src="/archives/assets/c3a4240a7582937166f9300c35b4e868.png" alt=""/></figure><p>而前面我们知道了，如果是自己手写，它可以是任何值，它的意义仅仅是个标识，并不会取它的值。验证：</p><div class="highlight"><pre><span></span><span class="kd">enum</span> <span class="nc">NormEnum</span><span class="p">:</span> <span class="n">Codable</span> <span class="p">{</span>
     <span class="k">case</span> <span class="n">history</span><span class="p">,</span> <span class="n">math</span><span class="p">,</span> <span class="n">geometry</span>
 
     <span class="kd">private</span> <span class="kd">enum</span> <span class="nc">keyMap</span><span class="p">:</span> <span class="nb">String</span><span class="p">,</span> <span class="n">CodingKey</span><span class="p">{</span>
@@ -1396,7 +1396,7 @@ Once you have desired UIColor, employ <code>Color(uiColor:)</code> to use it in 
 <li>animation的参数就是一个struct： duration, delay, repeat, curve...</li>
 </ul>
 <p>对于不能动画的modifier，看一下这个实例（上为修改前，下为修改后）
-<figure  style="flex: 51.452991452991455" ><img width="1204" height="1170" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/4804373fb223c0a4333d720331093521.png" alt=""/></figure></p><ol>
+<figure  style="flex: 51.452991452991455" ><img width="1204" height="1170" src="/archives/assets/4804373fb223c0a4333d720331093521.png" alt=""/></figure></p><ol>
 <li>把font设为常量，把缩放变成一个geometric effect</li>
 <li>同时也说明<code>.animation()</code>不止作用于它前面的</li>
 </ol>
@@ -1453,7 +1453,7 @@ Once you have desired UIColor, employ <code>Color(uiColor:)</code> to use it in 
 <li>The <code>setting</code> of this var is the animation system telling the Shape/VM which piece to draw.</li>
 <li>The <code>getting</code> of this var is the animation system getting the <code>start/end</code> points of an animation.</li>
 </ul>
-<p><strong>实例一</strong></p><figure  style="flex: 73.625" ><img width="1178" height="800" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/10d0bb779b10383a36d23d581f2fadb9.png" alt=""/></figure><ul>
+<p><strong>实例一</strong></p><figure  style="flex: 73.625" ><img width="1178" height="800" src="/archives/assets/10d0bb779b10383a36d23d581f2fadb9.png" alt=""/></figure><ul>
 <li>view modifier里面有一个变量<code>rotation</code>（ZStack, content, rotation3DEffect)</li>
 <li>那么外层在<code>withAnimation{}</code>的时候，我们是期望rotation的值能动起来的<ul>
 <li>内置的viewmodifier当然会自己动，如<code>opacity</code>等</li>
@@ -1472,18 +1472,18 @@ Once you have desired UIColor, employ <code>Color(uiColor:)</code> to use it in 
 <li>所以解决方法当然可以“延迟”呈现这些卡片</li>
 <li>课程里用了另一种方法，机制当然也是延迟，但不是那么地直白：</li>
 </ol>
-<figure  style="flex: 82.95774647887323" ><img width="1178" height="710" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e7e3ef2ac16296fabf73162c1fc678fa.png" alt=""/></figure><ul>
+<figure  style="flex: 82.95774647887323" ><img width="1178" height="710" src="/archives/assets/e7e3ef2ac16296fabf73162c1fc678fa.png" alt=""/></figure><ul>
 <li>就是利用了<code>.onAppear</code>来阻断容器和卡片的连续生成，而改用容器呈现后，再逐个“添加”的方式，让每一张卡片都有一个单独出现的机会</li>
 <li>同时也必须利用<code>@State</code>, 让每添加一张卡片都会invalidate view一次</li>
 <li>也能看出，animate能animate的就是属性和transition</li>
 </ul>
 <blockquote>
 <p>当然，课程最后改成了“发牌”的机制，手动添加卡片，彻底阻断了卡片和容器一起出现的场景。</p></blockquote>
-<p>这就带我们来到了实例三，同一个view在不同容器间的动画，怎么计算各自尺度下同一个view的位置：<code>matchedGeometryEffect</code></p><p><strong>实例三</strong></p><figure  style="flex: 73.45679012345678" ><img width="1190" height="810" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/08935bf9006d072875c203895aff17b7.png" alt=""/></figure><ul>
+<p>这就带我们来到了实例三，同一个view在不同容器间的动画，怎么计算各自尺度下同一个view的位置：<code>matchedGeometryEffect</code></p><p><strong>实例三</strong></p><figure  style="flex: 73.45679012345678" ><img width="1190" height="810" src="/archives/assets/08935bf9006d072875c203895aff17b7.png" alt=""/></figure><ul>
 <li>想要有牌一张张发出去的效果，自然会想到添加延时</li>
 <li>实现成了同时做动画，只不过越到后面的牌，延时越长（动作越慢），而不是我们想象的先后触发</li>
 </ul>
-<p>为了让不同的牌发出去时有立体效果，还以index为依据设置了<code>zIndex</code>，最终效果：</p><figure class="vertical-figure" style="flex: 24.608819345661452" ><img width="346" height="703" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c16a9ce3d925f64e63cdc14ebd2b5f59.gif" alt=""/></figure></div>
+<p>为了让不同的牌发出去时有立体效果，还以index为依据设置了<code>zIndex</code>，最终效果：</p><figure class="vertical-figure" style="flex: 24.608819345661452" ><img width="346" height="703" src="/archives/assets/c16a9ce3d925f64e63cdc14ebd2b5f59.gif" alt=""/></figure></div>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/cs193p_2021%E7%AC%94%E8%AE%B0%5B3%5D_Animation_Transition/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
@@ -1637,7 +1637,7 @@ Once you have desired UIColor, employ <code>Color(uiColor:)</code> to use it in 
 <li>并且不包含safe area（如刘海）</li>
 <li>如果需要绘制到safe area里去: <code>ZStack{...}.edgesIgnoringSafeArea([.top])</code></li>
 </ul>
-<figure  style="flex: 127.6086956521739" ><img width="1174" height="460" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/aa2a99b80008d002cfc2521af182c43d.png" alt=""/></figure><p>图中演示的是设置卡片字体的大小，希望尽可能地填充卡片，<code>geometry.size</code>能给出运行时数据，而无需硬编码。</p></div>
+<figure  style="flex: 127.6086956521739" ><img width="1174" height="460" src="/archives/assets/aa2a99b80008d002cfc2521af182c43d.png" alt=""/></figure><p>图中演示的是设置卡片字体的大小，希望尽可能地填充卡片，<code>geometry.size</code>能给出运行时数据，而无需硬编码。</p></div>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0%5B2%5D/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
@@ -1878,7 +1878,7 @@ let y = x?foo()?bar?.z</p><p>// 尝试还原一下：</p><div class="highlight">
 </ul>
 </li>
 </ul>
-<p>SwiftUI的<code>View</code> protocol非常简单，conform 一个返回<code>some view</code>的<code>body</code>方法就行了，但是又为它写了无数<code>extension</code>，比如<code>foregroundColor</code>, <code>padding</code>, etc. 示意图：</p><figure  style="flex: 146.20253164556962" ><img width="924" height="316" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9bfb49031e316c1d1d1bc4a5d6b57427.png" alt=""/></figure><h2>Generics(泛型)</h2>
+<p>SwiftUI的<code>View</code> protocol非常简单，conform 一个返回<code>some view</code>的<code>body</code>方法就行了，但是又为它写了无数<code>extension</code>，比如<code>foregroundColor</code>, <code>padding</code>, etc. 示意图：</p><figure  style="flex: 146.20253164556962" ><img width="924" height="316" src="/archives/assets/9bfb49031e316c1d1d1bc4a5d6b57427.png" alt=""/></figure><h2>Generics(泛型)</h2>
 <p>举例：</p><div class="highlight"><pre><span></span><span class="kd">protocol</span> <span class="nc">Identifiable</span> <span class="p">{</span>
     <span class="kd">associatedtype</span> <span class="n">ID</span><span class="p">:</span> <span class="nb">Hashable</span>
     <span class="kd">var</span> <span class="nv">id</span><span class="p">:</span> <span class="n">ID</span> <span class="p">{</span> <span class="kr">get</span> <span class="p">}</span>
@@ -1977,18 +1977,18 @@ let y = x?foo()?bar?.z</p><p>// 尝试还原一下：</p><div class="highlight">
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -2000,7 +2000,7 @@ let y = x?foo()?bar?.z</p><p>// 尝试还原一下：</p><div class="highlight">
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -36,7 +36,7 @@
 <meta name="twitter:title" content="walker's code blog" />
 <meta name="twitter:description" content="coder, reader" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png" />
+<meta name="twitter:image" content="/android-chrome-512x512.png" />
 
 
     
@@ -335,7 +335,7 @@ array&amp;\color{red}6&amp;7&amp;3&amp;2&amp;14&amp;9\\
 &amp;2&amp;3&amp;(6)&amp;7&amp;14&amp;9&amp;(1,2)索引间已没有大于6的数，排序完成，回填6
 \end{array}
 $$</p>
-<figure  style="flex: 156.39810426540285" ><img width="1320" height="422" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c5a22f53c6f3d78707c3504927c631dc.png" alt=""/></figure><ol>
+<figure  style="flex: 156.39810426540285" ><img width="1320" height="422" src="/archives/assets/c5a22f53c6f3d78707c3504927c631dc.png" alt=""/></figure><ol>
 <li>注意第1次从右往左找比6小的数时，找到2，右边的14，9就可以全部划掉了，因为我永远是在用6在左右查找，这一次pass了，后面永远会pass</li>
 </ol>
 <ul>
@@ -410,7 +410,7 @@ $$</p>
 <li>一轮摆完后，最大的数肯定已经<strong>上浮</strong>到根节点了，把它与最末的一个数字调换位置（这个数字是一个相对小，但不一定是最小的），然后把最大的这个数从堆里移除（已经确认是最大的，位置也就确认了，不再参与比较）</li>
 <li>实现的时候，因为有“找父/子节点比大小”这样的逻辑，显然可以直接用上二叉树的性质，不要自己去观察或归纳了。</li>
 </ol>
-<p>动图比较长，耐心看下：</p><figure  style="flex: 62.5" ><img width="350" height="280" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5aa56935b19cd4afe2cd50fb2ff0b485.gif" alt=""/></figure><blockquote>
+<p>动图比较长，耐心看下：</p><figure  style="flex: 62.5" ><img width="350" height="280" src="/archives/assets/5aa56935b19cd4afe2cd50fb2ff0b485.gif" alt=""/></figure><blockquote>
 <p>在实现每一轮的遍历数字较大的那个子节点并交换数字的过程中，我之前用的是递归，在小数据量顺利通过，但上万条数据时碰到了<code>RecursionError: maximum recursion depth exceeded in comparison</code>, 查询本机迭代大小设置为1000，但设到几十万就不起作用了（虽然不报错），于是改成了<code>while</code>循环，代码几乎没变，但是秒过了。</p></blockquote>
 <p>递归只是让代码看起来简洁而牛逼，并没有创造什么新的东西，while能行那就算过了吧。</p><p>但是代码开始dirty了起来，大量的代码在控制边界和描述场景，显然有些条件可能是冗余的，我没有很好地合并这些边界和条件导致if太多，这是个不好的演示，但三个核心函数还是阐释了这种算法的思路：</p><ul>
 <li>摆成树（堆）</li>
@@ -501,7 +501,7 @@ $$</p>
 </code></pre>
 <h2>归并排序</h2>
 <p>这次先看图吧，看你能总结出啥：
-<figure  style="flex: 83.33333333333333" ><img width="300" height="180" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9f48407474a15d03bd183eafc6266e88.gif" alt=""/></figure></p><ol>
+<figure  style="flex: 83.33333333333333" ><img width="300" height="180" src="/archives/assets/9f48407474a15d03bd183eafc6266e88.gif" alt=""/></figure></p><ol>
 <li>第一步是把数组打散后两两排序，实现每一组（2个元素）是排好序的</li>
 <li>第二步仍然是两两排序，但是把前面排序好的每两个组成一个组：</li>
 </ol>
@@ -627,7 +627,7 @@ $$</p>
 <span class="nx">sort</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span><span class="w"> </span><span class="nx">right</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 <p>即代码真走到第3行了的话，所有的数据已经排好序了</p><h2>基数排序</h2>
-<figure  style="flex: 126.0377358490566" ><img width="668" height="265" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/3c9e057d213761a0ebe19f5453b4a629.png" alt=""/></figure><p>看图，为什么从个位向高位依次排过去为什么就能保证后面高位的排序不会影响低序的，直观来理解的话，就是</p><ol>
+<figure  style="flex: 126.0377358490566" ><img width="668" height="265" src="/archives/assets/3c9e057d213761a0ebe19f5453b4a629.png" alt=""/></figure><p>看图，为什么从个位向高位依次排过去为什么就能保证后面高位的排序不会影响低序的，直观来理解的话，就是</p><ol>
 <li>如果高位数字不一样，那么低位顺序是没意义的，按高位大小排即可</li>
 <li>如果高位数字一样，那么低位已经排好序了</li>
 <li>按这个逻辑由低位向高位排，按归纳法，可以推到适用普遍情况的</li>
@@ -832,7 +832,7 @@ radix_sort	 0.17084 seconds
 <li>&quot;<code>www.kg.com/person/1</code>&quot;是一个IRI，用来唯一的表示“罗纳尔多”这个实体。&quot;kg:chineseName&quot;也是一个IRI，用来表示“中文名”这样一个属性。&quot;kg:&quot;是RDF文件中所定义的prefix，如下所示。</li>
 <li>@<code>prefix kg</code>: <a href="http://www.kg.com/ontology/">http://www.kg.com/ontology/</a> 即，kg:chineseName其实就是&quot;http:// www.kg.com/ontology/chineseName&quot;的缩写。</li>
 </ul>
-<p>这样知识图谱的正确表示其实是：</p><figure  style="flex: 81.6618911174785" ><img width="1140" height="698" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/055b61a7e0a74762f15ece471ec22ee8.png" alt=""/></figure><p>而不是网传的简单的画几个对象连几根线，也就是说，能用URI表示的，尽量都用URI表示。</p><h1>Identifying graph-shaped problems(应用场景)</h1>
+<p>这样知识图谱的正确表示其实是：</p><figure  style="flex: 81.6618911174785" ><img width="1140" height="698" src="/archives/assets/055b61a7e0a74762f15ece471ec22ee8.png" alt=""/></figure><p>而不是网传的简单的画几个对象连几根线，也就是说，能用URI表示的，尽量都用URI表示。</p><h1>Identifying graph-shaped problems(应用场景)</h1>
 <ul>
 <li><p>does our problem involve understanding <code>relationships</code> between entities?</p><ul>
 <li>Recommendations</li>
@@ -863,7 +863,7 @@ radix_sort	 0.17084 seconds
 </li>
 </ul>
 <h1>Neo4j</h1>
-<figure  style="flex: 88.44507845934379" ><img width="1240" height="701" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1da110e1163eb31331ea2c21528a4ae2.png" alt=""/></figure><ol>
+<figure  style="flex: 88.44507845934379" ><img width="1240" height="701" src="/archives/assets/1da110e1163eb31331ea2c21528a4ae2.png" alt=""/></figure><ol>
 <li><code>:person</code>, <code>:Car</code>, <code>:Vehicle</code> are <code>Label</code></li>
 <li>even <code>relationship</code> can also have(own) properties</li>
 </ol>
@@ -872,7 +872,7 @@ radix_sort	 0.17084 seconds
 <p><code>(p:Person:Mammal{name:'walker'})</code></p><h3>for Relationships</h3>
 <p><code>- [:HIRED {type: 'fulltime'}] -&gt;</code></p><h2>CRUD</h2>
 <h3>Create</h3>
-<figure  style="flex: 87.94326241134752" ><img width="1240" height="705" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1664c809c2f78ab7dc14392c1ef00ac9.png" alt=""/></figure><h4>Constraints</h4>
+<figure  style="flex: 87.94326241134752" ><img width="1240" height="705" src="/archives/assets/1664c809c2f78ab7dc14392c1ef00ac9.png" alt=""/></figure><h4>Constraints</h4>
 
 <pre><code>CREATE  CONSTRAINT ON (p:Person)
 ASSERT p.name IS UNIQUE
@@ -1031,7 +1031,7 @@ RETURN n
 <li>The classical example of a sequence model is the <code>Hidden Markov Model</code> for <strong>part-of-speech tagging</strong>. (词性标注)</li>
 <li>Another example is the <code>conditional random field</code>.</li>
 </ul>
-<p>HMM模型的典型应用是词性标注</p><figure  style="flex: 94.51219512195122" ><img width="1240" height="656" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8246ff19ee962171c5d3b15abd234eec.png" alt=""/></figure><p>词性标注语料库是统计标注算法的关键训练(和测试)集。三个主要的标注语料库始终用于训练和测试英语词性标注器。</p><ol>
+<p>HMM模型的典型应用是词性标注</p><figure  style="flex: 94.51219512195122" ><img width="1240" height="656" src="/archives/assets/8246ff19ee962171c5d3b15abd234eec.png" alt=""/></figure><p>词性标注语料库是统计标注算法的关键训练(和测试)集。三个主要的标注语料库始终用于训练和测试英语词性标注器。</p><ol>
 <li>布朗语料库是1961年在美国出版的500篇不同体裁的书面文本的100万单词样本。</li>
 <li>《华尔街日报》语料库收录了1989年发表在《华尔街日报》上的100万个单词。</li>
 <li>总机语料库由1990-1991年收集的200万字电话对话组成。语料库的创建是通过在文本上运行一个自动的词性标记，然后由人工注释器手工更正每个标记。</li>
@@ -1053,7 +1053,7 @@ RETURN n
 <li>可见状态之间没有转换概率</li>
 <li>输出概率（<code>emission probability</code>）：隐含状态和可见状态之间的概率，比如D4下1的概率为1/4，D6下为1/6 (表现概率，激发概率，多种翻译)</li>
 </ol>
-<figure  style="flex: 106.16438356164383" ><img width="1240" height="584" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1c9b14ebecf2d171b7f511296c425412.png" alt=""/></figure><p>应用HMM模型时候，往往是缺失了一部分信息的，</p><ul>
+<figure  style="flex: 106.16438356164383" ><img width="1240" height="584" src="/archives/assets/1c9b14ebecf2d171b7f511296c425412.png" alt=""/></figure><p>应用HMM模型时候，往往是缺失了一部分信息的，</p><ul>
 <li>有时候你知道骰子有几种，每种骰子是什么，但是不知道掷出来的骰子序列；</li>
 <li>有时候你只是看到了很多次掷骰子的结果，剩下的什么都不知道。</li>
 </ul>
@@ -1068,20 +1068,20 @@ RETURN n
 <li>但这个例子忽略了转移概率，即P(D6|D4), P(D4|D6,D4)，或者说默认了转移概率就是1/3，即每次挑中三个骰子的机率均等。</li>
 </ol>
 <h2>Evaluation</h2>
-<p>根据条件和序列结果求这一序列的概率是多少，比如三种骰子，投出了1，6，3的结果：</p><figure  style="flex: 169.86301369863014" ><img width="1240" height="365" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/3008ce6fdd893286e56d1b7f9ad1a342.png" alt=""/></figure><ul>
+<p>根据条件和序列结果求这一序列的概率是多少，比如三种骰子，投出了1，6，3的结果：</p><figure  style="flex: 169.86301369863014" ><img width="1240" height="365" src="/archives/assets/3008ce6fdd893286e56d1b7f9ad1a342.png" alt=""/></figure><ul>
 <li>第1列表示第一次投掷得到1的可能性和为0.18</li>
 <li>第2列为1 6的的可能性和为0.05</li>
 <li>第3列为1 6 3的可能性和为0.03</li>
 </ul>
 <p>如果远低于或远高于这个概率，必然有做过手脚的骰子。</p><h2>转移概率的矩阵表示</h2>
-<p>这次假定不同的骰子是用来作弊的，作弊者会根据情况来挑选骰子，这样转移概率就不可能是均等的了：</p><figure  style="flex: 83.33333333333333" ><img width="500" height="300" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8259518e5781e3ce798778e8da69de85.png" alt=""/></figure><p>很幸运，这么复杂的概率转移图，竟然能用矩阵表达：</p><p>$$A = 
+<p>这次假定不同的骰子是用来作弊的，作弊者会根据情况来挑选骰子，这样转移概率就不可能是均等的了：</p><figure  style="flex: 83.33333333333333" ><img width="500" height="300" src="/archives/assets/8259518e5781e3ce798778e8da69de85.png" alt=""/></figure><p>很幸运，这么复杂的概率转移图，竟然能用矩阵表达：</p><p>$$A = 
 \begin{bmatrix}
 0.15 &amp; 0.45 &amp; 0.4 \\
 0.25 &amp; 0.35 &amp; 0.4 \\
 0.10 &amp; 0.55 &amp; 0.35
 \end{bmatrix}
 $$</p>
-<p>既然是3行3列，显然$A_{ij}$就是从i切换到j的概率，比如$A_{12}$ 就应该是这个人把骰子从作弊骰子1切换到2的概率。</p><figure  style="flex: 102.04081632653062" ><img width="500" height="245" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/653c3cb7f8c2f3a541d170421fe489bf.png" alt=""/></figure><p>相应地，发射概率（即不同骰子摇出的点数的概率）也能表示为矩阵：</p><p>$$B = 
+<p>既然是3行3列，显然$A_{ij}$就是从i切换到j的概率，比如$A_{12}$ 就应该是这个人把骰子从作弊骰子1切换到2的概率。</p><figure  style="flex: 102.04081632653062" ><img width="500" height="245" src="/archives/assets/653c3cb7f8c2f3a541d170421fe489bf.png" alt=""/></figure><p>相应地，发射概率（即不同骰子摇出的点数的概率）也能表示为矩阵：</p><p>$$B = 
 \begin{bmatrix}
 0.16 &amp; 0.16 &amp; 0.16 &amp; 0.16 &amp; 0.16 &amp; 0.16 \\
 0.02 &amp; 0.02 &amp; 0.02 &amp; 0.02 &amp; 0.02 &amp; 0.90 \\
@@ -1206,7 +1206,7 @@ $$</p>
       <span class="n">best_edge</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span><span class="n">edge</span>
 </pre></div>
 <p>example:
-<figure  style="flex: 82.65765765765765" ><img width="734" height="444" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5aa5426eb70b4c6cd0b8c4b1dacda749.png" alt=""/></figure></p><ul>
+<figure  style="flex: 82.65765765765765" ><img width="734" height="444" src="/archives/assets/5aa5426eb70b4c6cd0b8c4b1dacda749.png" alt=""/></figure></p><ul>
 <li>初始节点打分0，其它节点打分为$\infty$</li>
 <li>每个节点打分由其(<code>incoming edge</code>)(即来源箭头)和来源节点的打分构成</li>
 <li>如果有多个来源，则计算出该来源的得分，与该节点当前的得分做对比，取得分低的那个</li>
@@ -1227,7 +1227,7 @@ $$</p>
 <span class="n">reverse</span> <span class="n">best</span> <span class="n">path</span>
 </pre></div>
 <p>举例：
-<figure  style="flex: 102.56410256410257" ><img width="800" height="390" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c97b27230bd42318efb72375c245c50b.png" alt=""/></figure></p><ul>
+<figure  style="flex: 102.56410256410257" ><img width="800" height="390" src="/archives/assets/c97b27230bd42318efb72375c245c50b.png" alt=""/></figure></p><ul>
 <li>从图片可知，<code>path</code>就是<code>edge</code></li>
 <li>初始path是空，[]</li>
 <li>从<code>forward</code>的结果字典里找到node 3的best_edge，就是e5 [e5]</li>
@@ -1237,12 +1237,12 @@ $$</p>
 <li>0的best_edge是NULL，结束递归</li>
 <li>reverse: [e2, e5]</li>
 </ul>
-<figure  style="flex: 53.25581395348837" ><img width="458" height="430" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c7650195782b845d9be6e36dac55f277.png" alt=""/></figure><p>这个很好理解</p><ol>
+<figure  style="flex: 53.25581395348837" ><img width="458" height="430" src="/archives/assets/c7650195782b845d9be6e36dac55f277.png" alt=""/></figure><p>这个很好理解</p><ol>
 <li>0到农，到农产，到农产物的概率，表示为0.0+ -log(p(农/农产/农产物))</li>
 <li>在农的前提下，就有农到产，和农到产物：best(1) + -log(P(产/产物))</li>
 <li>在产的前提下，就只有best(2) + -log(P(物))了</li>
 </ol>
-<p>应用到NLP：</p><figure  style="flex: 73.99193548387096" ><img width="734" height="496" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5e643e29e4fe62ef780ba545dc3a04fb.png" alt=""/></figure><p>这里就是把node, egde具体了一下：</p><ol>
+<p>应用到NLP：</p><figure  style="flex: 73.99193548387096" ><img width="734" height="496" src="/archives/assets/5e643e29e4fe62ef780ba545dc3a04fb.png" alt=""/></figure><p>这里就是把node, egde具体了一下：</p><ol>
 <li>多包了一层for-each，意思是前面的代码是处理一行的</li>
 <li>node对应是单词结尾(word_end)，其实就是一个index，前面说过了</li>
 <li>edge对应是单词(word)，前面也说过了，即<code>string[5,7]</code>的意思</li>
@@ -1257,7 +1257,7 @@ $$</p>
 </ul>
 </li>
 </ol>
-<figure  style="flex: 90.2439024390244" ><img width="592" height="328" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/9de76a49c53e036f86c0c2e7a950c8cd.png" alt=""/></figure><ol>
+<figure  style="flex: 90.2439024390244" ><img width="592" height="328" src="/archives/assets/9de76a49c53e036f86c0c2e7a950c8cd.png" alt=""/></figure><ol>
 <li>显然这里已经知道edge不知道是一个词，而且是一个词的首尾边界</li>
 <li>也知道存到best_edges里面的其实就是词的位置索引</li>
 <li>反向的时候，从最后一个索引找到得分最低的词，再从这个单词向前找，一直找到<ul>
@@ -1384,7 +1384,7 @@ $$</p>
                 </time>
             </a>
         </div>
-        <div class="prism-content"><figure  style="flex: 82.77777777777777" ><img width="596" height="360" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/794a90e7b252e2aa03842eeee7fad8de.png" alt=""/></figure>
+        <div class="prism-content"><figure  style="flex: 82.77777777777777" ><img width="596" height="360" src="/archives/assets/794a90e7b252e2aa03842eeee7fad8de.png" alt=""/></figure>
 $$
 \large
 \begin{aligned}
@@ -1459,7 +1459,7 @@ $$</p>
         </div>
         <div class="prism-content"><h2>Batch first</h2>
 <p>首先，我们要习惯接受<code>batch_first=False</code>（就是默认值）的思维，因为NLP中批量处理句子，是每一句取第一个词，第二个词，以此类推。
-按我们习惯的把数据放在同一批（即<code>batch_first=True</code>）的思路虽然可以做到（善用切片即可），但是绕了弯路。但是如果第1批都是第1个字，第2批全是第2个字，这会自然很多（<strong>行优先</strong>）。</p><p>所以至少<code>Pytorch</code>内部，你设了True，内部也是按False来处理的，只是给了你一个语法糖（当然你组织数据就必须按True来组织了。</p><p>看个实例：</p><figure  style="flex: 79.69151670951157" ><img width="1240" height="778" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d6a0d9ea71601f8b89c0e8465751baf4.png" alt=""/></figure><ol>
+按我们习惯的把数据放在同一批（即<code>batch_first=True</code>）的思路虽然可以做到（善用切片即可），但是绕了弯路。但是如果第1批都是第1个字，第2批全是第2个字，这会自然很多（<strong>行优先</strong>）。</p><p>所以至少<code>Pytorch</code>内部，你设了True，内部也是按False来处理的，只是给了你一个语法糖（当然你组织数据就必须按True来组织了。</p><p>看个实例：</p><figure  style="flex: 79.69151670951157" ><img width="1240" height="778" src="/archives/assets/d6a0d9ea71601f8b89c0e8465751baf4.png" alt=""/></figure><ol>
 <li>假定批次是64，句长截为70，在还没有向量化的数据中，那么显然一次的输入应该为(70x64)，批次在第2位</li>
 <li>注意第一行，全是2，这是设定的<code>&lt;bos&gt;</code>，这已经很好地表示了在行优先的系统里（比如<code>Matlab</code>就是列优先），会自然而且把<strong>每句话</strong>的第一个词读出来的设定了。</li>
 </ol>
@@ -1665,7 +1665,7 @@ tensor([-0.2336,  0.0660,  0.0859,  0.2164,  0.1229])
 <li>反向的输出就是把数据反传的单向rnn</li>
 <li>双向rnn出来的第最后一个hidden（后半截）就是反向完成后的hidden</li>
 </ul>
-<figure  style="flex: 83.6996336996337" ><img width="914" height="546" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/67bb7c8df3810d83a7f07909fbd601f9.png" alt=""/></figure><p>由打印出来的数据可知：</p><ul>
+<figure  style="flex: 83.6996336996337" ><img width="914" height="546" src="/archives/assets/67bb7c8df3810d83a7f07909fbd601f9.png" alt=""/></figure><p>由打印出来的数据可知：</p><ul>
 <li>最后一个hidden，就是反向RNN的最后一个hidden（时间点在开头）</li>
 <li>也是双向RNN里的第一个输出（<strong>的最后一个元素</strong>）</li>
 <li>也是单向RNN（但是数据反传）（或者正向，但逆时序）里的最后一个输出</li>
@@ -1679,7 +1679,7 @@ tensor([-0.2336,  0.0660,  0.0859,  0.2164,  0.1229])
 <li>output由正反向输出横向拼接（所有）</li>
 <li>hidden由正反向hidden竖向拼接（top layer)</li>
 </ul>
-<figure  style="flex: 71.92575406032482" ><img width="1240" height="862" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/671265db99cdb4c1fcda808d82a08794.png" alt=""/></figure></div>
+<figure  style="flex: 71.92575406032482" ><img width="1240" height="862" src="/archives/assets/671265db99cdb4c1fcda808d82a08794.png" alt=""/></figure></div>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/RNN%E4%B8%ADbidirectional%E5%92%8Cnum_layer%E5%AF%B9output%E5%92%8Chidden%E5%BD%A2%E7%8A%B6%E7%9A%84%E5%BD%B1%E5%93%8D/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
@@ -1882,18 +1882,18 @@ $$</p>
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -1905,7 +1905,7 @@ $$</p>
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

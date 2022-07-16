@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -63,7 +63,7 @@
             </div>
             <div class="prism-content-body">
                 <p>我们通过这篇文章练习如下几个知识点，借用的是斯坦福CS193p的课程里的demo，但是代码是我写的，也就是对着最终的效果写出我的实现的意思</p><h2>ViewModifier</h2>
-<figure class="vertical-figure" style="flex: 33.333333333333336" ><img width="212" height="318" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d841a907770d839bdbd57e0119a8651e.png" alt=""/></figure><p>首先，我们的卡片分为正面和背面，背面是纯色很简单，正面有一个圆环，和一张图片（实际是<code>emoji</code>，也就是<code>String</code>)，我们用<code>ZStack</code>布局好后即可：</p><div class="highlight"><pre><span></span><span class="n">ZStack</span> <span class="p">{</span>
+<figure class="vertical-figure" style="flex: 33.333333333333336" ><img width="212" height="318" src="/archives/assets/d841a907770d839bdbd57e0119a8651e.png" alt=""/></figure><p>首先，我们的卡片分为正面和背面，背面是纯色很简单，正面有一个圆环，和一张图片（实际是<code>emoji</code>，也就是<code>String</code>)，我们用<code>ZStack</code>布局好后即可：</p><div class="highlight"><pre><span></span><span class="n">ZStack</span> <span class="p">{</span>
             <span class="n">Group</span> <span class="p">{</span>
                 <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">).</span><span class="n">fill</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">white</span><span class="p">)</span>
                 <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">).</span><span class="n">stroke</span><span class="p">(</span><span class="n">lineWidth</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">)</span>
@@ -104,7 +104,7 @@
             <span class="p">)</span>
 </pre></div>
 <p>实际效果如下：
-<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><p>动画加长了，我们能看清卡片虽然有了翻面的动面，但是在开始动画的一瞬间，卡片的正面就显示出来了，我们来解决这个问题，所以我这里并不是系统讲解动画，而是在对解决问题的思路做个笔记。</p><blockquote>
+<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><p>动画加长了，我们能看清卡片虽然有了翻面的动面，但是在开始动画的一瞬间，卡片的正面就显示出来了，我们来解决这个问题，所以我这里并不是系统讲解动画，而是在对解决问题的思路做个笔记。</p><blockquote>
 <p>题外话，我觉得<code>SwiftUI</code>和<code>Flutter</code>诞生时代相同，很多理念也驱同，在动画方面，也是放弃了以前要么从头画起，要么用封装得很好的有限几个动画的思路，基本上让你能用自绘+插值的方式来自己控制动画（有点类似关键帧，但关键帧的帧与帧之间也是自动的），而现在你可以完全对一个过程进行Linear interpolation，来控制动画过程（Flutter中的<code>lerp</code>函数就是干这个的，本节也有SwiftUI的类似实现）。</p></blockquote>
 <p>比如这个翻转，<code>Objective-C</code>里直接就给你实现好了，在SwiftUI里，给的是一个最基本的几何变换，至于这上面的效果，就要你自己实现了。我认为这是对的。</p><p>按课程里的思路，卡片要么正面，要么反面，是由<code>isFaceUp</code>决定的，加入动画后，那需要这个属性在进行了50%（也就是90˚）的时候才改值</p><p>而这个属性是卡片的属性，与动画无关，所以<strong>第一个决策</strong>，就是把动画函数写到<code>ViewModifier</code>里面去，传进去的是卡片的属性，但是在<code>modifier</code>里，我们把它适当转化成应该转的角度（0˚或90˚）,这样在<code>modifier</code>里面不管做什么变化，都不影响外部调用者自己的语义了（方法和参数都没变）：</p><div class="highlight"><pre><span></span><span class="kd">init</span><span class="p">(</span><span class="n">isFaceUp</span><span class="p">:</span> <span class="nb">Bool</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// step1 这里接的是布尔值，但是我们需要把它转成对应的翻转角度</span>
@@ -152,7 +152,7 @@
 <span class="p">}</span>
 </pre></div>
 <p>效果如下，其实就是解决了如何捕捉动画进度的问题，也就是<code>animatableData</code>
-<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><h2>Animation2</h2>
+<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><h2>Animation2</h2>
 <p>多一个例子，课程里每张卡片翻开就会倒计时，原本是一个大饼，我根据我的喜好改成了圆环（其实是我学教程的习惯，尽可能不去做跟教程一样的事，避免思维惰性）</p><p>那么怎么让进度条动起来呢？终于讲到了怎么手动计算<strong>插值</strong>，并把这组值推给动画库让它动起来的过程了。</p><p>有了上一个例子，我查看了一个<code>Shape</code>的定义，原生就conform to protocol <code>Animatable</code>的，所以我们直接添加一个<code>AnimatedData</code>试试。</p><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nv">animatableData</span><span class="p">:</span> <span class="nb">Double</span>   <span class="c1">// degrees</span>
 </pre></div>
 <blockquote>
@@ -208,7 +208,7 @@
 <blockquote>
 <p>需要注意的是<code>withAnimation</code>过程中对值的更改我们并不能显式捕捉，至少我试图把它显示在UI上观察它的变化是失败的，直接显示了最终值，而在接这个变化的插值的底层函数里，我能在<code>animatableData</code>的<code>set</code>方法里看到确实设置了无数的插值，暂时没有理解<code>withAnimation</code>真的有有没有直接对两个数字直接生成一系列中间值</p></blockquote>
 <p>效果如下：
-<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><h2>后记</h2>
+<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><h2>后记</h2>
 <p>动画我之前写过一篇：<a href="https://www.jianshu.com/p/0e4c8f0e1c23">用CALayer绘图,添加动画和渐变</a>，很明显可以看到，以前的写法仍然是黑匣子，即告诉动画库，请给我动画，动画的要求是blablabla，而现在都走了插值的路线，即把一系列值告诉你，你按照每个值直接绘图就是了，绘成啥样我自己负责。这就是我这篇文章反复强调的思路的变化，我喜欢这种思路。</p>
             </div>
         </article>
@@ -322,18 +322,18 @@
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -345,7 +345,7 @@
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -63,7 +63,7 @@
             </div>
             <div class="prism-content-body">
                 <p>最近在找工作，所以这些算法梗又出现在了我的阅读视野里，比如经典的homebrew作者吐槽的翻转二叉树的问题。
-<figure  style="flex: 86.71052631578948" ><img width="659" height="380" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/4b282d39e440d597c619d781ee3b690e.png" alt=""/></figure></p><p>我本以为是根和叶节点倒转过来，原来是同层里面的左右翻转。</p><p>那么就是把左边换到右边，右边换到左边呗，可以考虑递归。我一直用一个原则理解递归，就是把命令传达下去（比如上面的左右互换，就完了），而不关心细节，只有最末端的那个大头兵才是真正做业务的人，写了一下，递归加业务也就4行代码：</p><figure  style="flex: 80.10335917312662" ><img width="1240" height="774" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8defc3430ca00b8a8501fb6d8356c6fb.png" alt=""/></figure><p>具体到这个问题，就是我把left和right互换就是了
+<figure  style="flex: 86.71052631578948" ><img width="659" height="380" src="/archives/assets/4b282d39e440d597c619d781ee3b690e.png" alt=""/></figure></p><p>我本以为是根和叶节点倒转过来，原来是同层里面的左右翻转。</p><p>那么就是把左边换到右边，右边换到左边呗，可以考虑递归。我一直用一个原则理解递归，就是把命令传达下去（比如上面的左右互换，就完了），而不关心细节，只有最末端的那个大头兵才是真正做业务的人，写了一下，递归加业务也就4行代码：</p><figure  style="flex: 80.10335917312662" ><img width="1240" height="774" src="/archives/assets/8defc3430ca00b8a8501fb6d8356c6fb.png" alt=""/></figure><p>具体到这个问题，就是我把left和right互换就是了
 然后left和right你们做好自己的子级的互换，我不管，所以核心代码就一句
 <code>left, right = right, left</code>，前面是为了稳妥，通过了之后，直接用python这种左右互换的特性，那就真是一句代码了：</p><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">invertTree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">TreeNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TreeNode</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -176,18 +176,18 @@
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -199,7 +199,7 @@
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

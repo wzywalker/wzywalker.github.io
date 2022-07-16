@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -97,7 +97,7 @@
 现在知道了有非对称加密这东西，那数字签名是怎么回事呢？
 数字签名的作用是我对某一份数据打个标记，表示我认可了这份数据（签了个名），然后我发送给其他人，其他人可以知道这份数据是经过我认证的，数据没有被篡改过。
 有了上述非对称加密算法，就可以实现这个需求：
-<a href="https://wereadteam.github.io/img/sign0.png"><figure  style="flex: 64.47963800904978" ><img width="855" height="663" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/234925bff10aed3dd8bbfcc719a6ed52.png" alt=""/></figure></a>
+<a href="https://wereadteam.github.io/img/sign0.png"><figure  style="flex: 64.47963800904978" ><img width="855" height="663" src="/archives/assets/234925bff10aed3dd8bbfcc719a6ed52.png" alt=""/></figure></a>
 首先用一种算法，算出原始数据的摘要。需满足 a.若原始数据有任何变化，计算出来的摘要值都会变化。 b.摘要要够短。这里最常用的算法是MD5。
 生成一份非对称加密的公钥和私钥，私钥我自己拿着，公钥公布出去。
 对一份数据，算出摘要后，用私钥加密这个摘要，得到一份加密后的数据，称为原始数据的签名。把它跟原始数据一起发送给用户。
@@ -105,7 +105,7 @@
 好了，有了非对称加密的基础，知道了数字签名是什么，怎样可以保证一份数据是经过某个地方认证的，来看看怎样通过数字签名的机制保证每一个安装到 iOS 上的 APP 都是经过苹果认证允许的。
 <a href="https://wereadteam.github.io/2017/03/13/Signature/#%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E7%AD%BE%E5%90%8D">https://wereadteam.github.io/2017/03/13/Signature/#%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E7%AD%BE%E5%90%8D</a>最简单的签名
 要实现这个需求很简单，最直接的方式，苹果官方生成一对公私钥，在 iOS 里内置一个公钥，私钥由苹果后台保存，我们传 App 上 AppStore 时，苹果后台用私钥对 APP 数据进行签名，iOS 系统下载这个 APP 后，用公钥验证这个签名，若签名正确，这个 APP 肯定是由苹果后台认证的，并且没有被修改过，也就达到了苹果的需求：保证安装的每一个 APP 都是经过苹果官方允许的。
-<a href="https://wereadteam.github.io/img/sign1.png"><figure  style="flex: 98.60406091370558" ><img width="777" height="394" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b8742d54a8daf092eae0fd59ae4b8b9f.png" alt=""/></figure></a>
+<a href="https://wereadteam.github.io/img/sign1.png"><figure  style="flex: 98.60406091370558" ><img width="777" height="394" src="/archives/assets/b8742d54a8daf092eae0fd59ae4b8b9f.png" alt=""/></figure></a>
 如果我们 iOS 设备安装 APP 只有从 AppStore 下载这一种方式的话，这件事就结束了，没有任何复杂的东西，只有一个数字签名，非常简单地解决问题。
 但实际上因为除了从 AppStore 下载，我们还可以有三种方式安装一个 App：
 开发 App 时可以直接把开发中的应用安装进手机进行调试。
@@ -116,7 +116,7 @@ AD-Hoc 相当于企业分发的限制版，限制安装设备数量，较少用�
 安装包不需要传到苹果服务器，可以直接安装到手机上。如果你编译一个 APP 到手机前要先传到苹果服务器签名，这显然是不能接受的。
 苹果必须对这里的安装有控制权，包括a.经过苹果允许才可以这样安装。b.不能被滥用导致非开发app也能被安装。</p><p>为了实现这些需求，iOS 签名的复杂度也就开始增加了。
 苹果这里给出的方案是使用了双层签名，会比较绕，流程大概是这样的：
-<a href="https://wereadteam.github.io/img/sign2.png"><figure  style="flex: 100.48622366288492" ><img width="1240" height="617" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/55b89ed1e2050a5894ae5c7f1fb704bd.png" alt=""/></figure></a>
+<a href="https://wereadteam.github.io/img/sign2.png"><figure  style="flex: 100.48622366288492" ><img width="1240" height="617" src="/archives/assets/55b89ed1e2050a5894ae5c7f1fb704bd.png" alt=""/></figure></a>
 在你的 Mac 开发机器生成一对公私钥，这里称为公钥L，私钥L。L:Local
 苹果自己有固定的一对公私钥，跟上面 AppStore 例子一样，私钥在苹果后台，公钥在每个 iOS 设备上。这里称为公钥A，私钥A。A:Apple
 把公钥 L 传到苹果后台，用苹果后台里的私钥 A 去签名公钥 L。得到一份数据包含了公钥 L 以及其签名，把这份数据称为证书。
@@ -125,13 +125,13 @@ AD-Hoc 相当于企业分发的限制版，限制安装设备数量，较少用�
 验证证书后确保了公钥 L 是苹果认证过的，再用公钥 L 去验证 APP 的签名，这里就间接验证了这个 APP 安装行为是否经过苹果官方允许。（这里只验证安装行为，不验证APP 是否被改动，因为开发阶段 APP 内容总是不断变化的，苹果不需要管。）</p><p><a href="https://wereadteam.github.io/2017/03/13/Signature/#%E5%8A%A0%E7%82%B9%E4%B8%9C%E8%A5%BF">https://wereadteam.github.io/2017/03/13/Signature/#%E5%8A%A0%E7%82%B9%E4%B8%9C%E8%A5%BF</a>加点东西
 上述流程只解决了上面第一个需求，也就是需要经过苹果允许才可以安装，还未解决第二个避免被滥用的问题。怎么解决呢？苹果再加了两个限制，一是限制在苹果后台注册过的设备才可以安装，二是限制签名只能针对某一个具体的 APP。
 怎么加的？在上述第三步，苹果用私钥 A 签名我们本地公钥 L 时，实际上除了签名公钥 L，还可以加上无限多数据，这些数据都可以保证是经过苹果官方认证的，不会有被篡改的可能。
-<a href="https://wereadteam.github.io/img/sign3.png"><figure  style="flex: 88.69814020028612" ><img width="1240" height="699" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/244a2c4cc4ff1bf3d4193b222dfe4648.png" alt=""/></figure></a>
+<a href="https://wereadteam.github.io/img/sign3.png"><figure  style="flex: 88.69814020028612" ><img width="1240" height="699" src="/archives/assets/244a2c4cc4ff1bf3d4193b222dfe4648.png" alt=""/></figure></a>
 可以想到把 允许安装的设备 ID 列表 和 App对应的 AppID 等数据，都在第三步这里跟公钥L一起组成证书，再用苹果私钥 A 对这个证书签名。在最后第 5 步验证时就可以拿到设备 ID 列表，判断当前设备是否符合要求。根据数字签名的原理，只要数字签名通过验证，第 5 步这里的设备 IDs / AppID / 公钥 L 就都是经过苹果认证的，无法被修改，苹果就可以限制可安装的设备和 APP，避免滥用。
 <a href="https://wereadteam.github.io/2017/03/13/Signature/#%E6%9C%80%E7%BB%88%E6%B5%81%E7%A8%8B">https://wereadteam.github.io/2017/03/13/Signature/#%E6%9C%80%E7%BB%88%E6%B5%81%E7%A8%8B</a>最终流程
 到这里这个证书已经变得很复杂了，有很多额外信息，实际上除了 设备 ID / AppID，还有其他信息也需要在这里用苹果签名，像这个 APP 里 iCloud / push / 后台运行 等权限苹果都想控制，苹果把这些权限开关统一称为 Entitlements，它也需要通过签名去授权。
 实际上一个“证书”本来就有规定的格式规范，上面我们把各种额外信息塞入证书里是不合适的，于是苹果另外搞了个东西，叫 Provisioning Profile，一个 Provisioning Profile 里就包含了证书以及上述提到的所有额外信息，以及所有信息的签名。
 所以整个流程稍微变一下，就变成这样了：
-<a href="https://wereadteam.github.io/img/sign4.png"><figure  style="flex: 74.25149700598803" ><img width="1240" height="835" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/09c33bcd536897bd2ae93cef8900d748.png" alt=""/></figure></a>
+<a href="https://wereadteam.github.io/img/sign4.png"><figure  style="flex: 74.25149700598803" ><img width="1240" height="835" src="/archives/assets/09c33bcd536897bd2ae93cef8900d748.png" alt=""/></figure></a>
 因为步骤有小变动，这里我们不辞啰嗦重新再列一遍整个流程：
 在你的 Mac 开发机器生成一对公私钥，这里称为公钥L，私钥L。L:Local
 苹果自己有固定的一对公私钥，跟上面 AppStore 例子一样，私钥在苹果后台，公钥在每个 iOS 设备上。这里称为公钥A，私钥A。A:Apple
@@ -289,18 +289,18 @@ AD-Hoc 相当于企业分发的限制版，限制安装设备数量，较少用�
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -312,7 +312,7 @@ AD-Hoc 相当于企业分发的限制版，限制安装设备数量，较少用�
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

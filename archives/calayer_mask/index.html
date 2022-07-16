@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -62,7 +62,7 @@
                 </time>
             </div>
             <div class="prism-content-body">
-                <p>先看效果，白底黑字，随着拖动，逐渐变成黑底白字（注：因为项目关系，效果是带着底色拖动，所以以这种效果来讲解，如果只是改文字颜色，就是只涂抹文字，会稍微简单一些，请触类旁通）</p><figure  style="flex: 106.89655172413794" ><img width="1116" height="522" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/ffbec7d6d811b8fd6cca175ce25a294e.gif" alt="20220714161447"/></figure><p>思路：底层（白底黑字），表层（黑底白字），对表层应用蒙板，蒙板的frame由手势控制</p><figure class="vertical-figure" style="flex: 49.69230769230769" ><img width="646" height="650" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/6f6838054b30d06ed348b1f6a24d1abf.png" alt="image-20220714193234444"/></figure><p>本质上是CALayer的mask，但我们先用两个UIView来实现一下，因为它直观且简单：</p><div class="highlight"><pre><span></span><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+                <p>先看效果，白底黑字，随着拖动，逐渐变成黑底白字（注：因为项目关系，效果是带着底色拖动，所以以这种效果来讲解，如果只是改文字颜色，就是只涂抹文字，会稍微简单一些，请触类旁通）</p><figure  style="flex: 106.89655172413794" ><img width="1116" height="522" src="/archives/assets/ffbec7d6d811b8fd6cca175ce25a294e.gif" alt="20220714161447"/></figure><p>思路：底层（白底黑字），表层（黑底白字），对表层应用蒙板，蒙板的frame由手势控制</p><figure class="vertical-figure" style="flex: 49.69230769230769" ><img width="646" height="650" src="/archives/assets/6f6838054b30d06ed348b1f6a24d1abf.png" alt="image-20220714193234444"/></figure><p>本质上是CALayer的mask，但我们先用两个UIView来实现一下，因为它直观且简单：</p><div class="highlight"><pre><span></span><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="p">[</span><span class="nb">super</span><span class="w"> </span><span class="n">viewDidLoad</span><span class="p">];</span><span class="w"></span>
 <span class="w">    </span><span class="c1">// create wrapper view 省略</span>
 
@@ -130,7 +130,7 @@
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">layer</span><span class="p">;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </pre></div>
-<p>结果却得到这个：</p><figure  style="flex: 189.3491124260355" ><img width="1280" height="338" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/41856510dfd32672a9312a09ce95245d.gif" alt="20220714180940"/></figure><p>黑底只剩下了黑边，观察到三个现象：</p><ol>
+<p>结果却得到这个：</p><figure  style="flex: 189.3491124260355" ><img width="1280" height="338" src="/archives/assets/41856510dfd32672a9312a09ce95245d.gif" alt="20220714180940"/></figure><p>黑底只剩下了黑边，观察到三个现象：</p><ol>
 <li>对根layer进行mask，其sublayer都是被mask的</li>
 <li>用文字对文字做mask，是会描边的（这一点做了额外几个测试证明了）</li>
 <li>动画没有那么跟手（人在前面跑，魂在后面追），都有动量的感觉了，对比UIView的方案看看</li>
@@ -139,7 +139,7 @@
 <span class="n">toptext</span><span class="p">.</span><span class="n">foregroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">UIColor</span><span class="w"> </span><span class="n">whiteColor</span><span class="p">].</span><span class="n">CGColor</span><span class="p">;</span><span class="w"></span>
 <span class="p">[</span><span class="n">top</span><span class="w"> </span><span class="n">addSublayer</span><span class="o">:</span><span class="n">toptext</span><span class="p">];</span><span class="w"></span>
 </pre></div>
-<p>效果如期望的那样，（这次没有描边了，所以就换了个颜色，不然白底白字就看不见了）</p><figure  style="flex: 200.32051282051282" ><img width="1250" height="312" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2594836c148deacd8a75f4b8fbd2ee29.gif" alt="20220714184942"/></figure><p>这次我们不用根layer做mask，添加一个层：</p><div class="highlight"><pre><span></span><span class="c1">// 底部文字，黑底+文字mask</span>
+<p>效果如期望的那样，（这次没有描边了，所以就换了个颜色，不然白底白字就看不见了）</p><figure  style="flex: 200.32051282051282" ><img width="1250" height="312" src="/archives/assets/2594836c148deacd8a75f4b8fbd2ee29.gif" alt="20220714184942"/></figure><p>这次我们不用根layer做mask，添加一个层：</p><div class="highlight"><pre><span></span><span class="c1">// 底部文字，黑底+文字mask</span>
 <span class="bp">CATextLayer</span><span class="w"> </span><span class="o">*</span><span class="n">bottom</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">createTextLayer</span><span class="o">:</span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">bounds</span><span class="p">];</span><span class="w"></span>
 <span class="c1">// self.wrapper.backgroundColor = [UIColor blackColor];</span>
 <span class="c1">// self.wrapper.layer.mask = bottom; </span>
@@ -151,8 +151,8 @@
 <span class="n">bottomShape</span><span class="p">.</span><span class="n">mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bottom</span><span class="p">;</span><span class="w"></span>
 <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">wrapper</span><span class="p">.</span><span class="n">layer</span><span class="w"> </span><span class="n">addSublayer</span><span class="o">:</span><span class="n">bottomShape</span><span class="p">];</span><span class="w"></span>
 </pre></div>
-<figure  style="flex: 181.14285714285714" ><img width="1268" height="350" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/03ebfa11434ae205e656839d6c410f6b.gif" alt="20220714191352"/></figure><p>现在如愿以偿，整个结构也只有一个UIView了，相比UView的方案，显然在查看视图结构的时候要简化得多，（动画效果仍然是魂在后面追...），但是，这次仍然是文字对文字做mask，这次却没有描边了：</p><figure  style="flex: 268.01801801801804" ><img width="1190" height="222" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/661881063d03936442e6722d2ad82063.png" alt="image-20220714191856600"/></figure><p>难道只有根layer上才会描？不继续探索了。</p><p>最后，解释一下对直接操作CALayer为什么反应还慢半拍呢？因为CALayer的大部分属性的改变是自带了动画的，在这个例子里得到了充分的证明。</p><p>补充一下全部用<code>CALayer</code>的结构
-<figure  style="flex: 67.69662921348315" ><img width="964" height="712" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/98c14a7ed3a8bfe08ed578b50521d239.png" alt=""/></figure></p>
+<figure  style="flex: 181.14285714285714" ><img width="1268" height="350" src="/archives/assets/03ebfa11434ae205e656839d6c410f6b.gif" alt="20220714191352"/></figure><p>现在如愿以偿，整个结构也只有一个UIView了，相比UView的方案，显然在查看视图结构的时候要简化得多，（动画效果仍然是魂在后面追...），但是，这次仍然是文字对文字做mask，这次却没有描边了：</p><figure  style="flex: 268.01801801801804" ><img width="1190" height="222" src="/archives/assets/661881063d03936442e6722d2ad82063.png" alt="image-20220714191856600"/></figure><p>难道只有根layer上才会描？不继续探索了。</p><p>最后，解释一下对直接操作CALayer为什么反应还慢半拍呢？因为CALayer的大部分属性的改变是自带了动画的，在这个例子里得到了充分的证明。</p><p>补充一下全部用<code>CALayer</code>的结构
+<figure  style="flex: 67.69662921348315" ><img width="964" height="712" src="/archives/assets/98c14a7ed3a8bfe08ed578b50521d239.png" alt=""/></figure></p>
             </div>
         </article>
         <div class="prism-post-meta col-md-8 offset-md-2">
@@ -273,18 +273,18 @@
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -296,7 +296,7 @@
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -36,7 +36,7 @@
 <meta name="twitter:title" content="walker's code blog" />
 <meta name="twitter:description" content="coder, reader" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/android-chrome-512x512.png" />
+<meta name="twitter:image" content="/android-chrome-512x512.png" />
 
 
     
@@ -109,7 +109,7 @@
 
 <pre><code>array([8])
 </code></pre>
-<figure  style="flex: 50.81967213114754" ><img width="496" height="488" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5f41cd44fe4cf94f9dbfee9954b82ec6.png" alt=""/></figure><div class="highlight"><pre><span></span><span class="c1"># better practise</span>
+<figure  style="flex: 50.81967213114754" ><img width="496" height="488" src="/archives/assets/5f41cd44fe4cf94f9dbfee9954b82ec6.png" alt=""/></figure><div class="highlight"><pre><span></span><span class="c1"># better practise</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 
 <span class="c1"># flatten the images</span>
@@ -193,7 +193,7 @@ weighted avg       0.97      0.97      0.97       899
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
-<figure  style="flex: 54.00696864111498" ><img width="620" height="574" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2088af7c0ab08ef8b680eab7d06d4bcd.png" alt=""/></figure><h2>Conventions</h2>
+<figure  style="flex: 54.00696864111498" ><img width="620" height="574" src="/archives/assets/2088af7c0ab08ef8b680eab7d06d4bcd.png" alt=""/></figure><h2>Conventions</h2>
 <h3>Type Casting</h3>
 <p>Unless otherwise specified, input will be cast to float64:</p><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">random_projection</span>
@@ -332,7 +332,7 @@ print(iris_y_test)
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">regr</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">))</span> 
     <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">this_X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
-<figure  style="flex: 75.50607287449392" ><img width="746" height="494" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/22a14395fafb62dcbaabdca600191fd6.png" alt=""/></figure><h2>Ridge regression:</h2>
+<figure  style="flex: 75.50607287449392" ><img width="746" height="494" src="/archives/assets/22a14395fafb62dcbaabdca600191fd6.png" alt=""/></figure><h2>Ridge regression:</h2>
 <p>A solution in high-dimensional statistical learning is to shrink the regression coefficients to zero: any two randomly chosen set of observations are likely to be uncorrelated. This is called Ridge regression.</p><p>This is an example of <code>bias/variance</code> tradeoff:</p><p>the <strong>larger</strong> the ridge <code>alpha</code> parameter,</p><ul>
 <li>the <strong>higher</strong> the <code>bias</code></li>
 <li>the <strong>lower</strong> the <code>variance</code>.</li>
@@ -456,7 +456,7 @@ ElasticNet optimal alpha: 0.001 and L1 ratio: 0.5000
 
 <span class="c1"># 观察图像的不同，其实可以理解为样本过少时的”过拟合“，引入忽略的指标后虽然对训练集的准确率大打折扣，但确实降低了方差</span>
 </pre></div>
-<figure  style="flex: 76.02459016393442" ><img width="742" height="488" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/97bc036cb6f5c3ce99362eb4bbba4c3d.png" alt=""/></figure><h4>Diabetes dataset</h4>
+<figure  style="flex: 76.02459016393442" ><img width="742" height="488" src="/archives/assets/97bc036cb6f5c3ce99362eb4bbba4c3d.png" alt=""/></figure><h4>Diabetes dataset</h4>
 <p>换个数据源，<code>estimator</code>并不需要更换，如果需要换超参，前文也已经讲过了：</p><div class="highlight"><pre><span></span><span class="n">diabetes_X</span><span class="p">,</span> <span class="n">diabetes_y</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_diabetes</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">diabetes_X_train</span> <span class="o">=</span> <span class="n">diabetes_X</span><span class="p">[:</span><span class="o">-</span><span class="mi">20</span><span class="p">]</span>
 <span class="n">diabetes_X_test</span>  <span class="o">=</span> <span class="n">diabetes_X</span><span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">:]</span>
@@ -492,7 +492,7 @@ ElasticNet optimal alpha: 0.001 and L1 ratio: 0.5000
 <h3>Different algorithms for the same problem</h3>
 <p>Different algorithms can be used to solve the same mathematical problem. For instance the <code>Lasso</code> object in scikit-learn solves the lasso regression problem using a <code>coordinate descent</code> method, that is efficient on <strong>large datasets</strong>. However, scikit-learn also provides the <code>LassoLars</code> object using the <code>LARS</code> algorithm, which is very efficient for problems in which the weight vector estimated is very <strong>sparse</strong> (i.e. problems with <strong>very few</strong> observations).</p><h2>Classification</h2>
 <h3>Logistic Regerssion</h3>
-<figure  style="flex: 66.66666666666667" ><img width="400" height="300" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/386b1a1250985ccfdacd014b942dff98.png" alt=""/></figure><div class="highlight"><pre><span></span><span class="n">log</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1e5</span><span class="p">)</span>
+<figure  style="flex: 66.66666666666667" ><img width="400" height="300" src="/archives/assets/386b1a1250985ccfdacd014b942dff98.png" alt=""/></figure><div class="highlight"><pre><span></span><span class="n">log</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1e5</span><span class="p">)</span>
 <span class="n">log</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">iris_X_train</span><span class="p">,</span> <span class="n">iris_y_train</span><span class="p">)</span>
 </pre></div>
 
@@ -564,7 +564,7 @@ LogisticRegression score: 0.933333
           <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">))</span>
 <span class="n">models</span> <span class="o">=</span> <span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">models</span><span class="p">)</span>
 </pre></div>
-<figure  style="flex: 79.81132075471699" ><img width="846" height="530" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/73af5427b414af6455402c92562d3524.png" alt=""/></figure><h2>cross validation</h2>
+<figure  style="flex: 79.81132075471699" ><img width="846" height="530" src="/archives/assets/73af5427b414af6455402c92562d3524.png" alt=""/></figure><h2>cross validation</h2>
 <p><a href="https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation">https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation</a></p><p><strong>RAW DEMO</strong>: KFold cross-validation:</p><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">svm</span>
 
@@ -725,7 +725,7 @@ score: 0.946047678795483
             </a>
         </div>
         <div class="prism-content"><p>学习线性回归的时候，会教我们$X\theta=y$可以直接用<strong>最小二乘法</strong>直接把$\theta$求出来：</p><p>$\theta=(X^TX)^{-1}X^Ty$</p><p>并且还在我<a href="https://blog.wzy.one/archives/%E7%9F%A9%E9%98%B5%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E6%B1%82%E8%A7%A3%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5/">之前的博文</a>里直接应用了一番（那是根据公式来应用，即如何构建正确的A和y，从而应用公式直接求解$\theta$)，里面还引了一篇详实的证明文章。</p><p>首先，在吴恩达的教材里，这个并不叫最小二乘(<code>least suqare</code>），而是叫<code>Normal Equation method</code>，这个不重要，毕竟在可汗学院的教材里，又叫最小二乘了^^。今天补充的内容，就是在回顾之前的笔记的时候，发现了大量的证明和应用这个公式的地方，而且全是在引入了投影(<code>Projection</code>)概念之后。因为那个时候并没有接触机器学习，看了也就看了，现在看到了应用场景，那就闭环了，回顾一下：</p><p>首先，预备知识</p><h2>子空间</h2>
-<figure class="vertical-figure" style="flex: 35.609397944199706" ><img width="970" height="1362" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/454cb3771fb0eb69bf0301b42ad8d9f3.png" alt=""/></figure><p>笔记很清楚了，对于一个矩阵
+<figure class="vertical-figure" style="flex: 35.609397944199706" ><img width="970" height="1362" src="/archives/assets/454cb3771fb0eb69bf0301b42ad8d9f3.png" alt=""/></figure><p>笔记很清楚了，对于一个矩阵
 $A= \begin{bmatrix}
    -2 &amp; -1 &amp; -3 \
    4 &amp; 2 &amp; 6 \
@@ -739,7 +739,7 @@ $A= \begin{bmatrix}
 <li>$C(A^T) = (N(A))^\bot$</li>
 </ul>
 <h2>投影是一个线性变换</h2>
-<figure  style="flex: 66.66666666666667" ><img width="1240" height="930" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d73cc50bd39caeb73a1816384ee8e8d7.png" alt=""/></figure>
+<figure  style="flex: 66.66666666666667" ><img width="1240" height="930" src="/archives/assets/d73cc50bd39caeb73a1816384ee8e8d7.png" alt=""/></figure>
 这里已经看到我们熟悉的$(A^TA)^{-1}A^Tx$了，我们来看一下推导过程：<ol>
 <li>$\vec x$在$V \in \R^n$上的投影$Proj_V^{\vec x} = \vec v$必然能表示成该空间的<code>basis</code>{$\vec b_1, \vec b_2, \vec b_3, \dots$}的线性变换：$\vec v \in V = y_1\vec b_1 + y_2\vec b_2 + \cdots + y_k \vec b_k =  A\vec y$</li>
 <li>求出$\vec y$则求出了这个投影在哪里</li>
@@ -759,10 +759,10 @@ $A= \begin{bmatrix}
 </ol>
 <h2>最小二乘逼近</h2>
 <p>由此到了下一课，<code>the lease squares approximation</code>，讲的就是$A\vec x = \vec b$无解时，意思就是在$\vec b$不存在A的张成子空间中，所以无论进行怎样的<strong>线性变换</strong>，都是不可能得到$\vec b$的，则取$\vec x$在$C(A)$中的投影作为近似的解（证明就不再展开了）
-<figure class="vertical-figure" style="flex: 49.5603517186251" ><img width="1240" height="1251" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d390aad67946ec06a573bddf79d29339.png" alt=""/></figure>
+<figure class="vertical-figure" style="flex: 49.5603517186251" ><img width="1240" height="1251" src="/archives/assets/d390aad67946ec06a573bddf79d29339.png" alt=""/></figure>
 仍然用的是同一个思路，即&quot;垂线在左零空间中&quot;，来构造$A^T\cdot \vec w = \vec 0$</p><h2>应用最小二乘拟合一条回归线</h2>
 <p>这里终于讲到了与机器学习最接近的内容：<code>regression</code>
-<figure  style="flex: 164.89361702127658" ><img width="1240" height="376" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2da3910c441eb8061e11ea708824fd7d.png" alt=""/></figure>
+<figure  style="flex: 164.89361702127658" ><img width="1240" height="376" src="/archives/assets/2da3910c441eb8061e11ea708824fd7d.png" alt=""/></figure>
 可以看到，毫无业务思维的花花肠子，很多机器学习课程里会花大量工夫从感性到理性上给你讲这些内容，因为它的期望从0跟你讲清楚，而在循序渐进的数学理论体系里，这些根本就不需要关联感性认识的，什么每年的房价啊，数学关注的只是建模。</p><p>这个回归实例里，因为需要拟合的是一条直线：$y = b + ax$，那么既有的数据就成了机器学习里的“样本”，但我们这里不需要这么理解，而是直接理解为矩阵，得到
 方程组：</p><p>$$\begin{cases}
 b + a = 1 \\
@@ -965,7 +965,7 @@ sqrt(9)	3.0
 </code></pre>
 <h2>梯度下降法</h2>
 <p>梯度下降法的数学原理是$f(x_1,x_2,\dots$)的gradient（$\nabla f$）就是其最陡爬升方向（<code>steepest ascent</code>）。</p><p>可以拿这个当成结论，也可以去感性认识，而要去证明的话，网上有数不清的教程，在花书(《Deep Learning深度学习》)和可汗学院里，都是用的<code>directional derivate</code>来解释（证明）的，即”<strong>自定义方向</strong>上的瞬时变化率“，也是我认为在如果有多变量微积分的基础下，比较容易让人接受且简单直白的解释：
-<figure class="vertical-figure" style="flex: 34.96774193548387" ><img width="1084" height="1550" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e7889d3178ce0131e3ac9dcc816d03c3.png" alt=""/></figure></p><ul>
+<figure class="vertical-figure" style="flex: 34.96774193548387" ><img width="1084" height="1550" src="/archives/assets/e7889d3178ce0131e3ac9dcc816d03c3.png" alt=""/></figure></p><ul>
 <li>$\overset{\rightarrow}{v} \cdot \nabla f = |\overset{\rightarrow}{v}|\cdot|\nabla f|\cdot cos\theta$</li>
 <li>$\overset{\rightarrow}{v}$ 就是指的任意方向，如果是x, y等方向，那就是普通的偏导了。</li>
 <li>显然上式当$\theta = 0$时拥有最大值，即$\overset{\rightarrow}{v}$指向的是$\nabla f$的方向，那就是梯度的方向了</li>
@@ -1111,7 +1111,7 @@ sin(59.999998857570986) ≈ sqrt(3)/2
 <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">))</span>
 </pre></div>
 <p>看你自己习惯了。
-<figure  style="flex: 53.95996518711923" ><img width="1240" height="1149" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e131d84109722ad314d449f86313f68e.png" alt=""/></figure></p></div>
+<figure  style="flex: 53.95996518711923" ><img width="1240" height="1149" src="/archives/assets/e131d84109722ad314d449f86313f68e.png" alt=""/></figure></p></div>
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
@@ -1163,7 +1163,7 @@ sin(59.999998857570986) ≈ sqrt(3)/2
 现在知道了有非对称加密这东西，那数字签名是怎么回事呢？
 数字签名的作用是我对某一份数据打个标记，表示我认可了这份数据（签了个名），然后我发送给其他人，其他人可以知道这份数据是经过我认证的，数据没有被篡改过。
 有了上述非对称加密算法，就可以实现这个需求：
-<a href="https://wereadteam.github.io/img/sign0.png"><figure  style="flex: 64.47963800904978" ><img width="855" height="663" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/234925bff10aed3dd8bbfcc719a6ed52.png" alt=""/></figure></a>
+<a href="https://wereadteam.github.io/img/sign0.png"><figure  style="flex: 64.47963800904978" ><img width="855" height="663" src="/archives/assets/234925bff10aed3dd8bbfcc719a6ed52.png" alt=""/></figure></a>
 首先用一种算法，算出原始数据的摘要。需满足 a.若原始数据有任何变化，计算出来的摘要值都会变化。 b.摘要要够短。这里最常用的算法是MD5。
 生成一份非对称加密的公钥和私钥，私钥我自己拿着，公钥公布出去。
 对一份数据，算出摘要后，用私钥加密这个摘要，得到一份加密后的数据，称为原始数据的签名。把它跟原始数据一起发送给用户。
@@ -1171,7 +1171,7 @@ sin(59.999998857570986) ≈ sqrt(3)/2
 好了，有了非对称加密的基础，知道了数字签名是什么，怎样可以保证一份数据是经过某个地方认证的，来看看怎样通过数字签名的机制保证每一个安装到 iOS 上的 APP 都是经过苹果认证允许的。
 <a href="https://wereadteam.github.io/2017/03/13/Signature/#%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E7%AD%BE%E5%90%8D">https://wereadteam.github.io/2017/03/13/Signature/#%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E7%AD%BE%E5%90%8D</a>最简单的签名
 要实现这个需求很简单，最直接的方式，苹果官方生成一对公私钥，在 iOS 里内置一个公钥，私钥由苹果后台保存，我们传 App 上 AppStore 时，苹果后台用私钥对 APP 数据进行签名，iOS 系统下载这个 APP 后，用公钥验证这个签名，若签名正确，这个 APP 肯定是由苹果后台认证的，并且没有被修改过，也就达到了苹果的需求：保证安装的每一个 APP 都是经过苹果官方允许的。
-<a href="https://wereadteam.github.io/img/sign1.png"><figure  style="flex: 98.60406091370558" ><img width="777" height="394" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b8742d54a8daf092eae0fd59ae4b8b9f.png" alt=""/></figure></a>
+<a href="https://wereadteam.github.io/img/sign1.png"><figure  style="flex: 98.60406091370558" ><img width="777" height="394" src="/archives/assets/b8742d54a8daf092eae0fd59ae4b8b9f.png" alt=""/></figure></a>
 如果我们 iOS 设备安装 APP 只有从 AppStore 下载这一种方式的话，这件事就结束了，没有任何复杂的东西，只有一个数字签名，非常简单地解决问题。
 但实际上因为除了从 AppStore 下载，我们还可以有三种方式安装一个 App：
 开发 App 时可以直接把开发中的应用安装进手机进行调试。
@@ -1182,7 +1182,7 @@ AD-Hoc 相当于企业分发的限制版，限制安装设备数量，较少用�
 安装包不需要传到苹果服务器，可以直接安装到手机上。如果你编译一个 APP 到手机前要先传到苹果服务器签名，这显然是不能接受的。
 苹果必须对这里的安装有控制权，包括a.经过苹果允许才可以这样安装。b.不能被滥用导致非开发app也能被安装。</p><p>为了实现这些需求，iOS 签名的复杂度也就开始增加了。
 苹果这里给出的方案是使用了双层签名，会比较绕，流程大概是这样的：
-<a href="https://wereadteam.github.io/img/sign2.png"><figure  style="flex: 100.48622366288492" ><img width="1240" height="617" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/55b89ed1e2050a5894ae5c7f1fb704bd.png" alt=""/></figure></a>
+<a href="https://wereadteam.github.io/img/sign2.png"><figure  style="flex: 100.48622366288492" ><img width="1240" height="617" src="/archives/assets/55b89ed1e2050a5894ae5c7f1fb704bd.png" alt=""/></figure></a>
 在你的 Mac 开发机器生成一对公私钥，这里称为公钥L，私钥L。L:Local
 苹果自己有固定的一对公私钥，跟上面 AppStore 例子一样，私钥在苹果后台，公钥在每个 iOS 设备上。这里称为公钥A，私钥A。A:Apple
 把公钥 L 传到苹果后台，用苹果后台里的私钥 A 去签名公钥 L。得到一份数据包含了公钥 L 以及其签名，把这份数据称为证书。
@@ -1191,13 +1191,13 @@ AD-Hoc 相当于企业分发的限制版，限制安装设备数量，较少用�
 验证证书后确保了公钥 L 是苹果认证过的，再用公钥 L 去验证 APP 的签名，这里就间接验证了这个 APP 安装行为是否经过苹果官方允许。（这里只验证安装行为，不验证APP 是否被改动，因为开发阶段 APP 内容总是不断变化的，苹果不需要管。）</p><p><a href="https://wereadteam.github.io/2017/03/13/Signature/#%E5%8A%A0%E7%82%B9%E4%B8%9C%E8%A5%BF">https://wereadteam.github.io/2017/03/13/Signature/#%E5%8A%A0%E7%82%B9%E4%B8%9C%E8%A5%BF</a>加点东西
 上述流程只解决了上面第一个需求，也就是需要经过苹果允许才可以安装，还未解决第二个避免被滥用的问题。怎么解决呢？苹果再加了两个限制，一是限制在苹果后台注册过的设备才可以安装，二是限制签名只能针对某一个具体的 APP。
 怎么加的？在上述第三步，苹果用私钥 A 签名我们本地公钥 L 时，实际上除了签名公钥 L，还可以加上无限多数据，这些数据都可以保证是经过苹果官方认证的，不会有被篡改的可能。
-<a href="https://wereadteam.github.io/img/sign3.png"><figure  style="flex: 88.69814020028612" ><img width="1240" height="699" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/244a2c4cc4ff1bf3d4193b222dfe4648.png" alt=""/></figure></a>
+<a href="https://wereadteam.github.io/img/sign3.png"><figure  style="flex: 88.69814020028612" ><img width="1240" height="699" src="/archives/assets/244a2c4cc4ff1bf3d4193b222dfe4648.png" alt=""/></figure></a>
 可以想到把 允许安装的设备 ID 列表 和 App对应的 AppID 等数据，都在第三步这里跟公钥L一起组成证书，再用苹果私钥 A 对这个证书签名。在最后第 5 步验证时就可以拿到设备 ID 列表，判断当前设备是否符合要求。根据数字签名的原理，只要数字签名通过验证，第 5 步这里的设备 IDs / AppID / 公钥 L 就都是经过苹果认证的，无法被修改，苹果就可以限制可安装的设备和 APP，避免滥用。
 <a href="https://wereadteam.github.io/2017/03/13/Signature/#%E6%9C%80%E7%BB%88%E6%B5%81%E7%A8%8B">https://wereadteam.github.io/2017/03/13/Signature/#%E6%9C%80%E7%BB%88%E6%B5%81%E7%A8%8B</a>最终流程
 到这里这个证书已经变得很复杂了，有很多额外信息，实际上除了 设备 ID / AppID，还有其他信息也需要在这里用苹果签名，像这个 APP 里 iCloud / push / 后台运行 等权限苹果都想控制，苹果把这些权限开关统一称为 Entitlements，它也需要通过签名去授权。
 实际上一个“证书”本来就有规定的格式规范，上面我们把各种额外信息塞入证书里是不合适的，于是苹果另外搞了个东西，叫 Provisioning Profile，一个 Provisioning Profile 里就包含了证书以及上述提到的所有额外信息，以及所有信息的签名。
 所以整个流程稍微变一下，就变成这样了：
-<a href="https://wereadteam.github.io/img/sign4.png"><figure  style="flex: 74.25149700598803" ><img width="1240" height="835" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/09c33bcd536897bd2ae93cef8900d748.png" alt=""/></figure></a>
+<a href="https://wereadteam.github.io/img/sign4.png"><figure  style="flex: 74.25149700598803" ><img width="1240" height="835" src="/archives/assets/09c33bcd536897bd2ae93cef8900d748.png" alt=""/></figure></a>
 因为步骤有小变动，这里我们不辞啰嗦重新再列一遍整个流程：
 在你的 Mac 开发机器生成一对公私钥，这里称为公钥L，私钥L。L:Local
 苹果自己有固定的一对公私钥，跟上面 AppStore 例子一样，私钥在苹果后台，公钥在每个 iOS 设备上。这里称为公钥A，私钥A。A:Apple
@@ -1392,7 +1392,7 @@ g.throw（'出错了'）;
             </a>
         </div>
         <div class="prism-content"><p>我们通过这篇文章练习如下几个知识点，借用的是斯坦福CS193p的课程里的demo，但是代码是我写的，也就是对着最终的效果写出我的实现的意思</p><h2>ViewModifier</h2>
-<figure class="vertical-figure" style="flex: 33.333333333333336" ><img width="212" height="318" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d841a907770d839bdbd57e0119a8651e.png" alt=""/></figure><p>首先，我们的卡片分为正面和背面，背面是纯色很简单，正面有一个圆环，和一张图片（实际是<code>emoji</code>，也就是<code>String</code>)，我们用<code>ZStack</code>布局好后即可：</p><div class="highlight"><pre><span></span><span class="n">ZStack</span> <span class="p">{</span>
+<figure class="vertical-figure" style="flex: 33.333333333333336" ><img width="212" height="318" src="/archives/assets/d841a907770d839bdbd57e0119a8651e.png" alt=""/></figure><p>首先，我们的卡片分为正面和背面，背面是纯色很简单，正面有一个圆环，和一张图片（实际是<code>emoji</code>，也就是<code>String</code>)，我们用<code>ZStack</code>布局好后即可：</p><div class="highlight"><pre><span></span><span class="n">ZStack</span> <span class="p">{</span>
             <span class="n">Group</span> <span class="p">{</span>
                 <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">).</span><span class="n">fill</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">white</span><span class="p">)</span>
                 <span class="n">RoundedRectangle</span><span class="p">(</span><span class="n">cornerRadius</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">).</span><span class="n">stroke</span><span class="p">(</span><span class="n">lineWidth</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">)</span>
@@ -1433,7 +1433,7 @@ g.throw（'出错了'）;
             <span class="p">)</span>
 </pre></div>
 <p>实际效果如下：
-<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><p>动画加长了，我们能看清卡片虽然有了翻面的动面，但是在开始动画的一瞬间，卡片的正面就显示出来了，我们来解决这个问题，所以我这里并不是系统讲解动画，而是在对解决问题的思路做个笔记。</p><blockquote>
+<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><p>动画加长了，我们能看清卡片虽然有了翻面的动面，但是在开始动画的一瞬间，卡片的正面就显示出来了，我们来解决这个问题，所以我这里并不是系统讲解动画，而是在对解决问题的思路做个笔记。</p><blockquote>
 <p>题外话，我觉得<code>SwiftUI</code>和<code>Flutter</code>诞生时代相同，很多理念也驱同，在动画方面，也是放弃了以前要么从头画起，要么用封装得很好的有限几个动画的思路，基本上让你能用自绘+插值的方式来自己控制动画（有点类似关键帧，但关键帧的帧与帧之间也是自动的），而现在你可以完全对一个过程进行Linear interpolation，来控制动画过程（Flutter中的<code>lerp</code>函数就是干这个的，本节也有SwiftUI的类似实现）。</p></blockquote>
 <p>比如这个翻转，<code>Objective-C</code>里直接就给你实现好了，在SwiftUI里，给的是一个最基本的几何变换，至于这上面的效果，就要你自己实现了。我认为这是对的。</p><p>按课程里的思路，卡片要么正面，要么反面，是由<code>isFaceUp</code>决定的，加入动画后，那需要这个属性在进行了50%（也就是90˚）的时候才改值</p><p>而这个属性是卡片的属性，与动画无关，所以<strong>第一个决策</strong>，就是把动画函数写到<code>ViewModifier</code>里面去，传进去的是卡片的属性，但是在<code>modifier</code>里，我们把它适当转化成应该转的角度（0˚或90˚）,这样在<code>modifier</code>里面不管做什么变化，都不影响外部调用者自己的语义了（方法和参数都没变）：</p><div class="highlight"><pre><span></span><span class="kd">init</span><span class="p">(</span><span class="n">isFaceUp</span><span class="p">:</span> <span class="nb">Bool</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// step1 这里接的是布尔值，但是我们需要把它转成对应的翻转角度</span>
@@ -1481,7 +1481,7 @@ g.throw（'出错了'）;
 <span class="p">}</span>
 </pre></div>
 <p>效果如下，其实就是解决了如何捕捉动画进度的问题，也就是<code>animatableData</code>
-<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><h2>Animation2</h2>
+<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><h2>Animation2</h2>
 <p>多一个例子，课程里每张卡片翻开就会倒计时，原本是一个大饼，我根据我的喜好改成了圆环（其实是我学教程的习惯，尽可能不去做跟教程一样的事，避免思维惰性）</p><p>那么怎么让进度条动起来呢？终于讲到了怎么手动计算<strong>插值</strong>，并把这组值推给动画库让它动起来的过程了。</p><p>有了上一个例子，我查看了一个<code>Shape</code>的定义，原生就conform to protocol <code>Animatable</code>的，所以我们直接添加一个<code>AnimatedData</code>试试。</p><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nv">animatableData</span><span class="p">:</span> <span class="nb">Double</span>   <span class="c1">// degrees</span>
 </pre></div>
 <blockquote>
@@ -1537,7 +1537,7 @@ g.throw（'出错了'）;
 <blockquote>
 <p>需要注意的是<code>withAnimation</code>过程中对值的更改我们并不能显式捕捉，至少我试图把它显示在UI上观察它的变化是失败的，直接显示了最终值，而在接这个变化的插值的底层函数里，我能在<code>animatableData</code>的<code>set</code>方法里看到确实设置了无数的插值，暂时没有理解<code>withAnimation</code>真的有有没有直接对两个数字直接生成一系列中间值</p></blockquote>
 <p>效果如下：
-<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><h2>后记</h2>
+<figure class="vertical-figure" style="flex: 35.714285714285715" ><img width="220" height="308" src="/archives/assets/72b4116eb1e49a3b1eaa9097a2890b60.jpg" alt=""/></figure></p><h2>后记</h2>
 <p>动画我之前写过一篇：<a href="https://www.jianshu.com/p/0e4c8f0e1c23">用CALayer绘图,添加动画和渐变</a>，很明显可以看到，以前的写法仍然是黑匣子，即告诉动画库，请给我动画，动画的要求是blablabla，而现在都走了插值的路线，即把一系列值告诉你，你按照每个值直接绘图就是了，绘成啥样我自己负责。这就是我这篇文章反复强调的思路的变化，我喜欢这种思路。</p></div>
         
         <div class="prism-action-bar">
@@ -1744,18 +1744,18 @@ echo ./a.txt HELLO?...y
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -1767,7 +1767,7 @@ echo ./a.txt HELLO?...y
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

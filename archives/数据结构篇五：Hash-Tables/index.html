@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -125,14 +125,14 @@
 </ol>
 <p>可见，虽然系数是“动态”的了，但是取值还是（1，N）中的一个而已，hash只是让其动起来的一个原因，而不是参与计算的值。</p><p>我们本来就是在求hash value，结果又要引入另一个hash function，显然这个$H_2$不能像外层这样复杂，一般是针对常见的key类型(string, int...-&gt; fundamental data type)的<code>universal hash functions</code></p><blockquote>
 <p>因为N要是一个素数，所以在double size的时候，还要继续往上找直到找到一个素数为止，比如N=7, double后，N=14，那么最终，N=17</p></blockquote>
-<figure  style="flex: 67.68558951965065" ><img width="1240" height="916" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/cbae1de97a3f72ae84ea59804293ec56.png" alt=""/></figure><h3>Issues with removing</h3>
+<figure  style="flex: 67.68558951965065" ><img width="1240" height="916" src="/archives/assets/cbae1de97a3f72ae84ea59804293ec56.png" alt=""/></figure><h3>Issues with removing</h3>
 <p>因为冲突的hash value需要probing，probing的依据是从序列里依次取出下一个位置，检查这个位置<strong>有没有被占用</strong>，那么问题就来了，如果一个本被占用的位置，因为元素需要删除，反而变成没有占用了，这有点类似删除树节点，不但要考虑删除，还要考虑这个位置怎么接续。</p><p><strong>lazy deletion</strong>
 但HT机制比树要复杂，为了避免反复应用probing函数重新摆放后续所有节点，干脆就在删除的位置放置一个预设的标识，我们称为墓碑(<code>tombstone</code>)，而不是直接置空，然后所有的查找和添加加上这一条规则，就能快速删除又无需重新排序。</p><p>大量删除会造成空间浪费，但无需立即处理：</p><ol>
 <li>添加元素允许添加到墓碑位置</li>
 <li>到达阈值容量需要倍增的时候有一次重排，这个时候就可以移除所有的墓碑</li>
 </ol>
 <p>如果查找一个hash value，连续3个都是墓碑，第4个才是它，这是不是有点浪费时间？
-确实，所以还可以优化，当你查找过一次之后，就可以把它移到第一个墓碑的位置，这样，<strong>下次</strong>查询的时候速度就会快很多了。</p><p>整个机制，叫<code>lazy deletion</code></p><figure class="vertical-figure" style="flex: 29.61816305469556" ><img width="1148" height="1938" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a935a20b4bc9641962766872aace8306.png" alt=""/></figure>
+确实，所以还可以优化，当你查找过一次之后，就可以把它移到第一个墓碑的位置，这样，<strong>下次</strong>查询的时候速度就会快很多了。</p><p>整个机制，叫<code>lazy deletion</code></p><figure class="vertical-figure" style="flex: 29.61816305469556" ><img width="1148" height="1938" src="/archives/assets/a935a20b4bc9641962766872aace8306.png" alt=""/></figure>
             </div>
         </article>
         <div class="prism-post-meta col-md-8 offset-md-2">
@@ -241,18 +241,18 @@
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -264,7 +264,7 @@
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

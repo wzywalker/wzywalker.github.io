@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -106,7 +106,7 @@
 
 <pre><code>array([8])
 </code></pre>
-<figure  style="flex: 50.81967213114754" ><img width="496" height="488" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5f41cd44fe4cf94f9dbfee9954b82ec6.png" alt=""/></figure><div class="highlight"><pre><span></span><span class="c1"># better practise</span>
+<figure  style="flex: 50.81967213114754" ><img width="496" height="488" src="/archives/assets/5f41cd44fe4cf94f9dbfee9954b82ec6.png" alt=""/></figure><div class="highlight"><pre><span></span><span class="c1"># better practise</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 
 <span class="c1"># flatten the images</span>
@@ -190,7 +190,7 @@ weighted avg       0.97      0.97      0.97       899
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
-<figure  style="flex: 54.00696864111498" ><img width="620" height="574" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2088af7c0ab08ef8b680eab7d06d4bcd.png" alt=""/></figure><h2>Conventions</h2>
+<figure  style="flex: 54.00696864111498" ><img width="620" height="574" src="/archives/assets/2088af7c0ab08ef8b680eab7d06d4bcd.png" alt=""/></figure><h2>Conventions</h2>
 <h3>Type Casting</h3>
 <p>Unless otherwise specified, input will be cast to float64:</p><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">random_projection</span>
@@ -329,7 +329,7 @@ print(iris_y_test)
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">regr</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">))</span> 
     <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">this_X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
-<figure  style="flex: 75.50607287449392" ><img width="746" height="494" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/22a14395fafb62dcbaabdca600191fd6.png" alt=""/></figure><h2>Ridge regression:</h2>
+<figure  style="flex: 75.50607287449392" ><img width="746" height="494" src="/archives/assets/22a14395fafb62dcbaabdca600191fd6.png" alt=""/></figure><h2>Ridge regression:</h2>
 <p>A solution in high-dimensional statistical learning is to shrink the regression coefficients to zero: any two randomly chosen set of observations are likely to be uncorrelated. This is called Ridge regression.</p><p>This is an example of <code>bias/variance</code> tradeoff:</p><p>the <strong>larger</strong> the ridge <code>alpha</code> parameter,</p><ul>
 <li>the <strong>higher</strong> the <code>bias</code></li>
 <li>the <strong>lower</strong> the <code>variance</code>.</li>
@@ -453,7 +453,7 @@ ElasticNet optimal alpha: 0.001 and L1 ratio: 0.5000
 
 <span class="c1"># 观察图像的不同，其实可以理解为样本过少时的”过拟合“，引入忽略的指标后虽然对训练集的准确率大打折扣，但确实降低了方差</span>
 </pre></div>
-<figure  style="flex: 76.02459016393442" ><img width="742" height="488" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/97bc036cb6f5c3ce99362eb4bbba4c3d.png" alt=""/></figure><h4>Diabetes dataset</h4>
+<figure  style="flex: 76.02459016393442" ><img width="742" height="488" src="/archives/assets/97bc036cb6f5c3ce99362eb4bbba4c3d.png" alt=""/></figure><h4>Diabetes dataset</h4>
 <p>换个数据源，<code>estimator</code>并不需要更换，如果需要换超参，前文也已经讲过了：</p><div class="highlight"><pre><span></span><span class="n">diabetes_X</span><span class="p">,</span> <span class="n">diabetes_y</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_diabetes</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">diabetes_X_train</span> <span class="o">=</span> <span class="n">diabetes_X</span><span class="p">[:</span><span class="o">-</span><span class="mi">20</span><span class="p">]</span>
 <span class="n">diabetes_X_test</span>  <span class="o">=</span> <span class="n">diabetes_X</span><span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">:]</span>
@@ -489,7 +489,7 @@ ElasticNet optimal alpha: 0.001 and L1 ratio: 0.5000
 <h3>Different algorithms for the same problem</h3>
 <p>Different algorithms can be used to solve the same mathematical problem. For instance the <code>Lasso</code> object in scikit-learn solves the lasso regression problem using a <code>coordinate descent</code> method, that is efficient on <strong>large datasets</strong>. However, scikit-learn also provides the <code>LassoLars</code> object using the <code>LARS</code> algorithm, which is very efficient for problems in which the weight vector estimated is very <strong>sparse</strong> (i.e. problems with <strong>very few</strong> observations).</p><h2>Classification</h2>
 <h3>Logistic Regerssion</h3>
-<figure  style="flex: 66.66666666666667" ><img width="400" height="300" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/386b1a1250985ccfdacd014b942dff98.png" alt=""/></figure><div class="highlight"><pre><span></span><span class="n">log</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1e5</span><span class="p">)</span>
+<figure  style="flex: 66.66666666666667" ><img width="400" height="300" src="/archives/assets/386b1a1250985ccfdacd014b942dff98.png" alt=""/></figure><div class="highlight"><pre><span></span><span class="n">log</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1e5</span><span class="p">)</span>
 <span class="n">log</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">iris_X_train</span><span class="p">,</span> <span class="n">iris_y_train</span><span class="p">)</span>
 </pre></div>
 
@@ -561,7 +561,7 @@ LogisticRegression score: 0.933333
           <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;poly&#39;</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">))</span>
 <span class="n">models</span> <span class="o">=</span> <span class="p">(</span><span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">models</span><span class="p">)</span>
 </pre></div>
-<figure  style="flex: 79.81132075471699" ><img width="846" height="530" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/73af5427b414af6455402c92562d3524.png" alt=""/></figure><h2>cross validation</h2>
+<figure  style="flex: 79.81132075471699" ><img width="846" height="530" src="/archives/assets/73af5427b414af6455402c92562d3524.png" alt=""/></figure><h2>cross validation</h2>
 <p><a href="https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation">https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation</a></p><p><strong>RAW DEMO</strong>: KFold cross-validation:</p><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">svm</span>
 
@@ -809,18 +809,18 @@ score: 0.946047678795483
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -832,7 +832,7 @@ score: 0.946047678795483
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

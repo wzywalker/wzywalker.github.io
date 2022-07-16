@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -66,7 +66,7 @@
 链接: <a href="https://pan.baidu.com/s/1hgnzfxbE9l4zlcYBDsa-1g">https://pan.baidu.com/s/1hgnzfxbE9l4zlcYBDsa-1g</a> 提取码: 7w1f</p><hr />
 <p>本文内容：与UIKit的集成，以及学习过程中的一些tips，skills，与章节无章的notes</p><hr />
 <h1>MVVM</h1>
-<figure  style="flex: 89.08045977011494" ><img width="1240" height="696" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/da570de12fc64177b4e88c6429ae285b.png" alt=""/></figure><ul>
+<figure  style="flex: 89.08045977011494" ><img width="1240" height="696" src="/archives/assets/da570de12fc64177b4e88c6429ae285b.png" alt=""/></figure><ul>
 <li>viewmodel要起到gete keeper的作用，它就要把model给private起来<ul>
 <li>或者private (set), 这样保护了写，但是能读</li>
 <li>或者用一个计算属性把需要的model 暴露出去</li>
@@ -141,11 +141,11 @@
 <li><code>Circle + trim + stroke + rotation</code> 可以组合出一段任意角度的弧形</li>
 <li>一个<code>PreferenceKey</code>用来广播属性变化的例子：</li>
 </ul>
-<figure class="vertical-figure" style="flex: 38.9937106918239" ><img width="1240" height="1590" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e660e659aadcd624c62b1b9102d015d5.png" alt=""/></figure>
+<figure class="vertical-figure" style="flex: 38.9937106918239" ><img width="1240" height="1590" src="/archives/assets/e660e659aadcd624c62b1b9102d015d5.png" alt=""/></figure>
 <pre><code>* see more [https://swiftwithmajid.com/2020/01/15/the-magic-of-view-preferences-in-swiftui/](https://swiftwithmajid.com/2020/01/15/the-magic-of-view-preferences-in-swiftui/)
 </code></pre>
 <p>看一个简化的实例：
-<figure class="vertical-figure" style="flex: 43.13868613138686" ><img width="1182" height="1370" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/01b4f14b413613c6bd36ad5b2288df9d.png" alt=""/></figure>
+<figure class="vertical-figure" style="flex: 43.13868613138686" ><img width="1182" height="1370" src="/archives/assets/01b4f14b413613c6bd36ad5b2288df9d.png" alt=""/></figure>
 可以看到，其实化简化可读性更强，用for循环，再在里面做逻辑，会把直白的初衷绕进去：</p><ul>
 <li><p>返回唯一一个面朝上的卡片</p></li>
 <li><p>设置选定索引的卡片面朝上</p></li>
@@ -360,18 +360,18 @@
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -383,7 +383,7 @@
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

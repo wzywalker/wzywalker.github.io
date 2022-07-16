@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -74,9 +74,9 @@
 <li>本来我只想绑一个固定的 IP, 基本通过, 但是在mac的chrome58下, 仍然过不了, 最终还是通过域名解决</li>
 </ol>
 <p>上一个在 chrome58下终于变绿的图片
-<figure  style="flex: 397.72727272727275" ><img width="700" height="88" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b09b9db95e4ba72877937a236a42b9ef.png" alt=""/></figure></p><h1>原文转载</h1>
+<figure  style="flex: 397.72727272727275" ><img width="700" height="88" src="/archives/assets/b09b9db95e4ba72877937a236a42b9ef.png" alt=""/></figure></p><h1>原文转载</h1>
 <p>Since version 58, Chrome requires SSL certificates to use SAN (Subject Alternative Name) instead of the popular Common Name (CN), thus <a href="https://groups.google.com/a/chromium.org/forum/#%21msg/security-dev/IGT2fLJrAeo/csf_1Rh1AwAJ">CN support has been removed</a>.If you're using self signed certificates (but not only!) having only CN defined, you get an error like this when calling a website using the self signed certificate:
-<figure  style="flex: 100.89887640449439" ><img width="898" height="445" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/df44dd6d5d409cc33b66c052ab9e7b81.png" alt=""/></figure>
+<figure  style="flex: 100.89887640449439" ><img width="898" height="445" src="/archives/assets/df44dd6d5d409cc33b66c052ab9e7b81.png" alt=""/></figure>
 Here's how to create a self signed certificate with SAN using openssl</p><p>First, lets create a root CA cert using <code>createRootCA.sh</code>:</p><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
 mkdir ~/ssl/openssl genrsa -des3 -out ~/ssl/rootCA.key <span class="m">2048</span>
 openssl req -x509 -new -nodes -key ~/ssl/rootCA.key -sha256 -days <span class="m">1024</span> -out ~/ssl/rootCA.pem
@@ -113,7 +113,7 @@ DNS.1 = localhost
 </code></pre>
 <p>In order to create your cert, first run <code>createRootCA.sh</code> which we created first. Next, run <code>createselfsignedcertificate.sh</code> to create the self signed cert using localhost as the SAN and CN.
 After adding <code>the rootCA.pem</code> to the list of your trusted root CAs, you can use the <code>server.key</code> and <code>server.crt</code> in your web server and browse <a href="https://localhost%C2%A0using">https://localhost%C2%A0using</a> Chrome 58 or later:
-<figure class="vertical-figure" style="flex: 41.278195488721806" ><img width="549" height="665" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b18d58c0b394b4a435202d5bf5858e47.jpg" alt=""/></figure>
+<figure class="vertical-figure" style="flex: 41.278195488721806" ><img width="549" height="665" src="/archives/assets/b18d58c0b394b4a435202d5bf5858e47.jpg" alt=""/></figure>
 You can also verify your certificate to contain the SAN by calling</p>
 <pre><code>openssl x509 -text -in server.crt -noout
 </code></pre>
@@ -223,18 +223,18 @@ Happy self signing!</p>
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -246,7 +246,7 @@ Happy self signing!</p>
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

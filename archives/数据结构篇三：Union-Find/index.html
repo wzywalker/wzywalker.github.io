@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -93,11 +93,11 @@
 </li>
 </ul>
 <p>看到这里，首先想知道什么是unified，看实现，也就是在一个集合里(component)
-<figure class="vertical-figure" style="flex: 42.622950819672134" ><img width="1040" height="1220" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/475d857d18dc3fe4749139b896e6f68a.png" alt=""/></figure></p><ul>
+<figure class="vertical-figure" style="flex: 42.622950819672134" ><img width="1040" height="1220" src="/archives/assets/475d857d18dc3fe4749139b896e6f68a.png" alt=""/></figure></p><ul>
 <li>观察C_J，因为C和J已经在一个组里了，这条边就不需要了</li>
 <li>观察D_E，一旦连上后，紫色和绿色其实就是一个组了</li>
 </ul>
-<figure class="vertical-figure" style="flex: 36.810730253353206" ><img width="988" height="1342" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/a3a52e1b62a1b105bc18f817ba801011.png" alt=""/></figure><ul>
+<figure class="vertical-figure" style="flex: 36.810730253353206" ><img width="988" height="1342" src="/archives/assets/a3a52e1b62a1b105bc18f817ba801011.png" alt=""/></figure><ul>
 <li>观察D_H，一旦连上后，紫色和红色也成为了一个组</li>
 <li>连接B_C，所有顶点就全部连上了，并且只有一条紫线</li>
 </ul>
@@ -115,10 +115,10 @@ Union: 找两个元素分别在哪个component里，然后找到它们的root，
 </li>
 </ul>
 <h2>Path Compression Union Find</h2>
-<figure class="vertical-figure" style="flex: 36.48111332007952" ><img width="734" height="1006" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5bac1a63885746047c532e2362b8ead9.png" alt=""/></figure><p>由一层层找到root改为所有顶点直接指向顶点（星形结构），实现路径压缩</p><p>这段代码演示的是，查找p的root节点，在查找的过程中，顺便进行了路径压缩
-<figure  style="flex: 102.99003322259136" ><img width="1240" height="602" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/6de31545897b5731ee7c6916033393a1.png" alt=""/></figure></p><p>合并的逻辑就是比较谁的元素多就把谁当作root，另一个component的root的parent设为元素多的组的root<br />
+<figure class="vertical-figure" style="flex: 36.48111332007952" ><img width="734" height="1006" src="/archives/assets/5bac1a63885746047c532e2362b8ead9.png" alt=""/></figure><p>由一层层找到root改为所有顶点直接指向顶点（星形结构），实现路径压缩</p><p>这段代码演示的是，查找p的root节点，在查找的过程中，顺便进行了路径压缩
+<figure  style="flex: 102.99003322259136" ><img width="1240" height="602" src="/archives/assets/6de31545897b5731ee7c6916033393a1.png" alt=""/></figure></p><p>合并的逻辑就是比较谁的元素多就把谁当作root，另一个component的root的parent设为元素多的组的root<br />
 合并完成后组数就少了1
-<figure  style="flex: 71.1825487944891" ><img width="1240" height="871" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1b52c2255e8963040253701946bae7d8.png" alt=""/></figure></p><p>看代码，这一步里面并没有路径压缩，也就是小组里面的元素并没有<strong>进一步</strong>再星状地指向新的parent，仍然指向的是老的组的root。</p>
+<figure  style="flex: 71.1825487944891" ><img width="1240" height="871" src="/archives/assets/1b52c2255e8963040253701946bae7d8.png" alt=""/></figure></p><p>看代码，这一步里面并没有路径压缩，也就是小组里面的元素并没有<strong>进一步</strong>再星状地指向新的parent，仍然指向的是老的组的root。</p>
             </div>
         </article>
         <div class="prism-post-meta col-md-8 offset-md-2">
@@ -227,18 +227,18 @@ Union: 找两个元素分别在哪个component里，然后找到它们的root，
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -250,7 +250,7 @@ Union: 找两个元素分别在哪个component里，然后找到它们的root，
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

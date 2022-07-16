@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -120,7 +120,7 @@ A UIImageView without an image and without a background color is <em>invisible</
     <span class="kr">right</span><span class="p">:</span> <span class="n">mars</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="mi">1</span>
 <span class="p">),</span> <span class="n">resizingMode</span><span class="p">:</span> <span class="p">.</span><span class="n">stretch</span><span class="p">)</span>
 </pre></div>
-<p>所以如果只是横向拉伸，上面的代码中，top, bottom都可以设为0，或都设为图片高度（而不去除2什么的），只需要保证把UI控件的高度保持跟图片一致即可。</p><p>那么，如果不小心高度大于图片高度了呢？分两种情况，如果设了0，表示没有保留区域，直接竖向拉伸，而如果设成了图片高度，那么表示整个Y方向没有可供拉伸的像素，必然造成拉伸失败：</p><figure  style="flex: 123.51598173515981" ><img width="1082" height="438" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/be32f2993735b82ac7da004327cf4bad.png" alt=""/></figure><p><strong>Transparency Masks</strong></p><p>The image shown on the screen is formed by combining the image’s <code>transparency</code> values with a single <code>tint color</code>.</p><p>忽略图片各像素上颜色的数值，只保留透明度，就成了一个mask. (renderingMode: <code>alwaysTemplate</code>)</p><ul>
+<p>所以如果只是横向拉伸，上面的代码中，top, bottom都可以设为0，或都设为图片高度（而不去除2什么的），只需要保证把UI控件的高度保持跟图片一致即可。</p><p>那么，如果不小心高度大于图片高度了呢？分两种情况，如果设了0，表示没有保留区域，直接竖向拉伸，而如果设成了图片高度，那么表示整个Y方向没有可供拉伸的像素，必然造成拉伸失败：</p><figure  style="flex: 123.51598173515981" ><img width="1082" height="438" src="/archives/assets/be32f2993735b82ac7da004327cf4bad.png" alt=""/></figure><p><strong>Transparency Masks</strong></p><p>The image shown on the screen is formed by combining the image’s <code>transparency</code> values with a single <code>tint color</code>.</p><p>忽略图片各像素上颜色的数值，只保留透明度，就成了一个mask. (renderingMode: <code>alwaysTemplate</code>)</p><ul>
 <li>iOS gives every UIView a <code>tintColor</code>, which will be used to <code>tint any template images</code>。所以我们经常用的tintColor其实就是给模板图片染色的意思。</li>
 <li>tintColor是向下继承的</li>
 <li>The symbol images are always template images</li>
@@ -532,7 +532,7 @@ CIImage 不是一个<code>displayaable image</code></p><ul>
     <span class="p">}</span> 
 <span class="p">}</span>
 </pre></div>
-<figure  style="flex: 77.47747747747748" ><img width="688" height="444" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/0059ea4156dffb9df15e77df8a87f971.png" alt=""/></figure><p>注意，语法虽然是先处理context，再绘制，其实只是告知坐标系的变化，绘制的时候自动应用这些变换。</p><h3>Erasing</h3>
+<figure  style="flex: 77.47747747747748" ><img width="688" height="444" src="/archives/assets/0059ea4156dffb9df15e77df8a87f971.png" alt=""/></figure><p>注意，语法虽然是先处理context，再绘制，其实只是告知坐标系的变化，绘制的时候自动应用这些变换。</p><h3>Erasing</h3>
 <p><code>clear(_:)</code>擦除行为取决于context是透明还是实心的（透明擦成透明，实心擦成黑色），只要不是opaque，通通理解为透明，比如background color是nil, 或0.9999的透明度。</p><h2>Points and Pixels</h2>
 <p><code>con.fill(CGRect(100,0,1.0/self.contentScaleFactor,100))</code>应用contentScaleFactor画一条在任何屏幕上都锐利的1像素直线。</p><h2>Content Mode</h2>
 <p>the drawing system will <code>avoid</code> asking a view to <code>redraw</code> itself from scratch if possible; instead, it will use the <code>cached</code> result of the previous drawing operation (the <strong>bitmap backing store</strong>).</p><p>If the view is resized, the system may simply stretch or shrink or reposition the cached drawing, if your contentMode setting instructs it to do so.</p><p><code>draw(_:)</code>从原点开始绘制，所以你的<code>contentMode</code>也要相应设置为<code>topLeft</code>。而如果设置为<code>.redraw</code>，则不会使用cached content，每当view被resize的时候，就会调用<code>setNeedsDisplay</code>方法，最终触发<code>draw(_:)</code>进行重绘。</p>
@@ -660,18 +660,18 @@ CIImage 不是一个<code>displayaable image</code></p><ul>
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -683,7 +683,7 @@ CIImage 不是一个<code>displayaable image</code></p><ul>
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

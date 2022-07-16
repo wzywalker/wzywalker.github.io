@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -113,11 +113,11 @@
 </ul>
 </li>
 </ul>
-<p>Scale (with <code>contentGravity</code> property):</p><figure  style="flex: 102.4390243902439" ><img width="1848" height="902" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/faa855dd2861cf296eb2c4ef5e8cf430.png" alt="image-20220515014627253"/></figure><ul>
+<p>Scale (with <code>contentGravity</code> property):</p><figure  style="flex: 102.4390243902439" ><img width="1848" height="902" src="/archives/assets/faa855dd2861cf296eb2c4ef5e8cf430.png" alt="image-20220515014627253"/></figure><ul>
 <li>场景一：屏幕向下拉，背景图越变越大（根据设置的填充和变形方式，以及容器的frame）</li>
 <li>场景二：类似macOS的docker，鼠标（滑块/slider）在图标上滚过的时候放大，处理为一个滑块，和左右两个layer，分别设置了只显示左边或右边的<code>gravity</code></li>
 </ul>
-<figure  style="flex: 157.19844357976655" ><img width="1616" height="514" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/76a10bc63cff42cdd20b5324358b5ce8.png" alt="image-20220515021047122"/></figure><blockquote>
+<figure  style="flex: 157.19844357976655" ><img width="1616" height="514" src="/archives/assets/76a10bc63cff42cdd20b5324358b5ce8.png" alt="image-20220515021047122"/></figure><blockquote>
 <p>我本以为是两张页码背景图是<strong>重合</strong>的，根据滑块位置来“切”掉对应的左侧图和右侧图，但是显然这个方案是左右两个背景图是<strong>并列</strong>的，它同时改的两个图的frame(其实就是width加起来永远是100%)，然后设置resize的方案是让左边的从左显示起，右边的从中显示起就行了</p><p>但仔细一想，仍然可以理解为两张图是重合的，分别往左右两方去resize使得两张图的frame并不相交而已</p></blockquote>
 <p>场景二的其它方案：</p><ul>
 <li>Because this method leverages the GPU, it is incredibly performant.</li>
@@ -142,15 +142,15 @@
 </ul>
 </li>
 </ul>
-<figure  style="flex: 83.88030888030887" ><img width="1738" height="1036" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/dd2c66a62f209303b9177f794efff8cc.png" alt="image-20220515023547309"/></figure><p>最近邻插值图像质量最差，但也最省资源最快速，用在动画切换场景（视频里演示了app退到桌面时，app的icon由当前app界面的截图逐渐变回logo的过程，这个截图显然就不需要高质量的图片）</p><ul>
+<figure  style="flex: 83.88030888030887" ><img width="1738" height="1036" src="/archives/assets/dd2c66a62f209303b9177f794efff8cc.png" alt="image-20220515023547309"/></figure><p>最近邻插值图像质量最差，但也最省资源最快速，用在动画切换场景（视频里演示了app退到桌面时，app的icon由当前app界面的截图逐渐变回logo的过程，这个截图显然就不需要高质量的图片）</p><ul>
 <li>同时也暗示了在图片展示区域本来就很小时，也没必要应用高质量scale</li>
 <li>或者动画相当快时，也尽量用最近邻插值</li>
 </ul>
 <p><strong>Masking CALayer Objects</strong></p><ul>
 <li><p>让一个layer(<strong>A</strong>)成为另一个layer(<strong>B</strong>)的<code>mask</code>属性</p></li>
-<li><p>A会被B(涂黑的区域)<code>clip</code>，同时仍然具有功能性，交互性，和动画性</p><figure  style="flex: 164.367816091954" ><img width="1144" height="348" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/f395601e92129519e7383fb4a3e4b514.png" alt="涂黑就是不显示"/></figure></li>
+<li><p>A会被B(涂黑的区域)<code>clip</code>，同时仍然具有功能性，交互性，和动画性</p><figure  style="flex: 164.367816091954" ><img width="1144" height="348" src="/archives/assets/f395601e92129519e7383fb4a3e4b514.png" alt="涂黑就是不显示"/></figure></li>
 </ul>
-<figure  style="flex: 81.36574074074075" ><img width="1406" height="864" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/37fbec26917db6079bb03b3ec2db28a3.png" alt="image-20220622143708966"/></figure><p><strong>Adding Shadows to CALayer</strong></p><p>The following code will <strong>indeed</strong> render a shadow. However, because the system has to do <strong>a per pixel</strong> comparison to work out the <strong>size</strong> of the shadow, it will be <strong>incredibly slow</strong> in terms of rendering and animation.</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">myLayer</span> <span class="p">=</span> <span class="n">view</span><span class="p">.</span><span class="n">layer</span>
+<figure  style="flex: 81.36574074074075" ><img width="1406" height="864" src="/archives/assets/37fbec26917db6079bb03b3ec2db28a3.png" alt="image-20220622143708966"/></figure><p><strong>Adding Shadows to CALayer</strong></p><p>The following code will <strong>indeed</strong> render a shadow. However, because the system has to do <strong>a per pixel</strong> comparison to work out the <strong>size</strong> of the shadow, it will be <strong>incredibly slow</strong> in terms of rendering and animation.</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">myLayer</span> <span class="p">=</span> <span class="n">view</span><span class="p">.</span><span class="n">layer</span>
  <span class="n">myLayer</span><span class="p">.</span><span class="n">shadowColor</span> <span class="p">=</span> <span class="bp">UIColor</span><span class="p">.</span><span class="n">blackColor</span><span class="p">().</span><span class="n">CGColor</span>
  <span class="n">myLayer</span><span class="p">.</span><span class="n">shadowOpacity</span> <span class="p">=</span> <span class="mf">0.75</span>
  <span class="n">myLayer</span><span class="p">.</span><span class="n">shadowOffset</span> <span class="p">=</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
@@ -180,7 +180,7 @@
 <span class="s">myBlendLayer.allowsGroupOpacity = false</span>
 <span class="s">myLayer.addSublayer(myBlendLayer)</span>
 </pre></div>
-<figure  style="flex: 189.568345323741" ><img width="1054" height="278" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/333bf0036824a4c48a4badd2371474bd.png" alt="image-20220622145432815"/></figure><p>苹果的&quot;slide to unlick&quot;重度应用了blend mode(注意那道左右跑动的流光)</p><figure  style="flex: 95.98997493734336" ><img width="1532" height="798" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/98de775b5e16920acd97bd71e0a154d9.png" alt="image-20220622145619139"/></figure><p><strong>Animating with Core Animation</strong></p><p>UIView实现方式：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">trySwiftLayer</span> <span class="p">=</span> <span class="c1">//...</span>
+<figure  style="flex: 189.568345323741" ><img width="1054" height="278" src="/archives/assets/333bf0036824a4c48a4badd2371474bd.png" alt="image-20220622145432815"/></figure><p>苹果的&quot;slide to unlick&quot;重度应用了blend mode(注意那道左右跑动的流光)</p><figure  style="flex: 95.98997493734336" ><img width="1532" height="798" src="/archives/assets/98de775b5e16920acd97bd71e0a154d9.png" alt="image-20220622145619139"/></figure><p><strong>Animating with Core Animation</strong></p><p>UIView实现方式：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">trySwiftLayer</span> <span class="p">=</span> <span class="c1">//...</span>
 
 <span class="kd">let</span> <span class="nv">myAnimation</span> <span class="p">=</span> <span class="bp">CABasicAnimation</span><span class="p">(</span><span class="n">keyPath</span><span class="p">:</span> <span class="err">“</span><span class="n">position</span><span class="p">.</span><span class="n">x</span><span class="err">”</span><span class="p">)</span>
 <span class="n">myAnimation</span><span class="p">.</span><span class="n">duration</span> <span class="p">=</span> <span class="mi">2</span>
@@ -414,18 +414,18 @@
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -437,7 +437,7 @@
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

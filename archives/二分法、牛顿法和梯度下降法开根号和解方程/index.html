@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -140,7 +140,7 @@ sqrt(9)	3.0
 </code></pre>
 <h2>梯度下降法</h2>
 <p>梯度下降法的数学原理是$f(x_1,x_2,\dots$)的gradient（$\nabla f$）就是其最陡爬升方向（<code>steepest ascent</code>）。</p><p>可以拿这个当成结论，也可以去感性认识，而要去证明的话，网上有数不清的教程，在花书(《Deep Learning深度学习》)和可汗学院里，都是用的<code>directional derivate</code>来解释（证明）的，即”<strong>自定义方向</strong>上的瞬时变化率“，也是我认为在如果有多变量微积分的基础下，比较容易让人接受且简单直白的解释：
-<figure class="vertical-figure" style="flex: 34.96774193548387" ><img width="1084" height="1550" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e7889d3178ce0131e3ac9dcc816d03c3.png" alt=""/></figure></p><ul>
+<figure class="vertical-figure" style="flex: 34.96774193548387" ><img width="1084" height="1550" src="/archives/assets/e7889d3178ce0131e3ac9dcc816d03c3.png" alt=""/></figure></p><ul>
 <li>$\overset{\rightarrow}{v} \cdot \nabla f = |\overset{\rightarrow}{v}|\cdot|\nabla f|\cdot cos\theta$</li>
 <li>$\overset{\rightarrow}{v}$ 就是指的任意方向，如果是x, y等方向，那就是普通的偏导了。</li>
 <li>显然上式当$\theta = 0$时拥有最大值，即$\overset{\rightarrow}{v}$指向的是$\nabla f$的方向，那就是梯度的方向了</li>
@@ -370,18 +370,18 @@ sin(59.999998857570986) ≈ sqrt(3)/2
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -393,7 +393,7 @@ sin(59.999998857570986) ≈ sqrt(3)/2
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

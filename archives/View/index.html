@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -383,7 +383,7 @@ constraint(lessThanOrEqualToSystemSpacingBelow:multiplier:)
 <li>令B的高度相等</li>
 </ul>
 <p>就把4个A给垂直平均分配了，理解的难点就是guide也当作一个view来用，而语法上又是加到view的属性里的。同时，只要设置guide的高度相等，就会自动占用4个View之外的所有空间平均分配。
-<figure  style="flex: 78.66449511400651" ><img width="966" height="614" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/2629afe5515d8fa7df75f83b138083fa.png" alt=""/></figure></p><p>这么做只是为了演示layout guide，但是虽然理解了，也不知道能用它来干嘛？当成一个隐形的view去做布局？</p><p><strong>Constraint alignment</strong></p><p>通过设置view的<code>alignmentRectInsets</code>，可以改变constrains计算的起点。对我来说，又是一种padding?</p><p>同样的还有自定义baseline的<code>forFirstBaselineLayout and forLastBaselineLayout.</code></p><h3>Intrinsic Content Size</h3>
+<figure  style="flex: 78.66449511400651" ><img width="966" height="614" src="/archives/assets/2629afe5515d8fa7df75f83b138083fa.png" alt=""/></figure></p><p>这么做只是为了演示layout guide，但是虽然理解了，也不知道能用它来干嘛？当成一个隐形的view去做布局？</p><p><strong>Constraint alignment</strong></p><p>通过设置view的<code>alignmentRectInsets</code>，可以改变constrains计算的起点。对我来说，又是一种padding?</p><p>同样的还有自定义baseline的<code>forFirstBaselineLayout and forLastBaselineLayout.</code></p><h3>Intrinsic Content Size</h3>
 <p>button, label, image等会根据内容和预设有一个instrinsic content size，而且可以用来<strong>隐式地</strong>产生约束（<code>NSContentSizeLayoutConstraint</code>）</p><ul>
 <li><code>contentHuggingPriority(for:)</code> 某方向上阻止扩大到比intrinsic size更大的优先级，默认250</li>
 <li><code>contentCompressionResistancePriority(for:)</code>，阻止缩小的优先级，默认750</li>
@@ -607,18 +607,18 @@ constraint(lessThanOrEqualToSystemSpacingBelow:multiplier:)
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -630,7 +630,7 @@ constraint(lessThanOrEqualToSystemSpacingBelow:multiplier:)
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

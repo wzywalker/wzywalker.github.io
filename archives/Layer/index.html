@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -238,7 +238,7 @@
 <span class="p">}</span><span class="w"></span>
 </pre></div>
 <p>结果如图：
-<figure class="vertical-figure" style="flex: 49.51923076923077" ><img width="412" height="416" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/031ad73f3f956d76b906cf986e36e22e.png" alt=""/></figure></p><ol start="2">
+<figure class="vertical-figure" style="flex: 49.51923076923077" ><img width="412" height="416" src="/archives/assets/031ad73f3f956d76b906cf986e36e22e.png" alt=""/></figure></p><ol start="2">
 <li>画箭头，演示了复杂的绘制怎么把它代理出去，并且什么时机让它产生绘制：</li>
 </ol>
 <div class="highlight"><pre><span></span><span class="c1">// the arrow</span>
@@ -259,8 +259,8 @@
 <p>绕Y轴镜像的示例：</p><div class="highlight"><pre><span></span><span class="n">someLayer</span><span class="p">.</span><span class="n">transform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CATransform3DMakeRotation</span><span class="p">(.</span><span class="n">pi</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 <p>一般而言，在Z轴没有分量的平面图，那就只剩旋转的效果了（没有翻转)
-<figure  style="flex: 51.151315789473685" ><img width="622" height="608" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/714bca8197bc1e5f9e71216b3ccd0745.png" alt=""/></figure></p><p>这是把anchorPoint设在了圆心，如果设在(0,0):
-<figure class="vertical-figure" style="flex: 45.258620689655174" ><img width="1260" height="1392" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/8e747494f676181ffca14504623cb89b.png" alt=""/></figure></p><ul>
+<figure  style="flex: 51.151315789473685" ><img width="622" height="608" src="/archives/assets/714bca8197bc1e5f9e71216b3ccd0745.png" alt=""/></figure></p><p>这是把anchorPoint设在了圆心，如果设在(0,0):
+<figure class="vertical-figure" style="flex: 45.258620689655174" ><img width="1260" height="1392" src="/archives/assets/8e747494f676181ffca14504623cb89b.png" alt=""/></figure></p><ul>
 <li>layer不是为了3D建模而诞生的（考虑<code>Metal</code>），它是2D对象，为<code>speed</code>和<code>simplicity</code>而设计</li>
 </ul>
 <p><strong>depth</strong></p><p>现实世界<code>z-component</code>的加入会近大远小，layer绘制没有表现出这种距离，而是压平到一个面：<code>orthographic projection</code>，但是使用了一些技巧来制造这种视觉效果。</p><p>[waiting for demo]</p><h2>Futher Layer Features</h2>
@@ -485,18 +485,18 @@
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -508,7 +508,7 @@
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -68,7 +68,7 @@
 <li>a traditional priority queue variant</li>
 <li>top node supports <code>quick update and deletions of key-value paris</code></li>
 </ul>
-<figure  style="flex: 77.8894472361809" ><img width="1240" height="796" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/5e238bf5e89b7b2188cfb748c4e5990e.png" alt=""/></figure><p>观察这个图，数据是Anna, Bella...等等，</p><ul>
+<figure  style="flex: 77.8894472361809" ><img width="1240" height="796" src="/archives/assets/5e238bf5e89b7b2188cfb748c4e5990e.png" alt=""/></figure><p>观察这个图，数据是Anna, Bella...等等，</p><ul>
 <li>首先，为这一堆数据进行任意排序，得到一堆索引(0,1,...)</li>
 <li>然后组一个binary heap，这样每个元素又获得一个索引，就是在heap上的序号（<code>Position Map</code>）</li>
 </ul>
@@ -81,14 +81,14 @@
 <li>pm = 3 -&gt; ki = 8 -&gt; Issac <strong>BINGO!!!</strong></li>
 </ul>
 <p>但神奇的事发生了，有人希望复用ki这个自然数序列（闲的蛋疼？），于是多做了一个数组，把ki定义为heap上的索引，与元素原来的ki进行映射（<code>Inverse Map</code>）:IM
-<figure  style="flex: 68.88888888888889" ><img width="1240" height="900" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/71be1add8c1a0cde72e08fc72adbd071.png" alt=""/></figure></p><p>可以看到，这张图上张个ki到im的映射，与pm到ki的映射其实是一样的，也就是说重定义了一下，并没有引入新的东西。(pm表里找到3，对应的第一行ki表里就是8）</p><p>这个时候，我们直接用ki的3就能找到im的8，继而找到数据源的<em>Issac</em>了。</p><h2>Insertion</h2>
+<figure  style="flex: 68.88888888888889" ><img width="1240" height="900" src="/archives/assets/71be1add8c1a0cde72e08fc72adbd071.png" alt=""/></figure></p><p>可以看到，这张图上张个ki到im的映射，与pm到ki的映射其实是一样的，也就是说重定义了一下，并没有引入新的东西。(pm表里找到3，对应的第一行ki表里就是8）</p><p>这个时候，我们直接用ki的3就能找到im的8，继而找到数据源的<em>Issac</em>了。</p><h2>Insertion</h2>
 <p>上面的数组，我们往里面添加第12条数据试试:</p><ul>
 <li>{ki:12, pm: 12, im:12, value:2}</li>
 <li>显然违反了binary heap的 invariant，向上冒泡，也就是跟{ki:12, pm:5, im:2, value:4}的节点互换</li>
 <li>此时，数据源肯定不会变，但是节点变了，pm的值就要交换（5， 12 互换）</li>
 <li>pm变了，把pm当成ki的映射表im也要变（12， 11互换）</li>
 </ul>
-<figure  style="flex: 224.63768115942028" ><img width="1240" height="276" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/47da2e700214e5e2de16aa42f5b92fb3.png" alt=""/></figure><p>仔细观察图片，搞清楚第一行ki在两次互换时的身份就明白了</p><ul>
+<figure  style="flex: 224.63768115942028" ><img width="1240" height="276" src="/archives/assets/47da2e700214e5e2de16aa42f5b92fb3.png" alt=""/></figure><p>仔细观察图片，搞清楚第一行ki在两次互换时的身份就明白了</p><ul>
 <li>pm的互换是直观的，就是节点的位置</li>
 <li>知道pm互换的依据后（2，5），在第一行找2，5对应的im值互换，因为在这个映射里，相当于pm与原ki的映射，pm此时是（2，5）了。</li>
 </ul>
@@ -130,7 +130,7 @@
 <p>在操作时，只需要知道传入的是哪种索引，及时转化就行了。</p><p>有了索引，lookup的时间复杂度就是常量时间了：O(1)</p><h2>Polling and Removals</h2>
 <p>没有什么特殊的,仍然是找到节点,与最后一个交换,移除最后一个节点,然后再看最后一个在堆里是上升还是下降.
 仍然是记得每一步交换,相应的几个索引值也需要随之交换.(polling 其实就是移除第1个节点,本质上还是 removal)
-<figure class="vertical-figure" style="flex: 36.70811130846655" ><img width="1240" height="1689" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/581b8563020c36307eae7a9bf618a7e0.png" alt=""/></figure></p><p>pseudo code</p><div class="highlight"><pre><span></span><span class="c1"># Deletes the node with the key index ki</span>
+<figure class="vertical-figure" style="flex: 36.70811130846655" ><img width="1240" height="1689" src="/archives/assets/581b8563020c36307eae7a9bf618a7e0.png" alt=""/></figure></p><p>pseudo code</p><div class="highlight"><pre><span></span><span class="c1"># Deletes the node with the key index ki</span>
 <span class="c1"># in the heap. The key index ki must exist </span>
 <span class="c1"># and be present in the heap.</span>
 <span class="n">function</span> <span class="n">remove</span><span class="p">(</span><span class="n">ki</span><span class="p">):</span>
@@ -313,18 +313,18 @@
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -336,7 +336,7 @@
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

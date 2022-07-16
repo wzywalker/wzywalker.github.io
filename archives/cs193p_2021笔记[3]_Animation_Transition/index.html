@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -105,7 +105,7 @@
 <li>animation的参数就是一个struct： duration, delay, repeat, curve...</li>
 </ul>
 <p>对于不能动画的modifier，看一下这个实例（上为修改前，下为修改后）
-<figure  style="flex: 51.452991452991455" ><img width="1204" height="1170" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/4804373fb223c0a4333d720331093521.png" alt=""/></figure></p><ol>
+<figure  style="flex: 51.452991452991455" ><img width="1204" height="1170" src="/archives/assets/4804373fb223c0a4333d720331093521.png" alt=""/></figure></p><ol>
 <li>把font设为常量，把缩放变成一个geometric effect</li>
 <li>同时也说明<code>.animation()</code>不止作用于它前面的</li>
 </ol>
@@ -162,7 +162,7 @@
 <li>The <code>setting</code> of this var is the animation system telling the Shape/VM which piece to draw.</li>
 <li>The <code>getting</code> of this var is the animation system getting the <code>start/end</code> points of an animation.</li>
 </ul>
-<p><strong>实例一</strong></p><figure  style="flex: 73.625" ><img width="1178" height="800" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/10d0bb779b10383a36d23d581f2fadb9.png" alt=""/></figure><ul>
+<p><strong>实例一</strong></p><figure  style="flex: 73.625" ><img width="1178" height="800" src="/archives/assets/10d0bb779b10383a36d23d581f2fadb9.png" alt=""/></figure><ul>
 <li>view modifier里面有一个变量<code>rotation</code>（ZStack, content, rotation3DEffect)</li>
 <li>那么外层在<code>withAnimation{}</code>的时候，我们是期望rotation的值能动起来的<ul>
 <li>内置的viewmodifier当然会自己动，如<code>opacity</code>等</li>
@@ -181,18 +181,18 @@
 <li>所以解决方法当然可以“延迟”呈现这些卡片</li>
 <li>课程里用了另一种方法，机制当然也是延迟，但不是那么地直白：</li>
 </ol>
-<figure  style="flex: 82.95774647887323" ><img width="1178" height="710" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/e7e3ef2ac16296fabf73162c1fc678fa.png" alt=""/></figure><ul>
+<figure  style="flex: 82.95774647887323" ><img width="1178" height="710" src="/archives/assets/e7e3ef2ac16296fabf73162c1fc678fa.png" alt=""/></figure><ul>
 <li>就是利用了<code>.onAppear</code>来阻断容器和卡片的连续生成，而改用容器呈现后，再逐个“添加”的方式，让每一张卡片都有一个单独出现的机会</li>
 <li>同时也必须利用<code>@State</code>, 让每添加一张卡片都会invalidate view一次</li>
 <li>也能看出，animate能animate的就是属性和transition</li>
 </ul>
 <blockquote>
 <p>当然，课程最后改成了“发牌”的机制，手动添加卡片，彻底阻断了卡片和容器一起出现的场景。</p></blockquote>
-<p>这就带我们来到了实例三，同一个view在不同容器间的动画，怎么计算各自尺度下同一个view的位置：<code>matchedGeometryEffect</code></p><p><strong>实例三</strong></p><figure  style="flex: 73.45679012345678" ><img width="1190" height="810" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/08935bf9006d072875c203895aff17b7.png" alt=""/></figure><ul>
+<p>这就带我们来到了实例三，同一个view在不同容器间的动画，怎么计算各自尺度下同一个view的位置：<code>matchedGeometryEffect</code></p><p><strong>实例三</strong></p><figure  style="flex: 73.45679012345678" ><img width="1190" height="810" src="/archives/assets/08935bf9006d072875c203895aff17b7.png" alt=""/></figure><ul>
 <li>想要有牌一张张发出去的效果，自然会想到添加延时</li>
 <li>实现成了同时做动画，只不过越到后面的牌，延时越长（动作越慢），而不是我们想象的先后触发</li>
 </ul>
-<p>为了让不同的牌发出去时有立体效果，还以index为依据设置了<code>zIndex</code>，最终效果：</p><figure class="vertical-figure" style="flex: 24.608819345661452" ><img width="346" height="703" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/c16a9ce3d925f64e63cdc14ebd2b5f59.gif" alt=""/></figure>
+<p>为了让不同的牌发出去时有立体效果，还以index为依据设置了<code>zIndex</code>，最终效果：</p><figure class="vertical-figure" style="flex: 24.608819345661452" ><img width="346" height="703" src="/archives/assets/c16a9ce3d925f64e63cdc14ebd2b5f59.gif" alt=""/></figure>
             </div>
         </article>
         <div class="prism-post-meta col-md-8 offset-md-2">
@@ -305,18 +305,18 @@
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -328,7 +328,7 @@
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

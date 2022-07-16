@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -76,7 +76,7 @@
 <li>左子树的元素小于右子树</li>
 </ul>
 <p>拥有重复元素是允许的，但多数情况下我们只研究不重复的元素</p><p>这是一个有效的BST吗？
-<figure  style="flex: 57.83582089552239" ><img width="1240" height="1072" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/d9ca27993e1a1228a3ffcadf9ed86aba.png" alt=""/></figure></p><p>是的（对于单链下来的，几乎会直接就满足右边比左边大）</p><p><strong>Usage</strong></p><ul>
+<figure  style="flex: 57.83582089552239" ><img width="1240" height="1072" src="/archives/assets/d9ca27993e1a1228a3ffcadf9ed86aba.png" alt=""/></figure></p><p>是的（对于单链下来的，几乎会直接就满足右边比左边大）</p><p><strong>Usage</strong></p><ul>
 <li>BSTs<ul>
 <li>implementation of some map and set ADTs</li>
 <li>red black trees</li>
@@ -119,16 +119,16 @@
 <li>递归</li>
 </ul>
 <p>新找到的元素当然要从原来的位置删除，这时又根据它是否叶节点，单子节点还是全节点，来反复进行前面的操作，最终总是可以退出的
-<figure  style="flex: 57.83582089552239" ><img width="1240" height="1072" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/511db0d1a3889dca35b02ce18318c787.png" alt=""/></figure></p><figure  style="flex: 68.69266055045871" ><img width="1198" height="872" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/85b0081fb572f97bd8fb1a93c9ca3d90.png" alt=""/></figure><h2>Tree Traversals</h2>
+<figure  style="flex: 57.83582089552239" ><img width="1240" height="1072" src="/archives/assets/511db0d1a3889dca35b02ce18318c787.png" alt=""/></figure></p><figure  style="flex: 68.69266055045871" ><img width="1198" height="872" src="/archives/assets/85b0081fb572f97bd8fb1a93c9ca3d90.png" alt=""/></figure><h2>Tree Traversals</h2>
 <p>(Preorder, Inorder, Postorder &amp; Level order)
-<figure  style="flex: 92.67563527653213" ><img width="1240" height="669" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/731be06981a3a58193e3d1ea54d7fd22.png" alt=""/></figure></p><ul>
+<figure  style="flex: 92.67563527653213" ><img width="1240" height="669" src="/archives/assets/731be06981a3a58193e3d1ea54d7fd22.png" alt=""/></figure></p><ul>
 <li>preorder，在遍历左侧元素的时候，每次已经先取到元素了（最顶层）</li>
 <li>inorder里，遍历元素的时候，直到所有的left走完了，才取到第一个元素（最底层的）</li>
 <li>postorder里，也是遍历到最底层，但是下一步就是取兄弟节点了</li>
 </ul>
-<figure  style="flex: 99.51845906902086" ><img width="1240" height="623" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/47fe26cb82c30df966d2cbb9f8bd3ee8.png" alt=""/></figure><p>inorder一个重要特征：它是从小到大排好序的！
-<figure  style="flex: 97.79179810725552" ><img width="1240" height="634" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/730f8d00e817c006cb9c33171da53386.png" alt=""/></figure>
-preorder 和 postorder没什么特征，举一个post的例子观察下</p><p>而levelorder则是一<code>层</code>一层地取的：</p><figure  style="flex: 91.58050221565732" ><img width="1240" height="677" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/483fae0876dbf6b3d954f86b6341ecf5.png" alt=""/></figure>
+<figure  style="flex: 99.51845906902086" ><img width="1240" height="623" src="/archives/assets/47fe26cb82c30df966d2cbb9f8bd3ee8.png" alt=""/></figure><p>inorder一个重要特征：它是从小到大排好序的！
+<figure  style="flex: 97.79179810725552" ><img width="1240" height="634" src="/archives/assets/730f8d00e817c006cb9c33171da53386.png" alt=""/></figure>
+preorder 和 postorder没什么特征，举一个post的例子观察下</p><p>而levelorder则是一<code>层</code>一层地取的：</p><figure  style="flex: 91.58050221565732" ><img width="1240" height="677" src="/archives/assets/483fae0876dbf6b3d954f86b6341ecf5.png" alt=""/></figure>
 这就是广度优先了（<code>Breadth First Searth</code>)BFS<p>实现BFS</p><ol>
 <li>每处理一个parent的时候，把parent加到结果数组里</li>
 <li>parent的子节点加到队列里</li>
@@ -136,7 +136,7 @@ preorder 和 postorder没什么特征，举一个post的例子观察下</p><p>�
 <li>该值的child加到队列里（步骤2）</li>
 </ol>
 <p>其实就是步骤1，2的重复，比如：
-<figure  style="flex: 70.7516339869281" ><img width="866" height="612" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/80ff2df354c0700753943e83fd5cd17a.png" alt=""/></figure></p>
+<figure  style="flex: 70.7516339869281" ><img width="866" height="612" src="/archives/assets/80ff2df354c0700753943e83fd5cd17a.png" alt=""/></figure></p>
 <pre><code>[11], [6, 15] 处理第1个数11， 队列里多了两个元素6， 15
 [11, 6], [15, 3, 8] 从队列里取出6， 加入结果，它的子元素(3, 8)加入队列
 [11, 6, 15], [3, 8, 13, 17]
@@ -259,18 +259,18 @@ preorder 和 postorder没什么特征，举一个post的例子观察下</p><p>�
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -282,7 +282,7 @@ preorder 和 postorder没什么特征，举一个post的例子观察下</p><p>�
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

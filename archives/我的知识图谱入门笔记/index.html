@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -80,7 +80,7 @@
 <li>&quot;<code>www.kg.com/person/1</code>&quot;是一个IRI，用来唯一的表示“罗纳尔多”这个实体。&quot;kg:chineseName&quot;也是一个IRI，用来表示“中文名”这样一个属性。&quot;kg:&quot;是RDF文件中所定义的prefix，如下所示。</li>
 <li>@<code>prefix kg</code>: <a href="http://www.kg.com/ontology/">http://www.kg.com/ontology/</a> 即，kg:chineseName其实就是&quot;http:// www.kg.com/ontology/chineseName&quot;的缩写。</li>
 </ul>
-<p>这样知识图谱的正确表示其实是：</p><figure  style="flex: 81.6618911174785" ><img width="1140" height="698" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/055b61a7e0a74762f15ece471ec22ee8.png" alt=""/></figure><p>而不是网传的简单的画几个对象连几根线，也就是说，能用URI表示的，尽量都用URI表示。</p><h1>Identifying graph-shaped problems(应用场景)</h1>
+<p>这样知识图谱的正确表示其实是：</p><figure  style="flex: 81.6618911174785" ><img width="1140" height="698" src="/archives/assets/055b61a7e0a74762f15ece471ec22ee8.png" alt=""/></figure><p>而不是网传的简单的画几个对象连几根线，也就是说，能用URI表示的，尽量都用URI表示。</p><h1>Identifying graph-shaped problems(应用场景)</h1>
 <ul>
 <li><p>does our problem involve understanding <code>relationships</code> between entities?</p><ul>
 <li>Recommendations</li>
@@ -111,7 +111,7 @@
 </li>
 </ul>
 <h1>Neo4j</h1>
-<figure  style="flex: 88.44507845934379" ><img width="1240" height="701" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1da110e1163eb31331ea2c21528a4ae2.png" alt=""/></figure><ol>
+<figure  style="flex: 88.44507845934379" ><img width="1240" height="701" src="/archives/assets/1da110e1163eb31331ea2c21528a4ae2.png" alt=""/></figure><ol>
 <li><code>:person</code>, <code>:Car</code>, <code>:Vehicle</code> are <code>Label</code></li>
 <li>even <code>relationship</code> can also have(own) properties</li>
 </ol>
@@ -120,7 +120,7 @@
 <p><code>(p:Person:Mammal{name:'walker'})</code></p><h3>for Relationships</h3>
 <p><code>- [:HIRED {type: 'fulltime'}] -&gt;</code></p><h2>CRUD</h2>
 <h3>Create</h3>
-<figure  style="flex: 87.94326241134752" ><img width="1240" height="705" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/1664c809c2f78ab7dc14392c1ef00ac9.png" alt=""/></figure><h4>Constraints</h4>
+<figure  style="flex: 87.94326241134752" ><img width="1240" height="705" src="/archives/assets/1664c809c2f78ab7dc14392c1ef00ac9.png" alt=""/></figure><h4>Constraints</h4>
 
 <pre><code>CREATE  CONSTRAINT ON (p:Person)
 ASSERT p.name IS UNIQUE
@@ -359,18 +359,18 @@ RETURN n
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -382,7 +382,7 @@ RETURN n
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

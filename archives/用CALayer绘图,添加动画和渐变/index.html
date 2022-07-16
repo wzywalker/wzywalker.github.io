@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -104,8 +104,8 @@ gradientLayer.endPoint = CGPointMake(0, _percentage);
 gradientLayer.mask = shapeLayer; // 当作渐变图层的 mask
 </code></pre>
 <p>组合效果如下:
-<figure  style="flex: 82.6086956521739" ><img width="380" height="230" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/43ff55cd36a9fdcc4a548f9b35395d54.gif" alt=""/></figure></p><p>要绘制弧形, 对照这个图就很简单了:
-<figure  style="flex: 50.0" ><img width="400" height="400" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/99b3f00e6554f019df9d19d398777341.png" alt=""/></figure></p><p>补充知识:</p><p>1, <code>CALayer</code>的动画用不了<code>animateWithDuration:animations:completion:</code>怎么办?</p><blockquote>
+<figure  style="flex: 82.6086956521739" ><img width="380" height="230" src="/archives/assets/43ff55cd36a9fdcc4a548f9b35395d54.gif" alt=""/></figure></p><p>要绘制弧形, 对照这个图就很简单了:
+<figure  style="flex: 50.0" ><img width="400" height="400" src="/archives/assets/99b3f00e6554f019df9d19d398777341.png" alt=""/></figure></p><p>补充知识:</p><p>1, <code>CALayer</code>的动画用不了<code>animateWithDuration:animations:completion:</code>怎么办?</p><blockquote>
 <p>因为这是<code>UIView</code>的方法, 你要把它加到一个<code>CATransaction</code>里面去</p></blockquote>
 <p>2, 即使加到<code>CATransaction</code>里面了, 怎么我对<code>frame</code>做的动画还是没有生效?</p><blockquote>
 <p>因为<code>frame</code>是一个复合属性, 它由<code>position</code>, <code>bounds</code>等属性决定, 所以你只是用错了属性.</p></blockquote>
@@ -283,18 +283,18 @@ override func displayLayer(layer: CALayer) {
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -306,7 +306,7 @@ override func displayLayer(layer: CALayer) {
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>

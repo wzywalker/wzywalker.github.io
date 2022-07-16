@@ -12,14 +12,14 @@
     <meta name="template" content="Prism" />
     <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
     <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-b9d78ff38a.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
         }
 
     </script>
@@ -90,7 +90,7 @@ LCP|Sorted Suffixes|
 2|ZAZA</p><p>我们知道第一列指的是“重复个数”，也就是说，如果按我们手写的那样去遍历，至少有这么多重复的子串，重复的既是“个数”，也是“组合方式”。</p><p>所以如果我们只需要计数的话，把右边的数出来就知道有会有多少个重复的了，此例为6.</p><p>$$\tt unique\ count = \underbrace{\frac{n(n+1)}{2}}_{substr\ count} - \underbrace{\sum_{i=1}^n LCP[i]}_{duplicates}$$</p>
 <p>这是LCP的应用之一，利用了LCP本身就是在数重复次数的特征。</p><h2>K common substring problem</h2>
 <p>n个字符串，找出一个子串，它至少是k个字符串的子串，求最大子串。$2\leq k \leq n$</p><p>即如果有k=2，那么这个子串只需要是其中两个的子串就行了，如果k=n，那么就需要是每一个字符串的子串。</p><p>直接上图
-<figure  style="flex: 50.4885993485342" ><img width="1240" height="1228" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/b7cb01449aa00a46b95ca35f28751a33.png" alt=""/></figure></p><ul>
+<figure  style="flex: 50.4885993485342" ><img width="1240" height="1228" src="/archives/assets/b7cb01449aa00a46b95ca35f28751a33.png" alt=""/></figure></p><ul>
 <li>图1演示k=3时，找到了<code>ca</code>，即3个串里都有的是<code>ca</code></li>
 <li>图2演示k=2时，找到了<code>bca</code>，即<code>bca</code>存在2个串里</li>
 <li>图3演示的是用了size=4的滑窗才包含了3个字符串，以及最大匹配是<code>AG</code></li>
@@ -124,7 +124,7 @@ LCP|Sorted Suffixes|
 <li>从前面排序，客观上就把来自不同字符串的相同字母打头的子串给排到一起了</li>
 </ul>
 <p>这就是为什么在<code>Suffix</code> Array的内容里面出现Longest Common <code>Prefix</code>的内容的原因了.</p><p>聪明。</p><h2>Longest Repeated Substring (LRS)</h2>
-<figure  style="flex: 72.68464243845251" ><img width="1240" height="853" src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/archives/assets/ef47276f994f76ccabc2c60900227916.png" alt=""/></figure><p>这个比暴力遍历要简单太多，直接找LCP最大值即可</p>
+<figure  style="flex: 72.68464243845251" ><img width="1240" height="853" src="/archives/assets/ef47276f994f76ccabc2c60900227916.png" alt=""/></figure><p>这个比暴力遍历要简单太多，直接找LCP最大值即可</p>
             </div>
         </article>
         <div class="prism-post-meta col-md-8 offset-md-2">
@@ -237,18 +237,18 @@ LCP|Sorted Suffixes|
                     var site_build_date = "2019-12-06T12:00+08:00"
 
                 </script>
-                <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/prism-efa8685153.js"></script>
+                <script src="/assets/prism-efa8685153.js"></script>
             </footer>
         </div>
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
 
     <!--katex-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/katex.min.js"></script>
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
     <script>
         mathOpts = {
             delimiters: [
@@ -260,7 +260,7 @@ LCP|Sorted Suffixes|
         };
 
     </script>
-    <script defer src="https://cdn.jsdelivr.net/gh/wzywalker/wzywalker.github.io@main/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
 
     
 </body>
