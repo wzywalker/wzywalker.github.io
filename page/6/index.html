@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/b098f530e4b4a4a690a595806babc6a7.json"
         }
 
     </script>
@@ -55,6 +55,138 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E5%87%A0%E7%A7%8D%E6%95%99%E6%9D%90%E9%87%8C%E6%B1%82%E8%A7%A3Ax%3D0%E7%AC%94%E8%AE%B0/" target="_self">几种教材里求解Ax=0笔记</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/%E5%87%A0%E7%A7%8D%E6%95%99%E6%9D%90%E9%87%8C%E6%B1%82%E8%A7%A3Ax%3D0%E7%AC%94%E8%AE%B0/" target="_self">
+                <time class="text-uppercase">
+                    March 05 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>如果一个矩阵化简为</p><p>$$
+A=
+\left[
+    \begin{array}{cccc|c}
+    1&amp;2&amp;2&amp;2&amp;0 \\
+    0&amp;0&amp;1&amp;2&amp;0 \\
+    0&amp;0&amp;0&amp;0&amp;0
+    \end{array}
+\right] \tag{0}
+$$</p>
+<p>求解$\bf{A}\it\vec{x}=0$</p><p>对比在不同教材中的解题思路。</p><h2>可汗学院解法</h2>
+<p>先继续化简为<code>Reduced Row Echelon Form</code> (RREF)</p><p>$$
+\left[
+    \begin{array}{cccc|c}
+    1&amp;2&amp;0&amp;-2&amp;0 \\
+    0&amp;0&amp;1&amp;2&amp;0 \\
+    0&amp;0&amp;0&amp;0&amp;0
+    \end{array}
+\right] \tag{1. 1}
+$$</p>
+<p>还原为方程组:</p><p>$$ 
+\begin{cases}
+    x_1=-2x_2+2x_4 \\
+    x_3=-2x_4\\
+\end{cases} \tag{1.2}
+$$</p>
+<p>用$x_2$和$x_4$来表示$x_1$和$x_3$，填满矩阵相应位置即可得解：</p><p>$$
+\left[\begin{smallmatrix} x_1\\x_2\\x_3\\x_4 \end{smallmatrix}\right]=
+x_2 \left[\begin{smallmatrix} -2\\1\\0\\0 \end{smallmatrix}\right] +
+x_4 \left[\begin{smallmatrix} 2\\0\\-2\\1 \end{smallmatrix}\right] \tag{1.3}
+$$</p>
+<p>如果不是太直观的话，其实就是把以下方程写成了矩阵的形式：</p><p>$$
+\begin{cases}
+    x_1=-2x_2+2x_4 \\
+    x_2=x_2\\
+    x_3=-2x_4\\
+    x_4=x_4
+\end{cases}\tag{1. 4}
+$$</p>
+<hr />
+<h2>剑桥教材解法</h2>
+<blockquote>
+<p>《Mathematics for Machine Learning》</p></blockquote>
+<p>by Marc Peter Deisenroth, A Aldo Faisal, Cheng Soon Ong,
+Cambridge University</p><p>化简为<code>RREF</code>后，观察到$c_1$和$c_3$列可组成一个单位矩阵（<code>identity matrix</code>）$\left[\begin{smallmatrix} 1&amp;0\0&amp;1 \end{smallmatrix}\right]$</p><blockquote>
+<p>如果是解$\bf{A}\it\vec{x}=b$，此时可用此矩阵求出特解，但此处是0，所以此步省略，直接求通解</p></blockquote>
+<p>我们用$c_1$和$c_3$来表示其它列：</p><p>$$
+\begin{cases}
+c_2=2c_1 \\
+c_4=-2c_1+2c_3
+\end{cases} \tag{2.1}
+$$</p>
+<p>我们利用$c_2-c_2=0, c_4-c_4=0$来构造0值（通解都是求0）：</p><p>$$
+\begin{cases}
+2c_1-\color{green}{c_2}=0 \\
+-2c_1+2c_3-\color{green}{c_4}=0
+\end{cases} \tag{2.2}
+$$</p>
+<p>补齐方程，整理顺序（以便直观地看到系数）得：</p><p>$$
+\begin{cases}
+\color{red}2c_1\color{red}{-1}c_2+\color{red}{0}c_3+\color{red}{0}c_4=0 \\
+\color{red}{-2}c_1+\color{red}0c_2+\color{red}2c_3\color{red}{-1}c_4=0
+\end{cases} \tag{2. 3}
+$$</p>
+<p>因为矩阵乘向量可以理解为矩阵和<code>列向量</code>$\vec{c}$与向量$x$的点积之和$\sum_{i=1}^4 x_ic_i$，所以红色的系数部分其实就是$(x_1, x_2, x_3, x_4)$，得解：</p><p>$$
+\left\{x\in\mathbb{R}^4:x=\lambda_1\left[\begin{smallmatrix} 2\\-1\\0\\0 \end{smallmatrix}\right]+\lambda_2\left[\begin{smallmatrix} 2\\0\\-2\\1 \end{smallmatrix}\right],\lambda_1,\lambda_2\in\mathbb{R}\right\} \tag{2.4}
+$$</p>
+<blockquote>
+<p>与<strong>可汗学院</strong>的解得到的两个向量比较下，是一样的，都是$[2,-1,0,0]^T$和$[2,0,-2,1]^T$。</p></blockquote>
+<hr />
+<p>##麻省理工教材解法</p><blockquote>
+<p>《Introduction to Linear Alegebra》</p></blockquote>
+<p>by Gilbert Strang, 
+Massachusetts Institute of Technology</p><p>无需继续化简为<code>RREF</code>，直接对方程组：</p><p>$$ 
+\begin{cases}
+    x_1=-2x_2+2x_4 \\
+    x_3=-2x_4\\
+\end{cases} \tag{3.1}
+$$</p>
+<p>使用特解。考虑到$x_1,x_3$为主元（<code>pivot</code>），那么分别设$[\begin{smallmatrix} x_2 \ x_4 \end{smallmatrix}]$ 为$[\begin{smallmatrix} 1 \ 0 \end{smallmatrix}]$ 和$[\begin{smallmatrix} 0 \ 1 \end{smallmatrix}]$ 。
+两种情况各代入一次，解出$x_1,x_3$，仍然是$[2,\color{red}{-1},0,\color{red}0]^T$和$[2,\color{red}0,-2,\color{red}1]^T$，红色标识了代入值，黑色即为代入后的解。</p><p><code>MIT</code>不止提供了这一个思路，解法二如下：</p><p>这次需要化简为<code>RREF</code>，然后互换第<code>2</code>列和第<code>3</code>列（<strong><code>记住这次互换</code></strong>），还记得剑桥的方法里发现$c_1,c_3$能组成一个单位矩阵吗？这里的目的是通过移动列，直接在表现形式上变成单位矩阵：</p><p>$$
+\left[
+    \begin{array}{cc:cc}
+    1&amp;0&amp;2&amp;-2\\
+    0&amp;1&amp;0&amp;2\\
+    \hdashline
+    0&amp;0&amp;0&amp;0
+    \end{array}
+\right] \tag{3.2}
+$$</p>
+<p>这里把用虚线反矩阵划成了四个区，左上角为一个<code>Identity Matrix</code>，我们记为<code>I</code>，右上角为自由列，我们记为<code>F</code>，矩阵（这次我们标记为<strong>R</strong>）变成了</p><p>$$
+\bf{\it{R}}=
+\begin{bmatrix}
+I&amp;F\\
+0&amp;0
+\end{bmatrix} \tag{3. 3}
+$$</p>
+<p>求解$\bf{\it{R}}\it\vec{x}=0$，得到$x=\left[\begin{smallmatrix} -F\I \end{smallmatrix}\right]$，把<strong>F</strong>和<strong>I</strong>分别展开(<code>记得F要乘上-1</code>)：</p><p>$$
+\begin{bmatrix}
+-2&amp;2\\
+0&amp;-2\\
+1&amp;0\\
+0&amp;1
+\end{bmatrix} \tag{3.4}
+$$</p>
+<p>还记得前面加粗提示的交换了两列吗？我们交换了两列，倒置后，我们要把第<code>2, 3</code><strong>行</strong>给交换一下：</p><p>$$
+\begin{bmatrix}
+-2&amp;2\\
+1&amp;0\\
+0&amp;-2\\
+0&amp;1
+\end{bmatrix} \tag{3.5}
+$$</p>
+<p>是不是又得到了两个熟悉的$[2,-1,0,0]^T$和$[2,0,-2,1]^T$。？</p><blockquote>
+<p>当时看到Gilbert教授简单粗暴地用$[\begin{smallmatrix} 1 \ 0 \end{smallmatrix}]$ 和$[\begin{smallmatrix} 0 \ 1 \end{smallmatrix}]$ 直接代入求出解，道理都不跟你讲，然后又给你画大饼，又是F又是I的，觉得可能他的课程不适合初学者，LOL。不过，这些Gilbert教授在此演示的解法并不适用于$\bf{A}\it\vec{x}=b$。</p></blockquote>
+<p>在此特用笔记把几本教材里的思路都记录一下。</p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E5%87%A0%E7%A7%8D%E6%95%99%E6%9D%90%E9%87%8C%E6%B1%82%E8%A7%A3Ax%3D0%E7%AC%94%E8%AE%B0/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/scikit-learn%E5%AE%98%E7%BD%91%E6%95%99%E7%A8%8B%E7%AC%94%E8%AE%B0%28%E4%B8%80%29/" target="_self">scikit-learn官网教程笔记(一)</a></h1>
@@ -879,6 +1011,35 @@ $$</p>
     </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/" target="_self">add_subplots方法传递额外参数</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/" target="_self">
+                <time class="text-uppercase">
+                    January 14 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>用matplotlib绘制3D图，最快的用法</p><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+
+<span class="n">此后即可</span>  <span class="err">`</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="err">`</span><span class="p">,</span> <span class="err">`</span><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="err">`</span><span class="n">等</span><span class="err">，</span><span class="n">具体用法请翻阅文档</span>
+</pre></div>
+<p>其次，这样：</p><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+</pre></div>
+<p>而我喜欢要同时绘多栏图的时候喜欢用<code>plt.subplots</code>方法，却发现传不进<code>projection</code>参数，仔细看文档，是支持用<code>subplot_kw</code>来为它添加的subplots来进行属性设置的，这样可以保持外层api干净而不必把subplots的所有属性都复制一遍</p><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s2">&quot;subplot_kw&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;3d&#39;</span><span class="p">}})</span>
+<span class="c1"># 或</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">))</span>
+</pre></div>
+<p>看你自己习惯了。
+<figure  style="flex: 53.95996518711923" ><img width="1240" height="1149" src="/archives/assets/e131d84109722ad314d449f86313f68e.png" alt=""/></figure></p></div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E4%BA%8C%E5%88%86%E6%B3%95%E3%80%81%E7%89%9B%E9%A1%BF%E6%B3%95%E5%92%8C%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E5%BC%80%E6%A0%B9%E5%8F%B7%E5%92%8C%E8%A7%A3%E6%96%B9%E7%A8%8B/" target="_self">二分法、牛顿法和梯度下降法开根号和解方程</a></h1>
         <div class="prism-post-time">
             <a class="no-link" href="/archives/%E4%BA%8C%E5%88%86%E6%B3%95%E3%80%81%E7%89%9B%E9%A1%BF%E6%B3%95%E5%92%8C%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E5%BC%80%E6%A0%B9%E5%8F%B7%E5%92%8C%E8%A7%A3%E6%96%B9%E7%A8%8B/" target="_self">
@@ -1086,35 +1247,6 @@ sin(59.999998857570986) ≈ sqrt(3)/2
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E4%BA%8C%E5%88%86%E6%B3%95%E3%80%81%E7%89%9B%E9%A1%BF%E6%B3%95%E5%92%8C%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E5%BC%80%E6%A0%B9%E5%8F%B7%E5%92%8C%E8%A7%A3%E6%96%B9%E7%A8%8B/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/" target="_self">add_subplots方法传递额外参数</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/" target="_self">
-                <time class="text-uppercase">
-                    January 14 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>用matplotlib绘制3D图，最快的用法</p><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
-
-<span class="n">此后即可</span>  <span class="err">`</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="err">`</span><span class="p">,</span> <span class="err">`</span><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="err">`</span><span class="n">等</span><span class="err">，</span><span class="n">具体用法请翻阅文档</span>
-</pre></div>
-<p>其次，这样：</p><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
-</pre></div>
-<p>而我喜欢要同时绘多栏图的时候喜欢用<code>plt.subplots</code>方法，却发现传不进<code>projection</code>参数，仔细看文档，是支持用<code>subplot_kw</code>来为它添加的subplots来进行属性设置的，这样可以保持外层api干净而不必把subplots的所有属性都复制一遍</p><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s2">&quot;subplot_kw&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;3d&#39;</span><span class="p">}})</span>
-<span class="c1"># 或</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">))</span>
-</pre></div>
-<p>看你自己习惯了。
-<figure  style="flex: 53.95996518711923" ><img width="1240" height="1149" src="/archives/assets/e131d84109722ad314d449f86313f68e.png" alt=""/></figure></p></div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/add_subplots%E6%96%B9%E6%B3%95%E4%BC%A0%E9%80%92%E9%A2%9D%E5%A4%96%E5%8F%82%E6%95%B0/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>
@@ -1542,141 +1674,6 @@ g.throw（'出错了'）;
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/SwiftUI%E7%9A%84ViewModifier%E5%92%8CAnimation%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/%E4%BB%8E%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6%E5%B9%B6%E7%A7%BB%E5%8A%A8%E7%9A%84shell%E5%91%BD%E4%BB%A4%E8%AF%B4%E5%BC%80%E5%8E%BB/" target="_self">从查找文件并移动的shell命令说开去</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/%E4%BB%8E%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6%E5%B9%B6%E7%A7%BB%E5%8A%A8%E7%9A%84shell%E5%91%BD%E4%BB%A4%E8%AF%B4%E5%BC%80%E5%8E%BB/" target="_self">
-                <time class="text-uppercase">
-                    October 13 2020
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><p>一个不能更常见的需求: 从一大堆下载目录(或别的目录)里, 查找指定的文件, 并移动/复制到指定的文件夹, 如果用鼠标点开一个个的文件夹, 还有文件夹里的文件夹, 估计要累死, 当然, 即使自己不会, 也很容易查到两个shell命令:</p>
-<pre><code>find path_A -name &quot;*AAA*&quot; -print0 | xargs -0 -I {} mv {} path_B
-find path_A -maxdepth 1 -name &quot;*AAA*&quot; -exec mv {} path_B \; 
-</code></pre>
-<p>都能达到目的, 第二条命令容易懂很多(<code>-maxdepth</code>去掉就是recrusive search), 去<code>exec</code>一个<code>mv</code>命令, 记得加上表示语句结束的分号就好了, 我的关注点在第一条, 趁机学学<code>xargs</code>吧.</p><p>查到<a href="https://www.cnblogs.com/wangqiguo/p/6464234.html">这篇文章</a>说的不错, 先摘几个要点:</p>
-<pre><code>echo 'main' | cat test.cpp
-</code></pre>
-<p>这条命令并不会把<code>main</code>输出, 因为管道确实将其作为标准输入给了<code>cat</code>命令作为标准输入, 但因为有了<code>test.cpp</code>这个命令行参数, <code>cat</code>命令就没有去读标准输入的参数了.<br />
-其实基本上linux的命令中很多的命令的设计是先从命令行参数中获取参数，然后从标准输入中读取，反映在程序上，命令行参数是通过main函数<code>int main(int argc,char*argv[])</code>的函数参数获得的，而标准输入则是通过标准输入函数例如C语言中的scanf读取到的。他们获取的地方是不一样的。例如：</p>
-<pre><code>echo 'main' | cat
-</code></pre>
-<p>这条命令中cat会从其标准输入中读取内容并处理，也就是会输出 'main' 字符串。echo命令将其标准输出的内容 'main' 通过管道定向到 cat 的标准输入中。</p>
-<pre><code>cat
-</code></pre>
-<p>如果仅仅输入cat并回车，则该程序会等待输入，我们需要从键盘输入要处理的内容给cat，此时cat也是从标准输入中得到要处理的内容的，因为我们的cat命令行中也没有指定要处理的文件名。大多数命令有一个参数<code>-</code>如果直接在命令的最后指定 <code>-</code>则表示从标准输入中读取，例如：</p>
-<pre><code>echo 'main' | cat -
-</code></pre>
-<p>这样也是可行的，会显示 'main' 字符串，同样输入	<code>cat -</code>直接回车与输入 <code>cat</code>直接回车的效果也一样，但是如果这样呢：</p>
-<pre><code>echo 'main' | cat test.cpp -
-</code></pre>
-<p>同时指定test.cpp 和 - 参数，此时cat程序会先输出test.cpp的内容，然后输出标准输入'main'字符串，如果换一下顺序变成这样：</p>
-<pre><code>echo 'main' | cat - test.cpp
-</code></pre>
-<p>则会先输出标准输入'main'字符串，然后输出test.cpp文件的内容。如果去掉这里的<code>-</code>参数，则cat只会输出test.cpp文件的内容。另外如果同时传递标准输入和文件名，grep也会同时处理这两个输入，例如：</p>
-<pre><code>echo 'main' | grep 'main' test.cpp -
-</code></pre>
-<p>此处同上, 如果不加<code>-</code>, 则只会在test.cpp中搜索&quot;main&quot;, 加了<code>-</code>, 则会在文件和标准输出中都检查关键字.</p><p>另外很多程序是不处理标准输入的，例如<code>kill</code>,<code>rm</code>这些程序如果命令行参数中没有指定要处理的内容则不会默认从标准输入中读取。所以：</p>
-<pre><code>echo '516' | kill
-</code></pre>
-<p>这种命里是不能执行的。</p>
-<pre><code>echo 'test' | rm -f
-</code></pre>
-<p>这种也是没有效果的。</p><p>有时候我们的脚本却需要<code>echo '516' | kill</code>这样的效果，例如<code>ps -ef | grep 'ddd' | kill</code>这样的效果，筛选出符合某条件的进程pid然后结束。这种需求对于我们来说是理所当然而且是很常见的，那么应该怎样达到这样的效果呢。有几个解决办法：</p>
-<pre><code>kill `ps -ef | grep 'ddd'`    
-</code></pre>
-<p>这个时候实际上等同于拼接字符串得到的命令，其效果类似于<code>kill $pid</code></p>
-<pre><code>for procid in $(ps -aux | grep &quot;some search&quot; | awk '{print $2}'); do kill -9 $procid; done   
-</code></pre>
-<p>其实与第一种原理一样，只不过需要多次kill的时候是循环处理的，每次处理一个</p>
-<pre><code>ps -ef | grep 'ddd' | xargs kill  
-</code></pre>
-<p>OK，使用了<code>xargs</code>命令，铺垫了这么久终于铺到了主题上。<code>xargs</code>命令可以通过管道接受字符串，并将接收到的字符串<strong>通过空格分割成许多参数</strong>(默认情况下是通过空格分割) 然后将参数传递给其后面的命令，作为后面命令的命令行参数</p><p>###xargs与管道的区别</p>
-<pre><code>echo '--help' | cat
-echo '--help' | xargs cat
-```	
-第一句输出`--help`, 第二句相当于执行了`cat --help`, 所以管道是把前面的输出当成后面的输入, 而`xargs`则是把前面的输出当成了后面的命令行参数.
-
-`xargs`的命令参数可以查我给的引用原文, 说得详细且有实例, 或者看下面的简单介绍:
-
-</code></pre>
-<p>-0，--null：以\0作为分隔符，接受到的特殊字符将当作文本符号处理；<br />
--d：指定分段的分隔符，默认分隔字符为空白字符；
--a，--arg-file=file：指定命令标准输入的来源文件；
--e'FLAG' 或者-E 'FLAG'：指定一个终止符号，当xargs命令匹配到第一个FLAG后，停止传递，并退出命令；
--p：每当xargs执行一个分段时，询问一次用户是否执行；
--t：表示先打印执行的命令再输出；
--n NUM：表示一个分段包含的参数个数，参数之间以分隔符隔开，默认是将所有的参数当作一个分段输出；
--i：用于将分段分批传递给其后的{}进行输出，分段会替换{}所在的位置进行输出；
--I &quot;FLAG&quot;：可指定分段的替换符号，分段会分批替换到符号所在的位置进行输出执行；
--L：指定每次执行的最大的非空行的行数；</p>
-<pre><code>我们来说回&quot;查找并移动&quot;这个原始需求.
-
-首先, 前面铺垫的那么多`-`与标准输入的内容其实与`find`命令并无多大关系. 我们看这里面用到的三个参数
-
-### -print0
-用过`find`都知道它的结果是以换行符分隔的, 而加上`-print0`选项则可以把它换成`\0`(其实就是`NUL`)来分隔. 嗯, 不是空格, 但是至少变成了一行, 有点命令行参数的意思了吧?
-
-### -0
-就是`--null`, 以`null`为分隔符, 因为我们在前面设置`find`的输出为`null`, 这里当然要设置相应的分隔符. 如果仔细读了前面的参数表, 会发现其实它就是`-d '\0'`的简化版.
-
-### -I
-这个命令的英文说明看得我云里雾里, 一贯的不说人话风格, 我还是用一个实例来说明它的用法吧
-
-我在一个目录里建了几个文件, 用`find`把它找出来并用`xargs`把它`echo`出来:
-
-</code></pre>
-<p>$find . -name &quot;*.txt&quot; -print0 | xargs -p -0 echo
-echo ./c.txt ./b.txt ./a.txt?...y
-./c.txt ./b.txt ./a.txt</p>
-<pre><code>    
-注意, 我加了一个`-p`参数, 这是为了在执行命令前先把命令打印出来, 这样一来你有机会检查生成的命令最终是不是你想要的, 另一方面也能检查你的命令是否执行了多次.
-
-根据上面的演示, 我们发现一个问题, 就是如果是执行`mv file path/`这样的命令, 也就是说我们需要在命令**中间**插入管道过来的参数, 是不行的, 似乎应该用占位符.
-
-反向学习, 我们既然已经知道了`-I replstr`是正确答案, 那就尝试一下吧:
-
-</code></pre>
-<p>$find . -name &quot;*.txt&quot; -print0 | xargs -p -0 -I {} echo {} &quot;HELLO&quot;
-echo ./c.txt HELLO?...y
-./c.txt HELLO
-echo ./b.txt HELLO?...y
-./b.txt HELLO
-echo ./a.txt HELLO?...y
-./a.txt HELLO</p>
-<pre><code>
-首先, 我们发现, 我们成功地在`echo`和`HELLO`间插入了管道过来的参数, 其次, 它还把参数用分隔符自行拆开了一次执行一个(又有点类似于添加了`-n 1`的选项的意思).
-
-现在我们明白了, 网上查到的那条命令最终就是执行了N次`mv FILE /path`, 这就是`-I {}`.
-
-Furthermore, 我们把标准答案里那高大上的`{}`换一下如何?
-
-</code></pre>
-<p>$ find . -name &quot;*.txt&quot; -print0 | xargs -p -0 -I 'M' echo 'M' &quot;HELLO&quot;
-echo ./c.txt HELLO?...y
-./c.txt HELLO
-echo ./b.txt HELLO?...y
-./b.txt HELLO
-echo ./a.txt HELLO?...y
-./a.txt HELLO</p><p>$ find . -name &quot;*.txt&quot; -print0 | xargs -p -0 -I M echo M &quot;HELLO&quot;
-echo ./c.txt HELLO?...y
-./c.txt HELLO
-echo ./b.txt HELLO?...y
-./b.txt HELLO
-echo ./a.txt HELLO?...y
-./a.txt HELLO</p>
-<pre><code>
-这里我分别用了`'M'`和`M`, 都不影响其作为占位符的作用, 不要被那故弄玄虚的`{}`给迷惑了. 之所以用`{}`应该还是它更好被辨识和表义, 并不是大括号本身是什么语法.
-</code></pre>
-</div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/%E4%BB%8E%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6%E5%B9%B6%E7%A7%BB%E5%8A%A8%E7%9A%84shell%E5%91%BD%E4%BB%A4%E8%AF%B4%E5%BC%80%E5%8E%BB/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>

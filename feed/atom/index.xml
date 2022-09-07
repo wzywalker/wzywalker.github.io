@@ -1,14 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="english"><id>/</id><title>walker's code blog</title><updated>2022-07-16T10:04:37.651874+08:06</updated><author><name>walker</name><email>walker.wzy@gmail.com</email></author><link href="/" rel="alternate"/><generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator><logo>/android-chrome-512x512.png</logo><subtitle>coder, reader</subtitle><entry><id>/archives/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/</id><title>翻转二叉树</title><updated>2022-07-16T10:04:37.652347+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;最近在找工作，所以这些算法梗又出现在了我的阅读视野里，比如经典的homebrew作者吐槽的翻转二叉树的问题。
-&lt;figure  style="flex: 86.71052631578948" &gt;&lt;img width="659" height="380" src="/archives/assets/4b282d39e440d597c619d781ee3b690e.png" alt=""/&gt;&lt;/figure&gt;&lt;/p&gt;&lt;p&gt;我本以为是根和叶节点倒转过来，原来是同层里面的左右翻转。&lt;/p&gt;&lt;p&gt;那么就是把左边换到右边，右边换到左边呗，可以考虑递归。我一直用一个原则理解递归，就是把命令传达下去（比如上面的左右互换，就完了），而不关心细节，只有最末端的那个大头兵才是真正做业务的人，写了一下，递归加业务也就4行代码：&lt;/p&gt;&lt;figure  style="flex: 80.10335917312662" &gt;&lt;img width="1240" height="774" src="/archives/assets/8defc3430ca00b8a8501fb6d8356c6fb.png" alt=""/&gt;&lt;/figure&gt;&lt;p&gt;具体到这个问题，就是我把left和right互换就是了
-然后left和right你们做好自己的子级的互换，我不管，所以核心代码就一句
-&lt;code&gt;left, right = right, left&lt;/code&gt;，前面是为了稳妥，通过了之后，直接用python这种左右互换的特性，那就真是一句代码了：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;invertTree&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;TreeNode&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;TreeNode&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;None&lt;/span&gt;
-    &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;right&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;left&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invertTree&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;left&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invertTree&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;right&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-</content><link href="/archives/%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="alternate"/><published>2021-12-08T00:00:00+08:06</published></entry><entry><id>/archives/View/</id><title>Programming iOS 14 - View</title><updated>2022-07-16T10:04:37.652310+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第1章&lt;/p&gt;&lt;hr /&gt;
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="english"><id>/</id><title>walker's code blog</title><updated>2022-09-07T16:12:34.060007+08:06</updated><author><name>walker</name><email>walker.wzy@gmail.com</email></author><link href="/" rel="alternate"/><generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator><logo>/android-chrome-512x512.png</logo><subtitle>coder, reader</subtitle><entry><id>/archives/View/</id><title>Programming iOS 14 - View</title><updated>2022-09-07T16:12:34.060488+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第1章&lt;/p&gt;&lt;hr /&gt;
 &lt;h1&gt;View&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;A view knows how to draw itself into a rectangular area of the interface.&lt;/li&gt;
@@ -432,7 +423,7 @@ constraint(lessThanOrEqualToSystemSpacingBelow:multiplier:)
 &lt;li&gt;call &lt;code&gt;super&lt;/code&gt;, causing all the subviews to adopt their new frames&lt;/li&gt;
 &lt;li&gt;examine those frames, 如果不满意，则对&lt;code&gt;frame&lt;/code&gt;进行微调（或者&lt;code&gt;bounds&lt;/code&gt;和&lt;code&gt;center&lt;/code&gt;）&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;这也是autolayout engine自己的步骤，要注意的是你必须要和autolayout engine来协作，并且&lt;strong&gt;不要&lt;/strong&gt;调用&lt;code&gt;setNeedsUpdateConstraints&lt;/code&gt;(时机已过)&lt;/p&gt;</content><link href="/archives/View/" rel="alternate"/><published>2021-12-22T00:00:00+08:06</published></entry><entry><id>/archives/Drawing/</id><title>Programming iOS 14 - Drawing</title><updated>2022-07-16T10:04:37.652273+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第2章&lt;/p&gt;&lt;hr /&gt;
+&lt;p&gt;这也是autolayout engine自己的步骤，要注意的是你必须要和autolayout engine来协作，并且&lt;strong&gt;不要&lt;/strong&gt;调用&lt;code&gt;setNeedsUpdateConstraints&lt;/code&gt;(时机已过)&lt;/p&gt;</content><link href="/archives/View/" rel="alternate"/><published>2021-12-22T00:00:00+08:06</published></entry><entry><id>/archives/Drawing/</id><title>Programming iOS 14 - Drawing</title><updated>2022-09-07T16:12:34.060451+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第2章&lt;/p&gt;&lt;hr /&gt;
 &lt;h1&gt;Drawing&lt;/h1&gt;
 &lt;p&gt;Many UIView subclasses, such as a UIButton or a UILabel, know how to draw themselves.&lt;/p&gt;&lt;p&gt;A &lt;em&gt;pure UIView&lt;/em&gt; is all about drawing, and it leaves that drawing largely up to you.&lt;/p&gt;&lt;h2&gt;Images and Image Views&lt;/h2&gt;
 &lt;p&gt;图片可以来自文件，代码，或网络。&lt;/p&gt;&lt;h3&gt;Image Files&lt;/h3&gt;
@@ -905,7 +896,7 @@ CIImage 不是一个&lt;code&gt;displayaable image&lt;/code&gt;&lt;/p&gt;&lt;ul&
 &lt;figure  style="flex: 77.47747747747748" &gt;&lt;img width="688" height="444" src="/archives/assets/0059ea4156dffb9df15e77df8a87f971.png" alt=""/&gt;&lt;/figure&gt;&lt;p&gt;注意，语法虽然是先处理context，再绘制，其实只是告知坐标系的变化，绘制的时候自动应用这些变换。&lt;/p&gt;&lt;h3&gt;Erasing&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;clear(_:)&lt;/code&gt;擦除行为取决于context是透明还是实心的（透明擦成透明，实心擦成黑色），只要不是opaque，通通理解为透明，比如background color是nil, 或0.9999的透明度。&lt;/p&gt;&lt;h2&gt;Points and Pixels&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;con.fill(CGRect(100,0,1.0/self.contentScaleFactor,100))&lt;/code&gt;应用contentScaleFactor画一条在任何屏幕上都锐利的1像素直线。&lt;/p&gt;&lt;h2&gt;Content Mode&lt;/h2&gt;
-&lt;p&gt;the drawing system will &lt;code&gt;avoid&lt;/code&gt; asking a view to &lt;code&gt;redraw&lt;/code&gt; itself from scratch if possible; instead, it will use the &lt;code&gt;cached&lt;/code&gt; result of the previous drawing operation (the &lt;strong&gt;bitmap backing store&lt;/strong&gt;).&lt;/p&gt;&lt;p&gt;If the view is resized, the system may simply stretch or shrink or reposition the cached drawing, if your contentMode setting instructs it to do so.&lt;/p&gt;&lt;p&gt;&lt;code&gt;draw(_:)&lt;/code&gt;从原点开始绘制，所以你的&lt;code&gt;contentMode&lt;/code&gt;也要相应设置为&lt;code&gt;topLeft&lt;/code&gt;。而如果设置为&lt;code&gt;.redraw&lt;/code&gt;，则不会使用cached content，每当view被resize的时候，就会调用&lt;code&gt;setNeedsDisplay&lt;/code&gt;方法，最终触发&lt;code&gt;draw(_:)&lt;/code&gt;进行重绘。&lt;/p&gt;</content><link href="/archives/Drawing/" rel="alternate"/><published>2021-12-25T00:00:00+08:06</published></entry><entry><id>/archives/%E3%80%8AEffective-Objective-C-2.0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/</id><title>《Effective Objective-C 2.0》笔记第1-2章</title><updated>2022-07-16T10:04:37.652218+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;figure class="vertical-figure" style="flex: 38.0" &gt;&lt;img width="912" height="1200" src="/archives/assets/ac920d0dab7ba40befbff58ed826b587.png" alt=""/&gt;&lt;/figure&gt;&lt;blockquote&gt;
+&lt;p&gt;the drawing system will &lt;code&gt;avoid&lt;/code&gt; asking a view to &lt;code&gt;redraw&lt;/code&gt; itself from scratch if possible; instead, it will use the &lt;code&gt;cached&lt;/code&gt; result of the previous drawing operation (the &lt;strong&gt;bitmap backing store&lt;/strong&gt;).&lt;/p&gt;&lt;p&gt;If the view is resized, the system may simply stretch or shrink or reposition the cached drawing, if your contentMode setting instructs it to do so.&lt;/p&gt;&lt;p&gt;&lt;code&gt;draw(_:)&lt;/code&gt;从原点开始绘制，所以你的&lt;code&gt;contentMode&lt;/code&gt;也要相应设置为&lt;code&gt;topLeft&lt;/code&gt;。而如果设置为&lt;code&gt;.redraw&lt;/code&gt;，则不会使用cached content，每当view被resize的时候，就会调用&lt;code&gt;setNeedsDisplay&lt;/code&gt;方法，最终触发&lt;code&gt;draw(_:)&lt;/code&gt;进行重绘。&lt;/p&gt;</content><link href="/archives/Drawing/" rel="alternate"/><published>2021-12-25T00:00:00+08:06</published></entry><entry><id>/archives/%E3%80%8AEffective-Objective-C-2.0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/</id><title>《Effective Objective-C 2.0》笔记第1-2章</title><updated>2022-09-07T16:12:34.060394+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;figure class="vertical-figure" style="flex: 38.0" &gt;&lt;img width="912" height="1200" src="/archives/assets/ac920d0dab7ba40befbff58ed826b587.png" alt=""/&gt;&lt;/figure&gt;&lt;blockquote&gt;
 &lt;p&gt;这个书当然中文版的，也很经典，我也读过了，但是嘛，老规矩，有原版还是读一遍原版，再加上英文水平也只有那么好，有机会能多读读在就多读读吧。一共就7章，52节，200多页，并不多。
 此外，因为很多名词其实我们平时直接叫的就是英文，中文版里统统都给了一个中文翻译，反而更陌生了，有种“访达”的即视感。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h1&gt;Chapter 1: Accustoming Yourself to Objective-C&lt;/h1&gt;
@@ -1204,7 +1195,7 @@ CIImage 不是一个&lt;code&gt;displayaable image&lt;/code&gt;&lt;/p&gt;&lt;ul&
 &lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;objc_removeAssociatedObjects&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;id&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;书中写了一个例子，alertView的代理方法来处理按了什么键，而一个页面中如果有多个alertView，且用同一个代理对象，那么处理需要更精细（比如需要知道是哪个警告框弹的，我一般用tag）。
-而如果把处理方法定义为一个block，并把它关联到UIAlertView类，那么处理逻辑就可以跟定义alertView写在一起了。&lt;/p&gt;&lt;p&gt;todo, item 11-14&lt;/p&gt;</content><link href="/archives/%E3%80%8AEffective-Objective-C-2.0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/" rel="alternate"/><published>2022-01-14T00:00:00+08:06</published></entry><entry><id>/archives/Layer/</id><title>Programming iOS 14 - Layer</title><updated>2022-07-16T10:04:37.652181+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第3章&lt;/p&gt;&lt;hr /&gt;
+而如果把处理方法定义为一个block，并把它关联到UIAlertView类，那么处理逻辑就可以跟定义alertView写在一起了。&lt;/p&gt;&lt;p&gt;todo, item 11-14&lt;/p&gt;</content><link href="/archives/%E3%80%8AEffective-Objective-C-2.0%E3%80%8B%E7%AC%94%E8%AE%B0%E7%AC%AC1-2%E7%AB%A0/" rel="alternate"/><published>2022-01-14T00:00:00+08:06</published></entry><entry><id>/archives/Layer/</id><title>Programming iOS 14 - Layer</title><updated>2022-09-07T16:12:34.060358+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;《Programming iOS 14: Dive Deep into Views, View Controllers, and Frameworks》第3章&lt;/p&gt;&lt;hr /&gt;
 &lt;h1&gt;Layers&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;A UIView does not actually &lt;strong&gt;draw itself&lt;/strong&gt; onto the screen; it draws itself &lt;strong&gt;into its layer&lt;/strong&gt;, and it is the layer that is portrayed on the screen.&lt;/li&gt;
@@ -1502,7 +1493,7 @@ CIImage 不是一个&lt;code&gt;displayaable image&lt;/code&gt;&lt;/p&gt;&lt;ul&
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-</content><link href="/archives/Layer/" rel="alternate"/><published>2022-02-18T00:00:00+08:06</published></entry><entry><id>/archives/hittest/</id><title>hitTest示例</title><updated>2022-07-16T10:04:37.652142+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;往窗口里添加两个自定义的view，这样每个view的&lt;code&gt;hitTest&lt;/code&gt;方法被访问的时候我们就能log一下：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;import&lt;/span&gt; &lt;span class="nc"&gt;UIKit&lt;/span&gt;
+</content><link href="/archives/Layer/" rel="alternate"/><published>2022-02-18T00:00:00+08:06</published></entry><entry><id>/archives/hittest/</id><title>hitTest示例</title><updated>2022-09-07T16:12:34.060322+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;往窗口里添加两个自定义的view，这样每个view的&lt;code&gt;hitTest&lt;/code&gt;方法被访问的时候我们就能log一下：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;import&lt;/span&gt; &lt;span class="nc"&gt;UIKit&lt;/span&gt;
 
 &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ViewController&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIViewController&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
 
@@ -1633,7 +1624,7 @@ Yes, it’s normal. The system may tweak the point being hit tested between the 
     return CGRectContainsPoint(bounds, point);
 }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;这个例子主要就是利用底层的&lt;code&gt;CGRectContainsPoint&lt;/code&gt;方法，传入了新的&lt;code&gt;bounds&lt;/code&gt;，可以理解为人为修改入参吧。代码也很明确了，自己根据当前的bounds合理做一个大一点的bounds，交给系统去做就行了。&lt;/p&gt;</content><link href="/archives/hittest/" rel="alternate"/><published>2022-02-19T21:03:00+08:06</published></entry><entry><id>/archives/cocoapods_private_library/</id><title>CocoaPods创建私有库过程拾遗</title><updated>2022-07-16T10:04:37.652104+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;h1&gt;创建私有podspec&lt;/h1&gt;
+&lt;p&gt;这个例子主要就是利用底层的&lt;code&gt;CGRectContainsPoint&lt;/code&gt;方法，传入了新的&lt;code&gt;bounds&lt;/code&gt;，可以理解为人为修改入参吧。代码也很明确了，自己根据当前的bounds合理做一个大一点的bounds，交给系统去做就行了。&lt;/p&gt;</content><link href="/archives/hittest/" rel="alternate"/><published>2022-02-19T21:03:00+08:06</published></entry><entry><id>/archives/cocoapods_private_library/</id><title>CocoaPods创建私有库过程拾遗</title><updated>2022-09-07T16:12:34.060284+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;h1&gt;创建私有podspec&lt;/h1&gt;
 &lt;p&gt;完整教程网上很多，我这里是曲曲折折弄好后的一些要点记录，里面的一些路径和库共同自&lt;a href="http://blog.wtlucky.com/blog/2015/02/26/create-private-podspec/"&gt;某篇教程&lt;/a&gt;，可以直接看他们的教程。&lt;/p&gt;&lt;p&gt;想看极简的骨架过程可以参考我下面的笔记，当然肯定缺少很多细节，主要是记录一下核心思路，里面的一些库地址出于隐私我就使用了他们公布在网上的而不是自己的真实地址。&lt;/p&gt;&lt;p&gt;首先，涉及两个仓库，一个放代码，一个放spec，放spec的就是私有库&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# 创建私有库 （就是host podspec文件的容器）&lt;/span&gt;
 pod repo add WTSpecs https://coding.net/wtlucky/WTSpecs.git  &lt;span class="c1"&gt;#（这是spec仓库）&lt;/span&gt;
 
@@ -1749,7 +1740,7 @@ pod repo push WTSpecs PodTestLibrary.podspec --allow-warnings --use-libraries --
 
 &lt;span class="n"&gt;pod&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;PodTestLibrary&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;1.0.0&amp;#39;&lt;/span&gt;   &lt;span class="c1"&gt;#使用整个库&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-</content><link href="/archives/cocoapods_private_library/" rel="alternate"/><published>2022-02-27T17:44:00+08:06</published></entry><entry><id>/archives/js-spread-syntax/</id><title>js spread syntax</title><updated>2022-07-16T10:04:37.652064+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;前段为这个解析api的dom元素生成的&lt;a href="https://github.com/walkerwzy/code_generator"&gt;小工具&lt;/a&gt;继confluence, swagger之后又增加了yapi的支持，用到了不少展开语法(&lt;code&gt;...&lt;/code&gt;)，特整理记录一下&lt;/p&gt;&lt;h1&gt;Dictionary&lt;/h1&gt;
+</content><link href="/archives/cocoapods_private_library/" rel="alternate"/><published>2022-02-27T17:44:00+08:06</published></entry><entry><id>/archives/js-spread-syntax/</id><title>js spread syntax</title><updated>2022-09-07T16:12:34.060245+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;前段为这个解析api的dom元素生成的&lt;a href="https://github.com/walkerwzy/code_generator"&gt;小工具&lt;/a&gt;继confluence, swagger之后又增加了yapi的支持，用到了不少展开语法(&lt;code&gt;...&lt;/code&gt;)，特整理记录一下&lt;/p&gt;&lt;h1&gt;Dictionary&lt;/h1&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;// 得到字典所有key的方法：&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
 &lt;span class="nb"&gt;Object&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;keys&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;dict&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
 &lt;span class="c1"&gt;// 得到字典所有key, value的方法： &lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
@@ -1782,7 +1773,7 @@ pod repo push WTSpecs PodTestLibrary.podspec --allow-warnings --use-libraries --
 &lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;first&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;toUpperCase&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;rest&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;很有python的风格啊&lt;/p&gt;</content><link href="/archives/js-spread-syntax/" rel="alternate"/><published>2022-04-23T23:16:00+08:06</published></entry><entry><id>/archives/advanced-graphics-with-core-animation/</id><title>Advanced Graphics With Core Animation 笔记</title><updated>2022-07-16T10:04:37.652019+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;h1&gt;Core Animation&lt;/h1&gt;
+&lt;p&gt;很有python的风格啊&lt;/p&gt;</content><link href="/archives/js-spread-syntax/" rel="alternate"/><published>2022-04-23T23:16:00+08:06</published></entry><entry><id>/archives/advanced-graphics-with-core-animation/</id><title>Advanced Graphics With Core Animation 笔记</title><updated>2022-09-07T16:12:34.060205+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;h1&gt;Core Animation&lt;/h1&gt;
 &lt;p&gt;&lt;a href="https://academy.realm.io/posts/tryswift-tim-oliver-advanced-graphics-with-core-animation/"&gt;Source&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Core Graphics&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
 &lt;li&gt;Core Animation is supposed to be the graphics system of the framework, but there is also Core Graphics.&lt;/li&gt;
 &lt;li&gt;Core Graphics is entirely done on the CPU, and cannot be performed on the GPU.&lt;ul&gt;
@@ -2017,7 +2008,7 @@ pod repo push WTSpecs PodTestLibrary.podspec --allow-warnings --use-libraries --
 &lt;li&gt;&lt;a href="(https://github.com/TimOliver/TOGlintyStringView)"&gt;slide to unlock 代码复现实例&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://revealapp.com/"&gt;Reveal&lt;/a&gt;，一个视图的线上debug工具&lt;/li&gt;
 &lt;/ul&gt;
-</content><link href="/archives/advanced-graphics-with-core-animation/" rel="alternate"/><published>2022-06-25T17:35:00+08:06</published></entry><entry><id>/archives/calayer_mask/</id><title>CALayer应用mask实现为文字部分涂抹</title><updated>2022-07-16T10:04:37.651941+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;先看效果，白底黑字，随着拖动，逐渐变成黑底白字（注：因为项目关系，效果是带着底色拖动，所以以这种效果来讲解，如果只是改文字颜色，就是只涂抹文字，会稍微简单一些，请触类旁通）&lt;/p&gt;&lt;figure  style="flex: 106.89655172413794" &gt;&lt;img width="1116" height="522" src="/archives/assets/ffbec7d6d811b8fd6cca175ce25a294e.gif" alt="20220714161447"/&gt;&lt;/figure&gt;&lt;p&gt;思路：底层（白底黑字），表层（黑底白字），对表层应用蒙板，蒙板的frame由手势控制&lt;/p&gt;&lt;figure class="vertical-figure" style="flex: 49.69230769230769" &gt;&lt;img width="646" height="650" src="/archives/assets/6f6838054b30d06ed348b1f6a24d1abf.png" alt="image-20220714193234444"/&gt;&lt;/figure&gt;&lt;p&gt;本质上是CALayer的mask，但我们先用两个UIView来实现一下，因为它直观且简单：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;viewDidLoad&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+</content><link href="/archives/advanced-graphics-with-core-animation/" rel="alternate"/><published>2022-06-25T17:35:00+08:06</published></entry><entry><id>/archives/calayer_mask/</id><title>CALayer应用mask实现为文字部分涂抹</title><updated>2022-09-07T16:12:34.060161+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;先看效果，白底黑字，随着拖动，逐渐变成黑底白字（注：因为项目关系，效果是带着底色拖动，所以以这种效果来讲解，如果只是改文字颜色，就是只涂抹文字，会稍微简单一些，请触类旁通）&lt;/p&gt;&lt;figure  style="flex: 106.89655172413794" &gt;&lt;img width="1116" height="522" src="/archives/assets/ffbec7d6d811b8fd6cca175ce25a294e.gif" alt="20220714161447"/&gt;&lt;/figure&gt;&lt;p&gt;思路：底层（白底黑字），表层（黑底白字），对表层应用蒙板，蒙板的frame由手势控制&lt;/p&gt;&lt;figure class="vertical-figure" style="flex: 49.69230769230769" &gt;&lt;img width="646" height="650" src="/archives/assets/6f6838054b30d06ed348b1f6a24d1abf.png" alt="image-20220714193234444"/&gt;&lt;/figure&gt;&lt;p&gt;本质上是CALayer的mask，但我们先用两个UIView来实现一下，因为它直观且简单：&lt;/p&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;viewDidLoad&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
 &lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;super&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;viewDidLoad&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
 &lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="c1"&gt;// create wrapper view 省略&lt;/span&gt;
 
@@ -2107,4 +2098,245 @@ pod repo push WTSpecs PodTestLibrary.podspec --allow-warnings --use-libraries --
 &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;wrapper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;layer&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;addSublayer&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;bottomShape&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;figure  style="flex: 181.14285714285714" &gt;&lt;img width="1268" height="350" src="/archives/assets/03ebfa11434ae205e656839d6c410f6b.gif" alt="20220714191352"/&gt;&lt;/figure&gt;&lt;p&gt;现在如愿以偿，整个结构也只有一个UIView了，相比UView的方案，显然在查看视图结构的时候要简化得多，（动画效果仍然是魂在后面追...），但是，这次仍然是文字对文字做mask，这次却没有描边了：&lt;/p&gt;&lt;figure  style="flex: 268.01801801801804" &gt;&lt;img width="1190" height="222" src="/archives/assets/661881063d03936442e6722d2ad82063.png" alt="image-20220714191856600"/&gt;&lt;/figure&gt;&lt;p&gt;难道只有根layer上才会描？不继续探索了。&lt;/p&gt;&lt;p&gt;最后，解释一下对直接操作CALayer为什么反应还慢半拍呢？因为CALayer的大部分属性的改变是自带了动画的，在这个例子里得到了充分的证明。&lt;/p&gt;&lt;p&gt;补充一下全部用&lt;code&gt;CALayer&lt;/code&gt;的结构
-&lt;figure  style="flex: 67.69662921348315" &gt;&lt;img width="964" height="712" src="/archives/assets/98c14a7ed3a8bfe08ed578b50521d239.png" alt=""/&gt;&lt;/figure&gt;&lt;/p&gt;</content><link href="/archives/calayer_mask/" rel="alternate"/><published>2022-07-14T23:25:00+08:06</published></entry></feed>
+&lt;figure  style="flex: 67.69662921348315" &gt;&lt;img width="964" height="712" src="/archives/assets/98c14a7ed3a8bfe08ed578b50521d239.png" alt=""/&gt;&lt;/figure&gt;&lt;/p&gt;</content><link href="/archives/calayer_mask/" rel="alternate"/><published>2022-07-14T23:25:00+08:06</published></entry><entry><id>/archives/collectionview_diffable_datasource/</id><title>Collection View With Diffable Datasource</title><updated>2022-09-07T16:12:34.060079+00:00</updated><author><name>walker</name><email>walker.wzy@gmail.com</email><uri>https://wzy.one</uri></author><content>&lt;p&gt;这篇文章有&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;collection view自定义布局的一些心得体会和查阅文档时的一些笔记&lt;/li&gt;
+&lt;li&gt;Compositional layout笔记 （少量）&lt;/li&gt;
+&lt;li&gt;diffable datasource笔记&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Compositional Layout&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Group 宽高给够（或estimate），Item固定大小，就成了一个FlowLayout&lt;/li&gt;
+&lt;li&gt;设定section垂直方向行为为滚动(分页，靠边等），则不会折行&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;.continuousGroupLeadingBoundary&lt;/code&gt; 的意思是如果一行摆不下，正常情况下会折行，这一行后面就会剩下空白，当你做成continous后，下一个元素也会排在空白后，而不是直接就接在后面了&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;.paging&lt;/code&gt;和&lt;code&gt;.groupPageing&lt;/code&gt;的区别则是一次滚动一页还是一个group&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Diffable Data Sources&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;A &lt;em&gt;diffable data source&lt;/em&gt; stores a list of section and item &lt;em&gt;identifiers&lt;/em&gt;&lt;ul&gt;
+&lt;li&gt;In contrast, a custom data source that conforms to &lt;a href="https://developer.apple.com/documentation/uikit/uicollectionviewdatasource"&gt;&lt;code&gt;UICollectionViewDataSource&lt;/code&gt;&lt;/a&gt; uses &lt;em&gt;indices&lt;/em&gt; and &lt;em&gt;index paths&lt;/em&gt;, which aren’t stable.&lt;ul&gt;
+&lt;li&gt;They represent the &lt;strong&gt;location&lt;/strong&gt; of sections and items, which can change as the data source adds, removes, and rearranges the contents of a collection view.&lt;/li&gt;
+&lt;li&gt;相反Diffable Data Source却能根据identifier追溯到其location&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;To use a value as an identifier, its data type must conform to the &lt;a href="https://developer.apple.com/documentation/swift/hashable"&gt;&lt;code&gt;Hashable&lt;/code&gt;&lt;/a&gt; protocol.&lt;ul&gt;
+&lt;li&gt;Hashing能让集合成为“键”，提供快速lookup能力&lt;ul&gt;
+&lt;li&gt;比如set, dictionary, snapshot&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;can determine the differences between its &lt;strong&gt;current&lt;/strong&gt; snapshot and &lt;strong&gt;another&lt;/strong&gt; snapshot.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Define the Diffable Data Source&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="n"&gt;preconcurrency&lt;/span&gt; &lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="n"&gt;MainActor&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="bp"&gt;UICollectionViewDiffableDataSource&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;SectionIdentifierType&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ItemIdentifierType&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;NSObject&lt;/span&gt; &lt;span class="k"&gt;where&lt;/span&gt; &lt;span class="n"&gt;SectionIdentifierType&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;Hashable&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;SectionIdentifierType&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Sendable&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ItemIdentifierType&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;Hashable&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ItemIdentifierType&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Sendable&lt;/span&gt;
+
+&lt;span class="c1"&gt;// 声明示例&lt;/span&gt;
+&lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;recipeListDataSource&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UICollectionViewDiffableDataSource&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;RecipeListSection&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Recipe&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ID&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;
+
+&lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="kd"&gt;enum&lt;/span&gt; &lt;span class="nc"&gt;RecipeListSection&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;Int&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="n"&gt;main&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="kd"&gt;struct&lt;/span&gt; &lt;span class="nc"&gt;Recipe&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Identifiable&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Codable&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;id&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;Int&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;title&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;String&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;prepTime&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;Int&lt;/span&gt;   &lt;span class="c1"&gt;// In seconds.&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;cookTime&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;Int&lt;/span&gt;   &lt;span class="c1"&gt;// In seconds.&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;servings&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;String&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;ingredients&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;String&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;directions&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;String&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;isFavorite&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;Bool&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;collections&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="n"&gt;fileprivate&lt;/span&gt; &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;addedOn&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Date&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Date&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;fileprivate&lt;/span&gt; &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;imageNames&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;section是枚举，枚举就是正整数&lt;/li&gt;
+&lt;li&gt;Recipe conforming to &lt;code&gt;Identifiable&lt;/code&gt;，automatically exposes the associated type &lt;a href="https://developer.apple.com/documentation/swift/identifiable/id-swift.associatedtype"&gt;&lt;code&gt;ID&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;整个&lt;code&gt;Recipe&lt;/code&gt;结构体不必是&lt;code&gt;Hashable&lt;/code&gt;的，因为存在Datasource和Snapshot里的仅仅只是&lt;code&gt;identifiers&lt;/code&gt;&lt;ol&gt;
+&lt;li&gt;Using the &lt;code&gt;Recipe.ID&lt;/code&gt; as the item identifier type for the &lt;code&gt;recipeListDataSource&lt;/code&gt; means that the &lt;strong&gt;data source&lt;/strong&gt;, and any &lt;strong&gt;snapshots&lt;/strong&gt; applied to it, &lt;strong&gt;contains only&lt;/strong&gt; &lt;code&gt;Recipe.ID&lt;/code&gt; values and not the complete recipe data.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Configure the Diffable Data Source&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;// Create a cell registration that the diffable data source will use.&lt;/span&gt;
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;recipeCellRegistration&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;UICollectionView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CellRegistration&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="bp"&gt;UICollectionViewListCell&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Recipe&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;cell&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;indexPath&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;recipe&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;
+    &lt;span class="c1"&gt;// 会带着cell对象，位置和应的数据源数据来请求配置当前cell &lt;/span&gt;
+    &lt;span class="c1"&gt;// 这里进行了两种配置，&lt;/span&gt;
+    &lt;span class="c1"&gt;// 1. 一种是对contentConfiguration进行配置（应该就是包了一层，没对cell暴露出来的subview直接进行设置）&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;contentConfiguration&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;UIListContentConfiguration&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;subtitleCell&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;contentConfiguration&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;recipe&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;
+    &lt;span class="n"&gt;contentConfiguration&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;secondaryText&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;recipe&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;subtitle&lt;/span&gt;
+    &lt;span class="n"&gt;contentConfiguration&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;image&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;recipe&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;smallImage&lt;/span&gt;
+    &lt;span class="n"&gt;contentConfiguration&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;imageProperties&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;cornerRadius&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;
+    &lt;span class="n"&gt;contentConfiguration&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;imageProperties&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;maximumSize&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;CGSize&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;60&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;60&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="n"&gt;cell&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;contentConfiguration&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;contentConfiguration&lt;/span&gt;
+
+    &lt;span class="c1"&gt;// 2. 这里就是直接对cell的subview来进行设置了，所以理论上上一节的内容应该也可以直接对cell来配置&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;recipe&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isFavorite&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;image&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;UIImage&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;systemName&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;heart.fill&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;accessoryConfiguration&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;UICellAccessory&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CustomViewConfiguration&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;customView&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIImageView&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;image&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;placement&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;trailing&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;displayed&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;always&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;cell&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;accessories&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[.&lt;/span&gt;&lt;span class="n"&gt;customView&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;configuration&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;accessoryConfiguration&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;cell&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;accessories&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="c1"&gt;// Create the diffable data source and its cell provider.&lt;/span&gt;
+&lt;span class="n"&gt;recipeListDataSource&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;UICollectionViewDiffableDataSource&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;collectionView&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;collectionView&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;collectionView&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;indexPath&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;identifier&lt;/span&gt; &lt;span class="p"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="bp"&gt;UICollectionViewCell&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;
+    &lt;span class="c1"&gt;// `identifier` is an instance of `Recipe.ID`. Use it to&lt;/span&gt;
+    &lt;span class="c1"&gt;// retrieve the recipe from the backing data store.&lt;/span&gt;
+    &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;recipe&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;dataStore&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;recipe&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;with&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;identifier&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;
+    &lt;span class="c1"&gt;// 这里既是传入注册cell的方法的地方，也是那个方法的handler里三个参数的来源&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;collectionView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dequeueConfiguredReusableCell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;using&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;recipeCellRegistration&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;indexPath&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;item&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;recipe&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;code&gt;configureDataSource()&lt;/code&gt; method creates a cell &lt;strong&gt;registration&lt;/strong&gt; and provides a handler closure that &lt;strong&gt;configures each cell&lt;/strong&gt; with data from a recipe.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Load the Diffable Data Source with Identifiers&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;loadRecipeData&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;// Retrieve the list of recipe identifiers determined based on a&lt;/span&gt;
+    &lt;span class="c1"&gt;// selected sidebar item such as All Recipes or Favorites.&lt;/span&gt;
+    &lt;span class="k"&gt;guard&lt;/span&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;recipeIds&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;recipeSplitViewController&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;selectedRecipes&lt;/span&gt;&lt;span class="p"&gt;?.&lt;/span&gt;&lt;span class="n"&gt;recipeIds&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+
+    &lt;span class="c1"&gt;// Update the collection view by adding the recipe identifiers to&lt;/span&gt;
+    &lt;span class="c1"&gt;// a new snapshot, and apply the snapshot to the diffable data source.&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;snapshot&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;NSDiffableDataSourceSnapshot&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;RecipeListSection&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Recipe&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ID&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;snapshot&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;appendSections&lt;/span&gt;&lt;span class="p"&gt;([.&lt;/span&gt;&lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+    &lt;span class="n"&gt;snapshot&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;appendItems&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;recipeIds&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;toSection&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;recipeListDataSource&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;applySnapshotUsingReloadData&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;snapshot&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;// 初始化用这个，reload代表完全重设&lt;/span&gt;
+    &lt;span class="c1"&gt;// 更新的话用 apply(_:animatingDifferences:) 这样有动画&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Insert, Delete, and Move Items&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;To &lt;strong&gt;handle changes&lt;/strong&gt; to a data collection, the app &lt;strong&gt;creates a new snapshot&lt;/strong&gt; that represents the current state of the data collection and &lt;strong&gt;applies&lt;/strong&gt; it to the diffable data source.&lt;/li&gt;
+&lt;li&gt;The data source &lt;strong&gt;compares&lt;/strong&gt; its current snapshot with the new snapshot to &lt;strong&gt;determine the changes&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Then it performs the necessary inserts, deletes, and moves into the collection view based on those changes.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;snapshot&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;NSDiffableDataSourceSnapshot&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;RecipeListSection&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Recipe&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ID&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;()&lt;/span&gt;
+&lt;span class="n"&gt;snapshot&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;appendSections&lt;/span&gt;&lt;span class="p"&gt;([.&lt;/span&gt;&lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="c1"&gt;// section是直接重建的，而不是从哪去retrieve一个, 因为它代表的是ID，只要值一致就行&lt;/span&gt;
+&lt;span class="n"&gt;snapshot&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;appendItems&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;selectedRecipeIds&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;toSection&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;// 这里是.main的全量数据，即增删后的结果集&lt;/span&gt;
+&lt;span class="n"&gt;recipeListDataSource&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;apply&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;snapshot&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;animatingDifferences&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;增删其实就是新建一个snapshot，datasource会根据identifiers来比较哪些多了哪些少了。&lt;ul&gt;
+&lt;li&gt;因为只比较“数量“，所以只要用这些id去新建snapshot就可以了，不存在把旧的&lt;strong&gt;retrieve&lt;/strong&gt;出来&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Update Existing Items&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;To handle changes to the properties of an &lt;strong&gt;EXISTING&lt;/strong&gt; item, an app retrieves the &lt;strong&gt;current snapshot&lt;/strong&gt; from the diffable data source and calls either &lt;a href="https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/3804468-reconfigureitems"&gt;&lt;code&gt;reconfigureItems(_:)&lt;/code&gt;&lt;/a&gt; or &lt;a href="https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/3375783-reloaditems"&gt;&lt;code&gt;reloadItems(_:)&lt;/code&gt;&lt;/a&gt; on the snapshot.  -&amp;gt; then &lt;code&gt;Apply&lt;/code&gt; to snapshot&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;snapshot&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;recipeListDataSource&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;snapshot&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;  &lt;span class="c1"&gt;// 这次是retrieve了&lt;/span&gt;
+&lt;span class="c1"&gt;// Update the recipe&amp;#39;s data displayed in the collection view.&lt;/span&gt;
+&lt;span class="n"&gt;snapshot&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;reconfigureItems&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;recipeId&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="c1"&gt;// 传入identifier&lt;/span&gt;
+&lt;span class="n"&gt;recipeListDataSource&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;apply&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;snapshot&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;animatingDifferences&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;the data source invokes its cell provider closure,&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Populate Snapshots with Lightweight Data Structures&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;对整个item对象做Hash，适用于快速建模，或数据源不会变更的场景（比如菜单）。&lt;ul&gt;
+&lt;li&gt;因为item对象的任何属性变化都会被认为有过改动导致重绘，也会产生一些副作用，比如重绘之前的状态都会被清掉（如selected）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;实践中，不会对设置datasource的时候专门给个identifier集合，而数据源用别的集合，每次都是用identifier从集合里找item这种方式，而是重写item的hash方法和equal方法，让其只观察id字段&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;NSDiffableDataSourceSnapshot&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;A representation of &lt;strong&gt;the state of the data&lt;/strong&gt; in a &lt;code&gt;view&lt;/code&gt; at a &lt;strong&gt;specific point in time&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Diffable data sources use &lt;em&gt;snapshots&lt;/em&gt; to provide data for collection views and table views.&lt;/li&gt;
+&lt;li&gt;You use a snapshot to set up the &lt;strong&gt;initial state&lt;/strong&gt; of the data that a view displays, and you use snapshots to reflect &lt;strong&gt;changes to the data&lt;/strong&gt; that the view displays.&lt;/li&gt;
+&lt;li&gt;The data in a snapshot is made up of the &lt;strong&gt;sections&lt;/strong&gt; and &lt;strong&gt;items&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;Each of your sections and items must have unique identifiers that conform to the &lt;a href="https://developer.apple.com/documentation/swift/hashable"&gt;&lt;code&gt;Hashable&lt;/code&gt;&lt;/a&gt; protocol.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;// Create a snapshot.&lt;/span&gt;
+&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;snapshot&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;NSDiffableDataSourceSnapshot&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nb"&gt;Int&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;UUID&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;()&lt;/span&gt;        
+
+&lt;span class="c1"&gt;// Populate the snapshot.&lt;/span&gt;
+&lt;span class="n"&gt;snapshot&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;appendSections&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;span class="n"&gt;snapshot&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;appendItems&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;UUID&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;UUID&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;UUID&lt;/span&gt;&lt;span class="p"&gt;()])&lt;/span&gt;
+
+&lt;span class="c1"&gt;// Apply the snapshot.&lt;/span&gt;
+&lt;span class="n"&gt;dataSource&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;apply&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;snapshot&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;animatingDifferences&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;NSDiffableDataSourceSectionSnapshot&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;A representation of &lt;strong&gt;the state of the data&lt;/strong&gt; in a &lt;code&gt;layout section&lt;/code&gt; at a specific point in time.&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;注意与&lt;code&gt;dataSourceSnapshot&lt;/code&gt;定义的区别&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;A section snapshot represents the data for a single section in a collection view or table view.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Through a section snapshot, you set up the &lt;strong&gt;initial state&lt;/strong&gt; of the data that displays in an individual section of your view, and later &lt;strong&gt;update that data&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You can use section snapshots &lt;strong&gt;with&lt;/strong&gt; or &lt;strong&gt;instead&lt;/strong&gt; of an &lt;a href="https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot"&gt;&lt;code&gt;NSDiffableDataSourceSnapshot&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Use a section snapshot when you need precise management of the data in a section of your layout&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;such as when the sections of your layout acquire their data from &lt;strong&gt;different sources&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;不同的section来自不同的数据源的话，倾向于用sectionSnapshot&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;section&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="n"&gt;Section&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;allCases&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;// Create a section snapshot&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;sectionSnapshot&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;NSDiffableDataSourceSectionSnapshot&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;()&lt;/span&gt;
+
+    &lt;span class="c1"&gt;// Populate the section snapshot&lt;/span&gt;
+    &lt;span class="n"&gt;sectionSnapshot&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Food&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Drinks&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+    &lt;span class="n"&gt;sectionSnapshot&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;🍏&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;🍓&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;🥐&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Food&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="c1"&gt;// Apply the section snapshot&lt;/span&gt;
+    &lt;span class="n"&gt;dataSource&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;apply&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sectionSnapshot&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                     &lt;span class="n"&gt;to&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;section&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                     &lt;span class="n"&gt;animatingDifferences&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;苹果CollectionView教程文档&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;The Layout Object Controls the Visual Presentation&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;The layout object is solely responsible for determining the &lt;strong&gt;placement and visual styling&lt;/strong&gt; of items within the collection view&lt;/li&gt;
+&lt;li&gt;do not confuse what a layout object does with the &lt;code&gt;layoutSubviews&lt;/code&gt; method used to reposition child views inside a parent view.&lt;ul&gt;
+&lt;li&gt;A layout object &lt;strong&gt;never&lt;/strong&gt; touches the views it manages directly because it &lt;strong&gt;does not actually own&lt;/strong&gt; any of those views.&lt;/li&gt;
+&lt;li&gt;it generates attributes that describe the location, size, and visual appearance of the cells, supplementary views, and decoration views in the collection view.&lt;/li&gt;
+&lt;li&gt;It is then the job of the collection view to apply those attributes to the actual view objects.&lt;/li&gt;
+&lt;li&gt;这就是需要提供两个代理方法的原因，一个提供view，一个提供布局配置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Transitioning Between Layouts&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;The easiest way to transition between layouts is by using the &lt;code&gt;setCollectionViewLayout:animated:&lt;/code&gt; method.&lt;/li&gt;
+&lt;li&gt;However, if you require control of the transition or want it to be interactive, use a &lt;code&gt;UICollectionViewTransitionLayout&lt;/code&gt; object.&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;UICollectionViewTransitionLayout&lt;/code&gt; class is a special type of layout that gets installed as the collection view’s layout object when transitioning to a new layout.&lt;ul&gt;
+&lt;li&gt;With a transition layout object, you can have objects follow a &lt;strong&gt;non linear&lt;/strong&gt; path, use a different &lt;strong&gt;timing algorithm&lt;/strong&gt;, or move according to incoming touch events.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;UICollectionViewLayout&lt;/code&gt; class provides &lt;strong&gt;several methods&lt;/strong&gt; for &lt;strong&gt;tracking&lt;/strong&gt; the transition between layouts.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;UICollectionViewTransitionLayout&lt;/code&gt; objects track the completion of a transition through the &lt;code&gt;transitionProgress&lt;/code&gt; property.&lt;/li&gt;
+&lt;li&gt;As the transition occurs, your code updates this property &lt;strong&gt;periodically&lt;/strong&gt; to indicate the completion percentage of the transition.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;通用流程：&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;Create an instance of the standard class or your own custom class using the &lt;code&gt;initWithCurrentLayout:nextLayout:&lt;/code&gt; method.&lt;/li&gt;
+&lt;li&gt;Communicate the progress of the transition by periodically modifying the &lt;code&gt;transitionProgress&lt;/code&gt; property. Do not forget to invalidate the layout using the collection view’s &lt;code&gt;invalidateLayout&lt;/code&gt; method after changing the transition’s progress.&lt;/li&gt;
+&lt;li&gt;Implement the &lt;code&gt;collectionView:transitionLayoutForOldLayout:newLayout:&lt;/code&gt; method in your collection view’s delegate and return your transition layout object.&lt;/li&gt;
+&lt;li&gt;Optionally modify values for your layout using the &lt;code&gt;updateValue:forAnimatedKey:&lt;/code&gt; method to indicate changed values relevant to your layout object. The stable value in this case is 0.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Customizing the Flow Layout Attributes&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;Flowlayout在一条线上排列元素，到达了边界就换行，新起一条线&lt;/li&gt;
+&lt;li&gt;元素大小可以通过&lt;code&gt;itemSize&lt;/code&gt; 属性设置，如果大小不同，则通过&lt;code&gt;[collectionView:layout:sizeForItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegateflowlayout/1617708-collectionview)&lt;/code&gt;代理方法设置&lt;/li&gt;
+&lt;li&gt;但是，同一行上不同的高度的cell会垂直居中排列，这点要注意&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;minimum spacing&lt;/code&gt;设置的只是同一行元素的“最小间距”，如果布局的时候一行下一个元素放不下了，但是剩余的空间很多，这个一行的元素间距会拉大&lt;ul&gt;
+&lt;li&gt;行间距同理，根据上一条描述，元素是垂直居中排列的，所以最小行间距设置的是上下两行间最高的元素的距离&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</content><link href="/archives/collectionview_diffable_datasource/" rel="alternate"/><published>2022-09-09T23:57:00+08:06</published></entry></feed>

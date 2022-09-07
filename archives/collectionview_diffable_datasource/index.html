@@ -1,0 +1,451 @@
+<!DOCTYPE HTML>
+<html lang="english">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Maverick,AlanDecode,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.2.1" />
+    <meta name="template" content="Prism" />
+    <link rel="alternate" type="application/rss+xml" title="walker's code blog &raquo; RSS 2.0" href="/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="walker's code blog &raquo; ATOM 1.0" href="/feed/atom/index.xml" />
+    <link rel="stylesheet" href="/assets/prism-b9d78ff38a.css">
+    <link rel="stylesheet" href="/assets/ExSearch/ExSearch-182e5a8869.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "/b098f530e4b4a4a690a595806babc6a7.json"
+        }
+
+    </script>
+    
+<title>Collection View With Diffable Datasource - walker's code blog</title>
+<meta name="author" content="walker" />
+<meta name="description" content="这篇文章有" />
+<meta property="og:title" content="Collection View With Diffable Datasource - walker's code blog" />
+<meta property="og:description" content="这篇文章有" />
+<meta property="og:site_name" content="walker's code blog" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/archives/collectionview_diffable_datasource/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2022-09-09T23:57:00-00.00" />
+<meta name="twitter:title" content="Collection View With Diffable Datasource - walker's code blog" />
+<meta name="twitter:description" content="这篇文章有" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+</head>
+
+<body>
+    <div class="container prism-container">
+        <header class="prism-header" id="prism__header">
+            <h1 class="text-uppercase brand"><a class="no-link" href="/" target="_self">walker's code blog</a></h1>
+            <p>coder, reader</p>
+            <nav class="prism-nav"><ul><li><a class="no-link text-uppercase " href="/" target="_self">Home</a></li><li><a class="no-link text-uppercase " href="/archives/" target="_self">Archives</a></li><li><a class="no-link text-uppercase " href="/about/" target="_self">About</a></li><li><a href="#" target="_self" class="search-form-input no-link text-uppercase">Search</a></li></ul></nav>
+        </header>
+        <div class="prism-wrapper" id="prism__wrapper">
+            
+<main>
+    <section class="prism-section row" id="prism__content">
+        <article class="yue col-md-8 offset-md-2">
+            <h1 class="prism-post-title">Collection View With Diffable Datasource</h1>
+            <div class="prism-post-time">
+                <time class="text-uppercase">
+                    September 09 2022
+                </time>
+            </div>
+            <div class="prism-content-body">
+                <p>这篇文章有</p><ul>
+<li>collection view自定义布局的一些心得体会和查阅文档时的一些笔记</li>
+<li>Compositional layout笔记 （少量）</li>
+<li>diffable datasource笔记</li>
+</ul>
+<h1>Compositional Layout</h1>
+<ul>
+<li>Group 宽高给够（或estimate），Item固定大小，就成了一个FlowLayout</li>
+<li>设定section垂直方向行为为滚动(分页，靠边等），则不会折行<ul>
+<li><code>.continuousGroupLeadingBoundary</code> 的意思是如果一行摆不下，正常情况下会折行，这一行后面就会剩下空白，当你做成continous后，下一个元素也会排在空白后，而不是直接就接在后面了</li>
+<li><code>.paging</code>和<code>.groupPageing</code>的区别则是一次滚动一页还是一个group</li>
+</ul>
+</li>
+</ul>
+<h1>Diffable Data Sources</h1>
+<ul>
+<li>A <em>diffable data source</em> stores a list of section and item <em>identifiers</em><ul>
+<li>In contrast, a custom data source that conforms to <a href="https://developer.apple.com/documentation/uikit/uicollectionviewdatasource"><code>UICollectionViewDataSource</code></a> uses <em>indices</em> and <em>index paths</em>, which aren’t stable.<ul>
+<li>They represent the <strong>location</strong> of sections and items, which can change as the data source adds, removes, and rearranges the contents of a collection view.</li>
+<li>相反Diffable Data Source却能根据identifier追溯到其location</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>To use a value as an identifier, its data type must conform to the <a href="https://developer.apple.com/documentation/swift/hashable"><code>Hashable</code></a> protocol.<ul>
+<li>Hashing能让集合成为“键”，提供快速lookup能力<ul>
+<li>比如set, dictionary, snapshot</li>
+</ul>
+</li>
+<li>can determine the differences between its <strong>current</strong> snapshot and <strong>another</strong> snapshot.</li>
+</ul>
+</li>
+</ul>
+<h3>Define the Diffable Data Source</h3>
+<div class="highlight"><pre><span></span><span class="p">@</span><span class="n">preconcurrency</span> <span class="p">@</span><span class="n">MainActor</span> <span class="kd">class</span> <span class="bp">UICollectionViewDiffableDataSource</span><span class="p">&lt;</span><span class="n">SectionIdentifierType</span><span class="p">,</span> <span class="n">ItemIdentifierType</span><span class="p">&gt;</span> <span class="p">:</span> <span class="bp">NSObject</span> <span class="k">where</span> <span class="n">SectionIdentifierType</span> <span class="p">:</span> <span class="nb">Hashable</span><span class="p">,</span> <span class="n">SectionIdentifierType</span> <span class="p">:</span> <span class="n">Sendable</span><span class="p">,</span> <span class="n">ItemIdentifierType</span> <span class="p">:</span> <span class="nb">Hashable</span><span class="p">,</span> <span class="n">ItemIdentifierType</span> <span class="p">:</span> <span class="n">Sendable</span>
+
+<span class="c1">// 声明示例</span>
+<span class="kd">private</span> <span class="kd">var</span> <span class="nv">recipeListDataSource</span><span class="p">:</span> <span class="bp">UICollectionViewDiffableDataSource</span><span class="p">&lt;</span><span class="n">RecipeListSection</span><span class="p">,</span> <span class="n">Recipe</span><span class="p">.</span><span class="n">ID</span><span class="p">&gt;</span><span class="o">!</span>
+
+<span class="kd">private</span> <span class="kd">enum</span> <span class="nc">RecipeListSection</span><span class="p">:</span> <span class="nb">Int</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="n">main</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="nc">Recipe</span><span class="p">:</span> <span class="n">Identifiable</span><span class="p">,</span> <span class="n">Codable</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">id</span><span class="p">:</span> <span class="nb">Int</span>
+    <span class="kd">var</span> <span class="nv">title</span><span class="p">:</span> <span class="nb">String</span>
+    <span class="kd">var</span> <span class="nv">prepTime</span><span class="p">:</span> <span class="nb">Int</span>   <span class="c1">// In seconds.</span>
+    <span class="kd">var</span> <span class="nv">cookTime</span><span class="p">:</span> <span class="nb">Int</span>   <span class="c1">// In seconds.</span>
+    <span class="kd">var</span> <span class="nv">servings</span><span class="p">:</span> <span class="nb">String</span>
+    <span class="kd">var</span> <span class="nv">ingredients</span><span class="p">:</span> <span class="nb">String</span>
+    <span class="kd">var</span> <span class="nv">directions</span><span class="p">:</span> <span class="nb">String</span>
+    <span class="kd">var</span> <span class="nv">isFavorite</span><span class="p">:</span> <span class="nb">Bool</span>
+    <span class="kd">var</span> <span class="nv">collections</span><span class="p">:</span> <span class="p">[</span><span class="nb">String</span><span class="p">]</span>
+    <span class="n">fileprivate</span> <span class="kd">var</span> <span class="nv">addedOn</span><span class="p">:</span> <span class="n">Date</span><span class="p">?</span> <span class="p">=</span> <span class="n">Date</span><span class="p">()</span>
+    <span class="n">fileprivate</span> <span class="kd">var</span> <span class="nv">imageNames</span><span class="p">:</span> <span class="p">[</span><span class="nb">String</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+<ol>
+<li>section是枚举，枚举就是正整数</li>
+<li>Recipe conforming to <code>Identifiable</code>，automatically exposes the associated type <a href="https://developer.apple.com/documentation/swift/identifiable/id-swift.associatedtype"><code>ID</code></a></li>
+<li>整个<code>Recipe</code>结构体不必是<code>Hashable</code>的，因为存在Datasource和Snapshot里的仅仅只是<code>identifiers</code><ol>
+<li>Using the <code>Recipe.ID</code> as the item identifier type for the <code>recipeListDataSource</code> means that the <strong>data source</strong>, and any <strong>snapshots</strong> applied to it, <strong>contains only</strong> <code>Recipe.ID</code> values and not the complete recipe data.</li>
+</ol>
+</li>
+</ol>
+<h3>Configure the Diffable Data Source</h3>
+<div class="highlight"><pre><span></span><span class="c1">// Create a cell registration that the diffable data source will use.</span>
+<span class="kd">let</span> <span class="nv">recipeCellRegistration</span> <span class="p">=</span> <span class="bp">UICollectionView</span><span class="p">.</span><span class="n">CellRegistration</span><span class="p">&lt;</span><span class="bp">UICollectionViewListCell</span><span class="p">,</span> <span class="n">Recipe</span><span class="p">&gt;</span> <span class="p">{</span> <span class="n">cell</span><span class="p">,</span> <span class="n">indexPath</span><span class="p">,</span> <span class="n">recipe</span> <span class="k">in</span>
+    <span class="c1">// 会带着cell对象，位置和应的数据源数据来请求配置当前cell </span>
+    <span class="c1">// 这里进行了两种配置，</span>
+    <span class="c1">// 1. 一种是对contentConfiguration进行配置（应该就是包了一层，没对cell暴露出来的subview直接进行设置）</span>
+    <span class="kd">var</span> <span class="nv">contentConfiguration</span> <span class="p">=</span> <span class="bp">UIListContentConfiguration</span><span class="p">.</span><span class="n">subtitleCell</span><span class="p">()</span>
+    <span class="n">contentConfiguration</span><span class="p">.</span><span class="n">text</span> <span class="p">=</span> <span class="n">recipe</span><span class="p">.</span><span class="n">title</span>
+    <span class="n">contentConfiguration</span><span class="p">.</span><span class="n">secondaryText</span> <span class="p">=</span> <span class="n">recipe</span><span class="p">.</span><span class="n">subtitle</span>
+    <span class="n">contentConfiguration</span><span class="p">.</span><span class="n">image</span> <span class="p">=</span> <span class="n">recipe</span><span class="p">.</span><span class="n">smallImage</span>
+    <span class="n">contentConfiguration</span><span class="p">.</span><span class="n">imageProperties</span><span class="p">.</span><span class="n">cornerRadius</span> <span class="p">=</span> <span class="mi">4</span>
+    <span class="n">contentConfiguration</span><span class="p">.</span><span class="n">imageProperties</span><span class="p">.</span><span class="n">maximumSize</span> <span class="p">=</span> <span class="n">CGSize</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="mi">60</span><span class="p">)</span>
+
+    <span class="n">cell</span><span class="p">.</span><span class="n">contentConfiguration</span> <span class="p">=</span> <span class="n">contentConfiguration</span>
+
+    <span class="c1">// 2. 这里就是直接对cell的subview来进行设置了，所以理论上上一节的内容应该也可以直接对cell来配置</span>
+    <span class="k">if</span> <span class="n">recipe</span><span class="p">.</span><span class="n">isFavorite</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nv">image</span> <span class="p">=</span> <span class="bp">UIImage</span><span class="p">(</span><span class="n">systemName</span><span class="p">:</span> <span class="s">&quot;heart.fill&quot;</span><span class="p">)</span>
+        <span class="kd">let</span> <span class="nv">accessoryConfiguration</span> <span class="p">=</span> <span class="bp">UICellAccessory</span><span class="p">.</span><span class="n">CustomViewConfiguration</span><span class="p">(</span><span class="n">customView</span><span class="p">:</span> <span class="bp">UIImageView</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">image</span><span class="p">),</span> <span class="n">placement</span><span class="p">:</span> <span class="p">.</span><span class="n">trailing</span><span class="p">(</span><span class="n">displayed</span><span class="p">:</span> <span class="p">.</span><span class="n">always</span><span class="p">),</span> <span class="n">cell</span><span class="p">.</span><span class="n">accessories</span> <span class="p">=</span> <span class="p">[.</span><span class="n">customView</span><span class="p">(</span><span class="n">configuration</span><span class="p">:</span> <span class="n">accessoryConfiguration</span><span class="p">)]</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">cell</span><span class="p">.</span><span class="n">accessories</span> <span class="p">=</span> <span class="p">[]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Create the diffable data source and its cell provider.</span>
+<span class="n">recipeListDataSource</span> <span class="p">=</span> <span class="bp">UICollectionViewDiffableDataSource</span><span class="p">(</span><span class="n">collectionView</span><span class="p">:</span> <span class="n">collectionView</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">collectionView</span><span class="p">,</span> <span class="n">indexPath</span><span class="p">,</span> <span class="n">identifier</span> <span class="p">-&gt;</span> <span class="bp">UICollectionViewCell</span> <span class="k">in</span>
+    <span class="c1">// `identifier` is an instance of `Recipe.ID`. Use it to</span>
+    <span class="c1">// retrieve the recipe from the backing data store.</span>
+    <span class="kd">let</span> <span class="nv">recipe</span> <span class="p">=</span> <span class="n">dataStore</span><span class="p">.</span><span class="n">recipe</span><span class="p">(</span><span class="n">with</span><span class="p">:</span> <span class="n">identifier</span><span class="p">)</span><span class="o">!</span>
+    <span class="c1">// 这里既是传入注册cell的方法的地方，也是那个方法的handler里三个参数的来源</span>
+    <span class="k">return</span> <span class="n">collectionView</span><span class="p">.</span><span class="n">dequeueConfiguredReusableCell</span><span class="p">(</span><span class="n">using</span><span class="p">:</span> <span class="n">recipeCellRegistration</span><span class="p">,</span> <span class="k">for</span><span class="p">:</span> <span class="n">indexPath</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">recipe</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<ul>
+<li>The <code>configureDataSource()</code> method creates a cell <strong>registration</strong> and provides a handler closure that <strong>configures each cell</strong> with data from a recipe.</li>
+</ul>
+<h3>Load the Diffable Data Source with Identifiers</h3>
+<div class="highlight"><pre><span></span><span class="kd">private</span> <span class="kd">func</span> <span class="nf">loadRecipeData</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Retrieve the list of recipe identifiers determined based on a</span>
+    <span class="c1">// selected sidebar item such as All Recipes or Favorites.</span>
+    <span class="k">guard</span> <span class="kd">let</span> <span class="nv">recipeIds</span> <span class="p">=</span> <span class="n">recipeSplitViewController</span><span class="p">.</span><span class="n">selectedRecipes</span><span class="p">?.</span><span class="n">recipeIds</span><span class="p">()</span>
+    <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+
+    <span class="c1">// Update the collection view by adding the recipe identifiers to</span>
+    <span class="c1">// a new snapshot, and apply the snapshot to the diffable data source.</span>
+    <span class="kd">var</span> <span class="nv">snapshot</span> <span class="p">=</span> <span class="bp">NSDiffableDataSourceSnapshot</span><span class="p">&lt;</span><span class="n">RecipeListSection</span><span class="p">,</span> <span class="n">Recipe</span><span class="p">.</span><span class="n">ID</span><span class="p">&gt;()</span>
+    <span class="n">snapshot</span><span class="p">.</span><span class="n">appendSections</span><span class="p">([.</span><span class="n">main</span><span class="p">])</span>
+    <span class="n">snapshot</span><span class="p">.</span><span class="n">appendItems</span><span class="p">(</span><span class="n">recipeIds</span><span class="p">,</span> <span class="n">toSection</span><span class="p">:</span> <span class="p">.</span><span class="n">main</span><span class="p">)</span>
+    <span class="n">recipeListDataSource</span><span class="p">.</span><span class="n">applySnapshotUsingReloadData</span><span class="p">(</span><span class="n">snapshot</span><span class="p">)</span> <span class="c1">// 初始化用这个，reload代表完全重设</span>
+    <span class="c1">// 更新的话用 apply(_:animatingDifferences:) 这样有动画</span>
+<span class="p">}</span>
+</pre></div>
+<h3>Insert, Delete, and Move Items</h3>
+<ul>
+<li>To <strong>handle changes</strong> to a data collection, the app <strong>creates a new snapshot</strong> that represents the current state of the data collection and <strong>applies</strong> it to the diffable data source.</li>
+<li>The data source <strong>compares</strong> its current snapshot with the new snapshot to <strong>determine the changes</strong>.</li>
+<li>Then it performs the necessary inserts, deletes, and moves into the collection view based on those changes.</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nv">snapshot</span> <span class="p">=</span> <span class="bp">NSDiffableDataSourceSnapshot</span><span class="p">&lt;</span><span class="n">RecipeListSection</span><span class="p">,</span> <span class="n">Recipe</span><span class="p">.</span><span class="n">ID</span><span class="p">&gt;()</span>
+<span class="n">snapshot</span><span class="p">.</span><span class="n">appendSections</span><span class="p">([.</span><span class="n">main</span><span class="p">])</span> <span class="c1">// section是直接重建的，而不是从哪去retrieve一个, 因为它代表的是ID，只要值一致就行</span>
+<span class="n">snapshot</span><span class="p">.</span><span class="n">appendItems</span><span class="p">(</span><span class="n">selectedRecipeIds</span><span class="p">,</span> <span class="n">toSection</span><span class="p">:</span> <span class="p">.</span><span class="n">main</span><span class="p">)</span> <span class="c1">// 这里是.main的全量数据，即增删后的结果集</span>
+<span class="n">recipeListDataSource</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">snapshot</span><span class="p">,</span> <span class="n">animatingDifferences</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+</pre></div>
+<ul>
+<li>增删其实就是新建一个snapshot，datasource会根据identifiers来比较哪些多了哪些少了。<ul>
+<li>因为只比较“数量“，所以只要用这些id去新建snapshot就可以了，不存在把旧的<strong>retrieve</strong>出来</li>
+</ul>
+</li>
+</ul>
+<h3>Update Existing Items</h3>
+<ul>
+<li>To handle changes to the properties of an <strong>EXISTING</strong> item, an app retrieves the <strong>current snapshot</strong> from the diffable data source and calls either <a href="https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/3804468-reconfigureitems"><code>reconfigureItems(_:)</code></a> or <a href="https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot/3375783-reloaditems"><code>reloadItems(_:)</code></a> on the snapshot.  -&gt; then <code>Apply</code> to snapshot</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nv">snapshot</span> <span class="p">=</span> <span class="n">recipeListDataSource</span><span class="p">.</span><span class="n">snapshot</span><span class="p">()</span>  <span class="c1">// 这次是retrieve了</span>
+<span class="c1">// Update the recipe&#39;s data displayed in the collection view.</span>
+<span class="n">snapshot</span><span class="p">.</span><span class="n">reconfigureItems</span><span class="p">([</span><span class="n">recipeId</span><span class="p">])</span> <span class="c1">// 传入identifier</span>
+<span class="n">recipeListDataSource</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">snapshot</span><span class="p">,</span> <span class="n">animatingDifferences</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+</pre></div>
+<ul>
+<li>the data source invokes its cell provider closure,</li>
+</ul>
+<h3>Populate Snapshots with Lightweight Data Structures</h3>
+<ul>
+<li>对整个item对象做Hash，适用于快速建模，或数据源不会变更的场景（比如菜单）。<ul>
+<li>因为item对象的任何属性变化都会被认为有过改动导致重绘，也会产生一些副作用，比如重绘之前的状态都会被清掉（如selected）</li>
+</ul>
+</li>
+<li>实践中，不会对设置datasource的时候专门给个identifier集合，而数据源用别的集合，每次都是用identifier从集合里找item这种方式，而是重写item的hash方法和equal方法，让其只观察id字段</li>
+</ul>
+<h3>NSDiffableDataSourceSnapshot</h3>
+<ul>
+<li>A representation of <strong>the state of the data</strong> in a <code>view</code> at a <strong>specific point in time</strong>.</li>
+<li>Diffable data sources use <em>snapshots</em> to provide data for collection views and table views.</li>
+<li>You use a snapshot to set up the <strong>initial state</strong> of the data that a view displays, and you use snapshots to reflect <strong>changes to the data</strong> that the view displays.</li>
+<li>The data in a snapshot is made up of the <strong>sections</strong> and <strong>items</strong><ul>
+<li>Each of your sections and items must have unique identifiers that conform to the <a href="https://developer.apple.com/documentation/swift/hashable"><code>Hashable</code></a> protocol.</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1">// Create a snapshot.</span>
+<span class="kd">var</span> <span class="nv">snapshot</span> <span class="p">=</span> <span class="bp">NSDiffableDataSourceSnapshot</span><span class="p">&lt;</span><span class="nb">Int</span><span class="p">,</span> <span class="n">UUID</span><span class="p">&gt;()</span>        
+
+<span class="c1">// Populate the snapshot.</span>
+<span class="n">snapshot</span><span class="p">.</span><span class="n">appendSections</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">snapshot</span><span class="p">.</span><span class="n">appendItems</span><span class="p">([</span><span class="n">UUID</span><span class="p">(),</span> <span class="n">UUID</span><span class="p">(),</span> <span class="n">UUID</span><span class="p">()])</span>
+
+<span class="c1">// Apply the snapshot.</span>
+<span class="n">dataSource</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">snapshot</span><span class="p">,</span> <span class="n">animatingDifferences</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+</pre></div>
+<h2>NSDiffableDataSourceSectionSnapshot</h2>
+<ul>
+<li><p>A representation of <strong>the state of the data</strong> in a <code>layout section</code> at a specific point in time.</p><ul>
+<li>注意与<code>dataSourceSnapshot</code>定义的区别</li>
+</ul>
+</li>
+<li><p>A section snapshot represents the data for a single section in a collection view or table view.</p></li>
+<li><p>Through a section snapshot, you set up the <strong>initial state</strong> of the data that displays in an individual section of your view, and later <strong>update that data</strong>.</p></li>
+<li><p>You can use section snapshots <strong>with</strong> or <strong>instead</strong> of an <a href="https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot"><code>NSDiffableDataSourceSnapshot</code></a></p></li>
+<li><p>Use a section snapshot when you need precise management of the data in a section of your layout</p><ul>
+<li>such as when the sections of your layout acquire their data from <strong>different sources</strong>.</li>
+<li>不同的section来自不同的数据源的话，倾向于用sectionSnapshot</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">section</span> <span class="k">in</span> <span class="n">Section</span><span class="p">.</span><span class="n">allCases</span> <span class="p">{</span>
+    <span class="c1">// Create a section snapshot</span>
+    <span class="kd">var</span> <span class="nv">sectionSnapshot</span> <span class="p">=</span> <span class="bp">NSDiffableDataSourceSectionSnapshot</span><span class="p">&lt;</span><span class="nb">String</span><span class="p">&gt;()</span>
+
+    <span class="c1">// Populate the section snapshot</span>
+    <span class="n">sectionSnapshot</span><span class="p">.</span><span class="n">append</span><span class="p">([</span><span class="s">&quot;Food&quot;</span><span class="p">,</span> <span class="s">&quot;Drinks&quot;</span><span class="p">])</span>
+    <span class="n">sectionSnapshot</span><span class="p">.</span><span class="n">append</span><span class="p">([</span><span class="s">&quot;🍏&quot;</span><span class="p">,</span> <span class="s">&quot;🍓&quot;</span><span class="p">,</span> <span class="s">&quot;🥐&quot;</span><span class="p">],</span> <span class="n">to</span><span class="p">:</span> <span class="s">&quot;Food&quot;</span><span class="p">)</span>
+
+    <span class="c1">// Apply the section snapshot</span>
+    <span class="n">dataSource</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">sectionSnapshot</span><span class="p">,</span>
+                     <span class="n">to</span><span class="p">:</span> <span class="n">section</span><span class="p">,</span>
+                     <span class="n">animatingDifferences</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<h1>苹果CollectionView教程文档</h1>
+<p><strong>The Layout Object Controls the Visual Presentation</strong></p><ul>
+<li>The layout object is solely responsible for determining the <strong>placement and visual styling</strong> of items within the collection view</li>
+<li>do not confuse what a layout object does with the <code>layoutSubviews</code> method used to reposition child views inside a parent view.<ul>
+<li>A layout object <strong>never</strong> touches the views it manages directly because it <strong>does not actually own</strong> any of those views.</li>
+<li>it generates attributes that describe the location, size, and visual appearance of the cells, supplementary views, and decoration views in the collection view.</li>
+<li>It is then the job of the collection view to apply those attributes to the actual view objects.</li>
+<li>这就是需要提供两个代理方法的原因，一个提供view，一个提供布局配置</li>
+</ul>
+</li>
+</ul>
+<p><strong>Transitioning Between Layouts</strong></p><ul>
+<li>The easiest way to transition between layouts is by using the <code>setCollectionViewLayout:animated:</code> method.</li>
+<li>However, if you require control of the transition or want it to be interactive, use a <code>UICollectionViewTransitionLayout</code> object.</li>
+<li>The <code>UICollectionViewTransitionLayout</code> class is a special type of layout that gets installed as the collection view’s layout object when transitioning to a new layout.<ul>
+<li>With a transition layout object, you can have objects follow a <strong>non linear</strong> path, use a different <strong>timing algorithm</strong>, or move according to incoming touch events.</li>
+</ul>
+</li>
+<li>The <code>UICollectionViewLayout</code> class provides <strong>several methods</strong> for <strong>tracking</strong> the transition between layouts.</li>
+<li><code>UICollectionViewTransitionLayout</code> objects track the completion of a transition through the <code>transitionProgress</code> property.</li>
+<li>As the transition occurs, your code updates this property <strong>periodically</strong> to indicate the completion percentage of the transition.</li>
+</ul>
+<p>通用流程：</p><ol>
+<li>Create an instance of the standard class or your own custom class using the <code>initWithCurrentLayout:nextLayout:</code> method.</li>
+<li>Communicate the progress of the transition by periodically modifying the <code>transitionProgress</code> property. Do not forget to invalidate the layout using the collection view’s <code>invalidateLayout</code> method after changing the transition’s progress.</li>
+<li>Implement the <code>collectionView:transitionLayoutForOldLayout:newLayout:</code> method in your collection view’s delegate and return your transition layout object.</li>
+<li>Optionally modify values for your layout using the <code>updateValue:forAnimatedKey:</code> method to indicate changed values relevant to your layout object. The stable value in this case is 0.</li>
+</ol>
+<p><strong>Customizing the Flow Layout Attributes</strong></p><ul>
+<li>Flowlayout在一条线上排列元素，到达了边界就换行，新起一条线</li>
+<li>元素大小可以通过<code>itemSize</code> 属性设置，如果大小不同，则通过<code>[collectionView:layout:sizeForItemAtIndexPath:](https://developer.apple.com/documentation/uikit/uicollectionviewdelegateflowlayout/1617708-collectionview)</code>代理方法设置</li>
+<li>但是，同一行上不同的高度的cell会垂直居中排列，这点要注意</li>
+<li><code>minimum spacing</code>设置的只是同一行元素的“最小间距”，如果布局的时候一行下一个元素放不下了，但是剩余的空间很多，这个一行的元素间距会拉大<ul>
+<li>行间距同理，根据上一条描述，元素是垂直居中排列的，所以最小行间距设置的是上下两行间最高的元素的距离</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+        </article>
+        <div class="prism-post-meta col-md-8 offset-md-2">
+    <span>walker</span>
+    
+    <span>/</span>
+    <span>
+        <a class="category no-link" href="/category/posts/" target="_self">
+        posts
+        </a>
+    </span>
+    
+    
+    <span>/</span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/CollectionView/" target="_self">#CollectionView</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/Diffable%20Datasource/" target="_self">#Diffable Datasource</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/Compositional%20Layout/" target="_self">#Compositional Layout</a>
+    </span>
+    
+    <span class="prism-tag">
+        <a class="no-link" href="/tag/Snapshot/" target="_self">#Snapshot</a>
+    </span>
+    
+    
+    
+    <span>/</span>
+    <span class="leancloud_visitors" id="/archives/collectionview_diffable_datasource/" data-flag-title="Collection View With Diffable Datasource"><span class="leancloud-visitors-count"></span> Views</span>
+    
+</div>
+    </section>
+
+    
+<section id="prism__pagination" class="prism-pagination" class="col-md-8 offset-md-2">
+    <ul>
+        
+        <li class="next text-muted">
+            <span title="Viewing the newest one."><i class="fa fa-chevron-left" aria-hidden="true"></i>Newer</span>
+        </li>
+        
+        
+        <li class="prev">
+            <a class="no-link" href="/archives/calayer_mask/" target="_self" title="CALayer应用mask实现为文字部分涂抹">Older<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    
+    <script>
+        var initValine = function() {
+            new Valine({"enable": true, "el": "#vcomments", "appId": "7tP92LoqK2cggW61DvJmWBo0-gzGzoHsz", "appKey": "iQCtrtlr8eKrQllM03GMESMJ", "visitor": true, "recordIP": true});
+        }
+
+    </script>
+    <script defer src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js' onload="initValine()"></script>
+    <div class="prism-comment-section container" id="prism__comment">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div id="vcomments"></div>
+            </div>
+        </div>
+    </div>
+    
+
+</main>
+
+            <footer id="prism__footer">
+                <section>
+                    <div>
+                        <nav class="social-links">
+                            <ul><li><a class="no-link" title="Twitter" href="https://twitter.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-twitter"></i></a></li><li><a class="no-link" title="GitHub" href="https://github.com/walkerwzy" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-github"></i></a></li><li><a class="no-link" title="Weibo" href="https://weibo.com/1071696872" target="_blank" rel="noopener noreferrer nofollow"><i class="gi gi-weibo"></i></a></li></ul>
+                        </nav>
+                    </div>
+
+                    <section id="prism__external_links">
+                        <ul>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://github.com/AlanDecode/Maverick" rel="noopener noreferrer nofollow">Maverick</a>：🏄‍ Go My Own Way.
+                                <span>|</span>
+                            </li>
+                            
+                            <li>
+                                <a class="no-link" target="_blank" href="https://www.imalan.cn" rel="noopener noreferrer nofollow">Triple NULL</a>：Home page for AlanDecode.
+                                <span>|</span>
+                            </li>
+                            
+                        </ul>
+                    </section>
+
+                    <div class="copyright">
+                        <p class="copyright-text">
+                            <span class="brand">walker's code blog</span>
+                            <span>Copyright © 2022 walker</span>
+                        </p>
+                        <p class="copyright-text powered-by">
+                            | Powered by <a href="https://github.com/AlanDecode/Maverick" class="no-link" target="_blank" rel="noopener noreferrer nofollow">Maverick</a> | Theme <a href="https://github.com/Reedo0910/Maverick-Theme-Prism" target="_blank" class="no-link" rel="noopener noreferrer nofollow">Prism</a>
+                        </p>
+                    </div>
+                    <div class="footer-addon">
+                        
+                    </div>
+                </section>
+                <script>
+                    var site_build_date = "2019-12-06T12:00+08:00"
+
+                </script>
+                <script src="/assets/prism-efa8685153.js"></script>
+            </footer>
+        </div>
+    </div>
+    </div>
+
+    <script src="/assets/ExSearch/jquery.min.js"></script>
+    <script src="/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+
+    <!--katex-->
+    <link rel="stylesheet" href="/assets/katex.min.css">
+    <script defer src="/assets/katex.min.js"></script>
+    <script>
+        mathOpts = {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        };
+
+    </script>
+    <script defer src="/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    
+</body>
+
+</html>

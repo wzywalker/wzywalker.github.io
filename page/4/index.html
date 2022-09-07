@@ -19,7 +19,7 @@
     <script>
         var ExSearchConfig = {
             root: "",
-            api: "/66077cf5542cc50c8af36c6d25f0819c.json"
+            api: "/b098f530e4b4a4a690a595806babc6a7.json"
         }
 
     </script>
@@ -55,6 +55,275 @@
     
 
 <section id="prism__post-list" class="prism-section row">
+    
+    <article class="yue prism-post-item col-md-8 offset-md-2">
+        <h1 class="prism-post-title"><a class="no-link" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0%5B1%5D/" target="_self">cs193p_2021_笔记[1]</a></h1>
+        <div class="prism-post-time">
+            <a class="no-link" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0%5B1%5D/" target="_self">
+                <time class="text-uppercase">
+                    October 24 2021
+                </time>
+            </a>
+        </div>
+        <div class="prism-content"><p>2020年看了一遍，后来学深度学习去了，然后发现2021也出来了，仍然是视频授课（对我们没区别），看完后整理了两年课程的笔记。</p><p>本文涉及内容：<code>struct, enum, optional, protocol, viewbuilder, shape</code></p><h1>struct and class</h1>
+<p>拥有差不多的结构</p><ul>
+<li>stored vars</li>
+<li>computed vars</li>
+<li>constant lets</li>
+<li>functions</li>
+<li>initializers</li>
+</ul>
+<p>differents:
+struct | class
+-------|------
+Value type | Reference type
+Copied when passed or assigned | Passed around via pointers 
+Copy on write | Automatically reference counted 
+Functional programming | Object-oriented programming 
+No inheritance | Inheritance (single) 
+“Free”（缺省） init initializes ALL vars | “Free” init initializes NO vars 
+Mutability must be explicitly stated | Always mutable (即使用let, 只表示不会改变指针)
+Your “go to” data structure | Used in specific circumstances
+Everything you’ve seen so far is a struct (except View which is a protocol) | The ViewModel in MVVM is always a class (also, UIKit (old style iOS) is class-based)</p><h1>泛型，函数类型,闭包</h1>
+<ul>
+<li>允许未知类型，但swift是强类型，所以用类型占位符，用作参数时参考.net的泛型</li>
+<li>函数也是一种类型，可以当作变量，参数，出现在变量，参数的位置</li>
+<li>in-line风格的函数叫<code>closure</code>(闭包)</li>
+</ul>
+<h1>enum</h1>
+<ul>
+<li>枚举是值类型</li>
+<li>枚举的每个state都可以有<code>associated data</code>（等于是把每个state看成一个class/struct，associated data就可以理解为<strong>属性</strong>)</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">enum</span> <span class="nc">FastFoodMenuItem</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="n">hamburger</span><span class="p">(</span><span class="n">numberOfPatties</span><span class="p">:</span> <span class="nb">Int</span><span class="p">)</span>
+    <span class="k">case</span> <span class="n">fries</span><span class="p">(</span><span class="n">size</span><span class="p">:</span> <span class="n">FryOrderSize</span><span class="p">)</span>
+    <span class="k">case</span> <span class="n">drink</span><span class="p">(</span><span class="nb">String</span><span class="p">,</span> <span class="n">ounces</span><span class="p">:</span> <span class="nb">Int</span><span class="p">)</span> <span class="c1">// the unnamed String is the brand, e.g. “Coke”</span>
+    <span class="k">case</span> <span class="n">cookie</span> <span class="p">}</span>
+
+<span class="kd">enum</span> <span class="nc">FryOrderSize</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="n">large</span>
+    <span class="k">case</span> <span class="n">small</span> <span class="p">}</span>
+
+<span class="kd">let</span> <span class="nv">menuItem</span><span class="p">:</span> <span class="n">FastFoodMenuItem</span> <span class="p">=</span> <span class="n">FastFoodMenuItem</span><span class="p">.</span><span class="n">hamburger</span><span class="p">(</span><span class="n">patties</span><span class="p">:</span> <span class="mi">2</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nv">otherItem</span><span class="p">:</span> <span class="n">FastFoodMenuItem</span> <span class="p">=</span> <span class="n">FastFoodMenuItem</span><span class="p">.</span><span class="n">cookie</span>
+<span class="kd">var</span> <span class="nv">yetAnotherItem</span> <span class="p">=</span> <span class="p">.</span><span class="n">cookie</span> <span class="c1">// Swift can’t figure this out</span>
+</pre></div>
+<ol>
+<li>FryOrderSize同时又是一个枚举</li>
+<li>状态drink拥有两个“属性”，而且其中一个还<strong>未命名</strong></li>
+</ol>
+<h2>break and fall through/defaults</h2>
+<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nv">menuItem</span> <span class="p">=</span> <span class="n">FastFoodMenuItem</span><span class="p">.</span><span class="n">cookie</span>
+<span class="k">switch</span> <span class="n">menuItem</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="p">.</span><span class="n">hamburger</span><span class="p">:</span> <span class="k">break</span>  <span class="c1">// break</span>
+    <span class="k">case</span> <span class="p">.</span><span class="n">fries</span><span class="p">:</span> <span class="bp">print</span><span class="p">(</span><span class="err">“</span><span class="n">fries</span><span class="err">”</span><span class="p">)</span>
+    <span class="k">default</span><span class="p">:</span> <span class="bp">print</span><span class="p">(</span><span class="err">“</span><span class="n">other</span><span class="err">”</span><span class="p">)</span> <span class="c1">// default</span>
+<span class="p">}</span>
+</pre></div>
+<ol>
+<li>如果把drink写上，但没有方法体，则叫<code>fall through</code>，只会往后面一个state fall through</li>
+<li>如果漏写了drink，则会匹配到default项（cookie同理）</li>
+</ol>
+<h2>with associated data</h2>
+<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nv">menuItem</span> <span class="p">=</span> <span class="n">FastFoodMenuItem</span><span class="p">.</span><span class="n">drink</span><span class="p">(</span><span class="err">“</span><span class="n">Coke</span><span class="err">”</span><span class="p">,</span> <span class="n">ounces</span><span class="p">:</span> <span class="mi">32</span><span class="p">)</span>
+  <span class="k">switch</span> <span class="n">menuItem</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="p">.</span><span class="n">hamburger</span><span class="p">(</span><span class="kd">let</span> <span class="nv">pattyCount</span><span class="p">):</span> <span class="bp">print</span><span class="p">(</span><span class="err">“</span><span class="n">a</span> <span class="n">burger</span> <span class="n">with</span> <span class="err">\</span><span class="p">(</span><span class="n">pattyCount</span><span class="p">)</span> <span class="n">patties</span><span class="p">!</span><span class="err">”</span><span class="p">)</span>
+      <span class="k">case</span> <span class="p">.</span><span class="n">fries</span><span class="p">(</span><span class="kd">let</span> <span class="nv">size</span><span class="p">):</span> <span class="bp">print</span><span class="p">(</span><span class="err">“</span><span class="n">a</span> <span class="err">\</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="n">order</span> <span class="n">of</span> <span class="n">fries</span><span class="p">!</span><span class="err">”</span><span class="p">)</span>
+      <span class="k">case</span> <span class="p">.</span><span class="n">drink</span><span class="p">(</span><span class="kd">let</span> <span class="nv">brand</span><span class="p">,</span> <span class="kd">let</span> <span class="nv">ounces</span><span class="p">):</span> <span class="bp">print</span><span class="p">(</span><span class="err">“</span><span class="n">a</span> <span class="err">\</span><span class="p">(</span><span class="n">ounces</span><span class="p">)</span><span class="n">oz</span> <span class="err">\</span><span class="p">(</span><span class="n">brand</span><span class="p">)</span><span class="err">”</span><span class="p">)</span>
+      <span class="k">case</span> <span class="p">.</span><span class="n">cookie</span><span class="p">:</span> <span class="bp">print</span><span class="p">(</span><span class="err">“</span><span class="n">a</span> <span class="n">cookie</span><span class="p">!</span><span class="err">”</span><span class="p">)</span>
+ <span class="p">}</span>
+</pre></div>
+<h2>可以拥有方法</h2>
+<p>这就可以扩展出computed vars</p><div class="highlight"><pre><span></span><span class="kd">enum</span> <span class="nc">FastFoodMenuItem</span> <span class="p">{</span> <span class="p">...</span>
+      <span class="kd">func</span> <span class="nf">isIncludedInSpecialOrder</span><span class="p">(</span><span class="n">number</span><span class="p">:</span> <span class="nb">Int</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="nb">Bool</span> <span class="p">{</span>
+          <span class="k">switch</span> <span class="kc">self</span> <span class="p">{</span>
+            <span class="k">case</span> <span class="p">.</span><span class="n">hamburger</span><span class="p">(</span><span class="kd">let</span> <span class="nv">pattyCount</span><span class="p">):</span> <span class="k">return</span> <span class="n">pattyCount</span> <span class="p">==</span> <span class="n">number</span>
+            <span class="k">case</span> <span class="p">.</span><span class="n">fries</span><span class="p">,</span> <span class="p">.</span><span class="n">cookie</span><span class="p">:</span> <span class="k">return</span> <span class="kc">true</span> <span class="c1">// a drink and cookie in every special order </span>
+            <span class="k">case</span> <span class="p">.</span><span class="n">drink</span><span class="p">(</span><span class="kc">_</span><span class="p">,</span> <span class="kd">let</span> <span class="nv">ounces</span><span class="p">):</span> <span class="k">return</span> <span class="n">ounces</span> <span class="p">==</span> <span class="mi">16</span> <span class="c1">// &amp; 16oz drink of any kind</span>
+ <span class="p">}</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<h2>Iterable</h2>
+<p>conform <code>CaseIterable</code>协议就能被遍历，因为增加了一个<code>allCases</code>的静态变量：</p><div class="highlight"><pre><span></span><span class="kd">enum</span> <span class="nc">TeslaModel</span><span class="p">:</span> <span class="n">CaseIterable</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="n">X</span>
+      <span class="k">case</span> <span class="n">S</span>
+      <span class="k">case</span> <span class="n">Three</span>
+      <span class="k">case</span> <span class="n">Y</span>
+<span class="p">}</span>
+<span class="k">for</span> <span class="n">model</span> <span class="k">in</span> <span class="n">TeslaModel</span><span class="p">.</span><span class="n">allCases</span> <span class="p">{</span>
+    <span class="n">reportSalesNumbers</span><span class="p">(</span><span class="k">for</span><span class="p">:</span> <span class="n">model</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">reportSalesNumbers</span><span class="p">(</span><span class="k">for</span> <span class="n">model</span><span class="p">:</span> <span class="n">TeslaModel</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="n">model</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>SwiftUI实例， <code>LazyVGrid</code>中：</p><div class="highlight"><pre><span></span><span class="kd">struct</span> <span class="nc">GridItem</span> <span class="p">{</span>
+    <span class="p">...</span>
+    <span class="kd">enum</span> <span class="nc">Size</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="n">adaptive</span><span class="p">(</span><span class="n">minimum</span><span class="p">:</span> <span class="n">CGFloat</span><span class="p">,</span> <span class="n">maximum</span><span class="p">:</span> <span class="n">CGFloat</span> <span class="p">=</span> <span class="p">.</span><span class="n">infinity</span><span class="p">)</span>
+        <span class="k">case</span> <span class="n">fixed</span><span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span>
+        <span class="k">case</span> <span class="n">flexible</span><span class="p">(</span><span class="n">minimum</span><span class="p">:</span> <span class="n">CGFloat</span> <span class="p">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">maximum</span><span class="p">:</span> <span class="n">CGFloat</span> <span class="p">=</span> <span class="p">.</span><span class="n">infinity</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<ol>
+<li><code>associated data</code>还能带默认值</li>
+<li>核心作用是告诉系统griditem的size是采用哪种方案（枚举），顺便设置了这种方案下的参数。所以这种场景在swift下完全可以用枚举做到</li>
+</ol>
+<h1>Optionals</h1>
+<p>可靠类型其实就是一个<code>Enum</code></p><div class="highlight"><pre><span></span><span class="kd">enum</span> <span class="nc">Optional</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="p">{</span> <span class="c1">// a generic type, like Array&lt;Element&gt; or MemoryGame&lt;CardContent&gt; </span>
+    <span class="k">case</span> <span class="kr">none</span>
+    <span class="k">case</span> <span class="n">some</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="c1">// the some case has associated value of type T }</span>
+</pre></div>
+<p>它只有两个状态，要么是none，要么就是is set的状态，具体的值其实是绑定到了<code>associate data</code>里去了</p><p>所以你现在知道了有一种取法其实就是从<code>some</code>里面来取了。</p><h2>语法糖</h2>
+<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nv">hello</span><span class="p">:</span> <span class="nb">String</span><span class="p">?</span>
+<span class="kd">var</span> <span class="nv">hello</span><span class="p">:</span> <span class="nb">String</span><span class="p">?</span> <span class="p">=</span> <span class="err">“</span><span class="n">hello</span><span class="err">”</span>
+<span class="kd">var</span> <span class="nv">hello</span><span class="p">:</span> <span class="nb">String</span><span class="p">?</span> <span class="p">=</span> <span class="kc">nil</span>
+<span class="c1">// 其实是：</span>
+<span class="kd">var</span> <span class="nv">hello</span><span class="p">:</span> <span class="nb">Optional</span><span class="p">&lt;</span><span class="nb">String</span><span class="p">&gt;</span> <span class="p">=</span> <span class="p">.</span><span class="kr">none</span>
+<span class="kd">var</span> <span class="nv">hello</span><span class="p">:</span> <span class="nb">Optional</span><span class="p">&lt;</span><span class="nb">String</span><span class="p">&gt;</span> <span class="p">=</span> <span class="p">.</span><span class="n">some</span><span class="p">(</span><span class="err">“</span><span class="n">hello</span><span class="err">”</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nv">hello</span><span class="p">:</span> <span class="nb">Optional</span><span class="p">&lt;</span><span class="nb">String</span><span class="p">&gt;</span> <span class="p">=</span> <span class="p">.</span><span class="kr">none</span>
+</pre></div>
+<p>使用：</p><div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">hello</span><span class="p">:</span> <span class="nb">String</span><span class="p">?</span> <span class="p">=</span> <span class="p">...</span>
+<span class="bp">print</span><span class="p">(</span><span class="n">hello</span><span class="p">!)</span> 
+<span class="c1">// 其实是：</span>
+<span class="k">switch</span> <span class="n">hello</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="p">.</span><span class="kr">none</span><span class="p">:</span> <span class="c1">// raise an exception (crash) </span>
+    <span class="k">case</span> <span class="p">.</span><span class="n">some</span><span class="p">(</span><span class="kd">let</span> <span class="nv">data</span><span class="p">):</span> <span class="bp">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="kd">let</span> <span class="nv">safehello</span> <span class="p">=</span> <span class="n">hello</span> <span class="p">{</span>
+    <span class="bp">print</span><span class="p">(</span><span class="n">safehello</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// do something else</span>
+<span class="p">}</span>
+<span class="c1">// 其实是：</span>
+<span class="k">switch</span> <span class="n">hello</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="p">.</span><span class="kr">none</span><span class="p">:</span> <span class="p">{</span> <span class="c1">// do something else } </span>
+    <span class="k">case</span> <span class="p">.</span><span class="n">some</span><span class="p">(</span><span class="kd">let</span> <span class="nv">data</span><span class="p">):</span> <span class="bp">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// 还有一种：</span>
+
+<span class="kd">let</span> <span class="nv">x</span><span class="p">:</span> <span class="nb">String</span><span class="p">?</span> <span class="p">=</span> <span class="p">...</span>
+<span class="kd">let</span> <span class="nv">y</span> <span class="p">=</span> <span class="n">x</span> <span class="p">??</span> <span class="err">“</span><span class="n">foo</span><span class="err">”</span>
+<span class="c1">// 其实是：</span>
+<span class="k">switch</span> <span class="n">x</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="p">.</span><span class="kr">none</span><span class="p">:</span> <span class="n">y</span> <span class="p">=</span> <span class="err">“</span><span class="n">foo</span><span class="err">”</span>
+    <span class="k">case</span> <span class="p">.</span><span class="n">some</span><span class="p">(</span><span class="kd">let</span> <span class="nv">data</span><span class="p">):</span> <span class="n">y</span> <span class="p">=</span> <span class="n">data</span>
+<span class="p">}</span>
+</pre></div>
+<ol>
+<li>所以用<code>!</code>来解包是会报错的原理在此</li>
+<li><code>guard</code>的原理同样是<code>switch</code></li>
+<li>默认值的原理你应该也能猜到了</li>
+<li>三个语法糖，对应的底层就是一句switch，其实就是<code>.none</code>时的三种处理方案</li>
+</ol>
+<p>当然，还可以<code>chain</code>起来
+let x: String? = ...
+let y = x?foo()?bar?.z</p><p>// 尝试还原一下：</p><div class="highlight"><pre><span></span><span class="k">switch</span> <span class="n">x</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="p">.</span><span class="kr">none</span><span class="p">:</span> <span class="n">y</span> <span class="p">=</span> <span class="kc">nil</span>
+    <span class="k">case</span> <span class="p">.</span><span class="n">some</span><span class="p">(</span><span class="kd">let</span> <span class="nv">xval</span><span class="p">)::</span>
+        <span class="k">switch</span> <span class="n">xval</span><span class="p">.</span><span class="n">foo</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">case</span> <span class="p">.</span><span class="kr">none</span><span class="p">:</span> <span class="n">y</span> <span class="p">=</span> <span class="kc">nil</span>
+            <span class="k">case</span> <span class="p">.</span><span class="n">some</span><span class="p">(</span><span class="kd">let</span> <span class="nv">xfooval</span><span class="p">):</span>
+                <span class="k">switch</span> <span class="n">xfooval</span><span class="p">.</span><span class="n">bar</span> <span class="p">{</span>
+                    <span class="k">case</span> <span class="p">.</span><span class="kr">none</span><span class="p">:</span> <span class="n">y</span> <span class="p">=</span> <span class="kc">nil</span>
+                    <span class="k">case</span> <span class="p">.</span><span class="n">some</span><span class="p">(</span><span class="kd">let</span> <span class="nv">xfbarval</span><span class="p">):</span>
+                        <span class="n">y</span> <span class="p">=</span> <span class="n">xfbarval</span><span class="p">.</span><span class="n">z</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>记住每一个句号对应一个switch，然后在<code>.none</code>的状态下安全退出就是<code>?</code>的用法了。</p><h1>@ViewBuilder</h1>
+<ol>
+<li>任意<code>func</code>或<code>只读的计算属性</code>都可以标识为<code>@ViewBuilder</code>，一旦标识，它里面的内容将会被解析为<code>a list of Views</code>（也仅仅是这个，最多再加上if-else来选择是“哪些view”，不能再定义变量和写其它代码了）<ul>
+<li>一个典型例子就是View里面扣出来的代码(比如子view)做成方法，这个方法是需要加上@ViewBuilder的</li>
+<li>或者改语法</li>
+<li>或者只有一个View，就不会产生语法歧义，也是可以不加@ViewBuilder的</li>
+</ul>
+</li>
+<li>所以不需要return，而如果你不打标，也是可以通过return来构建view的<ul>
+<li>但是就不支持默认返回list或通过if-else返view list的语法了</li>
+</ul>
+</li>
+<li><code>@ViewBuilder</code>也可以标识为方法的参数，表示需要接受一个返回views的函数</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="kd">init</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="p">@</span><span class="n">ViewBuilder</span> <span class="n">content</span><span class="p">:</span> <span class="p">@</span><span class="n">escaping</span> <span class="p">(</span><span class="n">Item</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">ItemView</span><span class="p">)</span> <span class="p">{...}</span>
+</pre></div>
+<p>同时也注意一下<code>@escaping</code>，凡是函数返回后才可能被调用的闭包（逃逸闭包）就需要，而我们的view是在需要的时候才创建，或反复移除并重建（重绘）的，显然符合逃逸闭包的特征。</p><blockquote>
+<p>viewbuilder支持的控制流程代码指的是<code>if-else</code>和<code>ForEach</code>, 所以<code>for...in...</code>是不行的。</p></blockquote>
+<h1>Protocol</h1>
+<p>接口，协议，约束... 使用场景：</p><ul>
+<li>用作类型(Type):<ul>
+<li>func travelAround(using moveable: Moveable)</li>
+<li>let foo = [Moveable]</li>
+</ul>
+</li>
+<li>用作接口:<ul>
+<li>struct cardView: View</li>
+<li>class myGame: ObservableObject</li>
+<li>behaviors: Identifiable, Hashable, ... Animatable</li>
+</ul>
+</li>
+<li>用作约束：
+  struct Game<Content> <code>where</code> Content: Equtable   // 类
+  extension Array <code>where</code> Element: Hashable {...}  // 扩展
+  init(data: Data) <code>where</code> Data: Collection, Data.Element: Identifiable // 方法</li>
+<li>OC里的delegate</li>
+<li>code sharing (by <code>extension</code>)<ul>
+<li><code>extension</code> to a protocol</li>
+<li>this is how Views get forecolor, font and all their other modifiers</li>
+<li>also `firstIndex(where:) get implemented</li>
+<li>an <code>extension</code> can add <em>default implementation</em> for a func or a var<ul>
+<li>that's how <code>objectWillChange</code> comes from</li>
+</ul>
+</li>
+<li><code>extension</code>可以作用到所有服从同一协议的对象<ul>
+<li>func filter(_ isIncluded: (Element) -&gt; Bool) -&gt; Array<Element></li>
+<li>只为<code>Sequence</code> protocol写了一份filter的扩展代码，但能作用于Array, Range, String, Dictionary</li>
+<li>等一切conform to the <code>Sequence</code> protocol的类</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>SwiftUI的<code>View</code> protocol非常简单，conform 一个返回<code>some view</code>的<code>body</code>方法就行了，但是又为它写了无数<code>extension</code>，比如<code>foregroundColor</code>, <code>padding</code>, etc. 示意图：</p><figure  style="flex: 146.20253164556962" ><img width="924" height="316" src="/archives/assets/9bfb49031e316c1d1d1bc4a5d6b57427.png" alt=""/></figure><h2>Generics(泛型)</h2>
+<p>举例：</p><div class="highlight"><pre><span></span><span class="kd">protocol</span> <span class="nc">Identifiable</span> <span class="p">{</span>
+    <span class="kd">associatedtype</span> <span class="n">ID</span><span class="p">:</span> <span class="nb">Hashable</span>
+    <span class="kd">var</span> <span class="nv">id</span><span class="p">:</span> <span class="n">ID</span> <span class="p">{</span> <span class="kr">get</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<ol>
+<li>不像struct，protocol并不是用<code>Identifiable&lt;ID&gt;</code>来表示泛型，而是在作用域内定义</li>
+<li>上例中，ID既定义了类别别名，还规范了约束</li>
+</ol>
+<ul>
+<li>所以你Identifiable的类, 是需要有一个Hashable的ID的</li>
+<li>而Hashable的对象，又是需要Equatable的(因为hash会碰撞出相同的结果，需要提供检查相等的方法)</li>
+<li>-&gt; <code>protocol inheritancee</code></li>
+</ul>
+<h1>Shape</h1>
+<ul>
+<li>Shape is a <code>protocol</code> that inherits from <code>View</code>.</li>
+<li>In other words, all Shapes are also Views.</li>
+<li>Examples of Shapes already in SwiftUI: RoundedRectangle, Circle, Capsule, etc.</li>
+<li>by default, Shapes draw themselfs by <code>filling</code> with the current foreground color.</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nf">fill</span><span class="p">&lt;</span><span class="n">S</span><span class="p">&gt;(</span><span class="kc">_</span> <span class="n">whatToFillWith</span><span class="p">:</span> <span class="n">S</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">some</span> <span class="n">view</span> <span class="k">where</span> <span class="n">S</span><span class="p">:</span> <span class="n">ShapeStyle</span>
+</pre></div>
+<p><code>ShapeStyle</code> protocol turns a <code>Shape</code> into a <code>View</code>: Color, ImagePaint, AngularGradinet, LinearGradient</p><p>自定义shape最好用path(系统的已经通过extension实现好了view的body)：</p><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nf">path</span><span class="p">(</span><span class="k">in</span> <span class="n">rect</span><span class="p">:</span> <span class="n">CGRect</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Path</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="n">Path</span> 
+<span class="p">}</span>
+</pre></div>
+</div>
+        
+        <div class="prism-action-bar">
+            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/cs193p_2021_%E7%AC%94%E8%AE%B0%5B1%5D/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
+        </div>
+        
+    </article>
     
     <article class="yue prism-post-item col-md-8 offset-md-2">
         <h1 class="prism-post-title"><a class="no-link" href="/archives/%E4%B8%80%E5%BC%A0%E5%9B%BE%E8%AF%B4%E6%B8%85%E5%8C%88%E7%89%99%E5%88%A9%E7%AE%97%E6%B3%95%EF%BC%88Hungarian-Algorithm%EF%BC%89/" target="_self">一张图说清匈牙利算法（Hungarian-Algorithm）</a></h1>
@@ -1712,218 +1981,6 @@ $
         
         <div class="prism-action-bar">
             <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Deep-Learning-with-Python-Notes-4/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
-        </div>
-        
-    </article>
-    
-    <article class="yue prism-post-item col-md-8 offset-md-2">
-        <h1 class="prism-post-title"><a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-3/" target="_self">《Deep Learning with Python》笔记[3]</a></h1>
-        <div class="prism-post-time">
-            <a class="no-link" href="/archives/Deep-Learning-with-Python-Notes-3/" target="_self">
-                <time class="text-uppercase">
-                    September 18 2021
-                </time>
-            </a>
-        </div>
-        <div class="prism-content"><h1>Fundamentals of machine learning</h1>
-<ul>
-<li>Supervised learning<ul>
-<li>binary classification</li>
-<li>multiclass classificaiton</li>
-<li>scalar regression</li>
-<li>vector regression（比如bounding-box)</li>
-<li>Sequence generation (摘要，翻译...)</li>
-<li>Syntax tree prediction</li>
-<li>Object detection (一般bounding-box的坐标仍然是回归出来的)</li>
-<li>Image segmentation</li>
-</ul>
-</li>
-<li>Unsupervised learing<ul>
-<li>是数据分析的基础，在监督学习前也常常需要用无监督学习来更好地“理解”数据集</li>
-<li>主要有降维(<code>Dimensionality reduction</code>)和聚类(<code>clustering</code>)</li>
-</ul>
-</li>
-<li>Self-supervised learning<ul>
-<li>其实还是监督学习，因为它仍需要与某个target做比较</li>
-<li>往往半监督（自监督）学习仍然有小量有标签数据集，在此基础上训练的不完善的model用来对无标签的数据进行打标，循环中对无标签数据打标的可靠度就越来越高，这样总体数据集的可靠度也越来越高了。有点像生成对抗网络里生成器和辨别器一同在训练过程中完善。</li>
-<li><code>autoencoders</code></li>
-</ul>
-</li>
-<li>Reinforcement learning<ul>
-<li>an <code>agent</code> receives information about its <code>environment</code> and learns to choose <code>actions</code> that will maximize some <code>reward</code>.</li>
-<li>可以用训练狗来理解</li>
-<li>工业界的应用除了游戏就是机器人了</li>
-</ul>
-</li>
-</ul>
-<h2>Data preprocessing</h2>
-<ul>
-<li>vectorization</li>
-<li>normalization (small, homogenous)</li>
-<li>handling missing values<ol>
-<li>除非0有特别的含义，不然一般可以对缺失值补0</li>
-<li>你不能保证测试集没有缺失值，如果训练集没看到过缺失值，那么将不会学到忽略缺失值<ul>
-<li><em>复制</em>一些训练数据并且随机drop掉一些特征</li>
-</ul>
-</li>
-</ol>
-</li>
-<li>feature extraction<ul>
-<li>making a problem easier by expressing it in a simpler way. It usually requires understanding the problem <strong>in depth</strong>.</li>
-<li><strong>Before</strong> deep learning, feature engineering used to be <code>critical</code>, because classical <strong>shallow algorithms</strong> didn’t have <code>hypothesis spaces</code> rich enough to learn useful features by themselves. (又见假设空间)</li>
-<li>但是好的特征仍然能让你在处理问题上更优雅、更省资源，也能减小对数据集规模的依赖。</li>
-</ul>
-</li>
-</ul>
-<h2>Overfitting and underfitting</h2>
-<ul>
-<li>Machine learning is the tension between <code>optimization</code> and <code>generalization</code>.</li>
-<li>optimization要求你在训练过的数据集上能达到最好的效果</li>
-<li>generalization则希望你在没见过的数据上有好的效果</li>
-<li>如果训练集上loss小，测试集上也小，说明还有优化(optimize)的余地 -&gt; <code>underfitting</code>看loss<ul>
-<li>just keep training</li>
-</ul>
-</li>
-<li>如果验证集上generalization stop improving(泛化不再进步，一般看衡量指标，比如准确率) -&gt; <code>overfitting</code></li>
-</ul>
-<p>解决overfitting的思路：</p><ul>
-<li><strong>the best solution</strong> is get more trainging data</li>
-<li><strong>the simple way</strong> is to reduce the size of the model<ul>
-<li>模型容量(<code>capacity</code>)足够大，就足够容易<em>记住</em>input和target的映射，没推理什么事了</li>
-</ul>
-</li>
-<li>add constraints -&gt; weight <code>regularization</code></li>
-<li>add dropout</li>
-</ul>
-<h2>Regularization</h2>
-<p><strong>Occam’s razor</strong></p><blockquote>
-<p>given <em>two explanations</em> for something, the explanation most likely to be correct is the <strong>simplest one</strong>—the one that makes <strong>fewer assumptions</strong>.</p></blockquote>
-<p>即为传说中<em>如无必要，勿增实体</em>的<code>奥卡姆剃刀原理</code>，这是在艺术创作领域的翻译，我们这里还是直译的好，即能解释一件事的各种理解中，越简单的，假设条件越少的，往往是最正确的，引申到机器学习，就是如何定义一个<code>simple model</code></p><p>A simple model in this context is:</p><ul>
-<li>a model where the distribution of parameter values has <code>less entropy</code></li>
-<li>or a model with fewer parameters</li>
-</ul>
-<p>实操就是，就是迫使选择那些值比较小的weights，which makes the distribution of weight values more regular. This is called weight <code>regularization</code>。这个解释是我目前看到的最<code>regularization</code>这个名字最好的解释，“正则化”三个字都认识，根本没人知道这三个字是什么意思，翻译了跟没番一样，而使分布更“常规化，正规化”，好像更有解释性。</p><p>别的教材里还会告诉你这里是对大的权重的<strong>惩罚</strong>（设计损失函数加上自身权重后，权重越大，loss也就越大，这就是对大权重的惩罚）</p><ul>
-<li>L1 regularization—The cost added is proportional to the absolute value of the weight coefficients (the L1 norm of the weights).</li>
-<li>L2 regularization—The cost added is proportional to the square of the value of the weight coefficients (the L2 norm of the weights).</li>
-</ul>
-<p>L2 regularization is also called <code>weight decay</code>in the context of neural networks. Don’t let the different name confuse you: weight decay is mathematically <strong>the same as</strong> L2 regularization.</p><blockquote>
-<p>只需要在训练时添加正则化</p></blockquote>
-<h2>Dropout</h2>
-<p>randomly dropping out (setting to zero) a number of output features of the layer during training.</p><p>dropout的作者Geoff Hinton解释dropout的灵感来源于银行办事出纳的不停更换和移动的防欺诈机制，可能认为一次欺诈的成功实施需要员工的配合，所以就尽量降低这种配合的可能性。于是他为了防止神经元也能聚在一起”密谋”，尝试随机去掉一些神经元。以及对输出添加噪声，让模型更难记住某些patten。</p><h2>The universal workflow of machine learning</h2>
-<ol>
-<li>Defining the problem and assembling a dataset<ul>
-<li>What will your input data be?</li>
-<li>What are you trying to predict?</li>
-<li>What type of problem are you facing?</li>
-<li>You hypothesize that your outputs can be predicted given your inputs.</li>
-<li>You hypothesize that your available data is sufficiently informative to learn the relationship between inputs and outputs.</li>
-<li>Just because you’ve assembled exam- ples of inputs X and targets Y doesn’t mean X contains enough information to predict Y.</li>
-</ul>
-</li>
-<li>Choosing a measure of success<ul>
-<li>accuracy? Precision and recall? Customer-retention rate?</li>
-<li>balanced-classification problems,<ul>
-<li>accuracy and area under the <code>receiver operating characteristic curve</code> (ROC AUC)</li>
-</ul>
-</li>
-<li>class-imbalanced problems<ul>
-<li>precision and recall.</li>
-</ul>
-</li>
-<li>ranking problems or multilabel classification<ul>
-<li>mean average precision</li>
-</ul>
-</li>
-<li>...</li>
-</ul>
-</li>
-<li>Deciding on an evaluation protocol<ul>
-<li>Maintaining a hold-out validation set—The way to go when you have plenty of data</li>
-<li>Doing <code>K-fold</code> cross-validation—The right choice when you have too few samples for hold-out validation to be reliable</li>
-<li>Doing <code>iterated K-fold</code> validation—For performing highly accurate model evaluation when <em>little data</em> is available</li>
-</ul>
-</li>
-<li>Preparing your data<ul>
-<li>tensor化，向量化，归一化等</li>
-<li>may do some feature engineering</li>
-</ul>
-</li>
-<li>Developing a model that does better than a baseline<ul>
-<li>baseline:<ul>
-<li>基本上是用纯随机(比如手写数字识别，随机猜测为10%)，和纯相关性推理（比如用前几天的温度预测今天的温度，因为温度变化是连续的），不用任何机器学习做出baseline</li>
-</ul>
-</li>
-<li>model:<ul>
-<li>Last-layer activation<ul>
-<li>sigmoid, relu系列， 等等</li>
-</ul>
-</li>
-<li>Loss function<ul>
-<li>直接的预测值真值的差，如MSE</li>
-<li>度量代理，如crossentropy是ROC AUC的proxy metric</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Optimization configuration<ul>
-<li>What optimizer will you use? What will its learning rate be? In most cases, it’s safe to go with rmsprop and its default learning rate.</li>
-</ul>
-</li>
-<li>Scaling up: developing a model that overfits<ul>
-<li>通过增加layers, 增加capacity，增加training epoch来加速overfitting，从而再通过减模型和加约束等优化</li>
-</ul>
-</li>
-<li>Regularizing your model and tuning your hyperparameters<ul>
-<li>Add dropout.</li>
-<li>Try different architectures: add or remove layers.</li>
-<li>Add L1 and/or L2 regularization.</li>
-<li>Try different hyperparameters (such as the number of units per layer or the learning rate of the optimizer) to find the optimal configuration.</li>
-<li>Optionally, iterate on feature engineering: add new features, or remove features that don’t seem to be informative.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<table>
-<thead>
-<tr>
-  <th>Problem type</th>
-  <th>Last-layer activation</th>
-  <th>Loss function</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td>Binary classification</td>
-  <td>sigmoid</td>
-  <td>binary_crossentropy</td>
-</tr>
-<tr>
-  <td>Multiclass, single-label classification</td>
-  <td>softmax</td>
-  <td>categorical_crossentropy</td>
-</tr>
-<tr>
-  <td>Multiclass, multilabel classification</td>
-  <td>sigmoid</td>
-  <td>binary_crossentropy</td>
-</tr>
-<tr>
-  <td>Regression to arbitrary values</td>
-  <td>None</td>
-  <td>mse</td>
-</tr>
-<tr>
-  <td>Regression to values between 0 and 1</td>
-  <td>sigmoi</td>
-  <td>mse or binary_crossentropy</td>
-</tr>
-</tbody>
-</table>
-</div>
-        
-        <div class="prism-action-bar">
-            <div class="comment-action action-item"><a class="no-link text-uppercase" href="/archives/Deep-Learning-with-Python-Notes-3/#prism__comment" target="_self"><i class="fa fa-comment"></i>Comment</a></div>
         </div>
         
     </article>
